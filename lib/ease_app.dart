@@ -22,6 +22,7 @@ class _EASEAppState extends State<EASEApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'EASE',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,

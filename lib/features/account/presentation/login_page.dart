@@ -43,7 +43,7 @@ class _LoginPageState extends State<LoginPage> {
           barrierDismissible: false,
           builder: (context) {
             return AlertDialog(
-              title: Text("Give the code?"),
+              title: Text("Enter OTP"),
               content: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
@@ -55,10 +55,10 @@ class _LoginPageState extends State<LoginPage> {
               actions: <Widget>[
                 TextButton(
                   child: Text("Confirm"),
-                  style: TextButton.styleFrom(
-                    // primary: Colors.white,
-                    backgroundColor: Colors.blue,
-                  ),
+                  // style: TextButton.styleFrom(
+                  // primary: Colors.white,
+                  // backgroundColor: Colors.blue,
+                  // ),
                   onPressed: () async {
                     final code = _codeController.text.trim();
                     AuthCredential credential = PhoneAuthProvider.credential(
@@ -93,32 +93,39 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Column(
-      children: <Widget>[
-        Container(
-          padding: EdgeInsets.all(10),
-          margin: EdgeInsets.only(top: 100),
-          child: TextField(
-            controller: _phoneController,
-            decoration: InputDecoration(hintText: "Enter your phone number"),
-          ),
-        ),
-        Container(
-          padding: EdgeInsets.all(10),
-          child: ElevatedButton(
-            onPressed: () {
-              final phone = _phoneController.text.trim();
-
-              loginUser(phone, context);
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.blue, // background color
-              // onPrimary: Colors.white, // text color
+      body: Center(
+        child: Column(
+          children: <Widget>[
+            Container(
+              padding: EdgeInsets.all(10),
+              // margin: EdgeInsets.only(top: 100),
+              child: TextField(
+                controller: _phoneController,
+                decoration:
+                    InputDecoration(hintText: "Enter your phone number"),
+              ),
             ),
-            child: Text("Verify", style: TextStyle(color: Colors.white)),
-          ),
-        )
-      ],
-    ));
+            Container(
+              padding: EdgeInsets.all(10),
+              child: ElevatedButton(
+                onPressed: () {
+                  final phone = _phoneController.text.trim();
+
+                  loginUser(phone, context);
+                },
+                // style: ElevatedButton.styleFrom(
+                // backgroundColor: Colors.blue, // background color
+                // onPrimary: Colors.white, // text color
+                // ),
+                child: Text(
+                  "Verify",
+                  // style: TextStyle(color: Colors.white),
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
   }
 }
