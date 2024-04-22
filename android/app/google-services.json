@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "935273134971",
+    "project_id": "ease-mvp",
+    "storage_bucket": "ease-mvp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:935273134971:android:8f8c445f4e53f7a8b69bde",
+        "android_client_info": {
+          "package_name": "com.example.ease_mvp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAA2M5VQCl9wGteRZ6vs0nUAOLEtl-qOHo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
