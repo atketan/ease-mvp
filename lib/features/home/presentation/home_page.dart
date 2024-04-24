@@ -12,12 +12,18 @@ class _EASEHomePageState extends State<EASEHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("EASE Home Page"),
+        title: const Text(""),
       ),
       body: const Center(
         child: Text(
-          'Welcome to EASE',
+          "Let's get accounting!",
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // Add your onPressed function here
+        },
+        child: const Icon(Icons.add),
       ),
     );
   }
