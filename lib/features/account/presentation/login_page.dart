@@ -97,33 +97,83 @@ class _LoginPageState extends State<LoginPage> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            Container(
-              padding: EdgeInsets.all(10),
-              // margin: EdgeInsets.only(top: 100),
-              child: TextField(
-                controller: _phoneController,
-                decoration:
-                    InputDecoration(hintText: "Enter your phone number"),
+            Card(
+              elevation: 2,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
               ),
-            ),
-            Container(
-              padding: EdgeInsets.all(10),
-              child: ElevatedButton(
-                onPressed: () {
-                  final phone = _phoneController.text.trim();
+              margin: EdgeInsets.all(16),
+              color: Colors.white,
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox.fromSize(size: Size.fromHeight(20)),
+                    Text(
+                      "Login",
+                      style: Theme.of(context)
+                          .textTheme
+                          .headlineLarge
+                          ?.copyWith(fontWeight: FontWeight.w700),
+                    ),
+                    SizedBox.fromSize(size: Size.fromHeight(40)),
+                    TextField(
+                      controller: _phoneController,
+                      keyboardType: TextInputType.phone,
+                      maxLength: 10,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        prefixText: '+91 ',
+                        hintText: "Enter your 10 digit mobile number",
+                      ),
+                    ),
+                    SizedBox.fromSize(size: Size.fromHeight(10)),
+                    // Container(
+                    //   padding: EdgeInsets.all(10),
+                    //   // margin: EdgeInsets.only(top: 100),
+                    //   child: Expanded(
+                    //     child: Row(
+                    //       children: [
+                    //         Text("+91"),
+                    //         TextField(
+                    //           controller: _phoneController,
+                    //           decoration: InputDecoration(
+                    //             hintText: "Enter your phone number",
+                    //           ),
+                    //         ),
+                    //       ],
+                    //     ),
+                    //   ),
+                    // ),
+                    Text(
+                      "We will send you one time password (OTP)",
+                      style: Theme.of(context).textTheme.bodyMedium,
+                      textAlign: TextAlign.center,
+                    ),
+                    SizedBox.fromSize(size: Size.fromHeight(40)),
+                    Container(
+                      padding: EdgeInsets.all(10),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          final phone = _phoneController.text.trim();
 
-                  loginUser(phone, context);
-                },
-                // style: ElevatedButton.styleFrom(
-                // backgroundColor: Colors.blue, // background color
-                // onPrimary: Colors.white, // text color
-                // ),
-                child: Text(
-                  "Verify",
-                  // style: TextStyle(color: Colors.white),
+                          loginUser(phone, context);
+                        },
+                        // style: ElevatedButton.styleFrom(
+                        // backgroundColor: Colors.blue, // background color
+                        // onPrimary: Colors.white, // text color
+                        // ),
+                        child: Text(
+                          "Verify",
+                          // style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    )
+                  ],
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),

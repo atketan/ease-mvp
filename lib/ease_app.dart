@@ -24,10 +24,12 @@ class _EASEAppState extends State<EASEApp> {
       title: 'EASE',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
+        fontFamily: 'Lato',
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
       darkTheme: ThemeData(
+        fontFamily: 'Lato',
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.lightGreen),
         useMaterial3: true,
       ),
