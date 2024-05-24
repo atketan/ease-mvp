@@ -2,10 +2,8 @@ import 'package:ease_mvp/features/account/presentation/bloc/login_cubit.dart';
 import 'package:ease_mvp/features/account/presentation/bloc/login_state.dart';
 import 'package:ease_mvp/features/account/presentation/otp_page.dart';
 import 'package:ease_mvp/features/home/presentation/home_page.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class LoginPage extends StatefulWidget {
@@ -15,7 +13,6 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final _phoneController = TextEditingController();
-  final _codeController = TextEditingController();
   // FirebaseAuth _auth = FirebaseAuth.instance;
 
   // Future<bool> loginUser(String phone, BuildContext context) async {

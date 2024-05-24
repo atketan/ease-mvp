@@ -37,7 +37,7 @@ class _EASEAppState extends State<EASEApp> {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.lightGreen),
           useMaterial3: true,
         ),
-        home: (_auth.currentUser != null) ? LoginPage() : LoginPage(),
+        home: (_auth.currentUser != null) ? EASEHomePage() : LoginPage(),
       ),
     );
   }
