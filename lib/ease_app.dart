@@ -29,7 +29,7 @@ class _EASEAppState extends State<EASEApp> {
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           fontFamily: 'Lato',
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.teal),
           useMaterial3: true,
         ),
         darkTheme: ThemeData(

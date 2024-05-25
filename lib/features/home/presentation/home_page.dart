@@ -1,3 +1,4 @@
+import 'package:floating_action_bubble/floating_action_bubble.dart';
 import 'package:flutter/material.dart';
 
 class EASEHomePage extends StatefulWidget {
@@ -7,13 +8,30 @@ class EASEHomePage extends StatefulWidget {
   State<EASEHomePage> createState() => _EASEHomePageState();
 }
 
-class _EASEHomePageState extends State<EASEHomePage> {
+class _EASEHomePageState extends State<EASEHomePage>
+    with SingleTickerProviderStateMixin {
   int _selectedIndex = 0;
+  late Animation<double> _animation;
+  late AnimationController _animationController;
 
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
+  }
+
+  @override
+  void initState() {
+    _animationController = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 260),
+    );
+
+    final curvedAnimation =
+        CurvedAnimation(curve: Curves.easeInOut, parent: _animationController);
+    _animation = Tween<double>(begin: 0, end: 1).animate(curvedAnimation);
+
+    super.initState();
   }
 
   @override
@@ -27,11 +45,65 @@ class _EASEHomePageState extends State<EASEHomePage> {
           "Let's get accounting!",
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // Add your onPressed function here
-        },
-        child: const Icon(Icons.add),
+      floatingActionButton: FloatingActionBubble(
+        items: <Bubble>[
+          // Floating action menu item
+          Bubble(
+            title: "Sale",
+            iconColor: Theme.of(context).colorScheme.primary,
+            bubbleColor: Theme.of(context).colorScheme.background,
+            icon: Icons.settings,
+            titleStyle: TextStyle(
+                fontSize: 16, color: Theme.of(context).colorScheme.primary),
+            onPress: () {
+              _animationController.reverse();
+            },
+          ),
+          // Floating action menu item
+          Bubble(
+            title: "Purchase",
+            iconColor: Theme.of(context).colorScheme.primary,
+            bubbleColor: Theme.of(context).colorScheme.background,
+            icon: Icons.people,
+            titleStyle: TextStyle(
+                fontSize: 16, color: Theme.of(context).colorScheme.primary),
+            onPress: () {
+              _animationController.reverse();
+            },
+          ),
+          //Floating action menu item
+          Bubble(
+            title: "Expense",
+            iconColor: Theme.of(context).colorScheme.primary,
+            bubbleColor: Theme.of(context).colorScheme.background,
+            icon: Icons.home,
+            titleStyle: TextStyle(
+                fontSize: 16, color: Theme.of(context).colorScheme.primary),
+            onPress: () {
+              // Navigator.push(context, new MaterialPageRoute(builder: (BuildContext context) => Homepage()));
+              _animationController.reverse();
+            },
+          ),
+          Bubble(
+            title: "Payment",
+            iconColor: Theme.of(context).colorScheme.primary,
+            bubbleColor: Theme.of(context).colorScheme.background,
+            icon: Icons.home,
+            titleStyle: TextStyle(
+                fontSize: 16, color: Theme.of(context).colorScheme.primary),
+            onPress: () {
+              // Navigator.push(context, new MaterialPageRoute(builder: (BuildContext context) => Homepage()));
+              _animationController.reverse();
+            },
+          ),
+        ],
+        animation: _animation,
+        onPress: () => _animationController.isCompleted
+            ? _animationController.reverse()
+            : _animationController.forward(),
+        iconColor: Theme.of(context).colorScheme.primary,
+        iconData: Icons.add,
+        backGroundColor: Theme.of(context).colorScheme.background,
       ),
       bottomNavigationBar: BottomNavigationBar(
         selectedItemColor: Theme.of(context).colorScheme.primary,
@@ -42,20 +114,16 @@ class _EASEHomePageState extends State<EASEHomePage> {
         showUnselectedLabels: true,
         items: [
           BottomNavigationBarItem(
-            icon: Icon(Icons.attach_money_outlined),
-            label: "Sale",
+            icon: Icon(Icons.dashboard_sharp),
+            label: "Dashboard",
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.shopping_cart_outlined),
-            label: "Purchase",
+            icon: Icon(Icons.inventory_sharp),
+            label: "Invoices",
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.money_off_outlined),
-            label: "Expense",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.done_all_outlined),
-            label: "Payment",
+            icon: Icon(Icons.view_list_sharp),
+            label: "Reports",
           ),
         ],
         onTap: (value) => _onItemTapped(value),
