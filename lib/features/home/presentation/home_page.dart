@@ -1,3 +1,6 @@
+import 'package:ease_mvp/features/invoices/data_models/invoice_operation.dart';
+import 'package:ease_mvp/features/invoices/data_models/invoice_type_enum.dart';
+import 'package:ease_mvp/features/invoices/presentation/manage_invoice.dart';
 import 'package:floating_action_bubble/floating_action_bubble.dart';
 import 'package:flutter/material.dart';
 
@@ -57,6 +60,16 @@ class _EASEHomePageState extends State<EASEHomePage>
                 fontSize: 16, color: Theme.of(context).colorScheme.primary),
             onPress: () {
               _animationController.reverse();
+              Navigator.push(
+                context,
+                new MaterialPageRoute(
+                  builder: (BuildContext context) => ManageInvoice(
+                    invoiceType: InvoiceType.cashSale,
+                    invoiceOperation: InvoiceOperation.newInvoice,
+                  ),
+                  fullscreenDialog: true,
+                ),
+              );
             },
           ),
           // Floating action menu item
@@ -69,6 +82,16 @@ class _EASEHomePageState extends State<EASEHomePage>
                 fontSize: 16, color: Theme.of(context).colorScheme.primary),
             onPress: () {
               _animationController.reverse();
+              Navigator.push(
+                context,
+                new MaterialPageRoute(
+                  builder: (BuildContext context) => ManageInvoice(
+                    invoiceType: InvoiceType.cashPurchase,
+                    invoiceOperation: InvoiceOperation.newInvoice,
+                  ),
+                  fullscreenDialog: true,
+                ),
+              );
             },
           ),
           //Floating action menu item
