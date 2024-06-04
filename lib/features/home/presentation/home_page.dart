@@ -1,6 +1,8 @@
+import 'package:ease_mvp/features/account/presentation/login_page.dart';
 import 'package:ease_mvp/features/invoices/data_models/invoice_operation.dart';
 import 'package:ease_mvp/features/invoices/data_models/invoice_type_enum.dart';
 import 'package:ease_mvp/features/invoices/presentation/manage_invoice.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:floating_action_bubble/floating_action_bubble.dart';
 import 'package:flutter/material.dart';
 
@@ -46,6 +48,36 @@ class _EASEHomePageState extends State<EASEHomePage>
       body: const Center(
         child: Text(
           "Let's get accounting!",
+        ),
+      ),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            DrawerHeader(
+              child: const Text("EASE"),
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.primary,
+              ),
+            ),
+            ListTile(
+              title: const Text("Settings"),
+              onTap: () {
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              title: const Text("Logout"),
+              onTap: () {
+                FirebaseAuth.instance.signOut();
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => LoginPage()),
+                  (route) => false,
+                );
+              },
+            ),
+          ],
         ),
       ),
       floatingActionButton: FloatingActionBubble(

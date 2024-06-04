@@ -21,6 +21,7 @@ class LoginCubit extends Cubit<LoginState> {
   }
 
   Future<void> loginWithPhoneNumber(String phoneNumber) async {
+    emit(LoginLoading(state: true));
     await _auth.verifyPhoneNumber(
         phoneNumber: phoneNumber,
         timeout: const Duration(seconds: 60),
@@ -39,17 +40,25 @@ class LoginCubit extends Cubit<LoginState> {
           }).catchError((error) {
             emit(LoginFailure(
                 message: 'Something has gone wrong, please try later'));
+            emit(LoginLoading(state: false));
             return Future<Null>.error(error);
           });
+          emit(LoginLoading(state: false));
         },
         verificationFailed: (FirebaseAuthException authException) {
           print('Error message: ' + authException.message.toString());
-          emit(
-            LoginFailure(
-              message:
-                  'The phone number format is incorrect. Please enter your number in E.164 format. [+][country code][number]',
-            ),
-          );
+          if (authException.code == 'recaptcha-verification-failed') {
+            emit(LoginFailure(
+                message: 'reCAPTCHA verification failed. Please try again.'));
+          } else {
+            emit(
+              LoginFailure(
+                message:
+                    'The phone number format is incorrect. Please enter your number in E.164 format. [+][country code][number]',
+              ),
+            );
+          }
+          emit(LoginLoading(state: false));
         },
         codeSent: (String verificationId, int? forceResendingToken) async {
           actualCode = verificationId;
