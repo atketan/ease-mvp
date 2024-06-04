@@ -10,21 +10,30 @@ class ManageReferencesWidget extends StatefulWidget {
 class _ManageReferencesWidgetState extends State<ManageReferencesWidget> {
   TextEditingController _reference1TextController = TextEditingController();
   TextEditingController _reference2TextController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: Text("References"),
+      ),
       body: Container(
-        padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4),
+        padding: EdgeInsets.symmetric(horizontal: 16.0),
         child: Column(
           children: [
+            SizedBox.fromSize(
+              size: Size.fromHeight(16),
+            ),
             TextFormField(
               controller: _reference1TextController,
               decoration: const InputDecoration(
-                icon: Icon(Icons.note_add),
+                border: OutlineInputBorder(),
+                // icon: Icon(Icons.note_add),
                 // hintText: 'Useful for search',
                 labelText: 'Reference 1',
               ),
+              maxLines: 1,
+              maxLength: 24,
               onSaved: (String? value) {
                 // This optional block of code can be used to run
                 // code when the user saves the form.
@@ -35,13 +44,19 @@ class _ManageReferencesWidgetState extends State<ManageReferencesWidget> {
                     : null;
               },
             ),
+            SizedBox.fromSize(
+              size: Size.fromHeight(16),
+            ),
             TextFormField(
               controller: _reference2TextController,
               decoration: const InputDecoration(
-                icon: Icon(Icons.note_add_outlined),
+                border: OutlineInputBorder(),
+                // icon: Icon(Icons.note_add_outlined),
                 // hintText: 'Useful for search',
                 labelText: 'Reference 2',
               ),
+              maxLines: 1,
+              maxLength: 24,
               onSaved: (String? value) {
                 // This optional block of code can be used to run
                 // code when the user saves the form.
