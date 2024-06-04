@@ -31,7 +31,12 @@ class _EASEAppState extends State<EASEApp> {
           fontFamily: 'Lato',
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.teal),
           useMaterial3: true,
+          appBarTheme: AppBarTheme(
+            backgroundColor: Colors.teal,
+            foregroundColor: Colors.white,
+          ),
           listTileTheme: ListTileThemeData(
+            visualDensity: VisualDensity.compact,
             tileColor: Colors.white,
             contentPadding: EdgeInsets.all(8),
             shape: RoundedRectangleBorder(
@@ -45,12 +50,23 @@ class _EASEAppState extends State<EASEApp> {
             color: Colors.white,
             surfaceTintColor: Colors.white,
           ),
+          textButtonTheme: TextButtonThemeData(
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(Colors.teal),
+              foregroundColor: MaterialStateProperty.all(Colors.white),
+            ),
+          ),
         ),
         darkTheme: ThemeData(
           fontFamily: 'Lato',
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.lightGreen),
           useMaterial3: true,
+          appBarTheme: AppBarTheme(
+            backgroundColor: Colors.lightGreen,
+            foregroundColor: Colors.black,
+          ),
           listTileTheme: ListTileThemeData(
+            visualDensity: VisualDensity.compact,
             tileColor: Colors.black,
             contentPadding: EdgeInsets.all(8),
             shape: RoundedRectangleBorder(
@@ -63,6 +79,12 @@ class _EASEAppState extends State<EASEApp> {
             ),
             color: Colors.black,
             surfaceTintColor: Colors.black,
+          ),
+          textButtonTheme: TextButtonThemeData(
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(Colors.lightGreen),
+              foregroundColor: MaterialStateProperty.all(Colors.black),
+            ),
           ),
         ),
         home: (_auth.currentUser != null) ? EASEHomePage() : LoginPage(),

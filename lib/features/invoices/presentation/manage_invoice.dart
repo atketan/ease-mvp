@@ -1,7 +1,11 @@
+import 'package:ease_mvp/core/providers/animated_routes_provider.dart';
 import 'package:ease_mvp/features/invoices/data_models/invoice_operation.dart';
 import 'package:ease_mvp/features/invoices/data_models/invoice_type_enum.dart';
-import 'package:ease_mvp/widgets/toggle_tab.dart';
+import 'package:ease_mvp/features/invoices/widgets/manage_customer_widget.dart';
+import 'package:ease_mvp/features/invoices/widgets/manage_references_widget.dart';
+import 'package:ease_mvp/features/invoices/widgets/manage_voucher_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class ManageInvoice extends StatefulWidget {
   final InvoiceType invoiceType;
@@ -18,18 +22,21 @@ class _ManageInvoiceState extends State<ManageInvoice> {
   late InvoiceOperation _invoiceOperation;
 
   final _formKey = GlobalKey<FormState>();
-  TextEditingController _reference1TextController = TextEditingController();
-  TextEditingController _reference2TextController = TextEditingController();
+
+  late double formWidth;
+  late String dueDate;
 
   @override
   void initState() {
     _invoiceType = widget.invoiceType;
     _invoiceOperation = widget.invoiceOperation;
+    dueDate = DateFormat('dd-MMM-yyyy').format(DateTime.now());
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    formWidth = MediaQuery.of(context).size.width.toDouble();
     return Scaffold(
       appBar: AppBar(
         title: Text(_invoiceOperation.prefix + " " + _invoiceType.title),
@@ -50,111 +57,122 @@ class _ManageInvoiceState extends State<ManageInvoice> {
         ],
       ),
       body: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(0.0),
         child: Form(
           key: _formKey,
           child: Column(
             children: [
               Container(
-                padding: EdgeInsets.all(8),
-                child: Flex(
-                  direction: Axis.horizontal,
-                  children: [
-                    ToggleTab(
-                      callback: (int i) {},
-                      tabTexts: const [
-                        'Cash',
-                        'Credit',
-                      ],
-                      height: 40,
-                      width: 360,
-                      boxDecoration: BoxDecoration(
-                          // color: Color(0xFFc3d2db),
-                          ),
-                      animatedBoxDecoration: BoxDecoration(
-                        boxShadow: [
-                          BoxShadow(
-                            color: const Color(0xFFc3d2db).withOpacity(0.1),
-                            spreadRadius: 1,
-                            blurRadius: 5,
-                            offset: const Offset(2, 2),
-                          ),
-                        ],
-                        // color: kDarkBlueColor,
-                        borderRadius: const BorderRadius.all(
-                          Radius.circular(5),
-                        ),
-                        border: Border.all(
-                          color: Colors.grey,
-                          width: 1,
-                        ),
-                      ),
-                      duration: const Duration(milliseconds: 50),
-                      activeStyle: const TextStyle(
-                        color: Colors.blue,
-                      ),
-                      inactiveStyle: const TextStyle(
-                        color: Colors.black,
-                      ),
+                decoration: BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(
+                      color: Colors.grey[200]!,
+                      width: 1,
                     ),
-                  ],
-                ),
-              ),
-              Card(
-                child: ListTile(
-                  title: Text("Voucher Number"),
-                  subtitle: Text("INV-2022-0001"),
-                  trailing: Icon(Icons.arrow_right_sharp),
-                ),
-              ),
-              Card(
-                child: ListTile(
-                  title: Text("Customer"),
-                  subtitle: Text("ABC Corp."),
-                  trailing: Icon(Icons.arrow_right_sharp),
-                ),
-              ),
-              Card(
-                child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4),
-                  child: Column(
-                    children: [
-                      TextFormField(
-                        controller: _reference1TextController,
-                        decoration: const InputDecoration(
-                          icon: Icon(Icons.note_add),
-                          // hintText: 'Useful for search',
-                          labelText: 'Reference 1',
-                        ),
-                        onSaved: (String? value) {
-                          // This optional block of code can be used to run
-                          // code when the user saves the form.
-                        },
-                        validator: (String? value) {
-                          return (value != null && value.contains('@'))
-                              ? 'Do not use the @ char.'
-                              : null;
-                        },
-                      ),
-                      TextFormField(
-                        controller: _reference2TextController,
-                        decoration: const InputDecoration(
-                          icon: Icon(Icons.note_add_outlined),
-                          // hintText: 'Useful for search',
-                          labelText: 'Reference 2',
-                        ),
-                        onSaved: (String? value) {
-                          // This optional block of code can be used to run
-                          // code when the user saves the form.
-                        },
-                        validator: (String? value) {
-                          return (value != null && value.contains('#'))
-                              ? 'Do not use the # char.'
-                              : null;
-                        },
-                      ),
-                    ],
                   ),
+                ),
+                margin: EdgeInsets.only(bottom: 8),
+                child: ListTile(
+                  title: Text("Voucher #" + "INV-2022-0001"),
+                  subtitle: Text("Due: " + dueDate),
+                  trailing: Icon(Icons.arrow_right_sharp),
+                  onTap: () => PushSlideInAnimatedRoute(
+                    context,
+                    page: ManageVoucherWidget(),
+                  ),
+                ),
+              ),
+              // We will not need the toggle, if we assume that all
+              // transactions are by default cash and have a payments widget
+              // which takes care of historical updates on the receivables.
+              // Container(
+              //   // padding: EdgeInsets.all(8),
+              //   child: Flex(
+              //     direction: Axis.horizontal,
+              //     children: [
+              //       ToggleTab(
+              //         callback: (int i) {},
+              //         tabTexts: const [
+              //           'Cash',
+              //           'Credit',
+              //         ],
+              //         height: 40,
+              //         width: formWidth,
+              //         boxDecoration: BoxDecoration(
+              //             // color: Color(0xFFc3d2db),
+              //             ),
+              //         animatedBoxDecoration: BoxDecoration(
+              //           boxShadow: [
+              //             BoxShadow(
+              //               color: const Color(0xFFc3d2db).withOpacity(0.1),
+              //               spreadRadius: 1,
+              //               blurRadius: 5,
+              //               offset: const Offset(2, 2),
+              //             ),
+              //           ],
+              //           // color: kDarkBlueColor,
+              //           borderRadius: const BorderRadius.all(
+              //             Radius.circular(5),
+              //           ),
+              //           border: Border.all(
+              //             color: Colors.grey,
+              //             width: 1,
+              //           ),
+              //         ),
+              //         duration: const Duration(milliseconds: 50),
+              //         activeStyle: const TextStyle(
+              //           color: Colors.blue,
+              //         ),
+              //         inactiveStyle: const TextStyle(
+              //           color: Colors.black,
+              //         ),
+              //       ),
+              //     ],
+              //   ),
+              // ),
+              Container(
+                decoration: BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(
+                      color: Colors.grey[200]!,
+                      width: 1,
+                    ),
+                  ),
+                ),
+                margin: EdgeInsets.only(bottom: 8),
+                child: ListTile(
+                  title: Text(
+                    "Customer: " + "ABC Corp.",
+                    style: TextStyle(
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  trailing: Icon(Icons.arrow_right_sharp),
+                  onTap: () => PushSlideInAnimatedRoute(
+                    context,
+                    page: ManageCustomerWidget(),
+                  ),
+                ),
+              ),
+              Container(
+                decoration: BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(
+                      color: Colors.grey[200]!,
+                      width: 1,
+                    ),
+                  ),
+                ),
+                margin: EdgeInsets.only(bottom: 8),
+                child: ListTile(
+                  title: Text("References"),
+                  trailing: Icon(Icons.arrow_right_sharp),
+                  onTap: () {
+                    PushSlideInAnimatedRoute(
+                      context,
+                      page: ManageReferencesWidget(),
+                    );
+                  },
                 ),
               ),
             ],
