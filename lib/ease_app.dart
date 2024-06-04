@@ -31,11 +31,39 @@ class _EASEAppState extends State<EASEApp> {
           fontFamily: 'Lato',
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.teal),
           useMaterial3: true,
+          listTileTheme: ListTileThemeData(
+            tileColor: Colors.white,
+            contentPadding: EdgeInsets.all(8),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+          ),
+          cardTheme: CardTheme(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+            color: Colors.white,
+            surfaceTintColor: Colors.white,
+          ),
         ),
         darkTheme: ThemeData(
           fontFamily: 'Lato',
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.lightGreen),
           useMaterial3: true,
+          listTileTheme: ListTileThemeData(
+            tileColor: Colors.black,
+            contentPadding: EdgeInsets.all(8),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+          ),
+          cardTheme: CardTheme(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+            color: Colors.black,
+            surfaceTintColor: Colors.black,
+          ),
         ),
         home: (_auth.currentUser != null) ? EASEHomePage() : LoginPage(),
       ),

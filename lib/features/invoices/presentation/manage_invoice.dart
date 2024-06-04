@@ -89,6 +89,7 @@ class _ManageInvoiceState extends State<ManageInvoice> {
                           width: 1,
                         ),
                       ),
+                      duration: const Duration(milliseconds: 50),
                       activeStyle: const TextStyle(
                         color: Colors.blue,
                       ),
