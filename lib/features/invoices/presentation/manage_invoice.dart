@@ -1,3 +1,4 @@
+import 'package:ease_mvp/core/models/invoice_item.dart';
 import 'package:ease_mvp/core/providers/animated_routes_provider.dart';
 import 'package:ease_mvp/features/invoices/data_models/invoice_operation.dart';
 import 'package:ease_mvp/features/invoices/data_models/invoice_type_enum.dart';
@@ -25,12 +26,32 @@ class _ManageInvoiceState extends State<ManageInvoice> {
 
   late double formWidth;
   late String dueDate;
+  late List<InvoiceItem> itemsList;
 
   @override
   void initState() {
     _invoiceType = widget.invoiceType;
     _invoiceOperation = widget.invoiceOperation;
     dueDate = DateFormat('dd-MMM-yyyy').format(DateTime.now());
+    itemsList = [];
+    itemsList.add(InvoiceItem(
+        particulars: "Asian Paints 1ltr",
+        uom: "ltr",
+        rate: 100,
+        quantity: 1,
+        amount: 100));
+    itemsList.add(InvoiceItem(
+        particulars: "Asian Paints 1ltr",
+        uom: "ltr",
+        rate: 100,
+        quantity: 1,
+        amount: 100));
+    itemsList.add(InvoiceItem(
+        particulars: "Asian Paints 1ltr",
+        uom: "ltr",
+        rate: 100,
+        quantity: 1,
+        amount: 100));
     super.initState();
   }
 
@@ -174,6 +195,57 @@ class _ManageInvoiceState extends State<ManageInvoice> {
                     );
                   },
                 ),
+              ),
+
+              Container(
+                decoration: BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(
+                      color: Colors.grey[200]!,
+                      width: 1,
+                    ),
+                  ),
+                ),
+                margin: EdgeInsets.only(bottom: 8),
+                child: (itemsList.isEmpty)
+                    ? ListTile(
+                        title: Text("Add items"),
+                      )
+                    : ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: itemsList.length,
+                        itemBuilder: (context, index) {
+                          return ListTile(
+                            visualDensity: VisualDensity.compact,
+                            dense: true,
+                            title: RichText(
+                              text: TextSpan(
+                                text: (index + 1).toString() + ". ",
+                                style: Theme.of(context).textTheme.titleSmall,
+                                children: <TextSpan>[
+                                  TextSpan(
+                                    text: itemsList[index].particulars,
+                                    style:
+                                        Theme.of(context).textTheme.titleMedium,
+                                  ),
+                                  TextSpan(
+                                    text: ", " +
+                                        itemsList[index].quantity.toString() +
+                                        " x \u{20B9}" +
+                                        itemsList[index].rate.toString(),
+                                    style:
+                                        Theme.of(context).textTheme.titleSmall,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            trailing: Text(
+                              "\u{20B9} ${itemsList[index].amount}",
+                              style: Theme.of(context).textTheme.titleMedium,
+                            ),
+                          );
+                        },
+                      ),
               ),
             ],
           ),
