@@ -1,8 +1,9 @@
-import 'package:ease_mvp/core/models/invoice_item.dart';
+import 'package:ease_mvp/features/invoices/data_models/invoice_item.dart';
 import 'package:ease_mvp/core/providers/animated_routes_provider.dart';
 import 'package:ease_mvp/features/invoices/data_models/invoice_operation.dart';
 import 'package:ease_mvp/features/invoices/data_models/invoice_type_enum.dart';
 import 'package:ease_mvp/features/invoices/widgets/manage_customer_widget.dart';
+import 'package:ease_mvp/features/invoices/widgets/manage_discount_widget.dart';
 import 'package:ease_mvp/features/invoices/widgets/manage_references_widget.dart';
 import 'package:ease_mvp/features/invoices/widgets/manage_voucher_widget.dart';
 import 'package:flutter/material.dart';
@@ -24,6 +25,7 @@ class _ManageInvoiceState extends State<ManageInvoice> {
 
   final _formKey = GlobalKey<FormState>();
 
+  late String voucherNumber;
   late double formWidth;
   late String dueDate;
   late List<InvoiceItem> itemsList;
@@ -32,8 +34,21 @@ class _ManageInvoiceState extends State<ManageInvoice> {
   void initState() {
     _invoiceType = widget.invoiceType;
     _invoiceOperation = widget.invoiceOperation;
+    voucherNumber = "INV-" + DateTime.now().millisecondsSinceEpoch.toString();
     dueDate = DateFormat('dd-MMM-yyyy').format(DateTime.now());
     itemsList = [];
+    itemsList.add(InvoiceItem(
+        particulars: "Asian Paints 1ltr",
+        uom: "ltr",
+        rate: 100,
+        quantity: 1,
+        amount: 100));
+    itemsList.add(InvoiceItem(
+        particulars: "Asian Paints 1ltr",
+        uom: "ltr",
+        rate: 100,
+        quantity: 1,
+        amount: 100));
     itemsList.add(InvoiceItem(
         particulars: "Asian Paints 1ltr",
         uom: "ltr",
@@ -81,7 +96,8 @@ class _ManageInvoiceState extends State<ManageInvoice> {
         padding: const EdgeInsets.all(0.0),
         child: Form(
           key: _formKey,
-          child: Column(
+          child: ListView(
+            shrinkWrap: true,
             children: [
               Container(
                 decoration: BoxDecoration(
@@ -94,7 +110,7 @@ class _ManageInvoiceState extends State<ManageInvoice> {
                 ),
                 margin: EdgeInsets.only(bottom: 8),
                 child: ListTile(
-                  title: Text("Voucher #" + "INV-2022-0001"),
+                  title: Text("Voucher #" + voucherNumber),
                   subtitle: Text("Due: " + dueDate),
                   trailing: Icon(Icons.arrow_right_sharp),
                   onTap: () => PushSlideInAnimatedRoute(
@@ -207,45 +223,250 @@ class _ManageInvoiceState extends State<ManageInvoice> {
                   ),
                 ),
                 margin: EdgeInsets.only(bottom: 8),
-                child: (itemsList.isEmpty)
-                    ? ListTile(
-                        title: Text("Add items"),
-                      )
-                    : ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: itemsList.length,
-                        itemBuilder: (context, index) {
-                          return ListTile(
-                            visualDensity: VisualDensity.compact,
-                            dense: true,
-                            title: RichText(
-                              text: TextSpan(
-                                text: (index + 1).toString() + ". ",
-                                style: Theme.of(context).textTheme.titleSmall,
-                                children: <TextSpan>[
-                                  TextSpan(
-                                    text: itemsList[index].particulars,
-                                    style:
-                                        Theme.of(context).textTheme.titleMedium,
-                                  ),
-                                  TextSpan(
-                                    text: ", " +
-                                        itemsList[index].quantity.toString() +
-                                        " x \u{20B9}" +
-                                        itemsList[index].rate.toString(),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    (itemsList.isEmpty)
+                        ? ListTile(
+                            title: Text("Add items"),
+                          )
+                        : ListView.builder(
+                            shrinkWrap: true,
+                            physics: NeverScrollableScrollPhysics(),
+                            itemCount: itemsList.length,
+                            itemBuilder: (context, index) {
+                              return ListTile(
+                                visualDensity: VisualDensity.compact,
+                                dense: true,
+                                title: RichText(
+                                  text: TextSpan(
+                                    text: (index + 1).toString() + ". ",
                                     style:
                                         Theme.of(context).textTheme.titleSmall,
+                                    children: <TextSpan>[
+                                      TextSpan(
+                                        text: itemsList[index].particulars,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleMedium,
+                                      ),
+                                      TextSpan(
+                                        text: ", " +
+                                            itemsList[index]
+                                                .quantity
+                                                .toString() +
+                                            " x \u{20B9}" +
+                                            itemsList[index].rate.toString(),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleSmall,
+                                      ),
+                                    ],
                                   ),
-                                ],
-                              ),
-                            ),
-                            trailing: Text(
-                              "\u{20B9} ${itemsList[index].amount}",
-                              style: Theme.of(context).textTheme.titleMedium,
-                            ),
-                          );
-                        },
+                                ),
+                                trailing: Text(
+                                  "\u{20B9} ${itemsList[index].amount}",
+                                  style:
+                                      Theme.of(context).textTheme.titleMedium,
+                                ),
+                              );
+                            },
+                          ),
+                    TextButton(
+                      onPressed: () {},
+                      child: Row(
+                        children: [
+                          Icon(Icons.add_circle_outline),
+                          Text(" Add Item "),
+                        ],
                       ),
+                      style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all(Colors.transparent),
+                        foregroundColor:
+                            MaterialStateProperty.all(Colors.blue[700]),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                decoration: BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(
+                      color: Colors.grey[200]!,
+                      width: 1,
+                    ),
+                  ),
+                ),
+                margin: EdgeInsets.only(bottom: 8),
+                child: Column(
+                  children: [
+                    ListTile(
+                      title: Text("Subtotal"),
+                      visualDensity: VisualDensity.compact,
+                      trailing: Text(
+                        "\u{20B9} 300.0",
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
+                      onTap: () {
+                        // PushSlideInAnimatedRoute(
+                        //   context,
+                        //   page: ManagePaymentsWidget(),
+                        // );
+                      },
+                    ),
+                    ListTile(
+                      title: Text("Discount from Subtotal"),
+                      visualDensity: VisualDensity.compact,
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            "\u{20B9} 30.0",
+                            style: Theme.of(context).textTheme.titleMedium,
+                          ),
+                          Icon(Icons.arrow_right_sharp),
+                        ],
+                      ),
+                      onTap: () {
+                        PushSlideInAnimatedRoute(
+                          context,
+                          page: ManageDiscountWidget(),
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                decoration: BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(
+                      color: Colors.grey[200]!,
+                      width: 1,
+                    ),
+                  ),
+                ),
+                margin: EdgeInsets.only(bottom: 8),
+                child: ListTile(
+                  title: Text("GST"),
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        "10.0%",
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
+                      Icon(Icons.arrow_right_sharp),
+                    ],
+                  ),
+                  onTap: () {
+                    // PushSlideInAnimatedRoute(
+                    //   context,
+                    //   page: ManagePaymentsWidget(),
+                    // );
+                  },
+                ),
+              ),
+              Container(
+                decoration: BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(
+                      color: Colors.grey[200]!,
+                      width: 1,
+                    ),
+                  ),
+                ),
+                margin: EdgeInsets.only(bottom: 8),
+                child: ListTile(
+                  title: Text("Total"),
+                  trailing: Text(
+                    "\u{20B9} 330.0",
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                  onTap: () {
+                    // PushSlideInAnimatedRoute(
+                    //   context,
+                    //   page: ManagePaymentsWidget(),
+                    // );
+                  },
+                ),
+              ),
+              Container(
+                decoration: BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(
+                      color: Colors.grey[200]!,
+                      width: 1,
+                    ),
+                  ),
+                ),
+                margin: EdgeInsets.only(bottom: 8),
+                padding: EdgeInsets.all(8.0),
+                child: TextFormField(
+                  maxLines: 3,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    // icon: Icon(Icons.note_add),
+                    // hintText: 'Useful for search',
+                    labelText: 'Remarks',
+                    labelStyle: Theme.of(context).textTheme.titleSmall,
+                  ),
+                ),
+              ),
+              Container(
+                decoration: BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(
+                      color: Colors.grey[200]!,
+                      width: 1,
+                    ),
+                  ),
+                ),
+                margin: EdgeInsets.only(bottom: 8),
+                padding: EdgeInsets.all(8.0),
+                child: ButtonBar(
+                  alignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    TextButton(
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all(Colors.red),
+                      ),
+                      onPressed: () {
+                        // If the form is valid, display a Snackbar
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('Processing Data'),
+                          ),
+                        );
+                      },
+                      child: Text("Delete"),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        // If the form is valid, display a Snackbar
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('Processing Data'),
+                          ),
+                        );
+                      },
+                      child: Text("Save"),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        // If the form is valid, display a Snackbar
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('Processing Data'),
+                          ),
+                        );
+                      },
+                      child: Text("Print"),
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
