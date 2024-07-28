@@ -1,7 +1,7 @@
 import 'invoice_item.dart';
 
 class Invoice {
-  int id;
+  int? id; // auto-increment ID from the DB - primary key
   int? customerId;
   int? vendorId;
   String invoiceNumber;
@@ -12,7 +12,7 @@ class Invoice {
   List<InvoiceItem> _items = [];
 
   Invoice({
-    required this.id,
+    this.id,
     this.customerId,
     this.vendorId,
     required this.invoiceNumber,
