@@ -1,7 +1,5 @@
 import 'package:ease_mvp/features/account/presentation/login_page.dart';
-import 'package:ease_mvp/features/invoices/data_models/invoice_operation.dart';
-import 'package:ease_mvp/features/invoices/data_models/invoice_type_enum.dart';
-import 'package:ease_mvp/features/invoices/presentation/manage_invoice.dart';
+import 'package:ease_mvp/features/manage/presentation/manage_landing_page.dart';
 import 'package:ease_mvp/presentation/invoices/invoice_form.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:floating_action_bubble/floating_action_bubble.dart';
@@ -40,14 +38,24 @@ class _EASEHomePageState extends State<EASEHomePage>
     super.initState();
   }
 
+  static List<Widget> _widgetOptions = <Widget>[
+    Center(
+      child: Text(
+        "Let's get accounting!",
+      ),
+    ),
+    Center(
+      child: Text(
+        'Business Overview',
+      ),
+    ),
+    ReportsLandingPage(),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: const Center(
-        child: Text(
-          "Let's get accounting!",
-        ),
-      ),
+      body: _widgetOptions.elementAt(_selectedIndex),
       drawer: Drawer(
         child: ListView(
           padding: EdgeInsets.zero,
@@ -190,7 +198,7 @@ class _EASEHomePageState extends State<EASEHomePage>
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.view_list_sharp),
-            label: "Reports",
+            label: "Manage",
           ),
         ],
         onTap: (value) => _onItemTapped(value),

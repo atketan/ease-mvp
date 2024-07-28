@@ -14,8 +14,8 @@ class InvoiceForm extends StatelessWidget {
   // If it's a Sale Invoice, then that would be for a customer transaction    - credit entry on ledger
   // If it's a Purchase Invoice, then that would be for a vendor transaction  - debit entry on ledger
 
-  final CustomersDAO _customersDAO = CustomersDAO();
-  final VendorsDAO _vendorsDAO = VendorsDAO();
+  // final CustomersDAO _customersDAO = CustomersDAO();
+  // final VendorsDAO _vendorsDAO = VendorsDAO();
 
   InvoiceForm({Key? key, required this.isSale}) : super(key: key);
 
