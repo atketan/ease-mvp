@@ -1,3 +1,5 @@
+import 'package:ease_mvp/core/database/customers_dao.dart';
+import 'package:ease_mvp/features/customers/presentation/customers_page.dart';
 import 'package:flutter/material.dart';
 
 class ReportsLandingPage extends StatefulWidget {
@@ -17,6 +19,13 @@ class ReportsLandingPageState extends State<ReportsLandingPage> {
               title: Text("Customers"),
               subtitle: Text("Manage customer details | Sales"),
               trailing: Icon(Icons.arrow_forward_sharp),
+              onTap: () async {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => CustomersPage(),
+                  ),
+                );
+              },
             ),
             Divider(),
             ListTile(

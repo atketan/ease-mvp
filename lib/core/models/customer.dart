@@ -4,8 +4,8 @@ class Customer {
   String? address;
   String? phone;
   String? email;
-  DateTime? createdAt;
-  DateTime? updatedAt;
+  DateTime createdAt;
+  DateTime updatedAt;
 
   Customer({
     this.id,
@@ -13,8 +13,8 @@ class Customer {
     this.address,
     this.phone,
     this.email,
-    this.createdAt,
-    this.updatedAt,
+    required this.createdAt,
+    required this.updatedAt,
   });
 
   factory Customer.fromJSON(Map<String, dynamic> json) {
@@ -31,12 +31,13 @@ class Customer {
 
   Map<String, dynamic> toJSON() {
     return {
+      'id': id,
       'name': name,
       'address': address,
       'phone': phone,
       'email': email,
-      'created_at': createdAt?.toIso8601String(),
-      'updated_at': updatedAt?.toIso8601String(),
+      'created_at': createdAt.toIso8601String(),
+      'updated_at': updatedAt.toIso8601String(),
     };
   }
 }

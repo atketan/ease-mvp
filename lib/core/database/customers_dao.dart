@@ -10,7 +10,6 @@ class CustomersDAO {
   }
 
   Future<List<Customer>> getAllCustomers() async {
-    print("getAllCustomers");
     final db = await _databaseHelper.database;
     final List<Map<String, dynamic>> maps = await db.query('Customers');
     List.generate(maps.length, (i) {
@@ -23,6 +22,18 @@ class CustomersDAO {
     final db = await _databaseHelper.database;
     final List<Map<String, dynamic>> maps =
         await db.query('Customers', where: 'name = ?', whereArgs: [name]);
+
+    if (maps.isNotEmpty) {
+      return Customer.fromJSON(maps.first);
+    } else {
+      return null;
+    }
+  }
+
+  Future<Customer?> getCustomerById(int customerId) async {
+    final db = await _databaseHelper.database;
+    final List<Map<String, dynamic>> maps =
+        await db.query('Customers', where: 'id = ?', whereArgs: [customerId]);
 
     if (maps.isNotEmpty) {
       return Customer.fromJSON(maps.first);
