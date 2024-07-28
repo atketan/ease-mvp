@@ -15,6 +15,30 @@ class VendorsDAO {
     return List.generate(maps.length, (i) => Vendor.fromJSON(maps[i]));
   }
 
+  Future<Vendor?> getVendorByName(String name) async {
+    final db = await _databaseHelper.database;
+    final List<Map<String, dynamic>> maps =
+        await db.query('Vendors', where: 'name = ?', whereArgs: [name]);
+
+    if (maps.isNotEmpty) {
+      return Vendor.fromJSON(maps.first);
+    } else {
+      return null;
+    }
+  }
+
+  Future<Vendor?> getVendorById(int vendorId) async {
+    final db = await _databaseHelper.database;
+    final List<Map<String, dynamic>> maps =
+        await db.query('Vendors', where: 'id = ?', whereArgs: [vendorId]);
+
+    if (maps.isNotEmpty) {
+      return Vendor.fromJSON(maps.first);
+    } else {
+      return null;
+    }
+  }
+
   Future<int> updateVendor(Vendor vendor) async {
     final db = await _databaseHelper.database;
     return await db.update('Vendors', vendor.toJSON(),
