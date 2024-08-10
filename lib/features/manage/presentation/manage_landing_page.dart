@@ -1,4 +1,5 @@
 import 'package:ease_mvp/features/customers/presentation/customers_page.dart';
+import 'package:ease_mvp/features/items/presentation/items_page.dart';
 import 'package:ease_mvp/features/vendors/presentation/vendors_page.dart';
 import 'package:flutter/material.dart';
 
@@ -45,6 +46,13 @@ class ReportsLandingPageState extends State<ReportsLandingPage> {
               title: Text("Items"),
               subtitle: Text("Manage item details | Inventory"),
               trailing: Icon(Icons.arrow_forward_sharp),
+              onTap: () async {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => ItemsPage(),
+                  ),
+                );
+              },
             ),
             Divider(),
           ],

@@ -87,7 +87,7 @@ class _EASEAppState extends State<EASEApp> {
             ),
           ),
         ),
-        home: (_auth.currentUser != null) ? EASEHomePage() : LoginPage(),
+        home: (_auth.currentUser != null) ? EASEHomePage() : EASEHomePage(),
       ),
     );
   }
