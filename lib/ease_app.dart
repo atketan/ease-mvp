@@ -64,6 +64,26 @@ class _EASEAppState extends State<EASEApp> {
               ),
             ),
           ),
+          inputDecorationTheme: InputDecorationTheme(
+            border: OutlineInputBorder(
+              borderSide: BorderSide(
+                color: Colors.teal,
+                width: 1.0,
+              ),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                color: Colors.teal,
+                width: 1.0,
+              ),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                color: Colors.teal,
+                width: 2.0,
+              ),
+            ),
+          ),
         ),
         darkTheme: ThemeData(
           fontFamily: 'Lato',
@@ -99,6 +119,26 @@ class _EASEAppState extends State<EASEApp> {
               ),
               padding: MaterialStateProperty.all(
                 EdgeInsets.symmetric(vertical: 12.0, horizontal: 24.0),
+              ),
+            ),
+          ),
+          inputDecorationTheme: InputDecorationTheme(
+            border: OutlineInputBorder(
+              borderSide: BorderSide(
+                color: Colors.lightGreen,
+                width: 1.0,
+              ),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                color: Colors.lightGreen,
+                width: 1.0,
+              ),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                color: Colors.lightGreen,
+                width: 2.0,
               ),
             ),
           ),

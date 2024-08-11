@@ -1,15 +1,16 @@
-import 'package:ease_mvp/core/database/customers_dao.dart';
 import 'package:ease_mvp/core/database/inventory_items_dao.dart';
 import 'package:ease_mvp/core/database/invoice_items_dao.dart';
 import 'package:ease_mvp/core/database/invoices_dao.dart';
-import 'package:ease_mvp/core/database/vendors_dao.dart';
 import 'package:ease_mvp/core/models/customer.dart';
-import 'package:ease_mvp/core/models/inventory_item.dart';
 import 'package:ease_mvp/core/models/invoice.dart';
 import 'package:ease_mvp/core/models/invoice_item.dart';
 import 'package:ease_mvp/core/models/vendor.dart';
 import 'package:ease_mvp/core/providers/short_uuid_generator.dart';
+
 import 'package:flutter/material.dart';
+
+import '../widgets/entity_widget.dart';
+import '../widgets/invoice_order_details_widget.dart';
 
 enum InvoiceType {
   Sales,
@@ -40,11 +41,17 @@ enum InvoiceFormMode {
 class InvoiceManager extends StatefulWidget {
   final InvoiceType invoiceType;
   final InvoiceFormMode invoiceFormMode;
-  const InvoiceManager({
+  final Invoice? invoice;
+
+  InvoiceManager({
     Key? key,
     required this.invoiceType,
     required this.invoiceFormMode,
-  }) : super(key: key);
+    this.invoice,
+  }) : super(key: key) {
+    assert(invoiceFormMode != InvoiceFormMode.Edit || invoice != null,
+        'Invoice cannot be null in Edit mode');
+  }
 
   @override
   InvoiceManagerState createState() => InvoiceManagerState();
@@ -65,23 +72,31 @@ class InvoiceManagerState extends State<InvoiceManager> {
   late double _totalAmountPaid;
 
   final _itemsDAO = InventoryItemsDAO();
-  final _customersDAO = CustomersDAO();
-  final _vendorsDAO = VendorsDAO();
   final _invoiceDAO = InvoicesDAO();
   final _invoiceItemsDAO = InvoiceItemsDAO();
 
   // final String invoiceId = 'INV-${UniqueKey().toString()}';
   final String invoiceId = generateShort12CharUniqueKey().toUpperCase();
+  final DateTime invoiceCreateDate = DateTime.now();
 
   @override
   void initState() {
     super.initState();
-    // _fetchItems();
-    // if (widget.invoiceType == InvoiceType.Sales) {
-    //   _fetchCustomers();
-    // } else {
-    //   _fetchVendors();
-    // }
+    if (widget.invoiceFormMode == InvoiceFormMode.Edit) {
+      _invoice = widget.invoice!;
+    } else {
+      _invoice = Invoice(
+        customerId: 0,
+        invoiceNumber: invoiceId,
+        date: invoiceCreateDate,
+        totalAmount: 0.0,
+        discount: 0.0,
+        taxes: 0.0,
+        grandTotal: 0.0,
+        paymentType: 'cash',
+        status: 'unpaid',
+      );
+    }
   }
 
   @override
@@ -110,6 +125,9 @@ class InvoiceManagerState extends State<InvoiceManager> {
                   (widget.invoiceFormMode == InvoiceFormMode.Add
                           ? 'NEW | '
                           : 'UPDATE | ') +
+                      (widget.invoiceType == InvoiceType.Sales
+                          ? 'SALE | '
+                          : 'PURCHASE | ') +
                       '\₹ ' +
                       _grandTotal.toString(),
                   style: Theme.of(context)
@@ -123,15 +141,44 @@ class InvoiceManagerState extends State<InvoiceManager> {
         ),
       ),
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Expanded(
             child: SingleChildScrollView(
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Invoice type
-                  // Invoice number
-                  // Invoice date
-                  // Invoice due date
+                  // (widget.invoiceType == InvoiceType.Sales)
+                  //     ? CustomerDetailsWidget()
+                  //     : VendorDetailsWidget(),
+
+                  EntityWidget(
+                      invoice: _invoice, invoiceType: widget.invoiceType),
+                  InvoiceManagerSpacer(),
+
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "Items",
+                          style:
+                              Theme.of(context).textTheme.titleLarge!.copyWith(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                        ),
+                        IconButton(
+                          onPressed: () {},
+                          icon: Icon(
+                            Icons.add_circle_outline,
+                            size: 36,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                   // Invoice items
                   // Taxes
                   // Discounts
@@ -140,6 +187,11 @@ class InvoiceManagerState extends State<InvoiceManager> {
                   // Total amount after taxes and discounts
                   // Total amount due
                   // Total amount paid
+
+                  InvoiceManagerSpacer(),
+
+                  // Show non-editable invoice headers
+                  InvoiceOrderDetailsWidget(invoice: _invoice),
                 ],
               ),
             ),
@@ -198,6 +250,16 @@ class InvoiceManagerState extends State<InvoiceManager> {
           ),
         ],
       ),
+    );
+  }
+}
+
+class InvoiceManagerSpacer extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 12,
+      color: Theme.of(context).colorScheme.surfaceVariant,
     );
   }
 }
