@@ -131,4 +131,9 @@ class DatabaseHelper {
       )
     ''');
   }
+
+  Future<void> deleteLocalDatabase() async {
+    String path = join(await getDatabasesPath(), 'invoicing.db');
+    await deleteDatabase(path);
+  }
 }
