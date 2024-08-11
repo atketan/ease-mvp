@@ -56,7 +56,7 @@ class _CustomersPageState extends State<CustomersPage> {
                   .push(
                     MaterialPageRoute(
                       builder: (_) => UpdateCustomersPage(
-                        mode: FormMode.Add,
+                        mode: CustomersFormMode.Add,
                       ),
                     ),
                   )
@@ -117,7 +117,7 @@ class _CustomersPageState extends State<CustomersPage> {
                                 .push(
                                   MaterialPageRoute(
                                     builder: (_) => UpdateCustomersPage(
-                                      mode: FormMode.Edit,
+                                      mode: CustomersFormMode.Edit,
                                       customerId: customer.id,
                                     ),
                                   ),

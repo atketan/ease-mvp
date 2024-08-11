@@ -126,16 +126,15 @@ class _EASEHomePageState extends State<EASEHomePage>
                 fontSize: 16, color: Theme.of(context).colorScheme.primary),
             onPress: () {
               _animationController.reverse();
-              // Navigator.push(
-              //   context,
-              //   new MaterialPageRoute(
-              //     builder: (BuildContext context) => ManageInvoice(
-              //       invoiceType: InvoiceType.cashPurchase,
-              //       invoiceOperation: InvoiceOperation.newInvoice,
-              //     ),
-              //     fullscreenDialog: true,
-              //   ),
-              // );
+              Navigator.push(
+                context,
+                new MaterialPageRoute(
+                  builder: (BuildContext context) => InvoiceManager(
+                    invoiceType: InvoiceType.Purchase,
+                    invoiceFormMode: InvoiceFormMode.Add,
+                  ),
+                ),
+              );
               // Navigator.push(
               //   context,
               //   new MaterialPageRoute(

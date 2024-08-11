@@ -1,6 +1,8 @@
 import 'package:ease_mvp/core/database/customers_dao.dart';
 import 'package:ease_mvp/core/database/vendors_dao.dart';
 import 'package:ease_mvp/core/models/invoice.dart';
+import 'package:ease_mvp/features/customers/presentation/update_customers_page.dart';
+import 'package:ease_mvp/features/vendors/presentation/update_vendors_page.dart';
 import 'package:flutter/material.dart';
 
 import '../presentation/invoice_manager.dart';
@@ -144,14 +146,15 @@ class EntitySearchDelegate extends SearchDelegate {
           Text('No Results Found'),
           ElevatedButton(
             onPressed: () async {
-              // var result = await showDialog(
-              //   context: context,
-              //   builder: (BuildContext context) =>
-              //       AddEntityDialog(entityType: entityType),
-              // );
-              // if (result != null) {
-              //   close(context, result);
-              // }
+              var result = await showDialog(
+                context: context,
+                builder: (BuildContext context) => (entityType == 'customer')
+                    ? UpdateCustomersPage(mode: CustomersFormMode.Add)
+                    : UpdateVendorsPage(mode: VendorsFormMode.Add),
+              );
+              if (result != null) {
+                close(context, result);
+              }
             },
             child: Text(
                 'Add New ${entityType == 'customer' ? 'Customer' : 'Vendor'}'),

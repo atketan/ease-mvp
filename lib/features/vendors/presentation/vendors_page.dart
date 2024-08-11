@@ -58,7 +58,7 @@ class _VendorsPageState extends State<VendorsPage> {
                   .push(
                     MaterialPageRoute(
                       builder: (_) => UpdateVendorsPage(
-                        mode: FormMode.Add,
+                        mode: VendorsFormMode.Add,
                       ),
                     ),
                   )
@@ -119,7 +119,7 @@ class _VendorsPageState extends State<VendorsPage> {
                                 .push(
                                   MaterialPageRoute(
                                     builder: (_) => UpdateVendorsPage(
-                                      mode: FormMode.Edit,
+                                      mode: VendorsFormMode.Edit,
                                       vendorId: vendor.id,
                                     ),
                                   ),

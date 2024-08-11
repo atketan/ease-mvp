@@ -2,17 +2,17 @@ import 'package:ease_mvp/core/database/customers_dao.dart';
 import 'package:ease_mvp/core/models/customer.dart';
 import 'package:flutter/material.dart';
 
-enum FormMode {
+enum CustomersFormMode {
   Add,
   Edit,
 }
 
 class UpdateCustomersPage extends StatefulWidget {
-  final FormMode mode;
+  final CustomersFormMode mode;
   final int? customerId;
 
   UpdateCustomersPage({required this.mode, this.customerId = null})
-      : assert(mode == FormMode.Add || customerId != null,
+      : assert(mode == CustomersFormMode.Add || customerId != null,
             'customerId cannot be null in Edit mode');
 
   @override
@@ -31,7 +31,7 @@ class _UpdateCustomersPageState extends State<UpdateCustomersPage> {
   @override
   void initState() {
     super.initState();
-    if (widget.mode == FormMode.Edit) {
+    if (widget.mode == CustomersFormMode.Edit) {
       // Fetch customer details using the customer ID
       _fetchCustomerDetails();
     }
@@ -65,7 +65,7 @@ class _UpdateCustomersPageState extends State<UpdateCustomersPage> {
     String phone = _phoneController.text;
     String address = _addressController.text;
 
-    if (widget.mode == FormMode.Add) {
+    if (widget.mode == CustomersFormMode.Add) {
       // Create a new customer
       Customer newCustomer = Customer(
         name: name,
@@ -98,8 +98,9 @@ class _UpdateCustomersPageState extends State<UpdateCustomersPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-            widget.mode == FormMode.Add ? 'Add Customer' : 'Edit Customer'),
+        title: Text(widget.mode == CustomersFormMode.Add
+            ? 'Add Customer'
+            : 'Edit Customer'),
       ),
       body: Padding(
         padding: EdgeInsets.all(16.0),

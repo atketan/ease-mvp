@@ -2,17 +2,17 @@ import 'package:ease_mvp/core/database/vendors_dao.dart';
 import 'package:ease_mvp/core/models/vendor.dart';
 import 'package:flutter/material.dart';
 
-enum FormMode {
+enum VendorsFormMode {
   Add,
   Edit,
 }
 
 class UpdateVendorsPage extends StatefulWidget {
-  final FormMode mode;
+  final VendorsFormMode mode;
   final int? vendorId;
 
   const UpdateVendorsPage({super.key, required this.mode, this.vendorId})
-      : assert(mode == FormMode.Add || vendorId != null,
+      : assert(mode == VendorsFormMode.Add || vendorId != null,
             'vendorId cannot be null in Edit mode');
 
   @override
@@ -31,7 +31,7 @@ class _UpdateVendorsPageState extends State<UpdateVendorsPage> {
   @override
   void initState() {
     super.initState();
-    if (widget.mode == FormMode.Edit) {
+    if (widget.mode == VendorsFormMode.Edit) {
       // Fetch vendor details using the vendor ID
       _fetchVendorDetails();
     }
@@ -65,7 +65,7 @@ class _UpdateVendorsPageState extends State<UpdateVendorsPage> {
     String phone = _phoneController.text;
     String address = _addressController.text;
 
-    if (widget.mode == FormMode.Add) {
+    if (widget.mode == VendorsFormMode.Add) {
       // Create a new vendor
       Vendor newVendor = Vendor(
         name: name,
@@ -98,7 +98,8 @@ class _UpdateVendorsPageState extends State<UpdateVendorsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.mode == FormMode.Add ? 'Add Vendor' : 'Edit Vendor'),
+        title: Text(
+            widget.mode == VendorsFormMode.Add ? 'Add Vendor' : 'Edit Vendor'),
       ),
       body: Padding(
         padding: EdgeInsets.all(16.0),
