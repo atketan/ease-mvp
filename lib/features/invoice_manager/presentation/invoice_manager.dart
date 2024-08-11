@@ -68,8 +68,6 @@ class InvoiceManagerState extends State<InvoiceManager> {
   late double _taxes;
   late double _discounts;
   double _grandTotal = 0.0;
-  late double _totalAmountDue;
-  late double _totalAmountPaid;
 
   final _itemsDAO = InventoryItemsDAO();
   final _invoiceDAO = InvoicesDAO();
@@ -126,10 +124,11 @@ class InvoiceManagerState extends State<InvoiceManager> {
                           ? 'NEW | '
                           : 'UPDATE | ') +
                       (widget.invoiceType == InvoiceType.Sales
-                          ? 'SALE | '
-                          : 'PURCHASE | ') +
-                      '\₹ ' +
-                      _grandTotal.toString(),
+                          ? 'SALE'
+                          : 'PURCHASE'),
+                  // +
+                  // ' | \₹ ' +
+                  // _grandTotal.toString(),
                   style: Theme.of(context)
                       .textTheme
                       .titleSmall!
