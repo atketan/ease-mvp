@@ -18,11 +18,35 @@ class InventoryItemsDAO {
   Future<int> updateInventoryItem(InventoryItem inventoryItem) async {
     final db = await _databaseHelper.database;
     return await db.update('InventoryItems', inventoryItem.toJSON(),
-        where: 'id = ?', whereArgs: [inventoryItem.id]);
+        where: 'id = ?', whereArgs: [inventoryItem.itemId]);
   }
 
   Future<int> deleteInventoryItem(int id) async {
     final db = await _databaseHelper.database;
     return await db.delete('InventoryItems', where: 'id = ?', whereArgs: [id]);
+  }
+
+  Future<InventoryItem?> getInventoryItemByName(String name) async {
+    final db = await _databaseHelper.database;
+    final List<Map<String, dynamic>> maps =
+        await db.query('InventoryItems', where: 'name = ?', whereArgs: [name]);
+
+    if (maps.isNotEmpty) {
+      return InventoryItem.fromJSON(maps.first);
+    } else {
+      return null;
+    }
+  }
+
+  Future<InventoryItem?> getInventoryItemById(int itemId) async {
+    final db = await _databaseHelper.database;
+    final List<Map<String, dynamic>> maps =
+        await db.query('InventoryItems', where: 'id = ?', whereArgs: [itemId]);
+
+    if (maps.isNotEmpty) {
+      return InventoryItem.fromJSON(maps.first);
+    } else {
+      return null;
+    }
   }
 }

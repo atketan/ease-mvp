@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:ease_mvp/core/database/inventory_items_dao.dart';
 import 'package:ease_mvp/core/models/inventory_item.dart';
+import 'package:ease_mvp/features/items/presentation/update_items_page.dart';
 import 'package:flutter/material.dart';
 
 class ItemsPage extends StatefulWidget {
@@ -52,17 +53,17 @@ class ItemsPageState extends State<ItemsPage> {
         actions: [
           TextButton(
             onPressed: () {
-              // Navigator.of(context)
-              //     .push(
-              //       MaterialPageRoute(
-              //         builder: (_) => UpdateVendorsPage(
-              //           mode: FormMode.Add,
-              //         ),
-              //       ),
-              //     )
-              //     .then(
-              //       (value) => _fetchVendors(),
-              //     );
+              Navigator.of(context)
+                  .push(
+                    MaterialPageRoute(
+                      builder: (_) => UpdateItemsPage(
+                        mode: FormMode.Add,
+                      ),
+                    ),
+                  )
+                  .then(
+                    (value) => _fetchItems(),
+                  );
             },
             child: Text('Add'),
           ),
@@ -113,18 +114,18 @@ class ItemsPageState extends State<ItemsPage> {
                         ),
                         trailing: IconButton(
                           onPressed: () {
-                            // Navigator.of(context)
-                            //     .push(
-                            //       MaterialPageRoute(
-                            //         builder: (_) => UpdateVendorsPage(
-                            //           mode: FormMode.Edit,
-                            //           vendorId: vendor.id,
-                            //         ),
-                            //       ),
-                            //     )
-                            //     .then(
-                            //       (value) => _fetchVendors(),
-                            //     );
+                            Navigator.of(context)
+                                .push(
+                                  MaterialPageRoute(
+                                    builder: (_) => UpdateItemsPage(
+                                      mode: FormMode.Edit,
+                                      itemId: item.itemId,
+                                    ),
+                                  ),
+                                )
+                                .then(
+                                  (value) => _fetchItems(),
+                                );
                           },
                           icon: Icon(Icons.edit),
                         ),

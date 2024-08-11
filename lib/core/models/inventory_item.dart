@@ -1,30 +1,34 @@
 class InventoryItem {
-  final String id;
+  final int? itemId;
   final String name;
+  final String? description;
   final double unitPrice;
   final String unit;
 
   InventoryItem({
-    required this.id,
+    this.itemId,
     required this.name,
+    this.description,
     required this.unitPrice,
     required this.unit,
   });
 
   factory InventoryItem.fromJSON(Map<String, dynamic> json) {
     return InventoryItem(
-      id: json['id'],
+      itemId: json['item_id'],
       name: json['name'],
-      unitPrice: json['unitPrice'],
+      description: json['description'],
+      unitPrice: json['unit_price'],
       unit: json['unit'],
     );
   }
 
   Map<String, dynamic> toJSON() {
     return {
-      'id': id,
+      'item_id': itemId,
       'name': name,
-      'unitPrice': unitPrice,
+      'description': description,
+      'unit_price': unitPrice,
       'unit': unit,
     };
   }

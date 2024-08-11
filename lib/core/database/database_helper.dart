@@ -66,6 +66,7 @@ class DatabaseHelper {
       CREATE TABLE InventoryItems (
         item_id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT NOT NULL,
+        description TEXT,
         unit_price REAL NOT NULL,
         unit TEXT NOT NULL
       )
