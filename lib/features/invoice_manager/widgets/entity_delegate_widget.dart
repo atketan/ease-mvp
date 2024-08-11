@@ -7,21 +7,21 @@ import 'package:flutter/material.dart';
 
 import '../presentation/invoice_manager.dart';
 
-class EntityWidget extends StatefulWidget {
+class EntityDelegateWidget extends StatefulWidget {
   final Invoice invoice;
   final InvoiceType invoiceType;
 
-  EntityWidget({
+  EntityDelegateWidget({
     required this.invoice,
     required this.invoiceType,
   });
   @override
   State<StatefulWidget> createState() {
-    return EntityWidgetState();
+    return EntityDelegateWidgetState();
   }
 }
 
-class EntityWidgetState extends State<EntityWidget> {
+class EntityDelegateWidgetState extends State<EntityDelegateWidget> {
   TextEditingController _entityController = TextEditingController();
 
   @override

@@ -1,15 +1,19 @@
 class InvoiceItem {
   int? id;
   int? invoiceId;
-  String description;
+  int? itemId;
+  String name;
+  String? description;
   int quantity;
   double unitPrice;
   double totalPrice;
 
   InvoiceItem({
     this.id,
-    required this.invoiceId,
-    required this.description,
+    this.invoiceId,
+    required this.itemId,
+    required this.name,
+    this.description,
     required this.quantity,
     required this.unitPrice,
     required this.totalPrice,
@@ -19,6 +23,8 @@ class InvoiceItem {
     return InvoiceItem(
       id: json['id'],
       invoiceId: json['invoice_id'],
+      itemId: json['item_id'],
+      name: json['name'],
       description: json['description'],
       quantity: json['quantity'],
       unitPrice: json['unit_price'],
@@ -30,6 +36,8 @@ class InvoiceItem {
     return {
       'id': id,
       'invoice_id': invoiceId,
+      'item_id': itemId,
+      'name': name,
       'description': description,
       'quantity': quantity,
       'unit_price': unitPrice,

@@ -2,17 +2,17 @@ import 'package:ease_mvp/core/database/inventory_items_dao.dart';
 import 'package:ease_mvp/core/models/inventory_item.dart';
 import 'package:flutter/material.dart';
 
-enum FormMode {
+enum InventoryItemsFormMode {
   Add,
   Edit,
 }
 
 class UpdateItemsPage extends StatefulWidget {
-  final FormMode mode;
+  final InventoryItemsFormMode mode;
   final int? itemId;
 
   const UpdateItemsPage({Key? key, required this.mode, this.itemId})
-      : assert(mode == FormMode.Add || itemId != null,
+      : assert(mode == InventoryItemsFormMode.Add || itemId != null,
             'itemId cannot be null in Edit mode');
   @override
   UpdateItemsPageState createState() => UpdateItemsPageState();
@@ -30,7 +30,7 @@ class UpdateItemsPageState extends State<UpdateItemsPage> {
   @override
   void initState() {
     super.initState();
-    if (widget.mode == FormMode.Edit) {
+    if (widget.mode == InventoryItemsFormMode.Edit) {
       // Fetch item details using the item ID
       _fetchItemDetails();
     }
@@ -64,7 +64,7 @@ class UpdateItemsPageState extends State<UpdateItemsPage> {
     final description = _descriptionController.text;
     final unitPrice = double.parse(_unitPriceController.text);
 
-    if (widget.mode == FormMode.Add) {
+    if (widget.mode == InventoryItemsFormMode.Add) {
       // Create a new inventory item
       final item = InventoryItem(
         name: name,
@@ -92,7 +92,9 @@ class UpdateItemsPageState extends State<UpdateItemsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.mode == FormMode.Add ? 'Add Item' : 'Edit Item'),
+        title: Text(widget.mode == InventoryItemsFormMode.Add
+            ? 'Add Item'
+            : 'Edit Item'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),

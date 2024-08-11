@@ -2,15 +2,21 @@ import 'dart:async';
 
 import 'package:ease_mvp/core/database/inventory_items_dao.dart';
 import 'package:ease_mvp/core/models/inventory_item.dart';
+import 'package:ease_mvp/core/models/invoice_item.dart';
+
 import 'package:ease_mvp/features/items/presentation/update_items_page.dart';
 import 'package:flutter/material.dart';
 
-class ItemsPage extends StatefulWidget {
+class InvoiceItemDelegateWidget extends StatefulWidget {
+  const InvoiceItemDelegateWidget({
+    super.key,
+  });
+
   @override
-  ItemsPageState createState() => ItemsPageState();
+  State<StatefulWidget> createState() => InvoiceItemDelegateWidgetState();
 }
 
-class ItemsPageState extends State<ItemsPage> {
+class InvoiceItemDelegateWidgetState extends State<InvoiceItemDelegateWidget> {
   List<InventoryItem> _allItems = [];
   final _itemsDAO = InventoryItemsDAO();
   final _streamController = StreamController<List<InventoryItem>>();
@@ -94,6 +100,17 @@ class ItemsPageState extends State<ItemsPage> {
                     itemBuilder: (context, index) {
                       final item = items[index];
                       return ListTile(
+                        onTap: () {
+                          final invoiceItem = InvoiceItem(
+                            itemId: item.itemId,
+                            name: item.name,
+                            unitPrice: item.unitPrice,
+                            quantity: 1,
+                            totalPrice: item.unitPrice,
+                          );
+
+                          Navigator.of(context).pop(invoiceItem);
+                        },
                         title: Text(
                           item.name,
                           style: Theme.of(context).textTheme.titleMedium,
@@ -129,7 +146,6 @@ class ItemsPageState extends State<ItemsPage> {
                           },
                           icon: Icon(Icons.edit),
                         ),
-                        // Add other vendor details here
                       );
                     },
                   );

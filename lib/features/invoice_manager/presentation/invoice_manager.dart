@@ -6,10 +6,11 @@ import 'package:ease_mvp/core/models/invoice.dart';
 import 'package:ease_mvp/core/models/invoice_item.dart';
 import 'package:ease_mvp/core/models/vendor.dart';
 import 'package:ease_mvp/core/providers/short_uuid_generator.dart';
+import 'package:ease_mvp/features/invoice_manager/widgets/invoice_item_delegate_widget.dart';
 
 import 'package:flutter/material.dart';
 
-import '../widgets/entity_widget.dart';
+import '../widgets/entity_delegate_widget.dart';
 import '../widgets/invoice_order_details_widget.dart';
 
 enum InvoiceType {
@@ -94,6 +95,7 @@ class InvoiceManagerState extends State<InvoiceManager> {
         paymentType: 'cash',
         status: 'unpaid',
       );
+      _invoiceItems = [];
     }
   }
 
@@ -151,37 +153,16 @@ class InvoiceManagerState extends State<InvoiceManager> {
                   //     ? CustomerDetailsWidget()
                   //     : VendorDetailsWidget(),
 
-                  EntityWidget(
-                      invoice: _invoice, invoiceType: widget.invoiceType),
+                  EntityDelegateWidget(
+                    invoice: _invoice,
+                    invoiceType: widget.invoiceType,
+                  ),
                   InvoiceManagerSpacer(),
 
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "Items",
-                          style:
-                              Theme.of(context).textTheme.titleLarge!.copyWith(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                        ),
-                        IconButton(
-                          onPressed: () {},
-                          icon: Icon(
-                            Icons.add_circle_outline,
-                            size: 36,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  // Invoice items
+                  InvoiceItemsListWidget(invoiceItems: _invoiceItems),
+
                   // Taxes
                   // Discounts
-                  // Notes
                   // Total amount
                   // Total amount after taxes and discounts
                   // Total amount due
@@ -259,6 +240,210 @@ class InvoiceManagerSpacer extends StatelessWidget {
     return Container(
       height: 12,
       color: Theme.of(context).colorScheme.surfaceVariant,
+    );
+  }
+}
+
+class InvoiceItemsListWidget extends StatefulWidget {
+  final List<InvoiceItem> invoiceItems;
+
+  InvoiceItemsListWidget({
+    Key? key,
+    required this.invoiceItems,
+  }) : super(key: key);
+
+  @override
+  InvoiceItemsListWidgetState createState() => InvoiceItemsListWidgetState();
+}
+
+class InvoiceItemsListWidgetState extends State<InvoiceItemsListWidget> {
+  late List<InvoiceItem> _invoiceItems;
+  @override
+  void initState() {
+    _invoiceItems = widget.invoiceItems;
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "Items",
+                style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                    ),
+              ),
+              IconButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    new MaterialPageRoute(
+                      builder: (BuildContext context) =>
+                          InvoiceItemDelegateWidget(),
+                    ),
+                  ).then(
+                    (invoiceItem) {
+                      debugPrint((invoiceItem as InvoiceItem).name);
+                      setState(() {
+                        _invoiceItems.add(invoiceItem);
+                      });
+                    },
+                  );
+                },
+                icon: Icon(
+                  Icons.add_circle_outline,
+                  size: 36,
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 12),
+          ListView.builder(
+            shrinkWrap: true,
+            itemCount: _invoiceItems.length,
+            physics: NeverScrollableScrollPhysics(),
+            itemBuilder: (context, index) {
+              final item = _invoiceItems[index];
+              return Container(
+                padding: const EdgeInsets.only(bottom: 6, top: 6),
+                decoration: BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(
+                      color: Theme.of(context).colorScheme.tertiaryContainer,
+                      width: 1.0,
+                    ),
+                  ),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            item.name,
+                            softWrap: true,
+                            overflow: TextOverflow.ellipsis,
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium!
+                                .copyWith(fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            'Unit Price: ${item.unitPrice}',
+                            style: Theme.of(context).textTheme.titleSmall,
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(width: 4),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: Theme.of(context).colorScheme.primary,
+                              width: 1.0,
+                            ),
+                            borderRadius: BorderRadius.circular(4.0),
+                          ),
+                          child: Row(
+                            children: [
+                              IconButton(
+                                icon: Icon(Icons.remove),
+                                onPressed: () {
+                                  if (item.quantity == 1) {
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return AlertDialog(
+                                          shape: ContinuousRectangleBorder(
+                                            borderRadius: BorderRadius.circular(
+                                              8.0,
+                                            ),
+                                          ),
+                                          title: Text(
+                                            'Confirm Deletion',
+                                          ),
+                                          content: Text(
+                                            'Are you sure you want to delete this item?',
+                                          ),
+                                          actions: [
+                                            TextButton(
+                                              child: Text('Cancel'),
+                                              onPressed: () {
+                                                Navigator.of(context)
+                                                    .pop(); // Close the dialog
+                                              },
+                                            ),
+                                            TextButton(
+                                              child: Text('Delete'),
+                                              onPressed: () {
+                                                setState(() {
+                                                  _invoiceItems.removeAt(index);
+                                                });
+                                                Navigator.of(context)
+                                                    .pop(); // Close the dialog
+                                              },
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    );
+                                  }
+                                  if (item.quantity > 1) {
+                                    setState(() {
+                                      item.quantity--;
+                                      item.totalPrice =
+                                          item.quantity * item.unitPrice;
+                                    });
+                                  }
+                                },
+                              ),
+                              Text(
+                                '${item.quantity}',
+                                style: TextStyle(fontSize: 18),
+                              ),
+                              IconButton(
+                                icon: Icon(Icons.add),
+                                onPressed: () {
+                                  setState(() {
+                                    item.quantity++;
+                                    item.totalPrice =
+                                        item.quantity * item.unitPrice;
+                                  });
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                        Container(
+                          width: 64,
+                          alignment: Alignment.centerRight,
+                          child: Text(
+                            "\₹" + item.totalPrice.toString(),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+        ],
+      ),
     );
   }
 }

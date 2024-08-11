@@ -188,7 +188,7 @@ class InvoiceFormBody extends StatelessWidget {
               itemBuilder: (context, index) {
                 var item = invoice.items[index];
                 return ListTile(
-                  title: Text(item.description),
+                  title: Text(item.name),
                   subtitle: Text('${item.quantity} x ${item.unitPrice}'),
                   trailing: IconButton(
                     icon: Icon(Icons.delete),
@@ -417,7 +417,9 @@ class _AddInvoiceItemDialogState extends State<AddInvoiceItemDialog> {
 
             var item = InvoiceItem(
               invoiceId: widget.invoiceId,
-              description: description,
+              itemId: null,
+              name: description,
+              description: null,
               quantity: quantity,
               unitPrice: unitPrice,
               totalPrice: totalPrice,

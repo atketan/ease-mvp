@@ -78,6 +78,8 @@ class DatabaseHelper {
       CREATE TABLE InvoiceItems (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         invoice_id INTEGER NOT NULL,
+        item_id INTEGER NOT NULL,
+        name TEXT NOT NULL,
         description TEXT NOT NULL,
         quantity INTEGER NOT NULL,
         unit_price REAL NOT NULL,
@@ -85,7 +87,7 @@ class DatabaseHelper {
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
         updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
         FOREIGN KEY (invoice_id) REFERENCES Invoices(id),
-        FOREIGN KEY (id) REFERENCES InventoryItems(item_id)
+        FOREIGN KEY (item_id) REFERENCES InventoryItems(item_id)
       )
     ''');
     await db.execute('''
