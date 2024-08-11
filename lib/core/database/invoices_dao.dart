@@ -21,8 +21,14 @@ class InvoicesDAO {
         where: 'id = ?', whereArgs: [invoice.id]);
   }
 
-  Future<int> deleteInvoice(int id) async {
+  Future<List<Invoice>> getInvoicesByDateRange(
+      DateTime startDate, DateTime endDate) async {
     final db = await _databaseHelper.database;
-    return await db.delete('Invoices', where: 'id = ?', whereArgs: [id]);
+    final List<Map<String, dynamic>> maps = await db.query(
+      'Invoices',
+      where: 'invoiceDate >= ? AND invoiceDate <= ?',
+      whereArgs: [startDate.toIso8601String(), endDate.toIso8601String()],
+    );
+    return List.generate(maps.length, (i) => Invoice.fromJSON(maps[i]));
   }
 }

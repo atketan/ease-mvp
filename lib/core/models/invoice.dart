@@ -32,8 +32,8 @@ class Invoice {
   factory Invoice.fromJSON(Map<String, dynamic> json) {
     return Invoice(
       id: json['id'],
-      customerId: json['customer_id'] ?? "",
-      vendorId: json['vendor_id'] ?? "",
+      customerId: json['customer_id'],
+      vendorId: json['vendor_id'],
       invoiceNumber: json['invoice_number'],
       date: DateTime.parse(json['date']),
       totalAmount: json['total_amount'],
@@ -47,8 +47,8 @@ class Invoice {
   Map<String, dynamic> toJSON() {
     return {
       'id': id,
-      'customer_id': customerId ?? "",
-      'vendor_id': vendorId ?? "",
+      'customer_id': customerId,
+      'vendor_id': vendorId,
       'invoice_number': invoiceNumber,
       'date': date.toIso8601String(),
       'total_amount': totalAmount,
