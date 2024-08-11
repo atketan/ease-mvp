@@ -1,3 +1,6 @@
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+
 import 'invoice_item.dart';
 
 class Invoice {
@@ -7,8 +10,11 @@ class Invoice {
   String invoiceNumber;
   DateTime date;
   double totalAmount;
-  String paymentType;
-  String status;
+  double discount;
+  double taxes;
+  double grandTotal;
+  String paymentType; // cash or credit
+  String status; // paid or unpaid
   List<InvoiceItem> _items = [];
 
   Invoice({
@@ -18,6 +24,9 @@ class Invoice {
     required this.invoiceNumber,
     required this.date,
     required this.totalAmount,
+    required this.discount,
+    required this.taxes,
+    required this.grandTotal,
     required this.paymentType,
     required this.status,
   }) : assert(customerId != null || vendorId != null,
@@ -37,11 +46,15 @@ class Invoice {
       invoiceNumber: json['invoice_number'],
       date: DateTime.parse(json['date']),
       totalAmount: json['total_amount'],
+      discount: json['discount'],
+      taxes: json['taxes'],
+      grandTotal: json['grand_total'],
       paymentType: json['payment_type'],
       status: json['status'],
-    ).._items = (json['items'] as List)
-        .map((item) => InvoiceItem.fromJSON(item))
-        .toList();
+    );
+    // ).._items = (json['items'] as List)
+    //     .map((item) => InvoiceItem.fromJSON(item))
+    //     .toList();
   }
 
   Map<String, dynamic> toJSON() {
@@ -52,9 +65,12 @@ class Invoice {
       'invoice_number': invoiceNumber,
       'date': date.toIso8601String(),
       'total_amount': totalAmount,
+      'discount': discount,
+      'taxes': taxes,
+      'grand_total': grandTotal,
       'payment_type': paymentType,
       'status': status,
-      'items': _items.map((item) => item.toJSON()).toList(),
+      // 'items': _items.map((item) => item.toJSON()).toList(),
     };
   }
 }

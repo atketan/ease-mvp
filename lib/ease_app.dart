@@ -54,6 +54,14 @@ class _EASEAppState extends State<EASEApp> {
             style: ButtonStyle(
               backgroundColor: MaterialStateProperty.all(Colors.teal),
               foregroundColor: MaterialStateProperty.all(Colors.white),
+              shape: MaterialStateProperty.all(
+                RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(4),
+                ),
+              ),
+              padding: MaterialStateProperty.all(
+                EdgeInsets.symmetric(vertical: 12.0, horizontal: 24.0),
+              ),
             ),
           ),
         ),
@@ -84,6 +92,14 @@ class _EASEAppState extends State<EASEApp> {
             style: ButtonStyle(
               backgroundColor: MaterialStateProperty.all(Colors.lightGreen),
               foregroundColor: MaterialStateProperty.all(Colors.black),
+              shape: MaterialStateProperty.all(
+                RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(4),
+                ),
+              ),
+              padding: MaterialStateProperty.all(
+                EdgeInsets.symmetric(vertical: 12.0, horizontal: 24.0),
+              ),
             ),
           ),
         ),

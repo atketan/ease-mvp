@@ -13,7 +13,10 @@ class InvoiceBloc extends Cubit<Invoice> {
           Invoice(
             invoiceNumber: '',
             date: DateTime.now(),
-            totalAmount: 0,
+            totalAmount: 0.0,
+            discount: 0.0,
+            taxes: 0.0,
+            grandTotal: 0.0,
             paymentType: 'cash',
             status: 'unpaid',
           ),

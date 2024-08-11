@@ -1,4 +1,5 @@
 import 'package:ease_mvp/features/account/presentation/login_page.dart';
+import 'package:ease_mvp/features/invoice_manager/presentation/invoice_manager.dart';
 import 'package:ease_mvp/features/manage/presentation/manage_landing_page.dart';
 import 'package:ease_mvp/presentation/invoices/invoice_form.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -98,23 +99,22 @@ class _EASEHomePageState extends State<EASEHomePage>
                 fontSize: 16, color: Theme.of(context).colorScheme.primary),
             onPress: () {
               _animationController.reverse();
-              // Navigator.push(
-              //   context,
-              //   new MaterialPageRoute(
-              //     builder: (BuildContext context) => ManageInvoice(
-              //       invoiceType: InvoiceType.cashSale,
-              //       invoiceOperation: InvoiceOperation.newInvoice,
-              //     ),
-              //     fullscreenDialog: true,
-              //   ),
-              // );
               Navigator.push(
                 context,
                 new MaterialPageRoute(
-                  builder: (BuildContext context) => InvoiceForm(isSale: true),
-                  fullscreenDialog: true,
+                  builder: (BuildContext context) => InvoiceManager(
+                    invoiceType: InvoiceType.Sales,
+                    invoiceFormMode: InvoiceFormMode.Add,
+                  ),
                 ),
               );
+              // Navigator.push(
+              //   context,
+              //   new MaterialPageRoute(
+              //     builder: (BuildContext context) => InvoiceForm(isSale: true),
+              //     fullscreenDialog: true,
+              //   ),
+              // );
             },
           ),
           // Floating action menu item
@@ -137,13 +137,13 @@ class _EASEHomePageState extends State<EASEHomePage>
               //     fullscreenDialog: true,
               //   ),
               // );
-              Navigator.push(
-                context,
-                new MaterialPageRoute(
-                  builder: (BuildContext context) => InvoiceForm(isSale: false),
-                  fullscreenDialog: true,
-                ),
-              );
+              // Navigator.push(
+              //   context,
+              //   new MaterialPageRoute(
+              //     builder: (BuildContext context) => InvoiceForm(isSale: false),
+              //     fullscreenDialog: true,
+              //   ),
+              // );
             },
           ),
           //Floating action menu item
