@@ -6,13 +6,13 @@ import 'package:ease_mvp/core/models/invoice.dart';
 import 'package:ease_mvp/core/models/invoice_item.dart';
 import 'package:ease_mvp/core/models/vendor.dart';
 import 'package:ease_mvp/core/providers/short_uuid_generator.dart';
-import 'package:ease_mvp/features/invoice_manager/bloc/invoice_manager_cubit_state.dart';
 import 'package:ease_mvp/features/invoice_manager/widgets/invoice_item_delegate_widget.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../bloc/invoice_manager_cubit.dart';
+import '../bloc/invoice_manager_cubit_state.dart';
 import '../widgets/entity_delegate_widget.dart';
 import '../widgets/invoice_order_details_widget.dart';
 
