@@ -1,13 +1,11 @@
-import 'package:ease_mvp/core/models/invoice.dart';
 import 'package:ease_mvp/core/utils/date_time_utils.dart';
+import 'package:ease_mvp/features/invoice_manager/bloc/invoice_manager_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class InvoiceOrderDetailsWidget extends StatelessWidget {
-  final Invoice? invoice;
-
   InvoiceOrderDetailsWidget({
     Key? key,
-    this.invoice,
   }) : super(key: key);
 
   @override
@@ -36,7 +34,7 @@ class InvoiceOrderDetailsWidget extends StatelessWidget {
                     .copyWith(fontWeight: FontWeight.bold),
               ),
               Text(
-                "#" + invoice!.invoiceNumber,
+                "#" + context.read<InvoiceManagerCubit>().invoice.invoiceNumber,
                 style: Theme.of(context).textTheme.titleSmall,
               ),
             ],
@@ -53,7 +51,8 @@ class InvoiceOrderDetailsWidget extends StatelessWidget {
                     .copyWith(fontWeight: FontWeight.bold),
               ),
               Text(
-                formatInvoiceDate(invoice!.date),
+                formatInvoiceDate(
+                    context.read<InvoiceManagerCubit>().invoice.date),
                 style: Theme.of(context).textTheme.titleSmall,
               ),
             ],

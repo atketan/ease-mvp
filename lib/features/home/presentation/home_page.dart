@@ -1,9 +1,11 @@
 import 'package:ease_mvp/features/account/presentation/login_page.dart';
+import 'package:ease_mvp/features/invoice_manager/bloc/invoice_manager_cubit.dart';
 import 'package:ease_mvp/features/invoice_manager/presentation/invoice_manager.dart';
 import 'package:ease_mvp/features/manage/presentation/manage_landing_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:floating_action_bubble/floating_action_bubble.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class EASEHomePage extends StatefulWidget {
   const EASEHomePage({super.key});
@@ -100,10 +102,13 @@ class _EASEHomePageState extends State<EASEHomePage>
               _animationController.reverse();
               Navigator.push(
                 context,
-                new MaterialPageRoute(
-                  builder: (BuildContext context) => InvoiceManager(
-                    invoiceType: InvoiceType.Sales,
-                    invoiceFormMode: InvoiceFormMode.Add,
+                MaterialPageRoute(
+                  builder: (BuildContext context) => BlocProvider(
+                    create: (context) => InvoiceManagerCubit(),
+                    child: InvoiceManager(
+                      invoiceType: InvoiceType.Sales,
+                      invoiceFormMode: InvoiceFormMode.Add,
+                    ),
                   ),
                 ),
               );

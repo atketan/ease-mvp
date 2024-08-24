@@ -1,18 +1,17 @@
 import 'package:ease_mvp/core/database/customers_dao.dart';
 import 'package:ease_mvp/core/database/vendors_dao.dart';
-import 'package:ease_mvp/core/models/invoice.dart';
 import 'package:ease_mvp/features/customers/presentation/update_customers_page.dart';
+import 'package:ease_mvp/features/invoice_manager/bloc/invoice_manager_cubit.dart';
 import 'package:ease_mvp/features/vendors/presentation/update_vendors_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../presentation/invoice_manager.dart';
 
 class EntityDelegateWidget extends StatefulWidget {
-  final Invoice invoice;
   final InvoiceType invoiceType;
 
   EntityDelegateWidget({
-    required this.invoice,
     required this.invoiceType,
   });
   @override
@@ -54,9 +53,9 @@ class EntityDelegateWidgetState extends State<EntityDelegateWidget> {
               if (result != null) {
                 _entityController.text = result.name;
                 if (widget.invoiceType == InvoiceType.Sales) {
-                  widget.invoice.customerId = result.id;
+                  context.read<InvoiceManagerCubit>().setCustomerId(result.id);
                 } else {
-                  widget.invoice.vendorId = result.id;
+                  context.read<InvoiceManagerCubit>().setVendorId(result.id);
                 }
               }
             },
