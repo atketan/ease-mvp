@@ -6,10 +6,13 @@ import 'package:ease_mvp/core/models/invoice.dart';
 import 'package:ease_mvp/core/models/invoice_item.dart';
 import 'package:ease_mvp/core/models/vendor.dart';
 import 'package:ease_mvp/core/providers/short_uuid_generator.dart';
+import 'package:ease_mvp/features/invoice_manager/bloc/invoice_manager_cubit_state.dart';
 import 'package:ease_mvp/features/invoice_manager/widgets/invoice_item_delegate_widget.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../bloc/invoice_manager_cubit.dart';
 import '../widgets/entity_delegate_widget.dart';
 import '../widgets/invoice_order_details_widget.dart';
 
@@ -63,8 +66,6 @@ class InvoiceManagerState extends State<InvoiceManager> {
   late Customer _customer;
   late Vendor _vendor;
 
-  late Invoice _invoice;
-
   late double _totalAmount;
   late double _taxes;
   late double _discounts;
@@ -81,22 +82,7 @@ class InvoiceManagerState extends State<InvoiceManager> {
   @override
   void initState() {
     super.initState();
-    if (widget.invoiceFormMode == InvoiceFormMode.Edit) {
-      _invoice = widget.invoice!;
-    } else {
-      _invoice = Invoice(
-        customerId: 0,
-        invoiceNumber: invoiceId,
-        date: invoiceCreateDate,
-        totalAmount: 0.0,
-        discount: 0.0,
-        taxes: 0.0,
-        grandTotal: 0.0,
-        paymentType: 'cash',
-        status: 'unpaid',
-      );
-      _invoiceItems = [];
-    }
+    _invoiceItems = [];
   }
 
   @override
@@ -106,129 +92,156 @@ class InvoiceManagerState extends State<InvoiceManager> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'INVOICE: #' + invoiceId,
-              style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
-            ),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
+    return BlocProvider(
+      create: (context) => InvoiceManagerCubit(),
+      child: BlocListener<InvoiceManagerCubit, InvoiceManagerCubitState>(
+        listener: (context, state) {
+          // Handle state changes here
+          if (state is InvoiceManagerInitial) {
+            context.read<InvoiceManagerCubit>().initialiseInvoice(
+                  widget.invoiceFormMode == InvoiceFormMode.Edit
+                      ? widget.invoice!
+                      : Invoice(
+                          customerId: 0,
+                          invoiceNumber: invoiceId,
+                          date: invoiceCreateDate,
+                          totalAmount: 0.0,
+                          discount: 0.0,
+                          taxes: 0.0,
+                          grandTotal: 0.0,
+                          paymentType: 'cash',
+                          status: 'unpaid',
+                        ),
+                );
+          }
+        },
+        child: Scaffold(
+          appBar: AppBar(
+            title: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  (widget.invoiceFormMode == InvoiceFormMode.Add
-                          ? 'NEW | '
-                          : 'UPDATE | ') +
-                      (widget.invoiceType == InvoiceType.Sales
-                          ? 'SALE'
-                          : 'PURCHASE'),
-                  // +
-                  // ' | \₹ ' +
-                  // _grandTotal.toString(),
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleSmall!
-                      .copyWith(color: Colors.white),
+                  'INVOICE: #' + invoiceId,
+                  style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      (widget.invoiceFormMode == InvoiceFormMode.Add
+                              ? 'NEW | '
+                              : 'UPDATE | ') +
+                          (widget.invoiceType == InvoiceType.Sales
+                              ? 'SALE'
+                              : 'PURCHASE'),
+                      // +
+                      // ' | \₹ ' +
+                      // _grandTotal.toString(),
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleSmall!
+                          .copyWith(color: Colors.white),
+                    ),
+                  ],
                 ),
               ],
             ),
-          ],
-        ),
-      ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // (widget.invoiceType == InvoiceType.Sales)
-                  //     ? CustomerDetailsWidget()
-                  //     : VendorDetailsWidget(),
-
-                  EntityDelegateWidget(
-                    invoice: _invoice,
-                    invoiceType: widget.invoiceType,
-                  ),
-                  InvoiceManagerSpacer(),
-
-                  InvoiceItemsListWidget(invoiceItems: _invoiceItems),
-
-                  // Taxes
-                  // Discounts
-                  // Total amount
-                  // Total amount after taxes and discounts
-                  // Total amount due
-                  // Total amount paid
-
-                  InvoiceManagerSpacer(),
-
-                  // Show non-editable invoice headers
-                  InvoiceOrderDetailsWidget(invoice: _invoice),
-                ],
-              ),
-            ),
           ),
-          Container(
-            color: Colors.white,
-            padding: EdgeInsets.all(16.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  flex: 4,
-                  child: TextButton(
-                    onPressed: () {
-                      // Share action
-                    },
-                    child: Text(
-                      'Share',
-                      style: TextStyle().copyWith(
-                        fontWeight: FontWeight.bold,
+          body: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // (widget.invoiceType == InvoiceType.Sales)
+                      //     ? CustomerDetailsWidget()
+                      //     : VendorDetailsWidget(),
+
+                      EntityDelegateWidget(
+                        invoice: context.read<InvoiceManagerCubit>().invoice,
+                        invoiceType: widget.invoiceType,
                       ),
-                    ),
-                    style: ButtonStyle().copyWith(
-                      backgroundColor: MaterialStateProperty.all<Color>(
-                        Theme.of(context).colorScheme.background,
+                      InvoiceManagerSpacer(),
+
+                      InvoiceItemsListWidget(invoiceItems: _invoiceItems),
+
+                      // Taxes
+                      // Discounts
+                      // Total amount
+                      // Total amount after taxes and discounts
+                      // Total amount due
+                      // Total amount paid
+
+                      InvoiceManagerSpacer(),
+
+                      // Show non-editable invoice headers
+                      InvoiceOrderDetailsWidget(
+                        invoice: context.read<InvoiceManagerCubit>().invoice,
                       ),
-                      foregroundColor: MaterialStateProperty.all<Color>(
-                        Theme.of(context).colorScheme.primary,
-                      ),
-                      side: MaterialStateProperty.all<BorderSide>(
-                        BorderSide(
-                          color: Theme.of(context).colorScheme.primary,
-                          width: 1.0,
+                    ],
+                  ),
+                ),
+              ),
+              Container(
+                color: Colors.white,
+                padding: EdgeInsets.all(16.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      flex: 4,
+                      child: TextButton(
+                        onPressed: () {
+                          // Share action
+                        },
+                        child: Text(
+                          'Share',
+                          style: TextStyle().copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        style: ButtonStyle().copyWith(
+                          backgroundColor: MaterialStateProperty.all<Color>(
+                            Theme.of(context).colorScheme.background,
+                          ),
+                          foregroundColor: MaterialStateProperty.all<Color>(
+                            Theme.of(context).colorScheme.primary,
+                          ),
+                          side: MaterialStateProperty.all<BorderSide>(
+                            BorderSide(
+                              color: Theme.of(context).colorScheme.primary,
+                              width: 1.0,
+                            ),
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ),
-                Spacer(flex: 1),
-                Expanded(
-                  flex: 4,
-                  child: TextButton(
-                    onPressed: () {
-                      // Save action
-                    },
-                    child: Text(
-                      'Save',
-                      style: TextStyle().copyWith(
-                        fontWeight: FontWeight.bold,
+                    Spacer(flex: 1),
+                    Expanded(
+                      flex: 4,
+                      child: TextButton(
+                        onPressed: () {
+                          // Save action
+                        },
+                        child: Text(
+                          'Save',
+                          style: TextStyle().copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ),
                     ),
-                  ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
