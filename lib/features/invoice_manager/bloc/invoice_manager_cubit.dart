@@ -22,7 +22,6 @@ class InvoiceManagerCubit extends Cubit<InvoiceManagerCubitState> {
   // final _invoiceItemsDAO = InvoiceItemsDAO();
 
   void initialiseInvoiceModelInstance(Invoice invoice) {
-    print("Initialising invoice model instance");
     _invoice = invoice;
     emit(InvoiceManagerLoaded());
   }
@@ -45,6 +44,11 @@ class InvoiceManagerCubit extends Cubit<InvoiceManagerCubitState> {
 
   void setVendorId(int vendorId) {
     _invoice.vendorId = vendorId;
+  }
+
+  void setDiscount(double discount) {
+    _invoice.discount = discount;
+    emit(InvoiceManagerLoaded());
   }
 
   // void addInvoice(Invoice invoice) {

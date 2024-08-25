@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../bloc/invoice_manager_cubit.dart';
 import '../bloc/invoice_manager_cubit_state.dart';
+import '../widgets/amount_summary_widget.dart';
 import '../widgets/entity_delegate_widget.dart';
 import '../widgets/invoice_items_list_widget.dart';
 import '../widgets/invoice_manager_spacer.dart';
@@ -139,12 +140,28 @@ class InvoiceManagerState extends State<InvoiceManager> {
                   // Build invoice items list
                   BlocBuilder<InvoiceManagerCubit, InvoiceManagerCubitState>(
                     builder: (context, state) {
-                      debugPrint("state " + state.toString());
                       if (state is InvoiceManagerLoaded) {
                         return InvoiceItemsListWidget(
                           invoiceItems:
                               context.read<InvoiceManagerCubit>().invoice.items,
                         );
+                      } else if (state is InvoiceManagerLoading) {
+                        return Center(child: CircularProgressIndicator());
+                      } else if (state is InvoiceManagerError) {
+                        return Center(child: Text('Error: ${state.message}'));
+                      } else {
+                        return Center(child: Text('Unknown state'));
+                      }
+                    },
+                  ),
+
+                  InvoiceManagerSpacer(),
+
+                  // Manage discount, taxes and gross total
+                  BlocBuilder<InvoiceManagerCubit, InvoiceManagerCubitState>(
+                    builder: (context, state) {
+                      if (state is InvoiceManagerLoaded) {
+                        return AmountSummaryWidget();
                       } else if (state is InvoiceManagerLoading) {
                         return Center(child: CircularProgressIndicator());
                       } else if (state is InvoiceManagerError) {
