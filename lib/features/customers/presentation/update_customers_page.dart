@@ -111,29 +111,44 @@ class _UpdateCustomersPageState extends State<UpdateCustomersPage> {
               keyboardType: TextInputType.name,
               decoration: InputDecoration(labelText: 'Name'),
             ),
+            SizedBox(height: 16.0),
             TextField(
               controller: _phoneController,
               maxLength: 10,
               keyboardType: TextInputType.phone,
               decoration: InputDecoration(labelText: 'Phone'),
             ),
+            SizedBox(height: 16.0),
             TextField(
               controller: _emailController,
               keyboardType: TextInputType.emailAddress,
               decoration: InputDecoration(labelText: 'Email'),
             ),
+            SizedBox(height: 16.0),
             TextField(
               controller: _addressController,
               maxLength: 50,
               keyboardType: TextInputType.multiline,
               decoration: InputDecoration(labelText: 'Address'),
             ),
-            SizedBox(height: 16.0),
-            Center(
-              child: ElevatedButton(
-                onPressed: _saveCustomer,
-                child: Text('Save'),
-              ),
+            SizedBox(height: 24.0),
+            Row(
+              children: [
+                Expanded(flex: 4, child: Container()),
+                Spacer(flex: 1),
+                Expanded(
+                  flex: 4,
+                  child: TextButton(
+                    onPressed: () => _saveCustomer,
+                    child: Text(
+                      'Save',
+                      style: TextStyle().copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ],
         ),

@@ -104,25 +104,40 @@ class UpdateItemsPageState extends State<UpdateItemsPage> {
               controller: _nameController,
               decoration: InputDecoration(labelText: 'Name'),
             ),
+            SizedBox(height: 16.0),
             TextField(
               controller: _unitController,
               decoration: InputDecoration(labelText: 'Unit'),
             ),
+            SizedBox(height: 16.0),
             TextField(
               controller: _unitPriceController,
               decoration: InputDecoration(labelText: 'Unit Price'),
               keyboardType: TextInputType.numberWithOptions(decimal: true),
             ),
+            SizedBox(height: 16.0),
             TextField(
               controller: _descriptionController,
               decoration: InputDecoration(labelText: 'Description'),
             ),
-            SizedBox(height: 16),
-            Center(
-              child: ElevatedButton(
-                onPressed: _saveItem,
-                child: Text('Save'),
-              ),
+            SizedBox(height: 24),
+            Row(
+              children: [
+                Expanded(flex: 4, child: Container()),
+                Spacer(flex: 1),
+                Expanded(
+                  flex: 4,
+                  child: TextButton(
+                    onPressed: () => _saveItem,
+                    child: Text(
+                      'Save',
+                      style: TextStyle().copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ],
         ),
