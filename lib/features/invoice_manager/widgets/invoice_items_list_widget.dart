@@ -102,7 +102,7 @@ class InvoiceItemsListWidgetState extends State<InvoiceItemsListWidget> {
                           ),
                           Text(
                             'Unit Price: ${item.unitPrice}',
-                            style: Theme.of(context).textTheme.titleSmall,
+                            style: Theme.of(context).textTheme.labelSmall,
                           ),
                         ],
                       ),

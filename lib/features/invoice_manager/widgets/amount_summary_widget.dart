@@ -24,8 +24,8 @@ class AmountSummaryWidgetState extends State<AmountSummaryWidget> {
             children: [
               Flexible(
                 child: Text(
-                  'Gross Total:',
-                  style: Theme.of(context).textTheme.titleMedium,
+                  'Gross Total',
+                  style: Theme.of(context).textTheme.titleSmall,
                 ),
               ),
               Flexible(
@@ -36,7 +36,7 @@ class AmountSummaryWidgetState extends State<AmountSummaryWidget> {
                           .invoice
                           .totalAmount
                           .toString(),
-                  style: Theme.of(context).textTheme.titleMedium,
+                  style: Theme.of(context).textTheme.titleSmall,
                 ),
               ),
             ],
@@ -60,8 +60,8 @@ class AmountSummaryWidgetState extends State<AmountSummaryWidget> {
                     }
                   },
                   child: Text(
-                    'Discount: ',
-                    style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                    'Discount',
+                    style: Theme.of(context).textTheme.titleSmall!.copyWith(
                           color: Colors.blue,
                           decoration: TextDecoration.underline,
                           decorationColor: Colors.blue,
@@ -77,16 +77,9 @@ class AmountSummaryWidgetState extends State<AmountSummaryWidget> {
                           .invoice
                           .discount
                           .toString(),
-                  style: Theme.of(context).textTheme.titleMedium,
+                  style: Theme.of(context).textTheme.titleSmall,
                 ),
               )
-              // Flexible(
-              //   child: TextField(
-              //     controller: _discountTextController,
-              //     style: Theme.of(context).textTheme.titleMedium,
-              //     keyboardType: TextInputType.number,
-              //   ),
-              // ),
             ],
           ),
           Row(
@@ -94,11 +87,11 @@ class AmountSummaryWidgetState extends State<AmountSummaryWidget> {
             children: [
               Flexible(
                 child: Text(
-                  'Total Payable: ',
+                  'Total Payable',
                   style: Theme.of(context)
                       .textTheme
                       .titleMedium!
-                      .copyWith(fontWeight: FontWeight.bold),
+                      .copyWith(fontWeight: FontWeight.w900),
                 ),
               ),
               Flexible(
@@ -109,10 +102,10 @@ class AmountSummaryWidgetState extends State<AmountSummaryWidget> {
                           .invoice
                           .grandTotal
                           .toString(),
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleMedium!
-                      .copyWith(fontWeight: FontWeight.bold),
+                  style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                        fontWeight: FontWeight.w900,
+                        color: Colors.red,
+                      ),
                 ),
               ),
             ],
