@@ -1,5 +1,4 @@
 import 'package:bloc/bloc.dart';
-import 'package:ease_mvp/core/database/database_helper.dart';
 import 'package:ease_mvp/core/database/invoice_items_dao.dart';
 import 'package:ease_mvp/core/database/invoices_dao.dart';
 import 'package:ease_mvp/core/database/payments_dao.dart';
@@ -16,21 +15,7 @@ class InvoiceManagerCubit extends Cubit<InvoiceManagerCubitState> {
   InvoiceItemsDAO _invoiceItemsDAO = InvoiceItemsDAO();
   PaymentsDAO _paymentsDAO = PaymentsDAO();
 
-  final DatabaseHelper _databaseHelper = DatabaseHelper();
-
   late Invoice _invoice;
-
-  // late Customer _customer;
-  // late Vendor _vendor;
-
-  // late double _totalAmount;
-  // late double _taxes;
-  // late double _discounts;
-  // double _grandTotal = 0.0;
-
-  // final _itemsDAO = InventoryItemsDAO();
-  // final _invoiceDAO = InvoicesDAO();
-  // final _invoiceItemsDAO = InvoiceItemsDAO();
 
   void initialiseInvoiceModelInstance(Invoice invoice) {
     _invoice = invoice;
