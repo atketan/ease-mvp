@@ -1,14 +1,13 @@
 import 'package:ease_mvp/core/models/invoice_item.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../bloc/invoice_manager_cubit.dart';
 import 'invoice_item_delegate_widget.dart';
 
 class InvoiceItemsListWidget extends StatefulWidget {
-  final List<InvoiceItem> invoiceItems;
-
   InvoiceItemsListWidget({
     Key? key,
-    required this.invoiceItems,
   }) : super(key: key);
 
   @override
@@ -17,9 +16,10 @@ class InvoiceItemsListWidget extends StatefulWidget {
 
 class InvoiceItemsListWidgetState extends State<InvoiceItemsListWidget> {
   late List<InvoiceItem> _invoiceItems;
+
   @override
   void initState() {
-    _invoiceItems = widget.invoiceItems;
+    _invoiceItems = context.read<InvoiceManagerCubit>().invoice.items;
     super.initState();
   }
 
@@ -53,6 +53,9 @@ class InvoiceItemsListWidgetState extends State<InvoiceItemsListWidget> {
                       setState(() {
                         _invoiceItems.add(invoiceItem);
                       });
+                      context
+                          .read<InvoiceManagerCubit>()
+                          .updateInvoiceAmounts();
                     },
                   );
                 },
@@ -142,8 +145,7 @@ class InvoiceItemsListWidgetState extends State<InvoiceItemsListWidget> {
                                             TextButton(
                                               child: Text('Cancel'),
                                               onPressed: () {
-                                                Navigator.of(context)
-                                                    .pop(); // Close the dialog
+                                                Navigator.of(context).pop();
                                               },
                                             ),
                                             TextButton(
@@ -152,13 +154,16 @@ class InvoiceItemsListWidgetState extends State<InvoiceItemsListWidget> {
                                                 setState(() {
                                                   _invoiceItems.removeAt(index);
                                                 });
-                                                Navigator.of(context)
-                                                    .pop(); // Close the dialog
+                                                Navigator.of(context).pop();
                                               },
                                             ),
                                           ],
                                         );
                                       },
+                                    ).then(
+                                      (value) => context
+                                          .read<InvoiceManagerCubit>()
+                                          .updateInvoiceAmounts(),
                                     );
                                   }
                                   if (item.quantity > 1) {
@@ -166,6 +171,9 @@ class InvoiceItemsListWidgetState extends State<InvoiceItemsListWidget> {
                                       item.quantity--;
                                       item.totalPrice =
                                           item.quantity * item.unitPrice;
+                                      context
+                                          .read<InvoiceManagerCubit>()
+                                          .updateInvoiceAmounts();
                                     });
                                   }
                                 },
@@ -181,6 +189,9 @@ class InvoiceItemsListWidgetState extends State<InvoiceItemsListWidget> {
                                     item.quantity++;
                                     item.totalPrice =
                                         item.quantity * item.unitPrice;
+                                    context
+                                        .read<InvoiceManagerCubit>()
+                                        .updateInvoiceAmounts();
                                   });
                                 },
                               ),

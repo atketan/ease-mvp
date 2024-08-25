@@ -30,7 +30,12 @@ class AmountSummaryWidgetState extends State<AmountSummaryWidget> {
               ),
               Flexible(
                 child: Text(
-                  '',
+                  "₹" +
+                      context
+                          .read<InvoiceManagerCubit>()
+                          .invoice
+                          .totalAmount
+                          .toString(),
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
               ),
@@ -98,7 +103,12 @@ class AmountSummaryWidgetState extends State<AmountSummaryWidget> {
               ),
               Flexible(
                 child: Text(
-                  '',
+                  "₹" +
+                      context
+                          .read<InvoiceManagerCubit>()
+                          .invoice
+                          .grandTotal
+                          .toString(),
                   style: Theme.of(context)
                       .textTheme
                       .titleMedium!

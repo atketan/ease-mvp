@@ -28,11 +28,13 @@ class InvoiceManagerCubit extends Cubit<InvoiceManagerCubitState> {
 
   void addInvoiceIteam(InvoiceItem invoiceItem) {
     _invoice.items.add(invoiceItem);
+    _updateInvoiceAmounts();
     emit(InvoiceManagerLoaded());
   }
 
   void removeInvoiceItem(int invoiceItemIndex) {
     _invoice.items.removeAt(invoiceItemIndex);
+    _updateInvoiceAmounts();
     emit(InvoiceManagerLoaded());
   }
 
@@ -46,9 +48,22 @@ class InvoiceManagerCubit extends Cubit<InvoiceManagerCubitState> {
     _invoice.vendorId = vendorId;
   }
 
-  void setDiscount(double discount) {
+  void setDiscount(double discount) async {
     _invoice.discount = discount;
+    await _updateInvoiceAmounts();
     emit(InvoiceManagerLoaded());
+  }
+
+  void updateInvoiceAmounts() async {
+    await _updateInvoiceAmounts();
+    emit(InvoiceManagerLoaded());
+  }
+
+  Future<bool> _updateInvoiceAmounts() {
+    _invoice.totalAmount = _invoice.items.fold(
+        0.0, (previousValue, element) => previousValue + element.totalPrice);
+    _invoice.grandTotal = _invoice.totalAmount - _invoice.discount;
+    return Future.value(true);
   }
 
   // void addInvoice(Invoice invoice) {
