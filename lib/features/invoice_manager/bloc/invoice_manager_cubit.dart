@@ -66,19 +66,13 @@ class InvoiceManagerCubit extends Cubit<InvoiceManagerCubitState> {
     return Future.value(true);
   }
 
-  // void addInvoice(Invoice invoice) {
-  //   _invoices.add(invoice);
-  //   emit(InvoiceManagerLoaded(_invoices));
-  // }
+  void updateStatus(String paymentStatus) {
+    _invoice.status = paymentStatus;
+    emit(InvoiceManagerLoaded());
+  }
 
-  // void removeInvoice(Invoice invoice) {
-  //   _invoices.remove(invoice);
-  //   emit(InvoiceManagerLoaded(_invoices));
-  // }
-
-  // void updateInvoice(Invoice invoice) {
-  //   final index = _invoices.indexWhere((element) => element.id == invoice.id);
-  //   _invoices[index] = invoice;
-  //   emit(InvoiceManagerLoaded(_invoices));
-  // }
+  void updatePaymentType(String paymentType) {
+    _invoice.paymentType = paymentType;
+    emit(InvoiceManagerLoaded());
+  }
 }

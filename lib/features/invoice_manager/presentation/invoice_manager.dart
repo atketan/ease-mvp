@@ -11,6 +11,7 @@ import '../widgets/entity_delegate_widget.dart';
 import '../widgets/invoice_items_list_widget.dart';
 import '../widgets/invoice_manager_spacer.dart';
 import '../widgets/invoice_order_details_widget.dart';
+import '../widgets/payment_details_widget.dart';
 
 enum InvoiceType {
   Sales,
@@ -169,12 +170,22 @@ class InvoiceManagerState extends State<InvoiceManager> {
                     },
                   ),
 
-                  // Taxes
-                  // Discounts
-                  // Total amount
-                  // Total amount after taxes and discounts
-                  // Total amount due
-                  // Total amount paid
+                  InvoiceManagerSpacer(),
+
+                  // Payment type and status
+                  BlocBuilder<InvoiceManagerCubit, InvoiceManagerCubitState>(
+                    builder: (context, state) {
+                      if (state is InvoiceManagerLoaded) {
+                        return PaymentDetailsWidget();
+                      } else if (state is InvoiceManagerLoading) {
+                        return Center(child: CircularProgressIndicator());
+                      } else if (state is InvoiceManagerError) {
+                        return Center(child: Text('Error: ${state.message}'));
+                      } else {
+                        return Center(child: Text('Unknown state'));
+                      }
+                    },
+                  ),
 
                   InvoiceManagerSpacer(),
 
