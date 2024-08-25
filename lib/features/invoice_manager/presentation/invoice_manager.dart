@@ -215,38 +215,51 @@ class InvoiceManagerState extends State<InvoiceManager> {
               children: [
                 Expanded(
                   flex: 4,
-                  child: TextButton(
-                    onPressed: () {
-                      // Share action
-                    },
-                    child: Text(
-                      'Share',
-                      style: TextStyle().copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    style: ButtonStyle().copyWith(
-                      backgroundColor: MaterialStateProperty.all<Color>(
-                        Theme.of(context).colorScheme.background,
-                      ),
-                      foregroundColor: MaterialStateProperty.all<Color>(
-                        Theme.of(context).colorScheme.primary,
-                      ),
-                      side: MaterialStateProperty.all<BorderSide>(
-                        BorderSide(
-                          color: Theme.of(context).colorScheme.primary,
-                          width: 1.0,
-                        ),
-                      ),
-                    ),
-                  ),
+                  child: Container(),
+                  // child: TextButton(
+                  //   onPressed: () {
+                  //     // Share action
+                  //   },
+                  //   child: Text(
+                  //     'Share',
+                  //     style: TextStyle().copyWith(
+                  //       fontWeight: FontWeight.bold,
+                  //     ),
+                  //   ),
+                  //   style: ButtonStyle().copyWith(
+                  //     backgroundColor: MaterialStateProperty.all<Color>(
+                  //       Theme.of(context).colorScheme.background,
+                  //     ),
+                  //     foregroundColor: MaterialStateProperty.all<Color>(
+                  //       Theme.of(context).colorScheme.primary,
+                  //     ),
+                  //     side: MaterialStateProperty.all<BorderSide>(
+                  //       BorderSide(
+                  //         color: Theme.of(context).colorScheme.primary,
+                  //         width: 1.0,
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
                 ),
                 Spacer(flex: 1),
                 Expanded(
                   flex: 4,
                   child: TextButton(
-                    onPressed: () {
-                      // Save action
+                    onPressed: () async {
+                      await context
+                          .read<InvoiceManagerCubit>()
+                          .saveInvoice()
+                          .then(
+                        (value) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text('Invoice updated successfully!'),
+                            ),
+                          );
+                          Navigator.pop(context);
+                        },
+                      );
                     },
                     child: Text(
                       'Save',

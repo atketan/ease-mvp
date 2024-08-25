@@ -80,7 +80,7 @@ class DatabaseHelper {
         invoice_id INTEGER NOT NULL,
         item_id INTEGER NOT NULL,
         name TEXT NOT NULL,
-        description TEXT NOT NULL,
+        description TEXT,
         quantity INTEGER NOT NULL,
         unit_price REAL NOT NULL,
         total_price REAL NOT NULL,
