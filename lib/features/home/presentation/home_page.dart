@@ -61,12 +61,12 @@ class _EASEHomePageState extends State<EASEHomePage>
   static List<Widget> _widgetOptions = <Widget>[
     Center(
       child: Text(
-        "Let's get accounting!",
+        'Business Overview',
       ),
     ),
     Center(
       child: Text(
-        'Business Overview',
+        "Let's get accounting!",
       ),
     ),
     ManageLandingPage(),
@@ -214,12 +214,12 @@ class _EASEHomePageState extends State<EASEHomePage>
             showUnselectedLabels: true,
             items: [
               BottomNavigationBarItem(
-                icon: Icon(Icons.dashboard_sharp),
-                label: "Dashboard",
-              ),
-              BottomNavigationBarItem(
                 icon: Icon(Icons.inventory_sharp),
                 label: "Invoices",
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.dashboard_sharp),
+                label: "Dashboard",
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.view_list_sharp),
