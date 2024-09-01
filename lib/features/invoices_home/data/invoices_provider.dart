@@ -26,14 +26,12 @@ class InvoicesProvider with ChangeNotifier {
   double get totalPaidAmount => _totalPaidAmount;
 
   Future<void> fetchUnpaidInvoices() async {
-    debugPrint('fetchUnpaidInvoices called');
     _unpaidInvoices = await _invoicesDAO.getAllInvoices(); // Filter unpaid invoices
     _totalUnpaidAmount = _unpaidInvoices.fold(0, (sum, invoice) => sum + invoice.totalAmount);
     notifyListeners();
   }
 
   Future<void> fetchPaidInvoices(DateTime startDate, DateTime endDate) async {
-    debugPrint('fetchPaidInvoices called');
     _paidInvoices = await _invoicesDAO.getInvoicesByDateRangeAndPaymentStatus(startDate, endDate, "paid"); // Filter paid invoices
     _totalPaidAmount = _paidInvoices.fold(0, (sum, invoice) => sum + invoice.totalAmount);
     notifyListeners();
