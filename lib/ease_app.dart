@@ -1,5 +1,5 @@
 import 'package:ease/features/account/presentation/bloc/login_cubit.dart';
-import 'package:ease/features/account/presentation/login_page.dart';
+// import 'package:ease/features/account/presentation/login_page.dart';
 import 'package:ease/features/home/presentation/home_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -52,14 +52,14 @@ class _EASEAppState extends State<EASEApp> {
           ),
           textButtonTheme: TextButtonThemeData(
             style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all(Colors.teal),
-              foregroundColor: MaterialStateProperty.all(Colors.white),
-              shape: MaterialStateProperty.all(
+              backgroundColor: WidgetStateProperty.all(Colors.teal),
+              foregroundColor: WidgetStateProperty.all(Colors.white),
+              shape: WidgetStateProperty.all(
                 RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(4),
                 ),
               ),
-              padding: MaterialStateProperty.all(
+              padding: WidgetStateProperty.all(
                 EdgeInsets.symmetric(vertical: 12.0, horizontal: 24.0),
               ),
             ),
@@ -110,14 +110,14 @@ class _EASEAppState extends State<EASEApp> {
           ),
           textButtonTheme: TextButtonThemeData(
             style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all(Colors.lightGreen),
-              foregroundColor: MaterialStateProperty.all(Colors.black),
-              shape: MaterialStateProperty.all(
+              backgroundColor: WidgetStateProperty.all(Colors.lightGreen),
+              foregroundColor: WidgetStateProperty.all(Colors.black),
+              shape: WidgetStateProperty.all(
                 RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(4),
                 ),
               ),
-              padding: MaterialStateProperty.all(
+              padding: WidgetStateProperty.all(
                 EdgeInsets.symmetric(vertical: 12.0, horizontal: 24.0),
               ),
             ),

@@ -1,7 +1,6 @@
 import 'package:ease/core/database/database_helper.dart';
 import 'package:ease/ease_app.dart';
 import 'package:flutter/material.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -19,9 +18,20 @@ void main() async {
     
 
     runApp(const EASEApp());
+    
   } catch (e, stackTrace) {
     debugPrint('Error during initialization: $e');
     debugPrint('Stack trace: $stackTrace');
-    // Consider showing an error dialog or screen here
+    
+    runApp(MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text('Error'),
+        ),
+        body: Center(
+          child: Text('Error during initialization: $e\n\nStack trace: $stackTrace'),
+        ),
+      ),
+    ));
   }
 }
