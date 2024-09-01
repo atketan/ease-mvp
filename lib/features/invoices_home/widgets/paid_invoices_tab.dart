@@ -10,15 +10,12 @@ class PaidInvoicesTab extends StatefulWidget {
 }
 
 class _PaidInvoicesTabState extends State<PaidInvoicesTab> {
-  DateTime _startDate = DateTime.now().subtract(Duration(days: 30));
-  DateTime _endDate = DateTime.now();
-
   @override
   void initState() {
     super.initState();
-    final invoicesProvider =
-        Provider.of<InvoicesProvider>(context, listen: false);
-    invoicesProvider.fetchPaidInvoices(_startDate, _endDate);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<InvoicesProvider>(context, listen: false).fetchPaidInvoices();
+    });
   }
 
   @override
@@ -27,33 +24,6 @@ class _PaidInvoicesTabState extends State<PaidInvoicesTab> {
 
     return Column(
       children: [
-        SizedBox(height: 8.0),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            TextButton(
-              onPressed: () async {
-                final picked = await showDateRangePicker(
-                  context: context,
-                  firstDate: DateTime(2000),
-                  lastDate: DateTime.now(),
-                  initialDateRange:
-                      DateTimeRange(start: _startDate, end: _endDate),
-                );
-                if (picked != null) {
-                  setState(() {
-                    _startDate = picked.start;
-                    _endDate = picked.end;
-                  });
-                  invoicesProvider.fetchPaidInvoices(_startDate, _endDate);
-                }
-              },
-              child: Text('Select Date Range'),
-            ),
-            Text('From: ${DateFormat.yMMMd().format(_startDate)}'),
-            Text('To: ${DateFormat.yMMMd().format(_endDate)}'),
-          ],
-        ),
         Padding(
           padding: const EdgeInsets.all(12.0),
           child: Text(

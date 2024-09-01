@@ -25,15 +25,31 @@ class InvoicesProvider with ChangeNotifier {
   double get totalUnpaidAmount => _totalUnpaidAmount;
   double get totalPaidAmount => _totalPaidAmount;
 
+DateTime _startDate = DateTime.now().subtract(Duration(days: 30));
+  DateTime _endDate = DateTime.now();
+  DateTime get startDate => _startDate;
+  DateTime get endDate => _endDate;
+
+  void setDateRange(DateTime start, DateTime end) {
+    _startDate = start;
+    _endDate = end;
+    fetchUnpaidInvoices();
+    fetchPaidInvoices();
+  }
+
   Future<void> fetchUnpaidInvoices() async {
-    _unpaidInvoices = await _invoicesDAO.getAllInvoices(paymentStatus: "unpaid"); // Filter unpaid invoices
-    _totalUnpaidAmount = _unpaidInvoices.fold(0, (sum, invoice) => sum + invoice.totalAmount);
+    _unpaidInvoices = await _invoicesDAO.getInvoicesByDateRangeAndPaymentStatus(
+        _startDate, _endDate, "unpaid"); // Filter unpaid invoices
+    _totalUnpaidAmount =
+        _unpaidInvoices.fold(0, (sum, invoice) => sum + invoice.totalAmount);
     notifyListeners();
   }
 
-  Future<void> fetchPaidInvoices(DateTime startDate, DateTime endDate) async {
-    _paidInvoices = await _invoicesDAO.getInvoicesByDateRangeAndPaymentStatus(startDate, endDate, "paid"); // Filter paid invoices
-    _totalPaidAmount = _paidInvoices.fold(0, (sum, invoice) => sum + invoice.totalAmount);
+  Future<void> fetchPaidInvoices() async {
+    _paidInvoices = await _invoicesDAO.getInvoicesByDateRangeAndPaymentStatus(
+        _startDate, _endDate, "paid"); // Filter paid invoices
+    _totalPaidAmount =
+        _paidInvoices.fold(0, (sum, invoice) => sum + invoice.totalAmount);
     notifyListeners();
   }
 }

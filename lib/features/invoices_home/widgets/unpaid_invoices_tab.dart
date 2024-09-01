@@ -14,9 +14,11 @@ class _UnpaidInvoicesTabState extends State<UnpaidInvoicesTab> {
   @override
   void initState() {
     super.initState();
-    final invoicesProvider =
-        Provider.of<InvoicesProvider>(context, listen: false);
-    invoicesProvider.fetchUnpaidInvoices();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<InvoicesProvider>(context, listen: false)
+          .fetchUnpaidInvoices();
+    });
+
   }
 
   @override
@@ -28,7 +30,7 @@ class _UnpaidInvoicesTabState extends State<UnpaidInvoicesTab> {
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(12.0),
           child: Text(
             'Total Amount to be Collected: ₹${invoicesProvider.totalUnpaidAmount.toStringAsFixed(2)}',
             style: Theme.of(context).textTheme.titleMedium,
