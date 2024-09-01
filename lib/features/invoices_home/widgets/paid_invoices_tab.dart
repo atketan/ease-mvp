@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -55,28 +54,35 @@ class _PaidInvoicesTabState extends State<PaidInvoicesTab> {
             Text('To: ${DateFormat.yMMMd().format(_endDate)}'),
           ],
         ),
+        Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Text(
+            'Total Amount Received: ₹${invoicesProvider.totalPaidAmount.toStringAsFixed(2)}',
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
+        ),
         Expanded(
           child: ListView.builder(
             itemCount: invoicesProvider.paidInvoices.length,
             itemBuilder: (context, index) {
               final invoice = invoicesProvider.paidInvoices[index];
               return ListTile(
-                title: Text(invoice.customerId.toString()),
+                title: Text(
+                  '#${invoice.invoiceNumber}',
+                  style: Theme.of(context).textTheme.titleSmall,
+                ),
                 subtitle: Text(
-                    'Invoice #: ${invoice.invoiceNumber}\nDate: ${DateFormat.yMMMd().format(invoice.date)}'),
+                  'Date: ${DateFormat.yMMMd().format(invoice.date)}',
+                  style: Theme.of(context).textTheme.titleSmall,
+                ),
                 trailing: Text(
                   '₹${invoice.totalAmount.toStringAsFixed(2)}',
-                  style: Theme.of(context).textTheme.titleMedium,
+                  style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
                 ),
               );
             },
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(
-            'Total Amount Received: ₹${invoicesProvider.totalPaidAmount.toStringAsFixed(2)}',
-            style: Theme.of(context).textTheme.titleMedium,
           ),
         ),
       ],

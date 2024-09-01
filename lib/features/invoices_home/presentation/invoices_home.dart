@@ -13,10 +13,18 @@ class InvoicesHomePage extends StatelessWidget {
         length: 2,
         child: Scaffold(
           appBar: AppBar(
-            // title: Text('Invoices'),
-            // centerTitle: true,
-            toolbarHeight: 0.0,
+            title: Text(
+              'Invoices',
+              style: Theme.of(context)
+                  .textTheme
+                  .titleMedium!
+                  .copyWith(fontWeight: FontWeight.bold),
+            ),
+            centerTitle: true,
+            toolbarHeight: 40.0,
             bottom: TabBar(
+              isScrollable: true,
+              tabAlignment: TabAlignment.start,
               labelStyle: Theme.of(context)
                   .textTheme
                   .titleMedium!
@@ -39,4 +47,3 @@ class InvoicesHomePage extends StatelessWidget {
     );
   }
 }
-

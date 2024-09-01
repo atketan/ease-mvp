@@ -26,7 +26,7 @@ class InvoicesProvider with ChangeNotifier {
   double get totalPaidAmount => _totalPaidAmount;
 
   Future<void> fetchUnpaidInvoices() async {
-    _unpaidInvoices = await _invoicesDAO.getAllInvoices(); // Filter unpaid invoices
+    _unpaidInvoices = await _invoicesDAO.getAllInvoices(paymentStatus: "unpaid"); // Filter unpaid invoices
     _totalUnpaidAmount = _unpaidInvoices.fold(0, (sum, invoice) => sum + invoice.totalAmount);
     notifyListeners();
   }

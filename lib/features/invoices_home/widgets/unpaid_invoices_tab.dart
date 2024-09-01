@@ -1,3 +1,4 @@
+import 'package:ease/core/models/invoice.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -21,26 +22,11 @@ class _UnpaidInvoicesTabState extends State<UnpaidInvoicesTab> {
   @override
   Widget build(BuildContext context) {
     final invoicesProvider = Provider.of<InvoicesProvider>(context);
+    final groupedInvoices =
+        _groupInvoicesByMonth(invoicesProvider.unpaidInvoices);
 
     return Column(
       children: [
-        Expanded(
-          child: ListView.builder(
-            itemCount: invoicesProvider.unpaidInvoices.length,
-            itemBuilder: (context, index) {
-              final invoice = invoicesProvider.unpaidInvoices[index];
-              return ListTile(
-                title: Text(invoice.customerId.toString()),
-                subtitle: Text(
-                    'Invoice #: ${invoice.invoiceNumber}\nDate: ${DateFormat.yMMMd().format(invoice.date)}'),
-                trailing: Text(
-                  '₹${invoice.totalAmount.toStringAsFixed(2)}',
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
-              );
-            },
-          ),
-        ),
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: Text(
@@ -48,7 +34,64 @@ class _UnpaidInvoicesTabState extends State<UnpaidInvoicesTab> {
             style: Theme.of(context).textTheme.titleMedium,
           ),
         ),
+        Expanded(
+          child: ListView.builder(
+            itemCount: groupedInvoices.length,
+            itemBuilder: (context, index) {
+              final month = groupedInvoices.keys.elementAt(index);
+              final invoices = groupedInvoices[month]!;
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      month,
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                  ),
+                  ...invoices
+                      .map(
+                        (invoice) => ListTile(
+                          dense: true,
+                          title: Text(
+                            '#${invoice.invoiceNumber}',
+                            style: Theme.of(context).textTheme.titleSmall,
+                          ),
+                          subtitle: Text(
+                            'Date: ${DateFormat.yMMMd().format(invoice.date)}',
+                            style: Theme.of(context).textTheme.titleSmall,
+                          ),
+                          trailing: Text(
+                            '₹${invoice.totalAmount.toStringAsFixed(2)}',
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium!
+                                .copyWith(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                          ),
+                        ),
+                      )
+                      .toList(),
+                ],
+              );
+            },
+          ),
+        ),
       ],
     );
+  }
+
+  Map<String, List<Invoice>> _groupInvoicesByMonth(List<Invoice> invoices) {
+    final Map<String, List<Invoice>> groupedInvoices = {};
+    for (var invoice in invoices) {
+      final month = DateFormat('MMMM yyyy').format(invoice.date);
+      if (!groupedInvoices.containsKey(month)) {
+        groupedInvoices[month] = [];
+      }
+      groupedInvoices[month]!.add(invoice);
+    }
+    return groupedInvoices;
   }
 }

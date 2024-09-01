@@ -9,9 +9,16 @@ class InvoicesDAO {
     return await db.insert('Invoices', invoice.toJSON());
   }
 
-  Future<List<Invoice>> getAllInvoices() async {
+  Future<List<Invoice>> getAllInvoices({String? paymentStatus}) async {
     final db = await _databaseHelper.database;
-    final List<Map<String, dynamic>> maps = await db.query('Invoices');
+    List<Map<String, dynamic>> maps;
+
+    if (paymentStatus == null || paymentStatus.isEmpty) {
+      maps = await db.query('Invoices');
+    } else {
+      maps = await db.query('Invoices', where: 'status = ?', whereArgs: [paymentStatus]);
+    }
+
     return List.generate(maps.length, (i) => Invoice.fromJSON(maps[i]));
   }
 
@@ -38,7 +45,11 @@ class InvoicesDAO {
     final List<Map<String, dynamic>> maps = await db.query(
       'Invoices',
       where: 'date >= ? AND date <= ? AND status = ?',
-      whereArgs: [startDate.toIso8601String(), endDate.toIso8601String(), paymentStatus],
+      whereArgs: [
+        startDate.toIso8601String(),
+        endDate.toIso8601String(),
+        paymentStatus
+      ],
     );
     return List.generate(maps.length, (i) => Invoice.fromJSON(maps[i]));
   }
