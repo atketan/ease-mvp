@@ -132,7 +132,7 @@ class _EASEHomePageState extends State<EASEHomePage>
               Bubble(
                 title: "Sale",
                 iconColor: Theme.of(context).colorScheme.primary,
-                bubbleColor: Theme.of(context).colorScheme.background,
+                bubbleColor: Theme.of(context).colorScheme.surface, // Updated line
                 icon: Icons.settings,
                 titleStyle: TextStyle(
                     fontSize: 16, color: Theme.of(context).colorScheme.primary),
@@ -156,7 +156,7 @@ class _EASEHomePageState extends State<EASEHomePage>
               Bubble(
                 title: "Purchase",
                 iconColor: Theme.of(context).colorScheme.primary,
-                bubbleColor: Theme.of(context).colorScheme.background,
+                bubbleColor: Theme.of(context).colorScheme.surface,
                 icon: Icons.people,
                 titleStyle: TextStyle(
                     fontSize: 16, color: Theme.of(context).colorScheme.primary),
@@ -177,7 +177,7 @@ class _EASEHomePageState extends State<EASEHomePage>
               Bubble(
                 title: "Expense",
                 iconColor: Theme.of(context).colorScheme.primary,
-                bubbleColor: Theme.of(context).colorScheme.background,
+                bubbleColor: Theme.of(context).colorScheme.surface,
                 icon: Icons.home,
                 titleStyle: TextStyle(
                     fontSize: 16, color: Theme.of(context).colorScheme.primary),
@@ -188,7 +188,7 @@ class _EASEHomePageState extends State<EASEHomePage>
               Bubble(
                 title: "Payment",
                 iconColor: Theme.of(context).colorScheme.primary,
-                bubbleColor: Theme.of(context).colorScheme.background,
+                bubbleColor: Theme.of(context).colorScheme.surface,
                 icon: Icons.home,
                 titleStyle: TextStyle(
                     fontSize: 16, color: Theme.of(context).colorScheme.primary),
@@ -203,7 +203,7 @@ class _EASEHomePageState extends State<EASEHomePage>
                 : _animationController.forward(),
             iconColor: Theme.of(context).colorScheme.primary,
             iconData: Icons.add,
-            backGroundColor: Theme.of(context).colorScheme.background,
+            backGroundColor: Theme.of(context).colorScheme.surface,
           ),
           bottomNavigationBar: BottomNavigationBar(
             selectedItemColor: Theme.of(context).colorScheme.primary,
