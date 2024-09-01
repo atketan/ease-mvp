@@ -1,10 +1,13 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart' as path_provider;
+import 'package:path/path.dart' as path;
 
 class DatabaseHelper {
   static final DatabaseHelper _instance = DatabaseHelper._internal();
-  factory DatabaseHelper() => _instance;
   static Database? _database;
+
+  factory DatabaseHelper() => _instance;
 
   DatabaseHelper._internal();
 
@@ -15,12 +18,20 @@ class DatabaseHelper {
   }
 
   Future<Database> _initDatabase() async {
-    String path = join(await getDatabasesPath(), 'invoicing.db');
-    return await openDatabase(
-      path,
-      version: 1,
-      onCreate: _onCreate,
-    );
+    try {
+      final documentsDirectory = await path_provider.getApplicationDocumentsDirectory();
+      final dbPath = path.join(documentsDirectory.path, 'your_database_name.db');
+      print('Initializing database at path: $dbPath');
+      return await openDatabase(
+        dbPath,
+        version: 1,
+        onCreate: _onCreate,
+      );
+    } catch (e, stackTrace) {
+      print('Error initializing database: $e');
+      print('Stack trace: $stackTrace');
+      rethrow;
+    }
   }
 
   Future<void> _onCreate(Database db, int version) async {

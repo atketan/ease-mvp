@@ -1,7 +1,7 @@
 import 'dart:async';
-import 'package:ease_mvp/core/database/customers_dao.dart';
-import 'package:ease_mvp/core/models/customer.dart';
-import 'package:ease_mvp/features/customers/presentation/update_customers_page.dart';
+import 'package:ease/core/database/customers_dao.dart';
+import 'package:ease/core/models/customer.dart';
+import 'package:ease/features/customers/presentation/update_customers_page.dart';
 import 'package:flutter/material.dart';
 
 class CustomersPage extends StatefulWidget {

@@ -1,8 +1,8 @@
 import 'package:bloc/bloc.dart';
-import 'package:ease_mvp/core/database/invoice_items_dao.dart';
-import 'package:ease_mvp/core/database/invoices_dao.dart';
-import 'package:ease_mvp/core/models/invoice.dart';
-import 'package:ease_mvp/core/models/invoice_item.dart';
+import 'package:ease/core/database/invoice_items_dao.dart';
+import 'package:ease/core/database/invoices_dao.dart';
+import 'package:ease/core/models/invoice.dart';
+import 'package:ease/core/models/invoice_item.dart';
 
 class InvoiceBloc extends Cubit<Invoice> {
   final InvoicesDAO _invoicesDAO = InvoicesDAO();

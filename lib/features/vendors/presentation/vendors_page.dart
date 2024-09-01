@@ -1,6 +1,6 @@
 import 'dart:async';
-import 'package:ease_mvp/core/database/vendors_dao.dart';
-import 'package:ease_mvp/core/models/vendor.dart';
+import 'package:ease/core/database/vendors_dao.dart';
+import 'package:ease/core/models/vendor.dart';
 
 import 'package:flutter/material.dart';
 

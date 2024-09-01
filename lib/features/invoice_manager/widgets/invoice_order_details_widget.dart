@@ -1,5 +1,5 @@
-import 'package:ease_mvp/core/utils/date_time_utils.dart';
-import 'package:ease_mvp/features/invoice_manager/bloc/invoice_manager_cubit.dart';
+import 'package:ease/core/utils/date_time_utils.dart';
+import 'package:ease/features/invoice_manager/bloc/invoice_manager_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

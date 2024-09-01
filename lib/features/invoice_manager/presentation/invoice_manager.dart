@@ -1,5 +1,5 @@
-import 'package:ease_mvp/core/models/invoice.dart';
-import 'package:ease_mvp/core/providers/short_uuid_generator.dart';
+import 'package:ease/core/models/invoice.dart';
+import 'package:ease/core/providers/short_uuid_generator.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

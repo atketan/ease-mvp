@@ -52,7 +52,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyAA2M5VQCl9wGteRZ6vs0nUAOLEtl-qOHo',
-    appId: '1:935273134971:android:8f8c445f4e53f7a8b69bde',
+    appId: '1:935273134971:android:242a724e91f64bfbb69bde',
     messagingSenderId: '935273134971',
     projectId: 'ease-mvp',
     storageBucket: 'ease-mvp.appspot.com',
@@ -60,11 +60,11 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyAuSXAR-XpsLHxefotRCi6xsI0lVqHkEkM',
-    appId: '1:935273134971:ios:2e84500aab75e56db69bde',
+    appId: '1:935273134971:ios:cf50da81bc040f6bb69bde',
     messagingSenderId: '935273134971',
     projectId: 'ease-mvp',
     storageBucket: 'ease-mvp.appspot.com',
-    iosBundleId: 'com.example.easeMvp',
+    iosBundleId: 'com.atketan.ease',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
@@ -78,11 +78,12 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions windows = FirebaseOptions(
     apiKey: 'AIzaSyDxFBLWPnEtN3SEqZl-qAkar971WSoHC7U',
-    appId: '1:935273134971:web:8d82ca3a7e4d28a0b69bde',
+    appId: '1:935273134971:web:9f8fcf763e938ea8b69bde',
     messagingSenderId: '935273134971',
     projectId: 'ease-mvp',
     authDomain: 'ease-mvp.firebaseapp.com',
     storageBucket: 'ease-mvp.appspot.com',
-    measurementId: 'G-HXT234208Y',
+    measurementId: 'G-CKEDR8DRFD',
   );
+
 }

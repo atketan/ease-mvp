@@ -1,7 +1,7 @@
-import 'package:ease_mvp/features/account/presentation/bloc/login_cubit.dart';
-import 'package:ease_mvp/features/account/presentation/bloc/login_state.dart';
-import 'package:ease_mvp/features/account/presentation/otp_page.dart';
-import 'package:ease_mvp/features/home/presentation/home_page.dart';
+import 'package:ease/features/account/presentation/bloc/login_cubit.dart';
+import 'package:ease/features/account/presentation/bloc/login_state.dart';
+import 'package:ease/features/account/presentation/otp_page.dart';
+import 'package:ease/features/home/presentation/home_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

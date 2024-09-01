@@ -1,9 +1,9 @@
-import 'package:ease_mvp/core/database/customers_dao.dart';
-import 'package:ease_mvp/core/database/vendors_dao.dart';
-import 'package:ease_mvp/core/models/customer.dart';
-import 'package:ease_mvp/core/models/invoice.dart';
-import 'package:ease_mvp/core/models/invoice_item.dart';
-import 'package:ease_mvp/core/models/vendor.dart';
+import 'package:ease/core/database/customers_dao.dart';
+import 'package:ease/core/database/vendors_dao.dart';
+import 'package:ease/core/models/customer.dart';
+import 'package:ease/core/models/invoice.dart';
+import 'package:ease/core/models/invoice_item.dart';
+import 'package:ease/core/models/vendor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'invoice_bloc.dart';

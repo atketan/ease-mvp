@@ -1,10 +1,10 @@
 import 'dart:async';
 
-import 'package:ease_mvp/core/database/inventory_items_dao.dart';
-import 'package:ease_mvp/core/models/inventory_item.dart';
-import 'package:ease_mvp/core/models/invoice_item.dart';
+import 'package:ease/core/database/inventory_items_dao.dart';
+import 'package:ease/core/models/inventory_item.dart';
+import 'package:ease/core/models/invoice_item.dart';
 
-import 'package:ease_mvp/features/items/presentation/update_items_page.dart';
+import 'package:ease/features/items/presentation/update_items_page.dart';
 import 'package:flutter/material.dart';
 
 class InvoiceItemDelegateWidget extends StatefulWidget {

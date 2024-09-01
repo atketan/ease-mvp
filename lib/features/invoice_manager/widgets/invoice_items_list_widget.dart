@@ -1,4 +1,4 @@
-import 'package:ease_mvp/core/models/invoice_item.dart';
+import 'package:ease/core/models/invoice_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

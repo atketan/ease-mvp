@@ -1,6 +1,6 @@
-import 'package:ease_mvp/features/account/presentation/bloc/login_cubit.dart';
-import 'package:ease_mvp/features/account/presentation/login_page.dart';
-import 'package:ease_mvp/features/home/presentation/home_page.dart';
+import 'package:ease/features/account/presentation/bloc/login_cubit.dart';
+import 'package:ease/features/account/presentation/login_page.dart';
+import 'package:ease/features/home/presentation/home_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

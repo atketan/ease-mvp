@@ -1,5 +1,5 @@
-import 'package:ease_mvp/core/database/inventory_items_dao.dart';
-import 'package:ease_mvp/core/models/inventory_item.dart';
+import 'package:ease/core/database/inventory_items_dao.dart';
+import 'package:ease/core/models/inventory_item.dart';
 import 'package:flutter/material.dart';
 
 enum InventoryItemsFormMode {
@@ -58,7 +58,8 @@ class UpdateItemsPageState extends State<UpdateItemsPage> {
     super.dispose();
   }
 
-  void _saveItem() {
+  void _saveItem() async {
+    print('Saving item');
     final name = _nameController.text;
     final unit = _unitController.text;
     final description = _descriptionController.text;
@@ -72,7 +73,14 @@ class UpdateItemsPageState extends State<UpdateItemsPage> {
         unit: unit,
         unitPrice: unitPrice,
       );
-      _itemsDAO.insertInventoryItem(item);
+      // _itemsDAO.insertInventoryItem(item);
+      try {
+        final result = await _itemsDAO.insertInventoryItem(item);
+        print('Item inserted successfully with id: $result');
+      } catch (e) {
+        print('Error inserting item: $e');
+        // Handle the error (e.g., show an error message to the user)
+      }
     } else {
       // Update the existing inventory item
       final updatedItem = InventoryItem(
@@ -128,7 +136,7 @@ class UpdateItemsPageState extends State<UpdateItemsPage> {
                 Expanded(
                   flex: 4,
                   child: TextButton(
-                    onPressed: () => _saveItem,
+                    onPressed: () => _saveItem(),
                     child: Text(
                       'Save',
                       style: TextStyle().copyWith(

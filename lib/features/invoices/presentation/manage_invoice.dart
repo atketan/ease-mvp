@@ -1,11 +1,11 @@
-import 'package:ease_mvp/features/invoices/data_models/invoice_item.dart';
-import 'package:ease_mvp/core/providers/animated_routes_provider.dart';
-import 'package:ease_mvp/features/invoices/data_models/invoice_operation.dart';
-import 'package:ease_mvp/features/invoices/data_models/invoice_type_enum.dart';
-import 'package:ease_mvp/features/invoices/widgets/manage_customer_widget.dart';
-import 'package:ease_mvp/features/invoices/widgets/manage_discount_widget.dart';
-import 'package:ease_mvp/features/invoices/widgets/manage_references_widget.dart';
-import 'package:ease_mvp/features/invoices/widgets/manage_voucher_widget.dart';
+import 'package:ease/features/invoices/data_models/invoice_item.dart';
+import 'package:ease/core/providers/animated_routes_provider.dart';
+import 'package:ease/features/invoices/data_models/invoice_operation.dart';
+import 'package:ease/features/invoices/data_models/invoice_type_enum.dart';
+import 'package:ease/features/invoices/widgets/manage_customer_widget.dart';
+import 'package:ease/features/invoices/widgets/manage_discount_widget.dart';
+import 'package:ease/features/invoices/widgets/manage_references_widget.dart';
+import 'package:ease/features/invoices/widgets/manage_voucher_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 

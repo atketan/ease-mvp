@@ -1,6 +1,6 @@
-import 'package:ease_mvp/features/customers/presentation/customers_page.dart';
-import 'package:ease_mvp/features/items/presentation/items_page.dart';
-import 'package:ease_mvp/features/vendors/presentation/vendors_page.dart';
+import 'package:ease/features/customers/presentation/customers_page.dart';
+import 'package:ease/features/items/presentation/items_page.dart';
+import 'package:ease/features/vendors/presentation/vendors_page.dart';
 import 'package:flutter/material.dart';
 
 class ReportsLandingPage extends StatefulWidget {
