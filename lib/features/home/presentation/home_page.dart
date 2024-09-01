@@ -69,7 +69,7 @@ class _EASEHomePageState extends State<EASEHomePage>
         'Business Overview',
       ),
     ),
-    ReportsLandingPage(),
+    ManageLandingPage(),
   ];
 
   @override

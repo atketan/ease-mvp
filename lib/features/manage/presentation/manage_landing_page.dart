@@ -3,12 +3,12 @@ import 'package:ease/features/items/presentation/items_page.dart';
 import 'package:ease/features/vendors/presentation/vendors_page.dart';
 import 'package:flutter/material.dart';
 
-class ReportsLandingPage extends StatefulWidget {
+class ManageLandingPage extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => ReportsLandingPageState();
+  State<StatefulWidget> createState() => ManageLandingPageState();
 }
 
-class ReportsLandingPageState extends State<ReportsLandingPage> {
+class ManageLandingPageState extends State<ManageLandingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
