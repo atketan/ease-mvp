@@ -1,6 +1,7 @@
 import 'package:ease/features/account/presentation/login_page.dart';
 import 'package:ease/features/invoice_manager/bloc/invoice_manager_cubit.dart';
 import 'package:ease/features/invoice_manager/presentation/invoice_manager.dart';
+import 'package:ease/features/invoices_home/presentation/invoices_home.dart';
 import 'package:ease/features/manage/presentation/manage_landing_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:floating_action_bubble/floating_action_bubble.dart';
@@ -59,11 +60,7 @@ class _EASEHomePageState extends State<EASEHomePage>
   }
 
   static List<Widget> _widgetOptions = <Widget>[
-    Center(
-      child: Text(
-        'Business Overview',
-      ),
-    ),
+    InvoicesHomePage(),
     Center(
       child: Text(
         "Let's get accounting!",

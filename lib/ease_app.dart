@@ -32,8 +32,8 @@ class _EASEAppState extends State<EASEApp> {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.teal),
           useMaterial3: true,
           appBarTheme: AppBarTheme(
-            backgroundColor: Colors.teal,
-            foregroundColor: Colors.white,
+            backgroundColor: Colors.white,
+            foregroundColor: Colors.teal,
           ),
           listTileTheme: ListTileThemeData(
             visualDensity: VisualDensity.compact,
@@ -90,8 +90,8 @@ class _EASEAppState extends State<EASEApp> {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.lightGreen),
           useMaterial3: true,
           appBarTheme: AppBarTheme(
-            backgroundColor: Colors.lightGreen,
-            foregroundColor: Colors.black,
+            backgroundColor: Colors.black,
+            foregroundColor: Colors.lightGreen,
           ),
           listTileTheme: ListTileThemeData(
             visualDensity: VisualDensity.compact,
