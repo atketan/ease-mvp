@@ -145,12 +145,24 @@ class EntitySearchDelegate extends SearchDelegate {
           Text('No Results Found'),
           ElevatedButton(
             onPressed: () async {
-              var result = await showDialog(
-                context: context,
-                builder: (BuildContext context) => (entityType == 'customer')
-                    ? UpdateCustomersPage(mode: CustomersFormMode.Add)
-                    : UpdateVendorsPage(mode: VendorsFormMode.Add),
-              );
+              var result;
+              if (entityType == 'customer') {
+                result=await Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => UpdateCustomersPage(
+                      mode: CustomersFormMode.Add,
+                    ),
+                  ),
+                );
+              } else {
+                result=await Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => UpdateVendorsPage(
+                      mode: VendorsFormMode.Add,
+                    ),
+                  ),
+                );
+              }
               if (result != null) {
                 close(context, result);
               }

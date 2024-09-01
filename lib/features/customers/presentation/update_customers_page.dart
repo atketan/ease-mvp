@@ -139,7 +139,7 @@ class _UpdateCustomersPageState extends State<UpdateCustomersPage> {
                 Expanded(
                   flex: 4,
                   child: TextButton(
-                    onPressed: () => _saveCustomer,
+                    onPressed: () => _saveCustomer(),
                     child: Text(
                       'Save',
                       style: TextStyle().copyWith(
