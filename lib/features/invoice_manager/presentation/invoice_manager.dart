@@ -97,7 +97,6 @@ class InvoiceManagerState extends State<InvoiceManager> {
             Text(
               'INVOICE: #' + invoiceId,
               style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                    color: Colors.white,
                     fontWeight: FontWeight.bold,
                   ),
             ),
@@ -111,13 +110,7 @@ class InvoiceManagerState extends State<InvoiceManager> {
                       (widget.invoiceType == InvoiceType.Sales
                           ? 'SALE'
                           : 'PURCHASE'),
-                  // +
-                  // ' | \₹ ' +
-                  // _grandTotal.toString(),
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleSmall!
-                      .copyWith(color: Colors.white),
+                  style: Theme.of(context).textTheme.titleSmall,
                 ),
               ],
             ),

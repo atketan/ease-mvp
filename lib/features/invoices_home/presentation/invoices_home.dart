@@ -13,6 +13,10 @@ class InvoicesHomePage extends StatelessWidget {
         length: 2,
         child: Scaffold(
           appBar: AppBar(
+            leading: IconButton(
+              onPressed: () {},
+              icon: Icon(Icons.person_4_outlined),
+            ),
             title: Text(
               'Invoices',
               style: Theme.of(context)
