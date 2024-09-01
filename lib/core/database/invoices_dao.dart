@@ -57,4 +57,14 @@ class InvoicesDAO {
     );
     return List.generate(maps.length, (i) => Invoice.fromJSON(maps[i]));
   }
+
+  Future<int> markInvoiceAsPaid(int invoiceId) async {
+    final db = await _databaseHelper.database;
+    return await db.update(
+      'Invoices',
+      {'status': 'paid'},
+      where: 'id = ?',
+      whereArgs: [invoiceId],
+    );
+  }
 }

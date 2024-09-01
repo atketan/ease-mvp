@@ -93,4 +93,16 @@ class InvoicesProvider with ChangeNotifier {
         _paidInvoices.fold(0, (sum, invoice) => sum + invoice.totalAmount);
     notifyListeners();
   }
+
+  Future<void> markInvoiceAsPaid(Invoice invoice) async {
+    try {
+      await _invoicesDAO.markInvoiceAsPaid(invoice.id!);
+      _unpaidInvoices.remove(invoice);
+      _calculateTotalUnpaidAmount();
+      notifyListeners();
+    } catch (e) {
+      developer.log('Error marking invoice as paid: $e');
+      // Handle the error appropriately
+    }
+  }
 }

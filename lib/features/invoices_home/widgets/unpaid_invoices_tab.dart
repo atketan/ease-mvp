@@ -57,24 +57,41 @@ class _UnpaidInvoicesTabState extends State<UnpaidInvoicesTab> {
                       ),
                       ...invoices
                           .map(
-                            (invoice) => ListTile(
-                              dense: true,
-                              title: Text(
-                                '#${invoice.invoiceNumber}',
-                                style: Theme.of(context).textTheme.titleSmall,
+                            (invoice) => Dismissible(
+                              key: Key(invoice.id.toString()),
+                              background: Container(
+                                color: Colors.green,
+                                alignment: Alignment.centerRight,
+                                padding: EdgeInsets.only(right: 20.0),
+                                child: Icon(Icons.check, color: Colors.white),
                               ),
-                              subtitle: Text(
-                                'Date: ${DateFormat.yMMMd().format(invoice.date)}',
-                                style: Theme.of(context).textTheme.titleSmall,
-                              ),
-                              trailing: Text(
-                                '₹${invoice.totalAmount.toStringAsFixed(2)}',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleMedium!
-                                    .copyWith(
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                              direction: DismissDirection.endToStart,
+                              onDismissed: (direction) {
+                                invoicesProvider.markInvoiceAsPaid(invoice);
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                      content: Text('Invoice marked as paid')),
+                                );
+                              },
+                              child: ListTile(
+                                dense: true,
+                                title: Text(
+                                  '#${invoice.invoiceNumber}',
+                                  style: Theme.of(context).textTheme.titleSmall,
+                                ),
+                                subtitle: Text(
+                                  'Date: ${DateFormat.yMMMd().format(invoice.date)}',
+                                  style: Theme.of(context).textTheme.titleSmall,
+                                ),
+                                trailing: Text(
+                                  '₹${invoice.totalAmount.toStringAsFixed(2)}',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .titleMedium!
+                                      .copyWith(
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                ),
                               ),
                             ),
                           )
