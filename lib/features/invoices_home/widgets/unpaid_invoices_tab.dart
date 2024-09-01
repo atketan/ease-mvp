@@ -1,5 +1,6 @@
 import 'package:ease/core/models/invoice.dart';
 import 'package:flutter/material.dart';
+import 'dart:developer' as developer;
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -18,70 +19,74 @@ class _UnpaidInvoicesTabState extends State<UnpaidInvoicesTab> {
       Provider.of<InvoicesProvider>(context, listen: false)
           .fetchUnpaidInvoices();
     });
-
   }
 
   @override
   Widget build(BuildContext context) {
-    final invoicesProvider = Provider.of<InvoicesProvider>(context);
-    final groupedInvoices =
-        _groupInvoicesByMonth(invoicesProvider.unpaidInvoices);
+    return Consumer<InvoicesProvider>(
+      builder: (context, invoicesProvider, child) {
+        developer.log(
+            'Building UnpaidInvoicesTab with ${invoicesProvider.unpaidInvoices.length} invoices');
+        final groupedInvoices =
+            _groupInvoicesByMonth(invoicesProvider.unpaidInvoices);
 
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Text(
-            'Total Amount to be Collected: ₹${invoicesProvider.totalUnpaidAmount.toStringAsFixed(2)}',
-            style: Theme.of(context).textTheme.titleMedium,
-          ),
-        ),
-        Expanded(
-          child: ListView.builder(
-            itemCount: groupedInvoices.length,
-            itemBuilder: (context, index) {
-              final month = groupedInvoices.keys.elementAt(index);
-              final invoices = groupedInvoices[month]!;
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      month,
-                      style: Theme.of(context).textTheme.titleMedium,
-                    ),
-                  ),
-                  ...invoices
-                      .map(
-                        (invoice) => ListTile(
-                          dense: true,
-                          title: Text(
-                            '#${invoice.invoiceNumber}',
-                            style: Theme.of(context).textTheme.titleSmall,
-                          ),
-                          subtitle: Text(
-                            'Date: ${DateFormat.yMMMd().format(invoice.date)}',
-                            style: Theme.of(context).textTheme.titleSmall,
-                          ),
-                          trailing: Text(
-                            '₹${invoice.totalAmount.toStringAsFixed(2)}',
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleMedium!
-                                .copyWith(
-                                  fontWeight: FontWeight.bold,
-                                ),
-                          ),
+        return Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Text(
+                'Total Amount to be Collected: ₹${invoicesProvider.totalUnpaidAmount.toStringAsFixed(2)}',
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+            ),
+            Expanded(
+              child: ListView.builder(
+                itemCount: groupedInvoices.length,
+                itemBuilder: (context, index) {
+                  final month = groupedInvoices.keys.elementAt(index);
+                  final invoices = groupedInvoices[month]!;
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          month,
+                          style: Theme.of(context).textTheme.titleMedium,
                         ),
-                      )
-                      .toList(),
-                ],
-              );
-            },
-          ),
-        ),
-      ],
+                      ),
+                      ...invoices
+                          .map(
+                            (invoice) => ListTile(
+                              dense: true,
+                              title: Text(
+                                '#${invoice.invoiceNumber}',
+                                style: Theme.of(context).textTheme.titleSmall,
+                              ),
+                              subtitle: Text(
+                                'Date: ${DateFormat.yMMMd().format(invoice.date)}',
+                                style: Theme.of(context).textTheme.titleSmall,
+                              ),
+                              trailing: Text(
+                                '₹${invoice.totalAmount.toStringAsFixed(2)}',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleMedium!
+                                    .copyWith(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                              ),
+                            ),
+                          )
+                          .toList(),
+                    ],
+                  );
+                },
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 

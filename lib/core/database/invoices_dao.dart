@@ -16,7 +16,8 @@ class InvoicesDAO {
     if (paymentStatus == null || paymentStatus.isEmpty) {
       maps = await db.query('Invoices');
     } else {
-      maps = await db.query('Invoices', where: 'status = ?', whereArgs: [paymentStatus]);
+      maps = await db
+          .query('Invoices', where: 'status = ?', whereArgs: [paymentStatus]);
     }
 
     return List.generate(maps.length, (i) => Invoice.fromJSON(maps[i]));
@@ -34,7 +35,10 @@ class InvoicesDAO {
     final List<Map<String, dynamic>> maps = await db.query(
       'Invoices',
       where: 'date >= ? AND date <= ?',
-      whereArgs: [startDate.toIso8601String(), endDate.toIso8601String()],
+      whereArgs: [
+        startDate.toIso8601String(),
+        endDate.toIso8601String(),
+      ],
     );
     return List.generate(maps.length, (i) => Invoice.fromJSON(maps[i]));
   }
