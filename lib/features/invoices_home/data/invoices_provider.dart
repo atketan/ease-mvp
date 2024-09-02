@@ -1,20 +1,28 @@
 import 'package:flutter/material.dart';
 import 'dart:developer' as developer;
-import 'package:intl/intl.dart';
 import '../../../core/database/invoices_dao.dart';
-import '../../../core/database/vendors_dao.dart';
-import '../../../core/database/customers_dao.dart';
-import '../../../core/database/payment_history_dao.dart';
 import '../../../core/models/invoice.dart';
-import '../../../core/models/vendor.dart';
-import '../../../core/models/customer.dart';
-import '../../../core/models/payment_history.dart';
 
 class InvoicesProvider with ChangeNotifier {
+  DateTime defaultStartDate;
+  DateTime defaultEndDate;
+  DateTime _startDate;
+  DateTime _endDate;
+
+  InvoicesProvider()
+      : defaultStartDate = DateTime.now().subtract(Duration(days: 30)).copyWith(
+            hour: 0, minute: 0, second: 0, millisecond: 0, microsecond: 0),
+        defaultEndDate = DateTime.now().copyWith(
+            hour: 23, minute: 59, second: 59, millisecond: 999, microsecond: 0),
+        _startDate = DateTime.now().subtract(Duration(days: 30)).copyWith(
+            hour: 0, minute: 0, second: 0, millisecond: 0, microsecond: 0),
+        _endDate = DateTime.now().copyWith(
+            hour: 23, minute: 59, second: 59, millisecond: 999, microsecond: 0);
+
   final InvoicesDAO _invoicesDAO = InvoicesDAO();
-  final VendorsDAO _vendorsDAO = VendorsDAO();
-  final CustomersDAO _customersDAO = CustomersDAO();
-  final PaymentHistoryDAO _paymentHistoryDAO = PaymentHistoryDAO();
+  // final VendorsDAO _vendorsDAO = VendorsDAO();
+  // final CustomersDAO _customersDAO = CustomersDAO();
+  // final PaymentHistoryDAO _paymentHistoryDAO = PaymentHistoryDAO();
 
   List<Invoice> _unpaidInvoices = [];
   List<Invoice> _paidInvoices = [];
@@ -26,8 +34,6 @@ class InvoicesProvider with ChangeNotifier {
   double get totalUnpaidAmount => _totalUnpaidAmount;
   double get totalPaidAmount => _totalPaidAmount;
 
-  DateTime _startDate = DateTime.now().subtract(Duration(days: 30));
-  DateTime _endDate = DateTime.now();
   DateTime get startDate => _startDate;
   DateTime get endDate => _endDate;
 
@@ -35,22 +41,22 @@ class InvoicesProvider with ChangeNotifier {
   bool get isFilterApplied => _isFilterApplied;
 
   void setDateRange(DateTime start, DateTime end) {
-    _startDate = DateTime(start.year, start.month, start.day);
+    developer.log('setDateRange called with start: $start, end: $end');
+    _startDate = DateTime(start.year, start.month, start.day)
+        .copyWith(hour: 0, minute: 0, second: 0, millisecond: 0);
     _endDate = DateTime(end.year, end.month, end.day, 23, 59, 59, 999);
+
     _isFilterApplied =
-        (_startDate != DateTime.now().subtract(Duration(days: 30))) ||
-            (_endDate.year != DateTime.now().year ||
-                _endDate.month != DateTime.now().month ||
-                _endDate.day != DateTime.now().day);
-    debugPrint(_isFilterApplied.toString());
+        !((_startDate == defaultStartDate) && (_endDate == defaultEndDate));
+
     fetchUnpaidInvoices();
     fetchPaidInvoices();
     notifyListeners();
   }
 
   void clearFilter() {
-    _startDate = DateTime.now().subtract(Duration(days: 30));
-    _endDate = DateTime.now();
+    _startDate = defaultStartDate;
+    _endDate = defaultEndDate;
     _isFilterApplied = false;
     fetchUnpaidInvoices();
     notifyListeners();
@@ -84,14 +90,28 @@ class InvoicesProvider with ChangeNotifier {
   }
 
   Future<void> fetchPaidInvoices() async {
-    // print("Fetching paid invoices");
-    // print("Start Date: $_startDate, End Date: $_endDate");
-    _paidInvoices = await _invoicesDAO.getInvoicesByDateRangeAndPaymentStatus(
-        _startDate, _endDate, "paid"); // Filter paid invoices
-    print("Paid invoices: $_paidInvoices");
-    _totalPaidAmount =
-        _paidInvoices.fold(0, (sum, invoice) => sum + invoice.totalAmount);
-    notifyListeners();
+    developer.log('fetchPaidInvoices called with startDate: $_startDate, endDate: $_endDate');
+    try {
+      _paidInvoices = await _invoicesDAO.getInvoicesByDateRangeAndPaymentStatus(
+        _startDate, 
+        _endDate, 
+        'paid', // Assuming 'paid' is the status for paid invoices
+      );
+      developer.log('Fetched ${_paidInvoices.length} paid invoices');
+      _calculateTotalPaidAmount();
+      notifyListeners();
+    } catch (e) {
+      developer.log('Error fetching paid invoices: $e');
+      // Handle the error appropriately
+    }
+  }
+
+  void _calculateTotalPaidAmount() {
+    _totalPaidAmount = _paidInvoices.fold(
+      0,
+      (sum, invoice) => sum + invoice.totalAmount,
+    );
+    developer.log('Total paid amount: $_totalPaidAmount');
   }
 
   Future<void> markInvoiceAsPaid(Invoice invoice) async {
