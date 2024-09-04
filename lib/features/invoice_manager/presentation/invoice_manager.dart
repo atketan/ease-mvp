@@ -7,7 +7,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../bloc/invoice_manager_cubit.dart';
 import '../bloc/invoice_manager_cubit_state.dart';
 import '../widgets/amount_summary_widget.dart';
-import '../widgets/entity_delegate_widget.dart';
+// import '../widgets/entity_delegate_widget.dart';
+import '../widgets/entity_type_ahead_field.dart';
 import '../widgets/invoice_items_list_widget.dart';
 import '../widgets/invoice_manager_spacer.dart';
 import '../widgets/invoice_order_details_widget.dart';
@@ -126,15 +127,29 @@ class InvoiceManagerState extends State<InvoiceManager> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // Get customer or vendor details
-                  EntityDelegateWidget(
-                    invoiceType: widget.invoiceType,
+                  // EntityDelegateWidget(
+                  //   invoiceType: widget.invoiceType,
+                  // ),
+                  BlocBuilder<InvoiceManagerCubit, InvoiceManagerCubitState>(
+                    builder: (context, state) {
+                      if (state is InvoiceManagerLoaded) {
+                        return EntityTypeAheadField(
+                          invoiceType: widget.invoiceType,
+                        );
+                      } else if (state is InvoiceManagerLoading) {
+                        return Center(child: CircularProgressIndicator());
+                      } else if (state is InvoiceManagerError) {
+                        return Center(child: Text('Error: ${state.message}'));
+                      } else {
+                        return Center(child: Text('Unknown state'));
+                      }
+                    },
                   ),
                   // Add separation space
                   InvoiceManagerSpacer(),
                   // Build invoice items list
                   BlocBuilder<InvoiceManagerCubit, InvoiceManagerCubitState>(
                     builder: (context, state) {
-                      print('Invoice items list widget built, state: $state');
                       if (state is InvoiceManagerLoaded) {
                         return InvoiceItemsListWidget();
                       } else if (state is InvoiceManagerLoading) {

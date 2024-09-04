@@ -136,6 +136,8 @@ class InvoiceItemsListWidgetState extends State<InvoiceItemsListWidget> {
           );
         },
         onSelected: (suggestion) {
+          // this is wrong logic, as unitPrice can be default set to 0 in any case
+          // need a different logic to handle this
           if (suggestion.unitPrice == 0) {
             _addNewItem(suggestion.name);
           } else {
@@ -291,7 +293,6 @@ class InvoiceItemsListWidgetState extends State<InvoiceItemsListWidget> {
   void _addNewItem(String name) async {
     final newItem = InventoryItem(name: name, unitPrice: 0, unit: '');
     var _itemId = await _inventoryItemsDAO.insertInventoryItem(newItem);
-    print('New item added: $_itemId');
     setState(() {
       _invoiceItems.add(
         InvoiceItem(

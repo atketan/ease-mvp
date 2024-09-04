@@ -38,10 +38,12 @@ class InvoiceManagerCubit extends Cubit<InvoiceManagerCubitState> {
 
   void setCustomerId(int customerId) {
     _invoice.customerId = customerId;
+    emit(InvoiceManagerLoaded());
   }
 
   void setVendorId(int vendorId) {
     _invoice.vendorId = vendorId;
+    emit(InvoiceManagerLoaded());
   }
 
   void setDiscount(double discount) async {
