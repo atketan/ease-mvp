@@ -323,8 +323,10 @@ class InvoiceItemsListWidgetState extends State<InvoiceItemsListWidget> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text(
-            'Update Unit Price for ${item.name}',
-            style: Theme.of(context).textTheme.titleMedium,
+            'Update unit price for "${item.name}"',
+            style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
           ),
           content: TextField(
             keyboardType:
