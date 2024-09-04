@@ -55,7 +55,7 @@ class InvoiceManagerCubit extends Cubit<InvoiceManagerCubitState> {
     emit(InvoiceManagerLoaded());
   }
 
-  Future<bool> _updateInvoiceAmounts() {
+  Future<bool> _updateInvoiceAmounts() async {
     _invoice.totalAmount = _invoice.items.fold(
         0.0, (previousValue, element) => previousValue + element.totalPrice);
     _invoice.grandTotal = _invoice.totalAmount - _invoice.discount;
@@ -93,5 +93,19 @@ class InvoiceManagerCubit extends Cubit<InvoiceManagerCubitState> {
     );
 
     return Future.value(true);
+  }
+
+  Future<void> updateInvoiceItemUnitPrice(InvoiceItem item) async {
+    print('Updating invoice item unit price: $item, ${item.itemId}');
+    if (item.itemId != null) {
+      _invoice.items
+          .firstWhere((element) => element.itemId == item.itemId)
+          .unitPrice = item.unitPrice;
+      _invoice.items
+          .firstWhere((element) => element.itemId == item.itemId)
+          .totalPrice = item.unitPrice * item.quantity;
+    }
+    await _updateInvoiceAmounts();
+    emit(InvoiceManagerLoaded());
   }
 }

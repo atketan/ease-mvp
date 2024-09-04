@@ -134,6 +134,7 @@ class InvoiceManagerState extends State<InvoiceManager> {
                   // Build invoice items list
                   BlocBuilder<InvoiceManagerCubit, InvoiceManagerCubitState>(
                     builder: (context, state) {
+                      print('Invoice items list widget built, state: $state');
                       if (state is InvoiceManagerLoaded) {
                         return InvoiceItemsListWidget();
                       } else if (state is InvoiceManagerLoading) {

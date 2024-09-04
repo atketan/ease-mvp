@@ -75,4 +75,10 @@ class InventoryItemsDAO {
       return null;
     }
   }
+
+  Future<List<InventoryItem>> getAllInventoryItemsWhereNameLike(String pattern) async {
+    final db = await _databaseHelper.database;
+    final List<Map<String, dynamic>> maps = await db.query('InventoryItems', where: 'name LIKE ?', whereArgs: ['%$pattern%']);
+    return List.generate(maps.length, (i) => InventoryItem.fromJSON(maps[i]));
+  }
 }
