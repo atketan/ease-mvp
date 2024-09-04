@@ -136,9 +136,7 @@ class InvoiceItemsListWidgetState extends State<InvoiceItemsListWidget> {
           );
         },
         onSelected: (suggestion) {
-          // this is wrong logic, as unitPrice can be default set to 0 in any case
-          // need a different logic to handle this
-          if (suggestion.unitPrice == 0) {
+          if (suggestion.itemId == null && suggestion.unitPrice == 0) {
             _addNewItem(suggestion.name);
           } else {
             _addExistingItem(suggestion);
