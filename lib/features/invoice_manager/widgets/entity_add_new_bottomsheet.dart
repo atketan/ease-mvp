@@ -71,8 +71,11 @@ class _AddEntityBottomSheetState extends State<AddEntityBottomSheet> {
               keyboardType: TextInputType.phone,
               maxLength: 10,
               decoration: InputDecoration(labelText: 'Mobile Number'),
-              validator: (value) =>
-                  value?.isEmpty ?? true ? 'Mobile number is required' : null,
+              validator: (value) {
+                if (value?.isEmpty ?? true) return 'Mobile number is required';
+                if (value!.length != 10) return 'Mobile number must be 10 digits';
+                return null;
+              },
             ),
             SizedBox(height: 24),
             Row(
