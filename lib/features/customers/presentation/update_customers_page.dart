@@ -94,6 +94,10 @@ class _UpdateCustomersPageState extends State<UpdateCustomersPage> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(e.toString())),
       );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error adding entity! \n$e')),
+      );
     }
   }
 

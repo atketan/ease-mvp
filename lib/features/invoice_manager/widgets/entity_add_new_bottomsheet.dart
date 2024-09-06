@@ -154,7 +154,7 @@ class _AddEntityBottomSheetState extends State<AddEntityBottomSheet> {
         if (!mounted) return;
         Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error adding entity: $e')),
+          SnackBar(content: Text('Error adding entity! \n$e')),
         );
       } finally {
         if (mounted) cubit.setLoading(false);
