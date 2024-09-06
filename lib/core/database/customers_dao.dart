@@ -1,3 +1,5 @@
+import 'package:sqflite/sqflite.dart';
+
 import '../models/customer.dart';
 import 'database_helper.dart';
 
@@ -6,7 +8,14 @@ class CustomersDAO {
 
   Future<int> insertCustomer(Customer customer) async {
     final db = await _databaseHelper.database;
-    return await db.insert('Customers', customer.toJSON());
+    try {
+      return await db.insert('Customers', customer.toJSON());
+    } on DatabaseException catch (e) {
+      if (e.isUniqueConstraintError()) {
+        throw Exception('Phone number already exists');
+      }
+      rethrow;
+    }
   }
 
   Future<List<Customer>> getAllCustomers() async {

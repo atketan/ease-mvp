@@ -7,6 +7,7 @@ import 'package:ease/features/invoices/data_models/invoice_type_enum.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sqflite/sqflite.dart';
 
 import '../bloc/invoice_manager_cubit_state.dart';
 
@@ -73,7 +74,8 @@ class _AddEntityBottomSheetState extends State<AddEntityBottomSheet> {
               decoration: InputDecoration(labelText: 'Mobile Number'),
               validator: (value) {
                 if (value?.isEmpty ?? true) return 'Mobile number is required';
-                if (value!.length != 10) return 'Mobile number must be 10 digits';
+                if (value!.length != 10)
+                  return 'Mobile number must be 10 digits';
                 return null;
               },
             ),
@@ -89,7 +91,8 @@ class _AddEntityBottomSheetState extends State<AddEntityBottomSheet> {
                 BlocBuilder<InvoiceManagerCubit, InvoiceManagerCubitState>(
                   builder: (context, state) {
                     return TextButton(
-                      onPressed: (state is InvoiceManagerLoading) ? null : _submitForm,
+                      onPressed:
+                          (state is InvoiceManagerLoading) ? null : _submitForm,
                       child: (state is InvoiceManagerLoading)
                           ? SizedBox(
                               width: 20,
@@ -131,7 +134,7 @@ class _AddEntityBottomSheetState extends State<AddEntityBottomSheet> {
                 createdAt: DateTime.now(),
                 updatedAt: DateTime.now()));
 
-        if (!mounted) return;  // Check if the widget is still in the tree
+        if (!mounted) return;
 
         if (widget.invoiceType == InvoiceType.Sales) {
           cubit.setCustomerId(newId);
@@ -141,14 +144,20 @@ class _AddEntityBottomSheetState extends State<AddEntityBottomSheet> {
 
         widget.onEntityAdded(_nameController.text);
         Navigator.pop(context);
+      } on DatabaseException catch (e) {
+        if (!mounted) return;
+        Navigator.pop(context);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(e.toString())),
+        );
       } catch (e) {
-        print("Error adding entity: $e");
-        if (!mounted) return;  // Check if the widget is still in the tree
+        if (!mounted) return;
+        Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Error adding entity: $e')),
         );
       } finally {
-        if (mounted) cubit.setLoading(false);  // Only set loading to false if still mounted
+        if (mounted) cubit.setLoading(false);
       }
     }
   }

@@ -118,6 +118,7 @@ class _EntityTypeAheadFieldState extends State<EntityTypeAheadField> {
           }
         } else {
           if (suggestion.id == -1) {
+            _isEditing = true;
             await _showAddEntityBottomSheet(
               context,
               suggestion.name.split(':').last.trim(),

@@ -1,6 +1,7 @@
 import 'package:ease/core/database/customers_dao.dart';
 import 'package:ease/core/models/customer.dart';
 import 'package:flutter/material.dart';
+import 'package:sqflite/sqflite.dart';
 
 enum CustomersFormMode {
   Add,
@@ -59,39 +60,41 @@ class _UpdateCustomersPageState extends State<UpdateCustomersPage> {
     super.dispose();
   }
 
-  void _saveCustomer() {
+  Future<void> _saveCustomer() async {
     String name = _nameController.text;
     String email = _emailController.text;
     String phone = _phoneController.text;
     String address = _addressController.text;
 
-    if (widget.mode == CustomersFormMode.Add) {
-      // Create a new customer
-      Customer newCustomer = Customer(
-        name: name,
-        email: email,
-        phone: phone,
-        address: address,
-        createdAt: DateTime.now(),
-        updatedAt: DateTime.now(),
+    try {
+      if (widget.mode == CustomersFormMode.Add) {
+        Customer newCustomer = Customer(
+          name: name,
+          email: email,
+          phone: phone,
+          address: address,
+          createdAt: DateTime.now(),
+          updatedAt: DateTime.now(),
+        );
+        await _customersDAO.insertCustomer(newCustomer);
+      } else {
+        Customer updatedCustomer = Customer(
+          id: widget.customerId,
+          name: name,
+          email: email,
+          phone: phone,
+          address: address,
+          createdAt: customer!.createdAt,
+          updatedAt: DateTime.now(),
+        );
+        await _customersDAO.updateCustomer(updatedCustomer);
+      }
+      Navigator.pop(context);
+    } on DatabaseException catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(e.toString())),
       );
-      _customersDAO.insertCustomer(newCustomer);
-    } else {
-      // Update existing customer
-      Customer updatedCustomer = Customer(
-        id: widget.customerId,
-        name: name,
-        email: email,
-        phone: phone,
-        address: address,
-        createdAt: customer!.createdAt,
-        updatedAt: DateTime.now(),
-      );
-      _customersDAO.updateCustomer(updatedCustomer);
     }
-
-    // Navigate back to the previous page
-    Navigator.pop(context);
   }
 
   @override
