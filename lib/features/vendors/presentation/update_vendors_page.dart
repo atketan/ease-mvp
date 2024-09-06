@@ -1,7 +1,7 @@
 import 'package:ease/core/database/vendors_dao.dart';
 import 'package:ease/core/models/vendor.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:sqflite/sqflite.dart';
 
 enum VendorsFormMode {
   Add,
@@ -60,39 +60,45 @@ class _UpdateVendorsPageState extends State<UpdateVendorsPage> {
     super.dispose();
   }
 
-  void _saveVendor() {
+  Future<void> _saveVendor() async {
     String name = _nameController.text;
     String email = _emailController.text;
     String phone = _phoneController.text;
     String address = _addressController.text;
 
-    if (widget.mode == VendorsFormMode.Add) {
-      // Create a new vendor
-      Vendor newVendor = Vendor(
-        name: name,
-        email: email,
-        phone: phone,
-        address: address,
-        createdAt: DateTime.now(),
-        updatedAt: DateTime.now(),
+    try {
+      if (widget.mode == VendorsFormMode.Add) {
+        Vendor newVendor = Vendor(
+          name: name,
+          email: email,
+          phone: phone,
+          address: address,
+          createdAt: DateTime.now(),
+          updatedAt: DateTime.now(),
+        );
+        await _vendorsDAO.insertVendor(newVendor);
+      } else {
+        Vendor updatedVendor = Vendor(
+          id: widget.vendorId,
+          name: name,
+          email: email,
+          phone: phone,
+          address: address,
+          createdAt: vendor!.createdAt,
+          updatedAt: DateTime.now(),
+        );
+        await _vendorsDAO.updateVendor(updatedVendor);
+      }
+      Navigator.pop(context);
+    } on DatabaseException catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(e.toString())),
       );
-      _vendorsDAO.insertVendor(newVendor);
-    } else {
-      // Update existing vendor
-      Vendor updatedVendor = Vendor(
-        id: widget.vendorId,
-        name: name,
-        email: email,
-        phone: phone,
-        address: address,
-        createdAt: vendor!.createdAt,
-        updatedAt: DateTime.now(),
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error adding entity! \n$e')),
       );
-      _vendorsDAO.updateVendor(updatedVendor);
     }
-
-    // Navigate back to the previous page
-    Navigator.pop(context);
   }
 
   @override
