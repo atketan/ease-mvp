@@ -110,4 +110,12 @@ class InvoiceManagerCubit extends Cubit<InvoiceManagerCubitState> {
     await _updateInvoiceAmounts();
     emit(InvoiceManagerLoaded());
   }
+
+  void setLoading(bool bool) {
+    if (bool) {
+      emit(InvoiceManagerLoading());
+    } else {
+      emit(InvoiceManagerLoaded());
+    }
+  }
 }

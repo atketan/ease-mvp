@@ -9,6 +9,7 @@ import 'package:ease/features/invoices_home/presentation/invoices_home.dart';
 import 'package:ease/features/manage/presentation/manage_landing_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:floating_action_bubble/floating_action_bubble.dart';
+import 'package:ease/features/invoices/data_models/invoice_type_enum.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:permission_handler/permission_handler.dart';

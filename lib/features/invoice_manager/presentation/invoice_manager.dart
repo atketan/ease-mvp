@@ -1,5 +1,6 @@
 import 'package:ease/core/models/invoice.dart';
 import 'package:ease/core/providers/short_uuid_generator.dart';
+import 'package:ease/features/invoices/data_models/invoice_type_enum.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,11 +14,6 @@ import '../widgets/invoice_items_list_widget.dart';
 import '../widgets/invoice_manager_spacer.dart';
 import '../widgets/invoice_order_details_widget.dart';
 import '../widgets/payment_details_widget.dart';
-
-enum InvoiceType {
-  Sales,
-  Purchase,
-}
 
 enum InvoiceFormMode {
   Add,
@@ -130,20 +126,8 @@ class InvoiceManagerState extends State<InvoiceManager> {
                   // EntityDelegateWidget(
                   //   invoiceType: widget.invoiceType,
                   // ),
-                  BlocBuilder<InvoiceManagerCubit, InvoiceManagerCubitState>(
-                    builder: (context, state) {
-                      if (state is InvoiceManagerLoaded) {
-                        return EntityTypeAheadField(
-                          invoiceType: widget.invoiceType,
-                        );
-                      } else if (state is InvoiceManagerLoading) {
-                        return Center(child: CircularProgressIndicator());
-                      } else if (state is InvoiceManagerError) {
-                        return Center(child: Text('Error: ${state.message}'));
-                      } else {
-                        return Center(child: Text('Unknown state'));
-                      }
-                    },
+                  EntityTypeAheadField(
+                    invoiceType: widget.invoiceType,
                   ),
                   // Add separation space
                   InvoiceManagerSpacer(),

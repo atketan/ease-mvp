@@ -1,20 +1,38 @@
 enum InvoiceType {
+  Sales,
+  Purchase,
+  // Add other types as needed
+}
+
+extension InvoiceTypeExtension on InvoiceType {
+  String get title {
+    switch (this) {
+      case InvoiceType.Sales:
+        return 'Sale';
+      case InvoiceType.Purchase:
+        return 'Purchase';
+      // Add cases for other types
+    }
+  }
+}
+
+enum InvoiceSubType {
   cashSale,
   creditSale,
   cashPurchase,
   creditPurchase,
 }
 
-extension InvoiceTypeExtension on InvoiceType {
+extension InvoiceSubTypeExtension on InvoiceSubType {
   String get label {
     switch (this) {
-      case InvoiceType.cashSale:
+      case InvoiceSubType.cashSale:
         return 'Cash Sale';
-      case InvoiceType.creditSale:
+      case InvoiceSubType.creditSale:
         return 'Credit Sale';
-      case InvoiceType.cashPurchase:
+      case InvoiceSubType.cashPurchase:
         return 'Cash Purchase';
-      case InvoiceType.creditPurchase:
+      case InvoiceSubType.creditPurchase:
         return 'Credit Purchase';
       default:
         return 'Unknown';
@@ -22,16 +40,16 @@ extension InvoiceTypeExtension on InvoiceType {
   }
 }
 
-extension InvoiceTitleExtension on InvoiceType {
+extension InvoiceSubTypeTitleExtension on InvoiceSubType {
   String get title {
     switch (this) {
-      case InvoiceType.cashSale:
+      case InvoiceSubType.cashSale:
         return 'Sale';
-      case InvoiceType.creditSale:
+      case InvoiceSubType.creditSale:
         return 'Sale';
-      case InvoiceType.cashPurchase:
+      case InvoiceSubType.cashPurchase:
         return 'Purchase';
-      case InvoiceType.creditPurchase:
+      case InvoiceSubType.creditPurchase:
         return 'Purchase';
       default:
         return 'Unknown';

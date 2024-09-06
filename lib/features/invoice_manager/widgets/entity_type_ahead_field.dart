@@ -1,13 +1,13 @@
 import 'package:ease/core/database/customers_dao.dart';
 import 'package:ease/core/database/vendors_dao.dart';
-import 'package:ease/features/customers/presentation/update_customers_page.dart';
 import 'package:ease/features/invoice_manager/bloc/invoice_manager_cubit.dart';
-import 'package:ease/features/vendors/presentation/update_vendors_page.dart';
+import 'package:ease/features/invoice_manager/bloc/invoice_manager_cubit_state.dart';
+import 'package:ease/features/invoices/data_models/invoice_type_enum.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 
-import '../presentation/invoice_manager.dart';
+import 'entity_add_new_bottomsheet.dart';
 
 class Entity {
   final int? id;
@@ -47,7 +47,19 @@ class _EntityTypeAheadFieldState extends State<EntityTypeAheadField> {
             style: Theme.of(context).textTheme.titleSmall,
           ),
           SizedBox(height: 8),
-          _isEditing ? _buildTypeAheadField() : _buildSelectedEntityField(),
+          BlocBuilder<InvoiceManagerCubit, InvoiceManagerCubitState>(
+            builder: (context, state) {
+              debugPrint(
+                  "State: $state, isEditing: $_isEditing, controller name: ${_controller.text}");
+              if (state is InvoiceManagerLoaded) {
+                return _isEditing
+                    ? _buildTypeAheadField()
+                    : _buildSelectedEntityField();
+              } else {
+                return Center(child: CircularProgressIndicator());
+              }
+            },
+          ),
         ],
       ),
     );
@@ -101,7 +113,7 @@ class _EntityTypeAheadFieldState extends State<EntityTypeAheadField> {
           title: Text(suggestion.name),
         );
       },
-      onSelected: (suggestion) {
+      onSelected: (suggestion) async {
         setState(() {
           _controller.text = suggestion.name.split(' ').last;
           _isEditing = false;
@@ -113,27 +125,13 @@ class _EntityTypeAheadFieldState extends State<EntityTypeAheadField> {
             context.read<InvoiceManagerCubit>().setVendorId(suggestion.id!);
           }
         } else {
-          // Handle adding new entity
-          if (widget.invoiceType == InvoiceType.Sales) {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (_) => UpdateCustomersPage(
-                  mode: CustomersFormMode.Add,
-                ),
-              ),
-            );
-          } else {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (_) => UpdateVendorsPage(
-                  mode: VendorsFormMode.Add,
-                ),
-              ),
+          if (suggestion.id == -1) {
+            await _showAddEntityBottomSheet(
+              context,
+              suggestion.name.split(':').last.trim(),
+              context.read<InvoiceManagerCubit>(),
             );
           }
-          setState(() {
-            _isEditing = true;
-          });
         }
       },
     );
@@ -160,5 +158,27 @@ class _EntityTypeAheadFieldState extends State<EntityTypeAheadField> {
         ),
       ],
     );
+  }
+
+  Future<void> _showAddEntityBottomSheet(BuildContext context,
+      String initialName, InvoiceManagerCubit cubit) async {
+    await showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return BlocProvider.value(
+          value: cubit,
+          child: AddEntityBottomSheet(
+            initialName: initialName,
+            invoiceType: widget.invoiceType,
+            onEntityAdded: (String name) {
+              _controller.text = name;
+              _isEditing = false;
+            },
+          ),
+        );
+      },
+    );
+    setState(() {});
   }
 }
