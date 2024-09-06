@@ -12,8 +12,9 @@ import 'entity_add_new_bottomsheet.dart';
 class Entity {
   final int? id;
   final String name;
+  final String phone;
 
-  Entity({required this.id, required this.name});
+  Entity({required this.id, required this.name, required this.phone});
 }
 
 class EntityTypeAheadField extends StatefulWidget {
@@ -42,15 +43,9 @@ class _EntityTypeAheadFieldState extends State<EntityTypeAheadField> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            widget.invoiceType == InvoiceType.Sales ? 'Customer' : 'Vendor',
-            style: Theme.of(context).textTheme.titleSmall,
-          ),
           SizedBox(height: 8),
           BlocBuilder<InvoiceManagerCubit, InvoiceManagerCubitState>(
             builder: (context, state) {
-              debugPrint(
-                  "State: $state, isEditing: $_isEditing, controller name: ${_controller.text}");
               if (state is InvoiceManagerLoaded) {
                 return _isEditing
                     ? _buildTypeAheadField()
@@ -74,8 +69,8 @@ class _EntityTypeAheadFieldState extends State<EntityTypeAheadField> {
           onTapOutside: (event) => focusNode.unfocus(),
           decoration: InputDecoration(
             labelText: widget.invoiceType == InvoiceType.Sales
-                ? 'Select customer'
-                : 'Select vendor',
+                ? 'Enter customer name or phone number'
+                : 'Enter vendor name or phone number',
             hintText:
                 'Start typing to search or add ${widget.invoiceType == InvoiceType.Sales ? 'Customer' : 'Vendor'}',
           ),
@@ -85,25 +80,21 @@ class _EntityTypeAheadFieldState extends State<EntityTypeAheadField> {
       suggestionsCallback: (pattern) async {
         if (pattern.isEmpty) return <Entity>[];
         if (widget.invoiceType == InvoiceType.Sales) {
-          final customers = await CustomersDAO().getAllCustomers();
+          final customers = await CustomersDAO().searchCustomers(pattern);
           final matchedCustomers = customers
-              .where((customer) =>
-                  customer.name.toLowerCase().contains(pattern.toLowerCase()))
-              .map((c) => Entity(id: c.id, name: c.name))
+              .map((c) => Entity(id: c.id, name: c.name, phone: c.phone ?? ''))
               .toList();
           if (matchedCustomers.isEmpty) {
-            return [Entity(id: -1, name: "Add: $pattern")];
+            return [Entity(id: -1, name: "Add: $pattern", phone: '')];
           }
           return matchedCustomers;
         } else {
-          final vendors = await VendorsDAO().getAllVendors();
+          final vendors = await VendorsDAO().searchVendors(pattern);
           final matchedVendors = vendors
-              .where((vendor) =>
-                  vendor.name.toLowerCase().contains(pattern.toLowerCase()))
-              .map((v) => Entity(id: v.id, name: v.name))
+              .map((v) => Entity(id: v.id, name: v.name, phone: v.phone ?? ''))
               .toList();
           if (matchedVendors.isEmpty) {
-            return [Entity(id: -1, name: "Add: $pattern")];
+            return [Entity(id: -1, name: "Add: $pattern", phone: '')];
           }
           return matchedVendors;
         }
@@ -111,6 +102,7 @@ class _EntityTypeAheadFieldState extends State<EntityTypeAheadField> {
       itemBuilder: (context, suggestion) {
         return ListTile(
           title: Text(suggestion.name),
+          subtitle: Text(suggestion.phone),
         );
       },
       onSelected: (suggestion) async {
@@ -141,11 +133,17 @@ class _EntityTypeAheadFieldState extends State<EntityTypeAheadField> {
     return Row(
       children: [
         Expanded(
-          child: Text(
-            _controller.text,
-            style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+          child: ListTile(
+            title: Text(
+              _controller.text,
+              style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+            ),
+            subtitle: Text(
+              widget.invoiceType == InvoiceType.Sales ? 'Customer' : 'Vendor',
+              style: Theme.of(context).textTheme.titleSmall,
+            ),
           ),
         ),
         IconButton(

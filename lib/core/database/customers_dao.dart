@@ -52,4 +52,15 @@ class CustomersDAO {
     final db = await _databaseHelper.database;
     return await db.delete('Customers', where: 'id = ?', whereArgs: [id]);
   }
+
+  Future<List<Customer>> searchCustomers(String pattern) async {
+    final db = await _databaseHelper.database;
+    final lowercasePattern = pattern.toLowerCase();
+    final result = await db.query(
+      'customers',
+      where: 'LOWER(name) LIKE ? OR phone LIKE ?',
+      whereArgs: ['%$lowercasePattern%', '%$pattern%'],
+    );
+    return result.map((map) => Customer.fromJSON(map)).toList();
+  }
 }

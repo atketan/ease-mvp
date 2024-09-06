@@ -49,4 +49,15 @@ class VendorsDAO {
     final db = await _databaseHelper.database;
     return await db.delete('Vendors', where: 'id = ?', whereArgs: [id]);
   }
+
+  Future<List<Vendor>> searchVendors(String pattern) async {
+    final db = await _databaseHelper.database;
+    final lowercasePattern = pattern.toLowerCase();
+    final result = await db.query(
+      'vendors',
+      where: 'LOWER(name) LIKE ? OR phone LIKE ?',
+      whereArgs: ['%$lowercasePattern%', '%$pattern%'],
+    );
+    return result.map((map) => Vendor.fromJSON(map)).toList();
+  }
 }
