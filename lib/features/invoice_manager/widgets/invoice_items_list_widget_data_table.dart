@@ -26,23 +26,37 @@ class _InvoiceItemsListWidgetDataTableState
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      shrinkWrap: true,
-      physics: NeverScrollableScrollPhysics(),
-      children: [
-        _buildTableHeader(),
-        ListView.builder(
-          itemCount: _invoiceItems.length + 1,
-          shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
-          itemBuilder: (context, index) {
-            if (index == _invoiceItems.length) {
-              return _buildNewItemRow();
-            }
-            return _buildExistingItemRow(_invoiceItems[index], index);
-          },
-        ),
-      ],
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text('ITEMS', style: Theme.of(context).textTheme.labelLarge),
+          ),
+          Card(
+            child: ListView(
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              children: [
+                _buildTableHeader(),
+                ListView.builder(
+                  itemCount: _invoiceItems.length + 1,
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemBuilder: (context, index) {
+                    if (index == _invoiceItems.length) {
+                      return _buildNewItemRow();
+                    }
+                    return _buildExistingItemRow(_invoiceItems[index], index);
+                  },
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -75,7 +89,7 @@ class _InvoiceItemsListWidgetDataTableState
       padding: const EdgeInsets.symmetric(vertical: 4.0),
       child: Row(
         children: [
-          SizedBox(width: 40),
+          SizedBox(width: 50, child: Icon(Icons.add_circle)),
           Expanded(
             flex: 3,
             child: TypeAheadField<InvoiceItem>(
