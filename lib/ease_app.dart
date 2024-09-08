@@ -29,11 +29,29 @@ class _EASEAppState extends State<EASEApp> {
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           fontFamily: 'Lato',
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.teal),
+          colorScheme: ColorScheme.fromSeed(
+            seedColor: Color(0xFF00695C), // Dark teal
+            primary: Color(0xFF00695C),
+            secondary: Color(0xFF00897B),
+            surface: Colors.white,
+            surfaceContainer: Color(0xFFF5F5F5),
+          ),
           useMaterial3: true,
           appBarTheme: AppBarTheme(
-            backgroundColor: Colors.white,
-            foregroundColor: Colors.teal,
+            backgroundColor: Color(0xFF00695C),
+            foregroundColor: Colors.white,
+            elevation: 2,
+            toolbarHeight: 50.0,
+            titleTextStyle: TextStyle(
+              fontFamily: 'Lato',
+              fontSize: 18,
+              // fontWeight: FontWeight.bold,
+            ),
+            iconTheme: IconThemeData(color: Colors.white),
+          ),
+          tabBarTheme: TabBarTheme(
+            labelColor: Colors.white,
+            unselectedLabelColor: Colors.grey[400],
           ),
           listTileTheme: ListTileThemeData(
             visualDensity: VisualDensity.compact,
@@ -49,10 +67,11 @@ class _EASEAppState extends State<EASEApp> {
             ),
             color: Colors.white,
             surfaceTintColor: Colors.white,
+            elevation: 2,
           ),
           textButtonTheme: TextButtonThemeData(
             style: ButtonStyle(
-              backgroundColor: WidgetStateProperty.all(Colors.teal),
+              backgroundColor: WidgetStateProperty.all(Color(0xFF00897B)),
               foregroundColor: WidgetStateProperty.all(Colors.white),
               shape: WidgetStateProperty.all(
                 RoundedRectangleBorder(
@@ -65,21 +84,21 @@ class _EASEAppState extends State<EASEApp> {
             ),
           ),
           inputDecorationTheme: InputDecorationTheme(
-            border: OutlineInputBorder(
+            border: UnderlineInputBorder(
               borderSide: BorderSide(
-                color: Colors.teal,
+                color: Color(0xFF00897B),
                 width: 1.0,
               ),
             ),
-            enabledBorder: OutlineInputBorder(
+            enabledBorder: UnderlineInputBorder(
               borderSide: BorderSide(
-                color: Colors.teal,
+                color: Color(0xFF00897B),
                 width: 1.0,
               ),
             ),
-            focusedBorder: OutlineInputBorder(
+            focusedBorder: UnderlineInputBorder(
               borderSide: BorderSide(
-                color: Colors.teal,
+                color: Color(0xFF00695C),
                 width: 2.0,
               ),
             ),
@@ -87,15 +106,31 @@ class _EASEAppState extends State<EASEApp> {
         ),
         darkTheme: ThemeData(
           fontFamily: 'Lato',
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.lightGreen),
+          colorScheme: ColorScheme.fromSeed(
+            seedColor: Color(0xFF00695C),
+            primary: Color(0xFF00897B),
+            secondary: Color(0xFF26A69A),
+            surface: Color(0xFF121212),
+            surfaceContainer: Color(0xFF121212),
+          ),
           useMaterial3: true,
           appBarTheme: AppBarTheme(
-            backgroundColor: Colors.black,
-            foregroundColor: Colors.lightGreen,
+            backgroundColor: Color(0xFF00695C),
+            foregroundColor: Colors.white,
+            elevation: 2,
+            titleTextStyle: TextStyle(
+              fontFamily: 'Lato',
+              fontWeight: FontWeight.bold,
+            ),
+            iconTheme: IconThemeData(color: Colors.white),
+          ),
+          tabBarTheme: TabBarTheme(
+            labelColor: Colors.white,
+            unselectedLabelColor: Colors.grey[400],
           ),
           listTileTheme: ListTileThemeData(
             visualDensity: VisualDensity.compact,
-            tileColor: Colors.black,
+            tileColor: Color(0xFF1E1E1E),
             contentPadding: EdgeInsets.all(8),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8),
@@ -105,13 +140,14 @@ class _EASEAppState extends State<EASEApp> {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8),
             ),
-            color: Colors.black,
-            surfaceTintColor: Colors.black,
+            color: Color(0xFF1E1E1E),
+            surfaceTintColor: Color(0xFF1E1E1E),
+            elevation: 2,
           ),
           textButtonTheme: TextButtonThemeData(
             style: ButtonStyle(
-              backgroundColor: WidgetStateProperty.all(Colors.lightGreen),
-              foregroundColor: WidgetStateProperty.all(Colors.black),
+              backgroundColor: WidgetStateProperty.all(Color(0xFF00897B)),
+              foregroundColor: WidgetStateProperty.all(Colors.white),
               shape: WidgetStateProperty.all(
                 RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(4),
@@ -123,21 +159,21 @@ class _EASEAppState extends State<EASEApp> {
             ),
           ),
           inputDecorationTheme: InputDecorationTheme(
-            border: OutlineInputBorder(
+            border: UnderlineInputBorder(
               borderSide: BorderSide(
-                color: Colors.lightGreen,
+                color: Color(0xFF26A69A),
                 width: 1.0,
               ),
             ),
-            enabledBorder: OutlineInputBorder(
+            enabledBorder: UnderlineInputBorder(
               borderSide: BorderSide(
-                color: Colors.lightGreen,
+                color: Color(0xFF26A69A),
                 width: 1.0,
               ),
             ),
-            focusedBorder: OutlineInputBorder(
+            focusedBorder: UnderlineInputBorder(
               borderSide: BorderSide(
-                color: Colors.lightGreen,
+                color: Color(0xFF00897B),
                 width: 2.0,
               ),
             ),

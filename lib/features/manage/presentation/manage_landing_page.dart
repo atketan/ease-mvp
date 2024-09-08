@@ -12,6 +12,13 @@ class ManageLandingPageState extends State<ManageLandingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text("Manage"),
+        leading: IconButton(
+          onPressed: () {},
+          icon: Icon(Icons.person_4_outlined),
+        ),
+      ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: ListView(

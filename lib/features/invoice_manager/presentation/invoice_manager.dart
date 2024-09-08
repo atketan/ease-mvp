@@ -92,24 +92,18 @@ class InvoiceManagerState extends State<InvoiceManager> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'INVOICE: #' + invoiceId,
-              style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+              'INVOICE: #$invoiceId',
+              style: Theme.of(context)
+                  .textTheme
+                  .labelLarge!
+                  .copyWith(color: Theme.of(context).colorScheme.surface),
             ),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  (widget.invoiceFormMode == InvoiceFormMode.Add
-                          ? 'NEW | '
-                          : 'UPDATE | ') +
-                      (widget.invoiceType == InvoiceType.Sales
-                          ? 'SALE'
-                          : 'PURCHASE'),
-                  style: Theme.of(context).textTheme.titleSmall,
-                ),
-              ],
+            Text(
+              '${widget.invoiceFormMode == InvoiceFormMode.Add ? 'NEW' : 'UPDATE'} | ${widget.invoiceType == InvoiceType.Sales ? 'SALE' : 'PURCHASE'}',
+              style: Theme.of(context)
+                  .textTheme
+                  .labelMedium!
+                  .copyWith(color: Theme.of(context).colorScheme.surface),
             ),
           ],
         ),

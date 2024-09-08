@@ -16,7 +16,6 @@ class _InvoicesHomePageState extends State<InvoicesHomePage> {
       length: 2,
       child: Consumer<InvoicesProvider>(
         builder: (context, invoicesProvider, child) {
-          debugPrint(invoicesProvider.isFilterApplied.toString());
           return Scaffold(
             appBar: AppBar(
               leading: IconButton(
@@ -34,6 +33,7 @@ class _InvoicesHomePageState extends State<InvoicesHomePage> {
                           context: context,
                           firstDate: DateTime(2000),
                           lastDate: DateTime.now(),
+                          initialEntryMode: DatePickerEntryMode.input,
                           initialDateRange: DateTimeRange(
                             start: invoicesProvider.startDate,
                             end: invoicesProvider.endDate,
@@ -63,15 +63,7 @@ class _InvoicesHomePageState extends State<InvoicesHomePage> {
                   ],
                 ),
               ],
-              title: Text(
-                'Invoices',
-                style: Theme.of(context)
-                    .textTheme
-                    .titleMedium!
-                    .copyWith(fontWeight: FontWeight.bold),
-              ),
-              centerTitle: true,
-              toolbarHeight: 40.0,
+              title: Text('Invoices'),
               bottom: TabBar(
                 isScrollable: true,
                 tabAlignment: TabAlignment.start,
@@ -84,7 +76,7 @@ class _InvoicesHomePageState extends State<InvoicesHomePage> {
                   Tab(text: 'Paid'),
                 ],
               ),
-              backgroundColor: Colors.white,
+              // backgroundColor: Colors.white,
             ),
             body: TabBarView(
               children: [
