@@ -14,6 +14,10 @@ class AmountSummaryWidget extends StatefulWidget {
 class AmountSummaryWidgetState extends State<AmountSummaryWidget> {
   @override
   Widget build(BuildContext context) {
+    debugPrint('TEST: AmountSummaryWidget build');
+    debugPrint(
+        'TEST: AmountSummaryWidget state: ${context.read<InvoiceManagerCubit>().invoice.totalAmount.toString()},${context.read<InvoiceManagerCubit>().invoice.discount.toString()},${context.read<InvoiceManagerCubit>().invoice.grandTotal.toString()}');
+
     return Container(
       padding: EdgeInsets.all(16.0),
       child: Column(

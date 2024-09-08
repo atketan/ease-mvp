@@ -58,6 +58,7 @@ class InvoiceManagerCubit extends Cubit<InvoiceManagerCubitState> {
   }
 
   Future<bool> _updateInvoiceAmounts() async {
+    print('TEST: Updating invoice amounts');
     _invoice.totalAmount = _invoice.items.fold(
         0.0, (previousValue, element) => previousValue + element.totalPrice);
     _invoice.grandTotal = _invoice.totalAmount - _invoice.discount;
