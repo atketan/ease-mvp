@@ -28,6 +28,7 @@ class EntityTypeAheadField extends StatefulWidget {
 
 class _EntityTypeAheadFieldState extends State<EntityTypeAheadField> {
   final TextEditingController _controller = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
   bool _isEditing = true;
 
   @override
@@ -39,21 +40,38 @@ class _EntityTypeAheadFieldState extends State<EntityTypeAheadField> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(8.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(height: 8),
-          BlocBuilder<InvoiceManagerCubit, InvoiceManagerCubitState>(
-            builder: (context, state) {
-              if (state is InvoiceManagerLoaded) {
-                return _isEditing
-                    ? _buildTypeAheadField()
-                    : _buildSelectedEntityField();
-              } else {
-                return Center(child: CircularProgressIndicator());
-              }
-            },
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              widget.invoiceType == InvoiceType.Sales ? 'CUSTOMER' : 'VENDOR',
+              style: Theme.of(context).textTheme.labelLarge,
+            ),
+          ),
+          Card(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // SizedBox(height: 8),
+                  BlocBuilder<InvoiceManagerCubit, InvoiceManagerCubitState>(
+                    builder: (context, state) {
+                      if (state is InvoiceManagerLoaded) {
+                        return _isEditing
+                            ? _buildTypeAheadField()
+                            : _buildSelectedEntityField();
+                      } else {
+                        return Center(child: CircularProgressIndicator());
+                      }
+                    },
+                  ),
+                ],
+              ),
+            ),
           ),
         ],
       ),
@@ -74,7 +92,7 @@ class _EntityTypeAheadFieldState extends State<EntityTypeAheadField> {
             hintText:
                 'Start typing to search or add ${widget.invoiceType == InvoiceType.Sales ? 'Customer' : 'Vendor'}',
           ),
-          style: Theme.of(context).textTheme.titleMedium,
+          style: Theme.of(context).textTheme.labelLarge,
         );
       },
       suggestionsCallback: (pattern) async {
@@ -108,6 +126,7 @@ class _EntityTypeAheadFieldState extends State<EntityTypeAheadField> {
       onSelected: (suggestion) async {
         setState(() {
           _controller.text = suggestion.name.split(' ').last;
+          _phoneController.text = suggestion.phone;
           _isEditing = false;
         });
         if (suggestion.id != -1 && suggestion.id != null) {
@@ -134,17 +153,20 @@ class _EntityTypeAheadFieldState extends State<EntityTypeAheadField> {
     return Row(
       children: [
         Expanded(
-          child: ListTile(
-            title: Text(
-              _controller.text,
-              style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
-            ),
-            subtitle: Text(
-              widget.invoiceType == InvoiceType.Sales ? 'Customer' : 'Vendor',
-              style: Theme.of(context).textTheme.titleSmall,
-            ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                _controller.text,
+                style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+              ),
+              Text(
+                _phoneController.text,
+                style: Theme.of(context).textTheme.labelMedium,
+              ),
+            ],
           ),
         ),
         IconButton(
@@ -170,8 +192,9 @@ class _EntityTypeAheadFieldState extends State<EntityTypeAheadField> {
           child: AddEntityBottomSheet(
             initialName: initialName,
             invoiceType: widget.invoiceType,
-            onEntityAdded: (String name) {
+            onEntityAdded: (String name, String phone) {
               _controller.text = name;
+              _phoneController.text = phone;
               _isEditing = false;
             },
           ),

@@ -36,6 +36,7 @@ class _EASEAppState extends State<EASEApp> {
             onSurface: Colors.black87,
           ),
           useMaterial3: true,
+          scaffoldBackgroundColor: Colors.white,
           appBarTheme: AppBarTheme(
             backgroundColor: Colors.black,
             foregroundColor: Colors.white,
@@ -66,9 +67,9 @@ class _EASEAppState extends State<EASEApp> {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8),
             ),
-            // color: Colors.white,
-            // surfaceTintColor: Colors.white,
-            elevation: 2,
+            color: Colors.white,
+            surfaceTintColor: Colors.white,
+            elevation: 5,
           ),
           textButtonTheme: TextButtonThemeData(
             style: ButtonStyle(

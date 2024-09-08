@@ -5,7 +5,6 @@ class InvoiceManagerSpacer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 12,
-      color: Theme.of(context).colorScheme.surfaceVariant,
     );
   }
 }

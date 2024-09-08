@@ -14,7 +14,7 @@ import '../bloc/invoice_manager_cubit_state.dart';
 class AddEntityBottomSheet extends StatefulWidget {
   final String initialName;
   final InvoiceType invoiceType;
-  final Function(String) onEntityAdded;
+  final Function(String, String) onEntityAdded;
 
   AddEntityBottomSheet({
     required this.initialName,
@@ -142,7 +142,7 @@ class _AddEntityBottomSheetState extends State<AddEntityBottomSheet> {
           cubit.setVendorId(newId);
         }
 
-        widget.onEntityAdded(_nameController.text);
+        widget.onEntityAdded(_nameController.text, _mobileController.text);
         Navigator.pop(context);
       } on DatabaseException catch (e) {
         if (!mounted) return;
