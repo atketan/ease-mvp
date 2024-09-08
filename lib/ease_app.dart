@@ -73,7 +73,7 @@ class _EASEAppState extends State<EASEApp> {
           ),
           textButtonTheme: TextButtonThemeData(
             style: ButtonStyle(
-              backgroundColor: WidgetStateProperty.all(Colors.black),
+              // backgroundColor: WidgetStateProperty.all(Colors.black),
               foregroundColor: WidgetStateProperty.all(Color(0xFF448AFF)),
               shape: WidgetStateProperty.all(
                 RoundedRectangleBorder(
@@ -163,7 +163,7 @@ class _EASEAppState extends State<EASEApp> {
           ),
           textButtonTheme: TextButtonThemeData(
             style: ButtonStyle(
-              backgroundColor: WidgetStateProperty.all(Colors.white),
+              // backgroundColor: WidgetStateProperty.all(Colors.white),
               foregroundColor: WidgetStateProperty.all(Color(0xFF82B1FF)),
               shape: WidgetStateProperty.all(
                 RoundedRectangleBorder(

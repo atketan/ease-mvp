@@ -45,7 +45,7 @@ class _EntityTypeAheadFieldState extends State<EntityTypeAheadField> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: Text(
               widget.invoiceType == InvoiceType.Sales ? 'CUSTOMER' : 'VENDOR',
               style: Theme.of(context).textTheme.labelLarge,

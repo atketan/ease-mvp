@@ -32,7 +32,7 @@ class _InvoiceItemsListWidgetDataTableState
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: Text('ITEMS', style: Theme.of(context).textTheme.labelLarge),
           ),
           Card(
