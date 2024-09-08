@@ -120,6 +120,7 @@ class InvoiceManagerState extends State<InvoiceManager> {
                   // EntityDelegateWidget(
                   //   invoiceType: widget.invoiceType,
                   // ),
+                  SizedBox(height: 8),
                   EntityTypeAheadField(
                     invoiceType: widget.invoiceType,
                   ),
@@ -157,7 +158,7 @@ class InvoiceManagerState extends State<InvoiceManager> {
                     },
                   ),
 
-                  InvoiceManagerSpacer(),
+                  InvoiceManagerSpacer(height: 0),
 
                   // Payment type and status
                   BlocBuilder<InvoiceManagerCubit, InvoiceManagerCubitState>(
@@ -174,7 +175,7 @@ class InvoiceManagerState extends State<InvoiceManager> {
                     },
                   ),
 
-                  InvoiceManagerSpacer(),
+                  InvoiceManagerSpacer(height: 0),
 
                   // Show non-editable invoice headers
                   BlocBuilder<InvoiceManagerCubit, InvoiceManagerCubitState>(
@@ -194,7 +195,7 @@ class InvoiceManagerState extends State<InvoiceManager> {
               ),
             ),
           ),
-          Card(
+          Container(
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Row(
@@ -232,7 +233,7 @@ class InvoiceManagerState extends State<InvoiceManager> {
                   Spacer(flex: 1),
                   Expanded(
                     flex: 4,
-                    child: TextButton(
+                    child: OutlinedButton(
                       onPressed: () async {
                         await context
                             .read<InvoiceManagerCubit>()
@@ -249,7 +250,7 @@ class InvoiceManagerState extends State<InvoiceManager> {
                         );
                       },
                       child: Text(
-                        'Save',
+                        'SAVE',
                         style: TextStyle().copyWith(
                           fontWeight: FontWeight.bold,
                         ),

@@ -67,9 +67,9 @@ class _EASEAppState extends State<EASEApp> {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8),
             ),
-            color: Colors.white,
+            color: Colors.grey[50],
             surfaceTintColor: Colors.white,
-            elevation: 5,
+            elevation: 0,
           ),
           textButtonTheme: TextButtonThemeData(
             style: ButtonStyle(
@@ -157,9 +157,9 @@ class _EASEAppState extends State<EASEApp> {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8),
             ),
-            // color: Color(0xFF1E1E1E),
+            color: Color(0xFF1E1E1E),
             // surfaceTintColor: Color(0xFF1E1E1E),
-            elevation: 2,
+            elevation: 0,
           ),
           textButtonTheme: TextButtonThemeData(
             style: ButtonStyle(
