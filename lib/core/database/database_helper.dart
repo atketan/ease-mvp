@@ -82,7 +82,7 @@ class DatabaseHelper {
         name TEXT NOT NULL,
         description TEXT,
         unit_price REAL NOT NULL,
-        unit TEXT NOT NULL
+        uom TEXT NOT NULL
       )
     ''');
     await db.execute('''
@@ -94,6 +94,7 @@ class DatabaseHelper {
         description TEXT,
         quantity INTEGER NOT NULL,
         unit_price REAL NOT NULL,
+        uom TEXT NOT NULL,
         total_price REAL NOT NULL,
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
         updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
