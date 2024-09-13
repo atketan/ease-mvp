@@ -89,6 +89,7 @@ class _EntityTypeAheadFieldState extends State<EntityTypeAheadField> {
             labelText: widget.invoiceType == InvoiceType.Sales
                 ? 'Enter customer name or phone number'
                 : 'Enter vendor name or phone number',
+            labelStyle: Theme.of(context).textTheme.labelLarge,
             hintText:
                 'Start typing to search or add ${widget.invoiceType == InvoiceType.Sales ? 'Customer' : 'Vendor'}',
           ),

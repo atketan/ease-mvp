@@ -63,6 +63,7 @@ class _InvoiceItemsListWidgetSearchBoxState
           return TextField(
             controller: controller,
             focusNode: focusNode,
+            onTapOutside: (event) => FocusScope.of(context).unfocus(),
             style: Theme.of(context).textTheme.labelLarge,
             decoration: InputDecoration(
               hintText: 'Start typing to search or add item...',
@@ -70,7 +71,7 @@ class _InvoiceItemsListWidgetSearchBoxState
                 borderRadius: BorderRadius.circular(8),
               ),
               labelText: 'Add item',
-              labelStyle: Theme.of(context).textTheme.labelMedium,
+              labelStyle: Theme.of(context).textTheme.labelLarge,
             ),
           );
         },
