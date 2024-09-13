@@ -31,55 +31,24 @@ class _InvoiceItemsListWidgetSearchBoxState
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              // Text(
-              //   "Items",
-              //   style: Theme.of(context).textTheme.titleLarge!.copyWith(
-              //         color: Colors.black,
-              //         fontWeight: FontWeight.bold,
-              //       ),
-              // ),
-              // IconButton(
-              //   onPressed: () {
-              //     Navigator.push(
-              //       context,
-              //       new MaterialPageRoute(
-              //         builder: (BuildContext context) =>
-              //             InvoiceItemDelegateWidget(),
-              //       ),
-              //     ).then(
-              //       (invoiceItem) {
-              //         debugPrint((invoiceItem as InvoiceItem).name);
-              //         setState(() {
-              //           _invoiceItems.add(invoiceItem);
-              //         });
-              //         context
-              //             .read<InvoiceManagerCubit>()
-              //             .updateInvoiceAmounts();
-              //       },
-              //     );
-              //   },
-              //   icon: Icon(
-              //     Icons.add_circle_outline,
-              //     size: 36,
-              //   ),
-              // ),
-            ],
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 0.0),
+            child: Text('ITEMS', style: Theme.of(context).textTheme.labelLarge),
           ),
-          SizedBox(height: 12),
-          ListView.builder(
-            shrinkWrap: true,
-            itemCount: _invoiceItems.length + 1,
-            physics: NeverScrollableScrollPhysics(),
-            itemBuilder: (context, index) {
-              if (index == _invoiceItems.length) {
-                return _buildNewItemEntry();
-              }
-              return _buildExistingItemEntry(_invoiceItems[index], index);
-            },
+          Card(
+            child: ListView.builder(
+              shrinkWrap: true,
+              itemCount: _invoiceItems.length + 1,
+              physics: NeverScrollableScrollPhysics(),
+              itemBuilder: (context, index) {
+                if (index == _invoiceItems.length) {
+                  return _buildNewItemEntry();
+                }
+                return _buildExistingItemEntry(_invoiceItems[index], index);
+              },
+            ),
           ),
         ],
       ),
@@ -94,12 +63,14 @@ class _InvoiceItemsListWidgetSearchBoxState
           return TextField(
             controller: controller,
             focusNode: focusNode,
+            style: Theme.of(context).textTheme.labelLarge,
             decoration: InputDecoration(
               hintText: 'Start typing to search or add item...',
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
               ),
               labelText: 'Add item',
+              labelStyle: Theme.of(context).textTheme.labelMedium,
             ),
           );
         },
@@ -132,8 +103,14 @@ class _InvoiceItemsListWidgetSearchBoxState
         },
         itemBuilder: (context, suggestion) {
           return ListTile(
-            title: Text(suggestion.name),
-            subtitle: Text('Price: ${suggestion.unitPrice}'),
+            title: Text(
+              suggestion.name,
+              style: Theme.of(context).textTheme.labelLarge,
+            ),
+            subtitle: Text(
+              'Price: ${suggestion.unitPrice}, UOM: ${suggestion.uom}',
+              style: Theme.of(context).textTheme.labelMedium,
+            ),
           );
         },
         onSelected: (suggestion) {
@@ -153,7 +130,7 @@ class _InvoiceItemsListWidgetSearchBoxState
       decoration: BoxDecoration(
         border: Border(
           bottom: BorderSide(
-            color: Theme.of(context).colorScheme.tertiaryContainer,
+            color: Colors.grey.shade300,
             width: 1.0,
           ),
         ),
@@ -172,7 +149,7 @@ class _InvoiceItemsListWidgetSearchBoxState
                   overflow: TextOverflow.ellipsis,
                   style: Theme.of(context)
                       .textTheme
-                      .titleMedium!
+                      .labelLarge!
                       .copyWith(fontWeight: FontWeight.bold),
                 ),
                 Text(
@@ -192,17 +169,17 @@ class _InvoiceItemsListWidgetSearchBoxState
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Container(
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Theme.of(context).colorScheme.primary,
-                    width: 1.0,
-                  ),
-                  borderRadius: BorderRadius.circular(4.0),
-                ),
+                // decoration: BoxDecoration(
+                //   border: Border.all(
+                //     color: Theme.of(context).colorScheme.primary,
+                //     width: 1.0,
+                //   ),
+                //   borderRadius: BorderRadius.circular(4.0),
+                // ),
                 child: Row(
                   children: [
                     IconButton(
-                      icon: Icon(Icons.remove),
+                      icon: Icon(Icons.remove, size: 18),
                       onPressed: () {
                         if (item.quantity == 1) {
                           showDialog(
@@ -258,10 +235,10 @@ class _InvoiceItemsListWidgetSearchBoxState
                     ),
                     Text(
                       '${item.quantity}',
-                      style: TextStyle(fontSize: 18),
+                      style: Theme.of(context).textTheme.labelLarge,
                     ),
                     IconButton(
-                      icon: Icon(Icons.add),
+                      icon: Icon(Icons.add, size: 18),
                       onPressed: () {
                         setState(() {
                           item.quantity++;
@@ -283,7 +260,7 @@ class _InvoiceItemsListWidgetSearchBoxState
                 ),
               ),
               IconButton(
-                icon: Icon(Icons.edit),
+                icon: Icon(Icons.edit, size: 18),
                 onPressed: () => _showPriceUpdateDialog(item),
               ),
             ],
