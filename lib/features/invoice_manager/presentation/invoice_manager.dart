@@ -130,7 +130,7 @@ class InvoiceManagerState extends State<InvoiceManager> {
                   BlocBuilder<InvoiceManagerCubit, InvoiceManagerCubitState>(
                     builder: (context, state) {
                       if (state is InvoiceManagerLoaded) {
-                        return InvoiceItemsListWidget.dataTableLayout();
+                        return InvoiceItemsListWidget.searchBoxLayout();
                       } else if (state is InvoiceManagerLoading) {
                         return Center(child: CircularProgressIndicator());
                       } else if (state is InvoiceManagerError) {

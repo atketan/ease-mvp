@@ -4,6 +4,7 @@ class InvoiceItem {
   int? itemId;
   String name;
   String? description;
+  String uom;
   int quantity;
   double unitPrice;
   double totalPrice;
@@ -14,6 +15,7 @@ class InvoiceItem {
     required this.itemId,
     required this.name,
     this.description,
+    required this.uom,
     required this.quantity,
     required this.unitPrice,
     required this.totalPrice,
@@ -26,6 +28,7 @@ class InvoiceItem {
       itemId: json['item_id'],
       name: json['name'],
       description: json['description'],
+      uom: json['uom'],
       quantity: json['quantity'],
       unitPrice: json['unit_price'],
       totalPrice: json['total_price'],
@@ -39,6 +42,7 @@ class InvoiceItem {
       'item_id': itemId,
       'name': name,
       'description': description,
+      'uom': uom,
       'quantity': quantity,
       'unit_price': unitPrice,
       'total_price': totalPrice,

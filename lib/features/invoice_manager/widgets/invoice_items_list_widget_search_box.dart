@@ -115,6 +115,7 @@ class _InvoiceItemsListWidgetSearchBoxState
                 unitPrice: 0,
                 quantity: 1,
                 totalPrice: 0,
+                uom: '',
               )
             ];
           }
@@ -125,6 +126,7 @@ class _InvoiceItemsListWidgetSearchBoxState
                     quantity: 1,
                     totalPrice: item.unitPrice * 1,
                     itemId: item.itemId,
+                    uom: item.uom,
                   ))
               .toList();
         },
@@ -175,6 +177,10 @@ class _InvoiceItemsListWidgetSearchBoxState
                 ),
                 Text(
                   'Unit Price: ${item.unitPrice}',
+                  style: Theme.of(context).textTheme.labelSmall,
+                ),
+                Text(
+                  'UOM: ${item.uom}',
                   style: Theme.of(context).textTheme.labelSmall,
                 ),
               ],
@@ -288,7 +294,7 @@ class _InvoiceItemsListWidgetSearchBoxState
   }
 
   void _addNewItem(String name) async {
-    final newItem = InventoryItem(name: name, unitPrice: 0, unit: '');
+    final newItem = InventoryItem(name: name, unitPrice: 0, uom: '');
     var _itemId = await _inventoryItemsDAO.insertInventoryItem(newItem);
     setState(() {
       _invoiceItems.add(
@@ -298,6 +304,7 @@ class _InvoiceItemsListWidgetSearchBoxState
           quantity: 1,
           totalPrice: 0,
           itemId: _itemId,
+          uom: '',
         ),
       );
       _searchController.clear();

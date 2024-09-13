@@ -42,7 +42,7 @@ class UpdateItemsPageState extends State<UpdateItemsPage> {
     if (item != null) {
       setState(() {
         _nameController.text = item!.name;
-        _unitController.text = item!.unit;
+        _unitController.text = item!.uom;
         _descriptionController.text = item!.description ?? "";
         _unitPriceController.text = item!.unitPrice.toString();
       });
@@ -61,7 +61,7 @@ class UpdateItemsPageState extends State<UpdateItemsPage> {
   void _saveItem() async {
     print('Saving item');
     final name = _nameController.text;
-    final unit = _unitController.text;
+    final uom = _unitController.text;
     final description = _descriptionController.text;
     final unitPrice = double.parse(_unitPriceController.text);
 
@@ -70,7 +70,7 @@ class UpdateItemsPageState extends State<UpdateItemsPage> {
       final item = InventoryItem(
         name: name,
         description: description,
-        unit: unit,
+        uom: uom,
         unitPrice: unitPrice,
       );
       // _itemsDAO.insertInventoryItem(item);
@@ -87,7 +87,7 @@ class UpdateItemsPageState extends State<UpdateItemsPage> {
         itemId: widget.itemId,
         name: name,
         description: description,
-        unit: unit,
+        uom: uom,
         unitPrice: unitPrice,
       );
       _itemsDAO.updateInventoryItem(updatedItem);

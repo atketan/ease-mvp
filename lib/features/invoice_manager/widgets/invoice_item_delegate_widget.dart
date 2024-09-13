@@ -107,6 +107,7 @@ class InvoiceItemDelegateWidgetState extends State<InvoiceItemDelegateWidget> {
                             unitPrice: item.unitPrice,
                             quantity: 1,
                             totalPrice: item.unitPrice,
+                            uom: '',
                           );
 
                           Navigator.of(context).pop(invoiceItem);
@@ -120,7 +121,7 @@ class InvoiceItemDelegateWidgetState extends State<InvoiceItemDelegateWidget> {
                           children: [
                             // Text("Address: ${vendor.address}"),
                             Text(
-                              "Unit: ${item.unit}",
+                              "UOM: ${item.uom}",
                               style: Theme.of(context).textTheme.labelMedium,
                             ),
                             Text(

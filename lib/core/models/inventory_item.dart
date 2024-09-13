@@ -3,14 +3,14 @@ class InventoryItem {
   final String name;
   final String? description;
   final double unitPrice;
-  final String unit;
+  final String uom;
 
   InventoryItem({
     this.itemId,
     required this.name,
     this.description,
     required this.unitPrice,
-    required this.unit,
+    required this.uom,
   });
 
   factory InventoryItem.fromJSON(Map<String, dynamic> json) {
@@ -19,7 +19,7 @@ class InventoryItem {
       name: json['name'],
       description: json['description'],
       unitPrice: json['unit_price'],
-      unit: json['unit'],
+      uom: json['uom'],
     );
   }
 
@@ -29,7 +29,7 @@ class InventoryItem {
       'name': name,
       'description': description,
       'unit_price': unitPrice,
-      'unit': unit,
+      'uom': uom,
     };
   }
 }

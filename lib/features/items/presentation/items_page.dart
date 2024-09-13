@@ -103,7 +103,7 @@ class ItemsPageState extends State<ItemsPage> {
                           children: [
                             // Text("Address: ${vendor.address}"),
                             Text(
-                              "Unit: ${item.unit}",
+                              "UOM: ${item.uom}",
                               style: Theme.of(context).textTheme.labelMedium,
                             ),
                             Text(

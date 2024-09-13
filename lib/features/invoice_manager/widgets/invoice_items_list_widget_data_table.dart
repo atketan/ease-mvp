@@ -173,6 +173,7 @@ class _InvoiceItemsListWidgetDataTableState
           unitPrice: 0,
           quantity: 1,
           totalPrice: 0,
+          uom: '',
         )
       ];
     }
@@ -183,6 +184,7 @@ class _InvoiceItemsListWidgetDataTableState
               quantity: 1,
               totalPrice: item.unitPrice * 1,
               itemId: item.itemId,
+              uom: item.uom,
             ))
         .toList();
   }
@@ -196,7 +198,7 @@ class _InvoiceItemsListWidgetDataTableState
   }
 
   Future<void> _addNewItem(String name) async {
-    final newItem = InventoryItem(name: name, unitPrice: 0, unit: '');
+    final newItem = InventoryItem(name: name, unitPrice: 0, uom: '');
     var _itemId = await _inventoryItemsDAO.insertInventoryItem(newItem);
     setState(() {
       _invoiceItems.add(
@@ -206,6 +208,7 @@ class _InvoiceItemsListWidgetDataTableState
           quantity: 1,
           totalPrice: 0,
           itemId: _itemId,
+          uom: '',
         ),
       );
     });

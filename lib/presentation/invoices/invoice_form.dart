@@ -423,6 +423,7 @@ class _AddInvoiceItemDialogState extends State<AddInvoiceItemDialog> {
               quantity: quantity,
               unitPrice: unitPrice,
               totalPrice: totalPrice,
+              uom: '',
             );
 
             Navigator.of(context).pop(item);
