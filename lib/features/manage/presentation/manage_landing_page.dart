@@ -1,3 +1,4 @@
+import 'package:ease/core/database/database_helper.dart';
 import 'package:ease/features/customers/presentation/customers_page.dart';
 import 'package:ease/features/items/presentation/items_page.dart';
 import 'package:ease/features/vendors/presentation/vendors_page.dart';
@@ -59,6 +60,15 @@ class ManageLandingPageState extends State<ManageLandingPage> {
                     builder: (_) => ItemsPage(),
                   ),
                 );
+              },
+            ),
+            Divider(),
+            ListTile(
+              title: Text("Reset Database"),
+              subtitle: Text("Delete database and recreate new"),
+              trailing: Icon(Icons.delete_forever),
+              onTap: () async {
+                await DatabaseHelper().deleteLocalDatabase();
               },
             ),
             Divider(),

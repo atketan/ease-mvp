@@ -1,5 +1,4 @@
 import 'package:sqflite/sqflite.dart';
-import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
 import 'package:path/path.dart' as path;
 
@@ -19,8 +18,9 @@ class DatabaseHelper {
 
   Future<Database> _initDatabase() async {
     try {
-      final documentsDirectory = await path_provider.getApplicationDocumentsDirectory();
-      final dbPath = path.join(documentsDirectory.path, 'your_database_name.db');
+      final documentsDirectory =
+          await path_provider.getApplicationDocumentsDirectory();
+      final dbPath = path.join(documentsDirectory.path, 'ease_invoices.db');
       print('Initializing database at path: $dbPath');
       return await openDatabase(
         dbPath,
@@ -150,7 +150,9 @@ class DatabaseHelper {
   }
 
   Future<void> deleteLocalDatabase() async {
-    String path = join(await getDatabasesPath(), 'invoicing.db');
-    await deleteDatabase(path);
+    final documentsDirectory =
+        await path_provider.getApplicationDocumentsDirectory();
+    final dbPath = path.join(documentsDirectory.path, 'ease_invoices.db');
+    await deleteDatabase(dbPath);
   }
 }
