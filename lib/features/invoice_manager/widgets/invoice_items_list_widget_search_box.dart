@@ -33,10 +33,10 @@ class _InvoiceItemsListWidgetSearchBoxState
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 0.0),
-            child: Text('ITEMS', style: Theme.of(context).textTheme.labelLarge),
-          ),
+          // Padding(
+          //   padding: const EdgeInsets.symmetric(horizontal: 0.0),
+          //   child: Text('ITEMS', style: Theme.of(context).textTheme.labelLarge),
+          // ),
           Card(
             child: ListView.builder(
               shrinkWrap: true,

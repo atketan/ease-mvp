@@ -59,6 +59,9 @@ class InvoiceManagerState extends State<InvoiceManager> {
   final String invoiceId = generateShort12CharUniqueKey().toUpperCase();
   final DateTime invoiceCreateDate = DateTime.now();
 
+  var selectedClientName;
+  List<bool> _isOpen = [false, false];
+
   @override
   void initState() {
     super.initState();
@@ -116,21 +119,11 @@ class InvoiceManagerState extends State<InvoiceManager> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Get customer or vendor details
-                  // EntityDelegateWidget(
-                  //   invoiceType: widget.invoiceType,
-                  // ),
-                  SizedBox(height: 8),
-                  EntityTypeAheadField(
-                    invoiceType: widget.invoiceType,
-                  ),
-                  // Add separation space
-                  InvoiceManagerSpacer(),
-                  // Build invoice items list
+                  // Show non-editable invoice headers
                   BlocBuilder<InvoiceManagerCubit, InvoiceManagerCubitState>(
                     builder: (context, state) {
                       if (state is InvoiceManagerLoaded) {
-                        return InvoiceItemsListWidget.searchBoxLayout();
+                        return InvoiceOrderDetailsWidget();
                       } else if (state is InvoiceManagerLoading) {
                         return Center(child: CircularProgressIndicator());
                       } else if (state is InvoiceManagerError) {
@@ -140,6 +133,148 @@ class InvoiceManagerState extends State<InvoiceManager> {
                       }
                     },
                   ),
+                  InvoiceManagerSpacer(height: 4, horizontalPadding: 0),
+                  ExpansionPanelList(
+                    expandIconColor: Theme.of(context).primaryColorDark,
+                    materialGapSize: 2,
+                    expandedHeaderPadding: EdgeInsets.symmetric(vertical: 0),
+                    dividerColor: Theme.of(context).primaryColorLight,
+                    children: [
+                      ExpansionPanel(
+                        canTapOnHeader: true,
+                        isExpanded: _isOpen[0],
+                        headerBuilder: (context, isExpanded) => Container(
+                          color: isExpanded
+                              ? Theme.of(context).secondaryHeaderColor
+                              : Colors.transparent,
+                          child: ListTile(
+                            leading: Icon(Icons.person_2_outlined),
+                            title: Text(
+                              widget.invoiceType == InvoiceType.Sales
+                                  ? 'CUSTOMER'
+                                  : 'VENDOR',
+                              style: Theme.of(context).textTheme.labelLarge,
+                            ),
+                            trailing: BlocBuilder<InvoiceManagerCubit,
+                                InvoiceManagerCubitState>(
+                              builder: (context, state) {
+                                if (state is InvoiceManagerLoaded) {
+                                  return Text(
+                                    widget.invoiceType == InvoiceType.Sales
+                                        ? '${selectedClientName ?? 'Select a customer'}'
+                                        : '${selectedClientName ?? 'Select a vendor'}',
+                                    style:
+                                        Theme.of(context).textTheme.labelLarge,
+                                  );
+                                } else if (state is InvoiceManagerLoading) {
+                                  return Center(
+                                      child: CircularProgressIndicator());
+                                } else if (state is InvoiceManagerError) {
+                                  return Center(
+                                      child: Text('Error: ${state.message}'));
+                                } else {
+                                  return Center(child: Text('Err'));
+                                }
+                              },
+                            ),
+                          ),
+                        ),
+                        body: Card(
+                          child: EntityTypeAheadField(
+                            invoiceType: widget.invoiceType,
+                            onClientSelected: (clientName) {
+                              selectedClientName = clientName;
+                            },
+                          ),
+                        ),
+                      ),
+                      ExpansionPanel(
+                        canTapOnHeader: true,
+                        isExpanded: _isOpen[1],
+                        headerBuilder: (context, isExpanded) {
+                          return Container(
+                            color: isExpanded
+                                ? Theme.of(context).secondaryHeaderColor
+                                : Colors.transparent,
+                            child: ListTile(
+                              leading: Icon(Icons.shopping_cart_outlined),
+                              title: Text(
+                                'ITEMS',
+                                style: Theme.of(context).textTheme.labelLarge,
+                              ),
+                              trailing: BlocBuilder<InvoiceManagerCubit,
+                                  InvoiceManagerCubitState>(
+                                builder: (context, state) {
+                                  if (state is InvoiceManagerLoaded) {
+                                    return Text(
+                                      "₹" +
+                                          context
+                                              .read<InvoiceManagerCubit>()
+                                              .invoice
+                                              .totalAmount
+                                              .toString(),
+                                      style:
+                                          Theme.of(context).textTheme.labelLarge,
+                                    );
+                                  } else if (state is InvoiceManagerLoading) {
+                                    return Center(
+                                        child: CircularProgressIndicator());
+                                  } else if (state is InvoiceManagerError) {
+                                    return Center(
+                                        child: Text('Error: ${state.message}'));
+                                  } else {
+                                    return Center(child: Text('Err'));
+                                  }
+                                },
+                              ),
+                            ),
+                          );
+                        },
+                        body: Card(
+                          child: BlocBuilder<InvoiceManagerCubit,
+                              InvoiceManagerCubitState>(
+                            builder: (context, state) {
+                              if (state is InvoiceManagerLoaded) {
+                                return InvoiceItemsListWidget.searchBoxLayout();
+                              } else if (state is InvoiceManagerLoading) {
+                                return Center(child: CircularProgressIndicator());
+                              } else if (state is InvoiceManagerError) {
+                                return Center(
+                                    child: Text('Error: ${state.message}'));
+                              } else {
+                                return Center(child: Text('Unknown state'));
+                              }
+                            },
+                          ),
+                        ),
+                      )
+                    ],
+                    expansionCallback: (panelIndex, isExpanded) => setState(() {
+                      _isOpen[panelIndex] = isExpanded;
+                    }),
+                  ),
+                  SizedBox(height: 8),
+                  InvoiceManagerSpacer(height: 4, horizontalPadding: 0),
+
+                  // EntityTypeAheadField(
+                  //   invoiceType: widget.invoiceType,
+                  // ),
+                  // Add separation space
+                  // InvoiceManagerSpacer(),
+                  // Build invoice items list
+                  // BlocBuilder<InvoiceManagerCubit, InvoiceManagerCubitState>(
+                  //   builder: (context, state) {
+                  //     if (state is InvoiceManagerLoaded) {
+                  //       return InvoiceItemsListWidget.searchBoxLayout();
+                  //     } else if (state is InvoiceManagerLoading) {
+                  //       return Center(child: CircularProgressIndicator());
+                  //     } else if (state is InvoiceManagerError) {
+                  //       return Center(child: Text('Error: ${state.message}'));
+                  //     } else {
+                  //       return Center(child: Text('Unknown state'));
+                  //     }
+                  //   },
+                  // ),
 
                   InvoiceManagerSpacer(),
 
@@ -176,21 +311,6 @@ class InvoiceManagerState extends State<InvoiceManager> {
                   ),
 
                   InvoiceManagerSpacer(height: 0),
-
-                  // Show non-editable invoice headers
-                  BlocBuilder<InvoiceManagerCubit, InvoiceManagerCubitState>(
-                    builder: (context, state) {
-                      if (state is InvoiceManagerLoaded) {
-                        return InvoiceOrderDetailsWidget();
-                      } else if (state is InvoiceManagerLoading) {
-                        return Center(child: CircularProgressIndicator());
-                      } else if (state is InvoiceManagerError) {
-                        return Center(child: Text('Error: ${state.message}'));
-                      } else {
-                        return Center(child: Text('Unknown state'));
-                      }
-                    },
-                  ),
                 ],
               ),
             ),

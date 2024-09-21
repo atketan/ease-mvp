@@ -19,8 +19,12 @@ class Entity {
 
 class EntityTypeAheadField extends StatefulWidget {
   final InvoiceType invoiceType;
+  final Function(String clientName) onClientSelected;
 
-  EntityTypeAheadField({required this.invoiceType});
+  EntityTypeAheadField({
+    required this.invoiceType,
+    required this.onClientSelected,
+  });
 
   @override
   _EntityTypeAheadFieldState createState() => _EntityTypeAheadFieldState();
@@ -34,6 +38,7 @@ class _EntityTypeAheadFieldState extends State<EntityTypeAheadField> {
   @override
   void dispose() {
     _controller.dispose();
+    _phoneController.dispose();
     super.dispose();
   }
 
@@ -44,13 +49,13 @@ class _EntityTypeAheadFieldState extends State<EntityTypeAheadField> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: Text(
-              widget.invoiceType == InvoiceType.Sales ? 'CUSTOMER' : 'VENDOR',
-              style: Theme.of(context).textTheme.labelLarge,
-            ),
-          ),
+          // Padding(
+          //   padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          //   child: Text(
+          //     widget.invoiceType == InvoiceType.Sales ? 'CUSTOMER' : 'VENDOR',
+          //     style: Theme.of(context).textTheme.labelLarge,
+          //   ),
+          // ),
           Card(
             child: Padding(
               padding: const EdgeInsets.all(8.0),
@@ -61,6 +66,7 @@ class _EntityTypeAheadFieldState extends State<EntityTypeAheadField> {
                   BlocBuilder<InvoiceManagerCubit, InvoiceManagerCubitState>(
                     builder: (context, state) {
                       if (state is InvoiceManagerLoaded) {
+                        widget.onClientSelected(_controller.text);
                         return _isEditing
                             ? _buildTypeAheadField()
                             : _buildSelectedEntityField();
@@ -126,9 +132,10 @@ class _EntityTypeAheadFieldState extends State<EntityTypeAheadField> {
       },
       onSelected: (suggestion) async {
         setState(() {
-          _controller.text = suggestion.name.split(' ').last;
+          _controller.text = suggestion.name;
           _phoneController.text = suggestion.phone;
           _isEditing = false;
+          widget.onClientSelected(suggestion.name);
         });
         if (suggestion.id != -1 && suggestion.id != null) {
           if (widget.invoiceType == InvoiceType.Sales) {
@@ -151,6 +158,7 @@ class _EntityTypeAheadFieldState extends State<EntityTypeAheadField> {
   }
 
   Widget _buildSelectedEntityField() {
+    widget.onClientSelected(_controller.text);
     return Row(
       children: [
         Expanded(
