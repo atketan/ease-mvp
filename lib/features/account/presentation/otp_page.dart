@@ -130,10 +130,10 @@ class _OTPPageState extends State<OTPPage> {
                     // loginStore.validateOtpAndLogin(context, text);
                   },
                   style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(
+                    backgroundColor: WidgetStateProperty.all(
                       Theme.of(context).primaryColor,
                     ),
-                    shape: MaterialStateProperty.all(
+                    shape: WidgetStateProperty.all(
                       RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(14),
                       ),

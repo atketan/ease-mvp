@@ -282,9 +282,9 @@ class _ManageInvoiceState extends State<ManageInvoice> {
                       ),
                       style: ButtonStyle(
                         backgroundColor:
-                            MaterialStateProperty.all(Colors.transparent),
+                            WidgetStateProperty.all(Colors.transparent),
                         foregroundColor:
-                            MaterialStateProperty.all(Colors.blue[700]),
+                            WidgetStateProperty.all(Colors.blue[700]),
                       ),
                     ),
                   ],
@@ -426,12 +426,12 @@ class _ManageInvoiceState extends State<ManageInvoice> {
                 ),
                 margin: EdgeInsets.only(bottom: 8),
                 padding: EdgeInsets.all(8.0),
-                child: ButtonBar(
+                child: OverflowBar(
                   alignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     TextButton(
                       style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(Colors.red),
+                        backgroundColor: WidgetStateProperty.all(Colors.red),
                       ),
                       onPressed: () {
                         // If the form is valid, display a Snackbar

@@ -232,10 +232,10 @@ class _LoginPageState extends State<LoginPage> {
                             }
                           },
                           style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all(
+                            backgroundColor: WidgetStateProperty.all(
                               Theme.of(context).primaryColor,
                             ),
-                            shape: MaterialStateProperty.all(
+                            shape: WidgetStateProperty.all(
                               RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(4),
                               ),
