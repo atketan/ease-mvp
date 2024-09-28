@@ -84,7 +84,7 @@ class InvoicesProvider with ChangeNotifier {
   void _calculateTotalUnpaidAmount() {
     _totalUnpaidAmount = _unpaidInvoices.fold(
       0,
-      (sum, invoice) => sum + invoice.totalAmount,
+      (sum, invoice) => sum + invoice.grandTotal,
     );
     developer.log('Total unpaid amount: $_totalUnpaidAmount');
   }
@@ -109,7 +109,7 @@ class InvoicesProvider with ChangeNotifier {
   void _calculateTotalPaidAmount() {
     _totalPaidAmount = _paidInvoices.fold(
       0,
-      (sum, invoice) => sum + invoice.totalAmount,
+      (sum, invoice) => sum + invoice.grandTotal,
     );
     developer.log('Total paid amount: $_totalPaidAmount');
   }

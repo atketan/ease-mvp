@@ -25,4 +25,11 @@ class InvoiceItemsDAO {
     final db = await _databaseHelper.database;
     return await db.delete('InvoiceItems', where: 'id = ?', whereArgs: [id]);
   }
+
+  Future<List<InvoiceItem>> getAllInvoiceItemsByInvoiceId(int invoiceId) async {
+    final db = await _databaseHelper.database;
+    final List<Map<String, dynamic>> maps = await db
+        .query('InvoiceItems', where: 'invoice_id = ?', whereArgs: [invoiceId]);
+    return List.generate(maps.length, (i) => InvoiceItem.fromJSON(maps[i]));
+  }
 }

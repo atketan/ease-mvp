@@ -1,3 +1,4 @@
+import 'dart:developer' as developer;
 import 'package:bloc/bloc.dart';
 import 'package:ease/core/database/inventory_items_dao.dart';
 import 'package:ease/core/database/invoice_items_dao.dart';
@@ -20,8 +21,41 @@ class InvoiceManagerCubit extends Cubit<InvoiceManagerCubitState> {
 
   late Invoice _invoice;
 
-  void initialiseInvoiceModelInstance(Invoice invoice) {
-    _invoice = invoice;
+  void initialiseInvoiceModelInstance(Invoice? invoice, String invoiceNumber) {
+    if (invoice == null) {
+      _invoice = Invoice(
+        customerId: 0,
+        invoiceNumber: invoiceNumber,
+        date: DateTime.now(),
+        totalAmount: 0.0,
+        discount: 0.0,
+        taxes: 0.0,
+        grandTotal: 0.0,
+        paymentType: 'cash',
+        status: 'unpaid',
+      );
+    } else {
+      _invoice = invoice;
+    }
+    emit(InvoiceManagerLoaded());
+  }
+
+  void populateInvoiceData() {
+    developer.log(_invoice.toJSON().toString());
+    _getAllInvoiceItems(_invoice.id);
+  }
+
+  void _getAllInvoiceItems(int? invoiceId) async {
+    if (invoiceId == null) return;
+    _invoice.items =
+        await _invoiceItemsDAO.getAllInvoiceItemsByInvoiceId(invoiceId);
+
+    updateInvoiceAmounts();
+
+    _invoice.items.forEach((item) {
+      developer.log('Invoice Item: ${item.toJSON()}');
+    });
+
     emit(InvoiceManagerLoaded());
   }
 
@@ -97,6 +131,50 @@ class InvoiceManagerCubit extends Cubit<InvoiceManagerCubitState> {
       ),
     );
 
+    return Future.value(true);
+  }
+
+  Future<bool> updateInvoice() async {
+    // Update invoice items
+    for (var element in _invoice.items) {
+      if (element.id != null) {
+        // Update existing invoice item
+        await _invoiceItemsDAO.updateInvoiceItem(element);
+      } else {
+        // Insert new invoice item
+        element.invoiceId = _invoice.id; // Ensure the invoiceId is set
+        await _invoiceItemsDAO.insertInvoiceItem(element);
+      }
+    }
+
+    // Update payment if grand total or status has changed
+    final Payment? existingPayment =
+        await _paymentsDAO.getPaymentByInvoiceId(_invoice.id);
+    if (existingPayment != null) {
+      if (existingPayment.amount != _invoice.grandTotal ||
+          existingPayment.paymentMethod != _invoice.status) {
+        existingPayment.amount = _invoice.grandTotal;
+        existingPayment.paymentMethod = _invoice.status;
+        existingPayment.updatedAt = DateTime.now();
+
+        await _paymentsDAO.updatePayment(existingPayment);
+      }
+    }
+    // } else {
+    //   // If no existing payment, create a new one
+    //   await _paymentsDAO.insertPayment(
+    //     Payment(
+    //       invoiceId: _invoice.id,
+    //       amount: _invoice.grandTotal,
+    //       paymentDate: _invoice.date,
+    //       createdAt: existingPayment?.createdAt ?? DateTime.now(), // Keep the original createdAt
+    //       updatedAt: DateTime.now(),
+    //       paymentMethod: _invoice.status,
+    //     ),
+    //   );
+    // }
+
+    await _invoiceDAO.updateInvoice(_invoice); // Update the invoice itself
     return Future.value(true);
   }
 

@@ -25,4 +25,17 @@ class PaymentsDAO {
     final db = await _databaseHelper.database;
     return await db.delete('Payments', where: 'id = ?', whereArgs: [id]);
   }
+
+  Future<Payment?> getPaymentByInvoiceId(int? id) async {
+    if (id == null) return null;
+    final db = await _databaseHelper.database;
+    final List<Map<String, dynamic>> maps =
+        await db.query('Payments', where: 'invoice_id = ?', whereArgs: [id]);
+
+    if (maps.isNotEmpty) {
+      return Payment.fromJSON(maps.first);
+    } else {
+      return null;
+    }
+  }
 }

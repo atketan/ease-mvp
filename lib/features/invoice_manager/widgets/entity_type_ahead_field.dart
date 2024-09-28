@@ -1,5 +1,7 @@
 import 'package:ease/core/database/customers_dao.dart';
 import 'package:ease/core/database/vendors_dao.dart';
+import 'package:ease/core/models/customer.dart';
+import 'package:ease/core/models/vendor.dart';
 import 'package:ease/features/invoice_manager/bloc/invoice_manager_cubit.dart';
 import 'package:ease/features/invoice_manager/bloc/invoice_manager_cubit_state.dart';
 import 'package:ease/features/invoices/data_models/invoice_type_enum.dart';
@@ -34,6 +36,12 @@ class _EntityTypeAheadFieldState extends State<EntityTypeAheadField> {
   final TextEditingController _controller = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   bool _isEditing = true;
+
+  @override
+  void initState() {
+    _getEntityDetails();
+    super.initState();
+  }
 
   @override
   void dispose() {
@@ -212,5 +220,25 @@ class _EntityTypeAheadFieldState extends State<EntityTypeAheadField> {
       },
     );
     setState(() {});
+  }
+
+  void _getEntityDetails() async {
+    int? customerId = context.read<InvoiceManagerCubit>().invoice.customerId;
+    int? vendorId = context.read<InvoiceManagerCubit>().invoice.vendorId;
+    if (customerId != null) {
+      Customer? customer = await CustomersDAO().getCustomerById(customerId);
+      _controller.text = customer!.name;
+      _phoneController.text = customer.phone ?? "";
+    } else if (vendorId != null) {
+      Vendor? vendor = await VendorsDAO().getVendorById(vendorId);
+      _controller.text = vendor!.name;
+      _phoneController.text = vendor.phone ?? "";
+    }
+    setState(() {
+      _isEditing = false;
+      widget.onClientSelected(_controller.text);
+    });
+    // ? await context.read<InvoiceManagerCubit>().getCustomerName(null)
+    // : await context.read<InvoiceManagerCubit>().getVendorName(null);
   }
 }

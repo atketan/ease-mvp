@@ -22,12 +22,12 @@ class _InvoiceItemsListWidgetSearchBoxState
 
   @override
   void initState() {
-    _invoiceItems = context.read<InvoiceManagerCubit>().invoice.items;
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    _invoiceItems = context.read<InvoiceManagerCubit>().invoice.items;
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(

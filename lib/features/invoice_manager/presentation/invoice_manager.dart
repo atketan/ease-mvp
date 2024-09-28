@@ -57,8 +57,8 @@ class InvoiceManager extends StatefulWidget {
 }
 
 class InvoiceManagerState extends State<InvoiceManager> {
-  final String invoiceId = generateShort12CharUniqueKey().toUpperCase();
-  final DateTime invoiceCreateDate = DateTime.now();
+  final String invoiceNumber = generateShort12CharUniqueKey().toUpperCase();
+  // final DateTime invoiceCreateDate = DateTime.now();
 
   var selectedClientName;
   List<bool> _isOpen = [false, false, false];
@@ -66,21 +66,12 @@ class InvoiceManagerState extends State<InvoiceManager> {
   @override
   void initState() {
     super.initState();
-    context.read<InvoiceManagerCubit>().initialiseInvoiceModelInstance(
-          widget.invoiceFormMode == InvoiceFormMode.Edit
-              ? widget.invoice!
-              : Invoice(
-                  customerId: 0,
-                  invoiceNumber: invoiceId,
-                  date: invoiceCreateDate,
-                  totalAmount: 0.0,
-                  discount: 0.0,
-                  taxes: 0.0,
-                  grandTotal: 0.0,
-                  paymentType: 'cash',
-                  status: 'unpaid',
-                ),
-        );
+    context
+        .read<InvoiceManagerCubit>()
+        .initialiseInvoiceModelInstance(widget.invoice, invoiceNumber);
+    if (widget.invoiceFormMode == InvoiceFormMode.Edit) {
+      context.read<InvoiceManagerCubit>().populateInvoiceData();
+    }
   }
 
   @override
@@ -96,7 +87,7 @@ class InvoiceManagerState extends State<InvoiceManager> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'INVOICE: #$invoiceId',
+              'INVOICE: #$invoiceNumber',
               style: Theme.of(context)
                   .textTheme
                   .labelLarge!
@@ -144,42 +135,45 @@ class InvoiceManagerState extends State<InvoiceManager> {
                       ExpansionPanel(
                         canTapOnHeader: true,
                         isExpanded: _isOpen[0],
-                        headerBuilder: (context, isExpanded) => Container(
-                          color: isExpanded
-                              ? Theme.of(context).secondaryHeaderColor
-                              : Colors.transparent,
-                          child: ListTile(
-                            leading: Icon(Icons.person_2_outlined),
-                            title: Text(
-                              widget.invoiceType == InvoiceType.Sales
-                                  ? 'CUSTOMER'
-                                  : 'VENDOR',
-                              style: Theme.of(context).textTheme.labelLarge,
+                        headerBuilder: (context, isExpanded) {
+                          return Container(
+                            color: isExpanded
+                                ? Theme.of(context).secondaryHeaderColor
+                                : Colors.transparent,
+                            child: ListTile(
+                              leading: Icon(Icons.person_2_outlined),
+                              title: Text(
+                                widget.invoiceType == InvoiceType.Sales
+                                    ? 'CUSTOMER'
+                                    : 'VENDOR',
+                                style: Theme.of(context).textTheme.labelLarge,
+                              ),
+                              trailing: BlocBuilder<InvoiceManagerCubit,
+                                  InvoiceManagerCubitState>(
+                                builder: (context, state) {
+                                  if (state is InvoiceManagerLoaded) {
+                                    return Text(
+                                      widget.invoiceType == InvoiceType.Sales
+                                          ? '${selectedClientName ?? 'Select a customer'}'
+                                          : '${selectedClientName ?? 'Select a vendor'}',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .labelLarge,
+                                    );
+                                  } else if (state is InvoiceManagerLoading) {
+                                    return Center(
+                                        child: CircularProgressIndicator());
+                                  } else if (state is InvoiceManagerError) {
+                                    return Center(
+                                        child: Text('Error: ${state.message}'));
+                                  } else {
+                                    return Center(child: Text('Err'));
+                                  }
+                                },
+                              ),
                             ),
-                            trailing: BlocBuilder<InvoiceManagerCubit,
-                                InvoiceManagerCubitState>(
-                              builder: (context, state) {
-                                if (state is InvoiceManagerLoaded) {
-                                  return Text(
-                                    widget.invoiceType == InvoiceType.Sales
-                                        ? '${selectedClientName ?? 'Select a customer'}'
-                                        : '${selectedClientName ?? 'Select a vendor'}',
-                                    style:
-                                        Theme.of(context).textTheme.labelLarge,
-                                  );
-                                } else if (state is InvoiceManagerLoading) {
-                                  return Center(
-                                      child: CircularProgressIndicator());
-                                } else if (state is InvoiceManagerError) {
-                                  return Center(
-                                      child: Text('Error: ${state.message}'));
-                                } else {
-                                  return Center(child: Text('Err'));
-                                }
-                              },
-                            ),
-                          ),
-                        ),
+                          );
+                        },
                         body: Card(
                           child: EntityTypeAheadField(
                             invoiceType: widget.invoiceType,
@@ -395,19 +389,37 @@ class InvoiceManagerState extends State<InvoiceManager> {
                     flex: 4,
                     child: OutlinedButton(
                       onPressed: () async {
-                        await context
-                            .read<InvoiceManagerCubit>()
-                            .saveInvoice()
-                            .then(
-                          (value) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text('Invoice updated successfully!'),
-                              ),
-                            );
-                            Navigator.pop(context);
-                          },
-                        );
+                        if (widget.invoiceFormMode == InvoiceFormMode.Edit) {
+                          await context
+                              .read<InvoiceManagerCubit>()
+                              .updateInvoice()
+                              .then(
+                            (value) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content:
+                                      Text('Invoice updated successfully!'),
+                                ),
+                              );
+                              Navigator.pop(context);
+                            },
+                          );
+                        } else {
+                          await context
+                              .read<InvoiceManagerCubit>()
+                              .saveInvoice()
+                              .then(
+                            (value) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content:
+                                      Text('Invoice created successfully!'),
+                                ),
+                              );
+                              Navigator.pop(context);
+                            },
+                          );
+                        }
                       },
                       child: Text(
                         'SAVE',

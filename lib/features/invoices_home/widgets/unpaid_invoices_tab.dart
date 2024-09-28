@@ -1,5 +1,9 @@
 import 'package:ease/core/models/invoice.dart';
+import 'package:ease/features/invoice_manager/bloc/invoice_manager_cubit.dart';
+import 'package:ease/features/invoice_manager/presentation/invoice_manager.dart';
+import 'package:ease/features/invoices/data_models/invoice_type_enum.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'dart:developer' as developer;
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -84,7 +88,7 @@ class _UnpaidInvoicesTabState extends State<UnpaidInvoicesTab> {
                                   style: Theme.of(context).textTheme.titleSmall,
                                 ),
                                 trailing: Text(
-                                  '₹${invoice.totalAmount.toStringAsFixed(2)}',
+                                  '₹${invoice.grandTotal.toStringAsFixed(2)}',
                                   style: Theme.of(context)
                                       .textTheme
                                       .titleMedium!
@@ -92,6 +96,23 @@ class _UnpaidInvoicesTabState extends State<UnpaidInvoicesTab> {
                                         fontWeight: FontWeight.bold,
                                       ),
                                 ),
+                                onLongPress: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (BuildContext context) =>
+                                          BlocProvider(
+                                        create: (context) =>
+                                            InvoiceManagerCubit(),
+                                        child: InvoiceManager(
+                                          invoiceType: InvoiceType.Sales,
+                                          invoiceFormMode: InvoiceFormMode.Edit,
+                                          invoice: invoice,
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                },
                               ),
                             ),
                           )
