@@ -306,6 +306,7 @@ class _InvoiceItemsListWidgetSearchBoxState
 
     showModalBottomSheet(
       context: context,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       builder: (BuildContext context) {
         return Padding(
           padding: const EdgeInsets.all(16.0),
@@ -318,6 +319,7 @@ class _InvoiceItemsListWidgetSearchBoxState
                       fontWeight: FontWeight.bold,
                     ),
               ),
+              SizedBox(height: 8),
               TextField(
                 controller: priceController,
                 keyboardType: TextInputType.numberWithOptions(

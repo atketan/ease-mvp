@@ -127,6 +127,7 @@ class _EASEAppState extends State<EASEApp> {
             onSurface: Colors.white70,
           ),
           useMaterial3: true,
+          scaffoldBackgroundColor: Colors.black,
           appBarTheme: AppBarTheme(
             backgroundColor: Colors.white,
             foregroundColor: Colors.black,

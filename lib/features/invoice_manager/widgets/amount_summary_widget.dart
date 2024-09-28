@@ -59,6 +59,7 @@ class AmountSummaryWidgetState extends State<AmountSummaryWidget> {
                           onTap: () async {
                             final discount = await showModalBottomSheet<double>(
                               context: context,
+                              backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                               isScrollControlled: true,
                               builder: (BuildContext context) {
                                 return DiscountManagerWidget();

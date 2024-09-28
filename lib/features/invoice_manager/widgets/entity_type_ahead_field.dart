@@ -194,6 +194,7 @@ class _EntityTypeAheadFieldState extends State<EntityTypeAheadField> {
       String initialName, InvoiceManagerCubit cubit) async {
     await showModalBottomSheet(
       context: context,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       isScrollControlled: true,
       builder: (BuildContext context) {
         return BlocProvider.value(
