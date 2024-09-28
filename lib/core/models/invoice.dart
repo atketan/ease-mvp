@@ -12,6 +12,7 @@ class Invoice {
   double grandTotal;
   String paymentType; // cash or credit
   String status; // paid or unpaid
+  String? notes;
   List<InvoiceItem> _items = [];
 
   Invoice({
@@ -26,6 +27,7 @@ class Invoice {
     required this.grandTotal,
     required this.paymentType,
     required this.status,
+    this.notes,
   }) : assert(customerId != null || vendorId != null,
             'Either customerId or vendorId must be non-null');
 
@@ -48,6 +50,7 @@ class Invoice {
       grandTotal: json['grand_total'],
       paymentType: json['payment_type'],
       status: json['status'],
+      notes: json['notes'],
     );
     // ).._items = (json['items'] as List)
     //     .map((item) => InvoiceItem.fromJSON(item))
@@ -67,6 +70,7 @@ class Invoice {
       'grand_total': grandTotal,
       'payment_type': paymentType,
       'status': status,
+      'notes': notes,
       // 'items': _items.map((item) => item.toJSON()).toList(),
     };
   }

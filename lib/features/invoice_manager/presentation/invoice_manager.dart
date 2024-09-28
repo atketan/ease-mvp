@@ -12,6 +12,7 @@ import '../widgets/amount_summary_widget.dart';
 import '../widgets/entity_type_ahead_field.dart';
 import '../widgets/invoice_items_list_widget.dart';
 import '../widgets/invoice_manager_spacer.dart';
+import '../widgets/invoice_notes_widget.dart';
 import '../widgets/invoice_order_details_widget.dart';
 import '../widgets/payment_details_widget.dart';
 
@@ -60,7 +61,7 @@ class InvoiceManagerState extends State<InvoiceManager> {
   final DateTime invoiceCreateDate = DateTime.now();
 
   var selectedClientName;
-  List<bool> _isOpen = [false, false];
+  List<bool> _isOpen = [false, false, false];
 
   @override
   void initState() {
@@ -213,8 +214,9 @@ class InvoiceManagerState extends State<InvoiceManager> {
                                               .invoice
                                               .totalAmount
                                               .toString(),
-                                      style:
-                                          Theme.of(context).textTheme.labelLarge,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .labelLarge,
                                     );
                                   } else if (state is InvoiceManagerLoading) {
                                     return Center(
@@ -237,7 +239,8 @@ class InvoiceManagerState extends State<InvoiceManager> {
                               if (state is InvoiceManagerLoaded) {
                                 return InvoiceItemsListWidget.searchBoxLayout();
                               } else if (state is InvoiceManagerLoading) {
-                                return Center(child: CircularProgressIndicator());
+                                return Center(
+                                    child: CircularProgressIndicator());
                               } else if (state is InvoiceManagerError) {
                                 return Center(
                                     child: Text('Error: ${state.message}'));
@@ -247,7 +250,44 @@ class InvoiceManagerState extends State<InvoiceManager> {
                             },
                           ),
                         ),
-                      )
+                      ),
+                      ExpansionPanel(
+                        canTapOnHeader: true,
+                        isExpanded: _isOpen[2],
+                        headerBuilder: (context, isExpanded) {
+                          return Container(
+                            color: isExpanded
+                                ? Theme.of(context).secondaryHeaderColor
+                                : Colors.transparent,
+                            child: ListTile(
+                              leading: Icon(Icons.notes_outlined),
+                              title: Text(
+                                'NOTES',
+                                style: Theme.of(context).textTheme.labelLarge,
+                              ),
+                            ),
+                          );
+                        },
+                        body: Card(
+                          child: // Payment type and status
+                              BlocBuilder<InvoiceManagerCubit,
+                                  InvoiceManagerCubitState>(
+                            builder: (context, state) {
+                              if (state is InvoiceManagerLoaded) {
+                                return InvoiceNotesWidget();
+                              } else if (state is InvoiceManagerLoading) {
+                                return Center(
+                                    child: CircularProgressIndicator());
+                              } else if (state is InvoiceManagerError) {
+                                return Center(
+                                    child: Text('Error: ${state.message}'));
+                              } else {
+                                return Center(child: Text('Unknown state'));
+                              }
+                            },
+                          ),
+                        ),
+                      ),
                     ],
                     expansionCallback: (panelIndex, isExpanded) => setState(() {
                       _isOpen[panelIndex] = isExpanded;

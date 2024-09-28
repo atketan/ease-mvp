@@ -129,4 +129,9 @@ class InvoiceManagerCubit extends Cubit<InvoiceManagerCubitState> {
       emit(InvoiceManagerLoaded());
     }
   }
+
+  void updateInvoiceNotes(String notes) {
+    _invoice.notes = notes;
+    emit(InvoiceManagerLoaded());
+  }
 }

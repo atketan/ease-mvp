@@ -70,6 +70,7 @@ class DatabaseHelper {
         grand_total REAL NOT NULL,
         payment_type TEXT CHECK(payment_type IN ('cash', 'credit')),
         status TEXT CHECK(status IN ('paid', 'unpaid')),
+        notes TEXT,
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
         updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
         FOREIGN KEY (customer_id) REFERENCES Customers(id),
