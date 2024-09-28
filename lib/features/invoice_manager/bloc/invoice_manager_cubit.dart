@@ -1,7 +1,9 @@
 import 'package:bloc/bloc.dart';
+import 'package:ease/core/database/inventory_items_dao.dart';
 import 'package:ease/core/database/invoice_items_dao.dart';
 import 'package:ease/core/database/invoices_dao.dart';
 import 'package:ease/core/database/payments_dao.dart';
+import 'package:ease/core/models/inventory_item.dart';
 import 'package:ease/core/models/invoice.dart';
 import 'package:ease/core/models/invoice_item.dart';
 import 'package:ease/core/models/payment.dart';
@@ -12,6 +14,7 @@ class InvoiceManagerCubit extends Cubit<InvoiceManagerCubitState> {
   InvoiceManagerCubit() : super(InvoiceManagerInitial());
 
   InvoicesDAO _invoiceDAO = InvoicesDAO();
+  InventoryItemsDAO _inventoryItemsDAO = InventoryItemsDAO();
   InvoiceItemsDAO _invoiceItemsDAO = InvoiceItemsDAO();
   PaymentsDAO _paymentsDAO = PaymentsDAO();
 
@@ -58,7 +61,6 @@ class InvoiceManagerCubit extends Cubit<InvoiceManagerCubitState> {
   }
 
   Future<bool> _updateInvoiceAmounts() async {
-    print('TEST: Updating invoice amounts');
     _invoice.totalAmount = _invoice.items.fold(
         0.0, (previousValue, element) => previousValue + element.totalPrice);
     _invoice.grandTotal = _invoice.totalAmount - _invoice.discount;
@@ -99,7 +101,7 @@ class InvoiceManagerCubit extends Cubit<InvoiceManagerCubitState> {
   }
 
   Future<void> updateInvoiceItemUnitPrice(InvoiceItem item) async {
-    print('Updating invoice item unit price: $item, ${item.itemId}');
+    // print('Updating invoice item unit price: $item, ${item.itemId}');
     if (item.itemId != null) {
       _invoice.items
           .firstWhere((element) => element.itemId == item.itemId)
@@ -107,6 +109,14 @@ class InvoiceManagerCubit extends Cubit<InvoiceManagerCubitState> {
       _invoice.items
           .firstWhere((element) => element.itemId == item.itemId)
           .totalPrice = item.unitPrice * item.quantity;
+      _inventoryItemsDAO.updateInventoryItem(
+        InventoryItem(
+          itemId: item.itemId,
+          name: item.name,
+          unitPrice: item.unitPrice,
+          uom: item.uom,
+        ),
+      );
     }
     await _updateInvoiceAmounts();
     emit(InvoiceManagerLoaded());

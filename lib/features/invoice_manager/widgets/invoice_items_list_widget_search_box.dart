@@ -299,42 +299,61 @@ class _InvoiceItemsListWidgetSearchBoxState
   }
 
   void _showPriceUpdateDialog(InvoiceItem item) {
-    // Implement a dialog to update the item's price
-    // Update the state and call updateInvoiceAmounts() after changing the price
-    showDialog(
+    final TextEditingController priceController =
+        TextEditingController(text: item.unitPrice.toString());
+    final TextEditingController uomController =
+        TextEditingController(text: item.uom);
+
+    showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(
-            'Update unit price for "${item.name}"',
-            style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                  fontWeight: FontWeight.bold,
+        return Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                'Update details for "${item.name}"',
+                style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+              ),
+              TextField(
+                controller: priceController,
+                keyboardType: TextInputType.numberWithOptions(
+                    decimal: true, signed: false),
+                decoration: InputDecoration(
+                  labelText: 'Current Price: ${item.unitPrice}',
                 ),
+              ),
+              TextField(
+                controller: uomController,
+                decoration: InputDecoration(
+                  labelText: 'Update UOM',
+                ),
+              ),
+              SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text('Cancel'),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      item.unitPrice = double.parse(priceController.text);
+                      item.uom = uomController.text;
+                      Navigator.of(context).pop();
+                    },
+                    child: Text('Update'),
+                  ),
+                ],
+              ),
+            ],
           ),
-          content: TextField(
-            keyboardType:
-                TextInputType.numberWithOptions(decimal: true, signed: false),
-            decoration: InputDecoration(
-              labelText: 'Current: ${item.unitPrice}',
-            ),
-            onChanged: (value) {
-              item.unitPrice = double.parse(value);
-            },
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text('Cancel'),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text('Update'),
-            ),
-          ],
         );
       },
     ).then(
