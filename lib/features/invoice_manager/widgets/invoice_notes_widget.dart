@@ -3,9 +3,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../bloc/invoice_manager_cubit.dart';
 
 class InvoiceNotesWidget extends StatelessWidget {
+  final String initialNotes;
+  InvoiceNotesWidget({required this.initialNotes});
+
+  final TextEditingController _notesTextController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
-    String notes = '';
+    String notes = initialNotes;
+    _notesTextController.text = initialNotes;
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(
@@ -16,6 +22,7 @@ class InvoiceNotesWidget extends StatelessWidget {
             style: Theme.of(context).textTheme.labelLarge,
           ),
           TextField(
+            controller: _notesTextController,
             maxLines: 3,
             style: Theme.of(context).textTheme.labelLarge,
             decoration: InputDecoration(
@@ -24,6 +31,7 @@ class InvoiceNotesWidget extends StatelessWidget {
             ),
             onChanged: (value) {
               notes = value;
+              context.read<InvoiceManagerCubit>().updateInvoiceNotes(notes);
             },
             onEditingComplete: () {
               context.read<InvoiceManagerCubit>().updateInvoiceNotes(notes);

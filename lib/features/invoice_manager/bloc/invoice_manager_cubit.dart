@@ -33,6 +33,7 @@ class InvoiceManagerCubit extends Cubit<InvoiceManagerCubitState> {
         grandTotal: 0.0,
         paymentType: 'cash',
         status: 'unpaid',
+        notes: "",
       );
     } else {
       _invoice = invoice;
@@ -174,6 +175,7 @@ class InvoiceManagerCubit extends Cubit<InvoiceManagerCubitState> {
     //   );
     // }
 
+    debugLog("Update invoice: " + _invoice.toJSON().toString());
     await _invoiceDAO.updateInvoice(_invoice); // Update the invoice itself
     return Future.value(true);
   }

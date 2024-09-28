@@ -263,24 +263,41 @@ class InvoiceManagerState extends State<InvoiceManager> {
                           );
                         },
                         body: Card(
-                          child: // Payment type and status
-                              BlocBuilder<InvoiceManagerCubit,
-                                  InvoiceManagerCubitState>(
-                            builder: (context, state) {
-                              if (state is InvoiceManagerLoaded) {
-                                return InvoiceNotesWidget();
-                              } else if (state is InvoiceManagerLoading) {
-                                return Center(
-                                    child: CircularProgressIndicator());
-                              } else if (state is InvoiceManagerError) {
-                                return Center(
-                                    child: Text('Error: ${state.message}'));
-                              } else {
-                                return Center(child: Text('Unknown state'));
-                              }
-                            },
-                          ),
-                        ),
+                            child: InvoiceNotesWidget(
+                          initialNotes: context
+                                  .read<InvoiceManagerCubit>()
+                                  .invoice
+                                  .notes ??
+                              "",
+                        )
+                            // Payment type and status
+                            //     BlocBuilder<InvoiceManagerCubit,
+                            //         InvoiceManagerCubitState>(
+                            //   builder: (context, state) {
+                            //     debugLog(context
+                            //         .read<InvoiceManagerCubit>()
+                            //         .invoice
+                            //         .notes
+                            //         .toString());
+                            //     if (state is InvoiceManagerLoaded) {
+                            //       return InvoiceNotesWidget(
+                            //           initialNotes: context
+                            //                   .read<InvoiceManagerCubit>()
+                            //                   .invoice
+                            //                   .notes ??
+                            //               "");
+                            //     } else if (state is InvoiceManagerLoading) {
+                            //       return Center(
+                            //           child: CircularProgressIndicator());
+                            //     } else if (state is InvoiceManagerError) {
+                            //       return Center(
+                            //           child: Text('Error: ${state.message}'));
+                            //     } else {
+                            //       return Center(child: Text('Unknown state'));
+                            //     }
+                            //   },
+                            // ),
+                            ),
                       ),
                     ],
                     expansionCallback: (panelIndex, isExpanded) => setState(() {
