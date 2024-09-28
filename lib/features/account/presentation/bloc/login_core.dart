@@ -62,7 +62,7 @@
 //           });
 //         },
 //         verificationFailed: (FirebaseAuthException authException) {
-//           debugPrint('Error message: ' + authException.message.toString());
+//           debugLog('Error message: ' + authException.message.toString());
 //           isLoginLoading = false;
 //           return Response(message: 'The phone number format is incorrect. Please enter your number in E.164 format. [+][country code][number]', success: false);
 //           // loginScaffoldKey.currentState.showSnackBar(SnackBar(

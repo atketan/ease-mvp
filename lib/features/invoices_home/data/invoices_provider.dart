@@ -1,5 +1,5 @@
+import 'package:ease/core/utils/developer_log.dart';
 import 'package:flutter/material.dart';
-import 'dart:developer' as developer;
 import '../../../core/database/invoices_dao.dart';
 import '../../../core/models/invoice.dart';
 
@@ -41,7 +41,7 @@ class InvoicesProvider with ChangeNotifier {
   bool get isFilterApplied => _isFilterApplied;
 
   void setDateRange(DateTime start, DateTime end) {
-    developer.log('setDateRange called with start: $start, end: $end');
+    debugLog('setDateRange called with start: $start, end: $end', name: 'InvoicesProvider');
     _startDate = DateTime(start.year, start.month, start.day)
         .copyWith(hour: 0, minute: 0, second: 0, millisecond: 0);
     _endDate = DateTime(end.year, end.month, end.day, 23, 59, 59, 999);
@@ -63,8 +63,8 @@ class InvoicesProvider with ChangeNotifier {
   }
 
   Future<void> fetchUnpaidInvoices() async {
-    developer.log(
-        'fetchUnpaidInvoices called with startDate: $_startDate, endDate: $_endDate');
+    debugLog(
+        'fetchUnpaidInvoices called with startDate: $_startDate, endDate: $_endDate', name: 'InvoicesProvider');
     try {
       _unpaidInvoices =
           await _invoicesDAO.getInvoicesByDateRangeAndPaymentStatus(
@@ -72,11 +72,11 @@ class InvoicesProvider with ChangeNotifier {
         _endDate,
         'unpaid', // Assuming 'unpaid' is the status for unpaid invoices
       );
-      developer.log('Fetched ${_unpaidInvoices.length} unpaid invoices');
+      debugLog('Fetched ${_unpaidInvoices.length} unpaid invoices', name: 'InvoicesProvider');
       _calculateTotalUnpaidAmount();
       notifyListeners();
     } catch (e) {
-      developer.log('Error fetching unpaid invoices: $e');
+      debugLog('Error fetching unpaid invoices: $e', name: 'InvoicesProvider');
       // Handle the error appropriately
     }
   }
@@ -86,22 +86,23 @@ class InvoicesProvider with ChangeNotifier {
       0,
       (sum, invoice) => sum + invoice.grandTotal,
     );
-    developer.log('Total unpaid amount: $_totalUnpaidAmount');
+    debugLog('Total unpaid amount: $_totalUnpaidAmount', name: 'InvoicesProvider');
   }
 
   Future<void> fetchPaidInvoices() async {
-    developer.log('fetchPaidInvoices called with startDate: $_startDate, endDate: $_endDate');
+    debugLog(
+        'fetchPaidInvoices called with startDate: $_startDate, endDate: $_endDate', name: 'InvoicesProvider');
     try {
       _paidInvoices = await _invoicesDAO.getInvoicesByDateRangeAndPaymentStatus(
-        _startDate, 
-        _endDate, 
+        _startDate,
+        _endDate,
         'paid', // Assuming 'paid' is the status for paid invoices
       );
-      developer.log('Fetched ${_paidInvoices.length} paid invoices');
+      debugLog('Fetched ${_paidInvoices.length} paid invoices', name: 'InvoicesProvider');
       _calculateTotalPaidAmount();
       notifyListeners();
     } catch (e) {
-      developer.log('Error fetching paid invoices: $e');
+      debugLog('Error fetching paid invoices: $e', name: 'InvoicesProvider');
       // Handle the error appropriately
     }
   }
@@ -111,7 +112,7 @@ class InvoicesProvider with ChangeNotifier {
       0,
       (sum, invoice) => sum + invoice.grandTotal,
     );
-    developer.log('Total paid amount: $_totalPaidAmount');
+    debugLog('Total paid amount: $_totalPaidAmount', name: 'InvoicesProvider');
   }
 
   Future<void> markInvoiceAsPaid(Invoice invoice) async {
@@ -121,7 +122,7 @@ class InvoicesProvider with ChangeNotifier {
       _calculateTotalUnpaidAmount();
       notifyListeners();
     } catch (e) {
-      developer.log('Error marking invoice as paid: $e');
+      debugLog('Error marking invoice as paid: $e', name: 'InvoicesProvider');
       // Handle the error appropriately
     }
   }

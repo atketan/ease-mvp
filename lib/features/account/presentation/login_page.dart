@@ -25,7 +25,7 @@ class _LoginPageState extends State<LoginPage> {
   //       UserCredential result = await _auth.signInWithCredential(credential);
 
   //       User? user = result.user;
-  //       debugPrint(user?.displayName.toString());
+  //       debugLog(user?.displayName.toString());
 
   //       if (user != null) {
   //         Navigator.pushAndRemoveUntil(

@@ -1,4 +1,5 @@
 import 'package:ease/core/database/database_helper.dart';
+import 'package:ease/core/utils/developer_log.dart';
 import 'package:ease/ease_app.dart';
 import 'package:flutter/material.dart';
 
@@ -15,21 +16,20 @@ void main() async {
 
     final dbHelper = DatabaseHelper();
     await dbHelper.database;
-    
 
     runApp(const EASEApp());
-    
   } catch (e, stackTrace) {
-    debugPrint('Error during initialization: $e');
-    debugPrint('Stack trace: $stackTrace');
-    
+    debugLog('Error during initialization: $e', name: 'Main');
+    debugLog('Stack trace: $stackTrace', name: 'Main');
+
     runApp(MaterialApp(
       home: Scaffold(
         appBar: AppBar(
           title: const Text('Error'),
         ),
         body: Center(
-          child: Text('Error during initialization: $e\n\nStack trace: $stackTrace'),
+          child: Text(
+              'Error during initialization: $e\n\nStack trace: $stackTrace'),
         ),
       ),
     ));

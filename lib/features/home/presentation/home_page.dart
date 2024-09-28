@@ -1,3 +1,4 @@
+import 'package:ease/core/utils/developer_log.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -59,7 +60,7 @@ class _EASEHomePageState extends State<EASEHomePage>
         return false;
       }
     } catch (e) {
-      debugPrint('Error requesting permissions: $e');
+      debugLog('Error requesting permissions: $e');
       return false;
     }
   }
@@ -79,7 +80,6 @@ class _EASEHomePageState extends State<EASEHomePage>
     return FutureBuilder<bool>(
       future: _requestPermissions(),
       builder: (context, snapshot) {
-        debugPrint('snapshot: $snapshot');
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Scaffold(
             body: Center(

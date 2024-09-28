@@ -1,4 +1,3 @@
-import 'dart:developer' as developer;
 import 'package:bloc/bloc.dart';
 import 'package:ease/core/database/inventory_items_dao.dart';
 import 'package:ease/core/database/invoice_items_dao.dart';
@@ -8,6 +7,7 @@ import 'package:ease/core/models/inventory_item.dart';
 import 'package:ease/core/models/invoice.dart';
 import 'package:ease/core/models/invoice_item.dart';
 import 'package:ease/core/models/payment.dart';
+import 'package:ease/core/utils/developer_log.dart';
 
 import 'invoice_manager_cubit_state.dart';
 
@@ -41,7 +41,7 @@ class InvoiceManagerCubit extends Cubit<InvoiceManagerCubitState> {
   }
 
   void populateInvoiceData() {
-    developer.log(_invoice.toJSON().toString());
+    debugLog(_invoice.toJSON().toString(), name: 'InvoiceManagerCubit');
     _getAllInvoiceItems(_invoice.id);
   }
 
@@ -53,7 +53,7 @@ class InvoiceManagerCubit extends Cubit<InvoiceManagerCubitState> {
     updateInvoiceAmounts();
 
     _invoice.items.forEach((item) {
-      developer.log('Invoice Item: ${item.toJSON()}');
+      debugLog('Invoice Item: ${item.toJSON()}', name: 'InvoiceManagerCubit');
     });
 
     emit(InvoiceManagerLoaded());
