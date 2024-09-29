@@ -1,4 +1,6 @@
+import 'package:ease/features/invoice_manager/bloc/invoice_manager_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class DiscountManagerWidget extends StatefulWidget {
   @override
@@ -28,13 +30,10 @@ class DiscountManagerWidgetState extends State<DiscountManagerWidget> {
 
   @override
   Widget build(BuildContext context) {
+    _discountTextController.text =
+        context.read<InvoiceManagerCubit>().invoice.discount.toString();
     return Padding(
-      padding: EdgeInsets.only(
-        bottom: MediaQuery.of(context).viewInsets.bottom,
-        left: 16.0,
-        right: 16.0,
-        top: 24.0,
-      ),
+      padding: EdgeInsets.symmetric(horizontal: 16),
       child: SingleChildScrollView(
         child: Wrap(
           children: [
@@ -46,38 +45,44 @@ class DiscountManagerWidgetState extends State<DiscountManagerWidget> {
                   children: [
                     Text(
                       'Discount (₹):',
-                      style: Theme.of(context).textTheme.titleMedium,
+                      style: Theme.of(context).textTheme.labelLarge,
                     ),
                     SizedBox(width: 16.0),
                     Flexible(
                       child: TextField(
                         controller: _discountTextController,
                         focusNode: _discountFocusNode,
-                        style: Theme.of(context).textTheme.titleMedium,
+                        style: Theme.of(context).textTheme.labelLarge,
                         keyboardType: TextInputType.number,
+                        onChanged: (value) {
+                          if (value.isEmpty) value = "0";
+                          context
+                              .read<InvoiceManagerCubit>()
+                              .setDiscount(double.parse(value));
+                        },
                       ),
                     ),
                   ],
                 ),
-                SizedBox(height: 16.0),
-                SizedBox(
-                  width: double.maxFinite / 2,
-                  child: TextButton(
-                    onPressed: () {
-                      Navigator.pop(
-                          context,
-                          _discountTextController.text.isEmpty
-                              ? 0.0
-                              : double.parse(_discountTextController.text));
-                    },
-                    child: Text(
-                      'Save',
-                      style: TextStyle().copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
+                // SizedBox(height: 16.0),
+                // SizedBox(
+                //   width: double.maxFinite / 2,
+                //   child: TextButton(
+                //     onPressed: () {
+                //       Navigator.pop(
+                //           context,
+                //           _discountTextController.text.isEmpty
+                //               ? 0.0
+                //               : double.parse(_discountTextController.text));
+                //     },
+                //     child: Text(
+                //       'Save',
+                //       style: TextStyle().copyWith(
+                //         fontWeight: FontWeight.bold,
+                //       ),
+                //     ),
+                //   ),
+                // ),
               ],
             ),
           ],

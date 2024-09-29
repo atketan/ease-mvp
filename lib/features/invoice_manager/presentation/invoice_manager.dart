@@ -1,5 +1,6 @@
 import 'package:ease/core/models/invoice.dart';
 import 'package:ease/core/providers/short_uuid_generator.dart';
+import 'package:ease/features/invoice_manager/widgets/discount_manager_widget.dart';
 import 'package:ease/features/invoices/data_models/invoice_type_enum.dart';
 
 import 'package:flutter/material.dart';
@@ -61,7 +62,7 @@ class InvoiceManagerState extends State<InvoiceManager> {
   // final DateTime invoiceCreateDate = DateTime.now();
 
   var selectedClientName;
-  List<bool> _isOpen = [false, false, false];
+  List<bool> _isOpen = [false, false, false, false];
 
   @override
   void initState() {
@@ -202,7 +203,7 @@ class InvoiceManagerState extends State<InvoiceManager> {
                                 builder: (context, state) {
                                   if (state is InvoiceManagerLoaded) {
                                     return Text(
-                                      "₹" +
+                                      "+₹" +
                                           context
                                               .read<InvoiceManagerCubit>()
                                               .invoice
@@ -254,6 +255,53 @@ class InvoiceManagerState extends State<InvoiceManager> {
                                 ? Theme.of(context).secondaryHeaderColor
                                 : Colors.transparent,
                             child: ListTile(
+                              leading: Icon(Icons.discount_outlined),
+                              title: Text(
+                                'DISCOUNT',
+                                style: Theme.of(context).textTheme.labelLarge,
+                              ),
+                              trailing: BlocBuilder<InvoiceManagerCubit,
+                                  InvoiceManagerCubitState>(
+                                builder: (context, state) {
+                                  if (state is InvoiceManagerLoaded) {
+                                    return Text(
+                                      "-₹" +
+                                          context
+                                              .read<InvoiceManagerCubit>()
+                                              .invoice
+                                              .discount
+                                              .toString(),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .labelLarge,
+                                    );
+                                  } else if (state is InvoiceManagerLoading) {
+                                    return Center(
+                                        child: CircularProgressIndicator());
+                                  } else if (state is InvoiceManagerError) {
+                                    return Center(
+                                        child: Text('Error: ${state.message}'));
+                                  } else {
+                                    return Center(child: Text('Err'));
+                                  }
+                                },
+                              ),
+                            ),
+                          );
+                        },
+                        body: Card(
+                          child: DiscountManagerWidget(),
+                        ),
+                      ),
+                      ExpansionPanel(
+                        canTapOnHeader: true,
+                        isExpanded: _isOpen[3],
+                        headerBuilder: (context, isExpanded) {
+                          return Container(
+                            color: isExpanded
+                                ? Theme.of(context).secondaryHeaderColor
+                                : Colors.transparent,
+                            child: ListTile(
                               leading: Icon(Icons.notes_outlined),
                               title: Text(
                                 'NOTES',
@@ -263,41 +311,41 @@ class InvoiceManagerState extends State<InvoiceManager> {
                           );
                         },
                         body: Card(
-                            child: InvoiceNotesWidget(
-                          initialNotes: context
-                                  .read<InvoiceManagerCubit>()
-                                  .invoice
-                                  .notes ??
-                              "",
-                        )
-                            // Payment type and status
-                            //     BlocBuilder<InvoiceManagerCubit,
-                            //         InvoiceManagerCubitState>(
-                            //   builder: (context, state) {
-                            //     debugLog(context
-                            //         .read<InvoiceManagerCubit>()
-                            //         .invoice
-                            //         .notes
-                            //         .toString());
-                            //     if (state is InvoiceManagerLoaded) {
-                            //       return InvoiceNotesWidget(
-                            //           initialNotes: context
-                            //                   .read<InvoiceManagerCubit>()
-                            //                   .invoice
-                            //                   .notes ??
-                            //               "");
-                            //     } else if (state is InvoiceManagerLoading) {
-                            //       return Center(
-                            //           child: CircularProgressIndicator());
-                            //     } else if (state is InvoiceManagerError) {
-                            //       return Center(
-                            //           child: Text('Error: ${state.message}'));
-                            //     } else {
-                            //       return Center(child: Text('Unknown state'));
-                            //     }
-                            //   },
-                            // ),
-                            ),
+                          child: InvoiceNotesWidget(
+                            initialNotes: context
+                                    .read<InvoiceManagerCubit>()
+                                    .invoice
+                                    .notes ??
+                                "",
+                          ),
+                          // Payment type and status
+                          //     BlocBuilder<InvoiceManagerCubit,
+                          //         InvoiceManagerCubitState>(
+                          //   builder: (context, state) {
+                          //     debugLog(context
+                          //         .read<InvoiceManagerCubit>()
+                          //         .invoice
+                          //         .notes
+                          //         .toString());
+                          //     if (state is InvoiceManagerLoaded) {
+                          //       return InvoiceNotesWidget(
+                          //           initialNotes: context
+                          //                   .read<InvoiceManagerCubit>()
+                          //                   .invoice
+                          //                   .notes ??
+                          //               "");
+                          //     } else if (state is InvoiceManagerLoading) {
+                          //       return Center(
+                          //           child: CircularProgressIndicator());
+                          //     } else if (state is InvoiceManagerError) {
+                          //       return Center(
+                          //           child: Text('Error: ${state.message}'));
+                          //     } else {
+                          //       return Center(child: Text('Unknown state'));
+                          //     }
+                          //   },
+                          // ),
+                        ),
                       ),
                     ],
                     expansionCallback: (panelIndex, isExpanded) => setState(() {
