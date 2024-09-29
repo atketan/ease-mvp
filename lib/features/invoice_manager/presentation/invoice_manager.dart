@@ -8,7 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../bloc/invoice_manager_cubit.dart';
 import '../bloc/invoice_manager_cubit_state.dart';
-import '../widgets/amount_summary_widget.dart';
+// import '../widgets/amount_summary_widget.dart';
 // import '../widgets/entity_delegate_widget.dart';
 import '../widgets/entity_type_ahead_field.dart';
 import '../widgets/invoice_items_list_widget.dart';
@@ -352,6 +352,42 @@ class InvoiceManagerState extends State<InvoiceManager> {
                       _isOpen[panelIndex] = isExpanded;
                     }),
                   ),
+                  ListTile(
+                    tileColor: Theme.of(context).primaryColorLight,
+                    leading: Icon(Icons.account_balance_outlined),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.zero, // Remove circular edges
+                    ),
+                    title: Text(
+                      "TOTAL PAYABLE",
+                      style: Theme.of(context).textTheme.labelLarge,
+                    ),
+                    trailing: BlocBuilder<InvoiceManagerCubit,
+                        InvoiceManagerCubitState>(
+                      builder: (context, state) {
+                        if (state is InvoiceManagerLoaded) {
+                          return Text(
+                            "₹" +
+                                context
+                                    .read<InvoiceManagerCubit>()
+                                    .invoice
+                                    .grandTotal
+                                    .toString(),
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyLarge!
+                                .copyWith(fontWeight: FontWeight.bold),
+                          );
+                        } else if (state is InvoiceManagerLoading) {
+                          return Center(child: CircularProgressIndicator());
+                        } else if (state is InvoiceManagerError) {
+                          return Center(child: Text('Error: ${state.message}'));
+                        } else {
+                          return Center(child: Text('Err'));
+                        }
+                      },
+                    ),
+                  ),
                   SizedBox(height: 8),
                   InvoiceManagerSpacer(height: 4, horizontalPadding: 0),
 
@@ -378,21 +414,21 @@ class InvoiceManagerState extends State<InvoiceManager> {
                   InvoiceManagerSpacer(),
 
                   // Manage discount, taxes and gross total
-                  BlocBuilder<InvoiceManagerCubit, InvoiceManagerCubitState>(
-                    builder: (context, state) {
-                      if (state is InvoiceManagerLoaded) {
-                        return AmountSummaryWidget();
-                      } else if (state is InvoiceManagerLoading) {
-                        return Center(child: CircularProgressIndicator());
-                      } else if (state is InvoiceManagerError) {
-                        return Center(child: Text('Error: ${state.message}'));
-                      } else {
-                        return Center(child: Text('Unknown state'));
-                      }
-                    },
-                  ),
+                  // BlocBuilder<InvoiceManagerCubit, InvoiceManagerCubitState>(
+                  //   builder: (context, state) {
+                  //     if (state is InvoiceManagerLoaded) {
+                  //       return AmountSummaryWidget();
+                  //     } else if (state is InvoiceManagerLoading) {
+                  //       return Center(child: CircularProgressIndicator());
+                  //     } else if (state is InvoiceManagerError) {
+                  //       return Center(child: Text('Error: ${state.message}'));
+                  //     } else {
+                  //       return Center(child: Text('Unknown state'));
+                  //     }
+                  //   },
+                  // ),
 
-                  InvoiceManagerSpacer(height: 0),
+                  // InvoiceManagerSpacer(height: 0),
 
                   // Payment type and status
                   BlocBuilder<InvoiceManagerCubit, InvoiceManagerCubitState>(
