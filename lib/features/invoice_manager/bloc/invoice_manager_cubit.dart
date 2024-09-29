@@ -7,6 +7,7 @@ import 'package:ease/core/models/inventory_item.dart';
 import 'package:ease/core/models/invoice.dart';
 import 'package:ease/core/models/invoice_item.dart';
 import 'package:ease/core/models/payment.dart';
+import 'package:ease/core/utils/date_time_utils.dart';
 import 'package:ease/core/utils/developer_log.dart';
 
 import 'invoice_manager_cubit_state.dart';
@@ -213,5 +214,29 @@ class InvoiceManagerCubit extends Cubit<InvoiceManagerCubitState> {
   void updateInvoiceNotes(String notes) {
     _invoice.notes = notes;
     emit(InvoiceManagerLoaded());
+  }
+
+  String formatInvoiceDetails() {
+    // Start building the formatted string
+    StringBuffer buffer = StringBuffer();
+    buffer.writeln('Invoice ID: ${_invoice.id}');
+    buffer.writeln('Date: ${formatInvoiceDate(_invoice.date)}');
+    buffer.writeln('-----------------------------------');
+    buffer.writeln('| Item Name | Quantity | Price   | Total   |');
+    buffer.writeln('-----------------------------------');
+
+    // Loop through each item in the invoice
+    for (var item in invoice.items) {
+      buffer.writeln(
+          '| ${item.name.padRight(10)} | ${item.quantity.toString().padRight(8)} | ${item.unitPrice.toStringAsFixed(2).padRight(7)} | ${item.totalPrice.toStringAsFixed(2).padRight(7)} |');
+    }
+
+    buffer.writeln('-----------------------------------');
+    buffer.writeln('Total Amount: ${_invoice.totalAmount.toStringAsFixed(2)}');
+    buffer.writeln('Discount: ${_invoice.discount.toStringAsFixed(2)}');
+    buffer
+        .writeln('Total Payable: ${(_invoice.grandTotal).toStringAsFixed(2)}');
+
+    return buffer.toString();
   }
 }

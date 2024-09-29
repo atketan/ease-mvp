@@ -5,6 +5,7 @@ import 'package:ease/features/invoices/data_models/invoice_type_enum.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../bloc/invoice_manager_cubit.dart';
 import '../bloc/invoice_manager_cubit_state.dart';
@@ -450,89 +451,87 @@ class InvoiceManagerState extends State<InvoiceManager> {
               ),
             ),
           ),
-          Container(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    flex: 4,
-                    child: Container(),
-                    // child: TextButton(
-                    //   onPressed: () {
-                    //     // Share action
-                    //   },
-                    //   child: Text(
-                    //     'Share',
-                    //     style: TextStyle().copyWith(
-                    //       fontWeight: FontWeight.bold,
-                    //     ),
-                    //   ),
-                    //   style: ButtonStyle().copyWith(
-                    //     backgroundColor: MaterialStateProperty.all<Color>(
-                    //       Theme.of(context).colorScheme.background,
-                    //     ),
-                    //     foregroundColor: MaterialStateProperty.all<Color>(
-                    //       Theme.of(context).colorScheme.primary,
-                    //     ),
-                    //     side: MaterialStateProperty.all<BorderSide>(
-                    //       BorderSide(
-                    //         color: Theme.of(context).colorScheme.primary,
-                    //         width: 1.0,
-                    //       ),
-                    //     ),
-                    //   ),
-                    // ),
-                  ),
-                  Spacer(flex: 1),
-                  Expanded(
-                    flex: 4,
-                    child: OutlinedButton(
-                      onPressed: () async {
-                        if (widget.invoiceFormMode == InvoiceFormMode.Edit) {
-                          await context
-                              .read<InvoiceManagerCubit>()
-                              .updateInvoice()
-                              .then(
-                            (value) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content:
-                                      Text('Invoice updated successfully!'),
-                                ),
-                              );
-                              Navigator.pop(context);
-                            },
-                          );
-                        } else {
-                          await context
-                              .read<InvoiceManagerCubit>()
-                              .saveInvoice()
-                              .then(
-                            (value) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content:
-                                      Text('Invoice created successfully!'),
-                                ),
-                              );
-                              Navigator.pop(context);
-                            },
-                          );
-                        }
-                      },
-                      child: Text(
-                        'SAVE',
-                        style: TextStyle().copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Expanded(
+                flex: 5,
+                child: Container(
+                  child: OutlinedButton(
+                    style: OutlinedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.zero,
                       ),
                     ),
+                    onPressed: () async {
+                      String formattedDetails = context
+                          .read<InvoiceManagerCubit>()
+                          .formatInvoiceDetails();
+                      await Share.share(formattedDetails);
+                    },
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.share_outlined),
+                        SizedBox(width: 4),
+                        Text('SHARE'),
+                      ],
+                    ),
                   ),
-                ],
+                ),
               ),
-            ),
+              Expanded(
+                flex: 5,
+                child: OutlinedButton(
+                  style: OutlinedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.zero,
+                    ),
+                  ),
+                  onPressed: () async {
+                    if (widget.invoiceFormMode == InvoiceFormMode.Edit) {
+                      await context
+                          .read<InvoiceManagerCubit>()
+                          .updateInvoice()
+                          .then(
+                        (value) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text('Invoice updated successfully!'),
+                            ),
+                          );
+                          Navigator.pop(context);
+                        },
+                      );
+                    } else {
+                      await context
+                          .read<InvoiceManagerCubit>()
+                          .saveInvoice()
+                          .then(
+                        (value) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text('Invoice created successfully!'),
+                            ),
+                          );
+                          Navigator.pop(context);
+                        },
+                      );
+                    }
+                  },
+                  child: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.save_outlined),
+                      SizedBox(width: 4),
+                      Text('SAVE'),
+                    ],
+                  ),
+                ),
+              ),
+            ],
           ),
         ],
       ),
