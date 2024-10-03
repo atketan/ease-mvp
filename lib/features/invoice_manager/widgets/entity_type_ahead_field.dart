@@ -227,15 +227,19 @@ class _EntityTypeAheadFieldState extends State<EntityTypeAheadField> {
     int? vendorId = context.read<InvoiceManagerCubit>().invoice.vendorId;
     if (customerId != null) {
       Customer? customer = await CustomersDAO().getCustomerById(customerId);
-      _controller.text = customer!.name;
-      _phoneController.text = customer.phone ?? "";
+      if (customer != null) {
+        _controller.text = customer.name;
+        _phoneController.text = customer.phone ?? "";
+      }
     } else if (vendorId != null) {
       Vendor? vendor = await VendorsDAO().getVendorById(vendorId);
       _controller.text = vendor!.name;
       _phoneController.text = vendor.phone ?? "";
     }
     setState(() {
-      _isEditing = false;
+      (customerId == null || vendorId == null)
+          ? _isEditing = true
+          : _isEditing = false;
       widget.onClientSelected(_controller.text);
     });
     // ? await context.read<InvoiceManagerCubit>().getCustomerName(null)
