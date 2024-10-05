@@ -53,41 +53,18 @@ class _EntityTypeAheadFieldState extends State<EntityTypeAheadField> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Padding(
-          //   padding: const EdgeInsets.symmetric(horizontal: 8.0),
-          //   child: Text(
-          //     widget.invoiceType == InvoiceType.Sales ? 'CUSTOMER' : 'VENDOR',
-          //     style: Theme.of(context).textTheme.labelLarge,
-          //   ),
-          // ),
-          Card(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // SizedBox(height: 8),
-                  BlocBuilder<InvoiceManagerCubit, InvoiceManagerCubitState>(
-                    builder: (context, state) {
-                      if (state is InvoiceManagerLoaded) {
-                        widget.onClientSelected(_controller.text);
-                        return _isEditing
-                            ? _buildTypeAheadField()
-                            : _buildSelectedEntityField();
-                      } else {
-                        return Center(child: CircularProgressIndicator());
-                      }
-                    },
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
+      padding: const EdgeInsets.all(16.0),
+      child: BlocBuilder<InvoiceManagerCubit, InvoiceManagerCubitState>(
+        builder: (context, state) {
+          if (state is InvoiceManagerLoaded) {
+            widget.onClientSelected(_controller.text);
+            return _isEditing
+                ? _buildTypeAheadField()
+                : _buildSelectedEntityField();
+          } else {
+            return Center(child: CircularProgressIndicator());
+          }
+        },
       ),
     );
   }

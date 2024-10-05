@@ -78,6 +78,32 @@ class AppTheme {
       showUnselectedLabels: false,
     ),
 
+    inputDecorationTheme: InputDecorationTheme(
+      filled: true, // To have a filled background color
+      fillColor: Colors.grey[100], // Light background for light mode
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(4.0), // Circular border
+        borderSide: BorderSide(
+          color: Color(0xFF004D40), // Deep Teal border color
+          width: 1.5,
+        ),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(4.0),
+        borderSide: BorderSide(
+          color: Color(0xFFF9A825), // Muted Gold for focused border color
+          width: 2.0,
+        ),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(4.0),
+        borderSide: BorderSide(
+          color: Color(0xFF004D40), // Deep Teal for enabled border color
+          width: 1.5,
+        ),
+      ),
+    ),
+
     // Color scheme
     colorScheme: ColorScheme.light(
       primary: Color(0xFF004D40), // Deep Teal
@@ -164,6 +190,32 @@ class AppTheme {
       unselectedIconTheme: IconThemeData(size: 24),
       showSelectedLabels: true,
       showUnselectedLabels: false,
+    ),
+
+    inputDecorationTheme: InputDecorationTheme(
+      filled: true, // To have a filled background color
+      fillColor: Color(0xFF1C1C1E), // Dark background for dark mode
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(4.0), // Circular border
+        borderSide: BorderSide(
+          color: Color(0xFFF9A825), // Muted Gold border color
+          width: 1.5,
+        ),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(4.0),
+        borderSide: BorderSide(
+          color: Color(0xFFF9A825), // Muted Gold for focused border color
+          width: 2.0,
+        ),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(4.0),
+        borderSide: BorderSide(
+          color: Color(0xFFF9A825), // Muted Gold for enabled border color
+          width: 1.5,
+        ),
+      ),
     ),
 
     // Color scheme

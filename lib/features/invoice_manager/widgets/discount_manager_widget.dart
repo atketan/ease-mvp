@@ -33,7 +33,7 @@ class DiscountManagerWidgetState extends State<DiscountManagerWidget> {
     _discountTextController.text =
         context.read<InvoiceManagerCubit>().invoice.discount.toString();
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 16),
+      padding: EdgeInsets.all(16.0),
       child: SingleChildScrollView(
         child: Wrap(
           children: [

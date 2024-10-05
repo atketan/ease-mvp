@@ -30,27 +30,16 @@ class _InvoiceItemsListWidgetSearchBoxState
     _invoiceItems = context.read<InvoiceManagerCubit>().invoice.items;
     return Padding(
       padding: const EdgeInsets.all(16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Padding(
-          //   padding: const EdgeInsets.symmetric(horizontal: 0.0),
-          //   child: Text('ITEMS', style: Theme.of(context).textTheme.labelLarge),
-          // ),
-          Card(
-            child: ListView.builder(
-              shrinkWrap: true,
-              itemCount: _invoiceItems.length + 1,
-              physics: NeverScrollableScrollPhysics(),
-              itemBuilder: (context, index) {
-                if (index == _invoiceItems.length) {
-                  return _buildNewItemEntry();
-                }
-                return _buildExistingItemEntry(_invoiceItems[index], index);
-              },
-            ),
-          ),
-        ],
+      child: ListView.builder(
+        shrinkWrap: true,
+        itemCount: _invoiceItems.length + 1,
+        physics: NeverScrollableScrollPhysics(),
+        itemBuilder: (context, index) {
+          if (index == _invoiceItems.length) {
+            return _buildNewItemEntry();
+          }
+          return _buildExistingItemEntry(_invoiceItems[index], index);
+        },
       ),
     );
   }
@@ -67,9 +56,6 @@ class _InvoiceItemsListWidgetSearchBoxState
             style: Theme.of(context).textTheme.labelLarge,
             decoration: InputDecoration(
               hintText: 'Start typing to search or add item...',
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
               labelText: 'Add item',
               labelStyle: Theme.of(context).textTheme.labelLarge,
             ),
