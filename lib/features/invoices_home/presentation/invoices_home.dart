@@ -67,10 +67,10 @@ class _InvoicesHomePageState extends State<InvoicesHomePage> {
               bottom: TabBar(
                 isScrollable: true,
                 tabAlignment: TabAlignment.start,
-                labelStyle: Theme.of(context)
-                    .textTheme
-                    .titleMedium!
-                    .copyWith(fontWeight: FontWeight.bold),
+                // labelStyle: Theme.of(context)
+                //     .textTheme
+                //     .titleMedium!
+                //     .copyWith(fontWeight: FontWeight.bold),
                 tabs: [
                   Tab(text: 'Unpaid'),
                   Tab(text: 'Paid'),
