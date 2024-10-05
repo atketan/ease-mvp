@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import 'package:ease/features/home_dashboard/data/dashboard_data_provider.dart';
 
 class DashboardHomePage extends StatefulWidget {
   @override
@@ -10,14 +13,23 @@ class DashboardHomePage extends StatefulWidget {
 class DashboardHomePageState extends State<DashboardHomePage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          onPressed: () {},
-          icon: Icon(Icons.person_4_outlined),
-        ),
-        title: Text('Dashboard'),
-      ),
+    return Consumer<DashboardDataProvider>(
+      builder: (context, dashboardDataProvider, child) {
+        return Scaffold(
+          appBar: AppBar(
+            leading: IconButton(
+              onPressed: () {},
+              icon: Icon(Icons.menu_outlined),
+            ),
+            title: Text('Dashboard'),
+          ),
+          body: Column(
+            children: [
+              
+            ],
+          ),
+        );
+      },
     );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:ease/core/utils/developer_log.dart';
+// import 'package:ease/features/home_dashboard/data/dashboard_data_provider.dart';
 import 'package:ease/features/home_dashboard/presentation/dashboard_home.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -87,7 +88,8 @@ class _EASEHomePageState extends State<EASEHomePage>
           WidgetsBinding.instance.addPostFrameCallback((_) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text('Permissions not granted. Please grant the required permissions and restart the app.'),
+                content: Text(
+                    'Permissions not granted. Please grant the required permissions and restart the app.'),
               ),
             );
           });
@@ -96,6 +98,8 @@ class _EASEHomePageState extends State<EASEHomePage>
         return MultiProvider(
           providers: [
             ChangeNotifierProvider(create: (context) => InvoicesProvider()),
+            // ChangeNotifierProvider(
+            //     create: (context) => DashboardDataProvider()),
           ],
           child: Scaffold(
             body: _widgetOptions.elementAt(_selectedIndex),
@@ -135,10 +139,12 @@ class _EASEHomePageState extends State<EASEHomePage>
                 Bubble(
                   title: "Sale",
                   iconColor: Theme.of(context).colorScheme.primary,
-                  bubbleColor: Theme.of(context).colorScheme.surface, // Updated line
+                  bubbleColor:
+                      Theme.of(context).colorScheme.surface, // Updated line
                   icon: Icons.settings,
                   titleStyle: TextStyle(
-                      fontSize: 16, color: Theme.of(context).colorScheme.primary),
+                      fontSize: 16,
+                      color: Theme.of(context).colorScheme.primary),
                   onPress: () {
                     _animationController.reverse();
                     Navigator.push(
@@ -162,7 +168,8 @@ class _EASEHomePageState extends State<EASEHomePage>
                   bubbleColor: Theme.of(context).colorScheme.surface,
                   icon: Icons.people,
                   titleStyle: TextStyle(
-                      fontSize: 16, color: Theme.of(context).colorScheme.primary),
+                      fontSize: 16,
+                      color: Theme.of(context).colorScheme.primary),
                   onPress: () {
                     _animationController.reverse();
                     Navigator.push(
@@ -183,7 +190,8 @@ class _EASEHomePageState extends State<EASEHomePage>
                   bubbleColor: Theme.of(context).colorScheme.surface,
                   icon: Icons.home,
                   titleStyle: TextStyle(
-                      fontSize: 16, color: Theme.of(context).colorScheme.primary),
+                      fontSize: 16,
+                      color: Theme.of(context).colorScheme.primary),
                   onPress: () {
                     _animationController.reverse();
                   },
@@ -194,7 +202,8 @@ class _EASEHomePageState extends State<EASEHomePage>
                   bubbleColor: Theme.of(context).colorScheme.surface,
                   icon: Icons.home,
                   titleStyle: TextStyle(
-                      fontSize: 16, color: Theme.of(context).colorScheme.primary),
+                      fontSize: 16,
+                      color: Theme.of(context).colorScheme.primary),
                   onPress: () {
                     _animationController.reverse();
                   },
