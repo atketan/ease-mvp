@@ -1,4 +1,5 @@
 import 'package:ease/core/utils/developer_log.dart';
+import 'package:ease/features/home_dashboard/presentation/dashboard_home.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -67,11 +68,7 @@ class _EASEHomePageState extends State<EASEHomePage>
 
   static List<Widget> _widgetOptions = <Widget>[
     InvoicesHomePage(),
-    Center(
-      child: Text(
-        "Let's get accounting!",
-      ),
-    ),
+    DashboardHomePage(),
     ManageLandingPage(),
   ];
 
