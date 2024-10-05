@@ -17,8 +17,9 @@ class _PaidInvoicesTabState extends State<PaidInvoicesTab> {
   @override
   void initState() {
     super.initState();
+    // not needed if the parent is calling same method, use when to be run as a separate widget
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<InvoicesProvider>(context, listen: false).fetchPaidInvoices();
+      // Provider.of<InvoicesProvider>(context, listen: false).fetchPaidInvoices();
     });
   }
 

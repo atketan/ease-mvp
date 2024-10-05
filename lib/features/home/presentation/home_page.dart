@@ -1,6 +1,4 @@
 import 'package:ease/core/utils/developer_log.dart';
-// import 'package:ease/features/home_dashboard/data/dashboard_data_provider.dart';
-import 'package:ease/features/home_dashboard/presentation/dashboard_home.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -69,7 +67,6 @@ class _EASEHomePageState extends State<EASEHomePage>
 
   static List<Widget> _widgetOptions = <Widget>[
     InvoicesHomePage(),
-    DashboardHomePage(),
     ManageLandingPage(),
   ];
 
@@ -217,29 +214,30 @@ class _EASEHomePageState extends State<EASEHomePage>
               iconData: Icons.add,
               backGroundColor: Theme.of(context).colorScheme.surface,
             ),
-            bottomNavigationBar: BottomNavigationBar(
-              selectedItemColor: Theme.of(context).colorScheme.primary,
-              unselectedItemColor: Theme.of(context).colorScheme.secondary,
-              enableFeedback: true,
-              currentIndex: _selectedIndex,
-              showSelectedLabels: true,
-              showUnselectedLabels: true,
-              items: [
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.inventory_sharp),
-                  label: "Invoices",
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.dashboard_sharp),
-                  label: "Dashboard",
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.view_list_sharp),
-                  label: "Manage",
-                ),
-              ],
-              onTap: (value) => _onItemTapped(value),
-            ),
+            // bottomNavigationBar: BottomNavigationBar(
+            //   selectedItemColor: Theme.of(context).colorScheme.primary,
+            //   unselectedItemColor: Theme.of(context).colorScheme.secondary,
+            //   enableFeedback: true,
+            //   currentIndex: _selectedIndex,
+            //   showSelectedLabels: true,
+            //   showUnselectedLabels: true,
+            //   items: [
+            //     BottomNavigationBarItem(
+            //       icon: Icon(Icons.inventory_sharp),
+            //       label: "Invoices",
+            //     ),
+            //     // BottomNavigationBarItem(
+            //     //   icon: Icon(Icons.dashboard_sharp),
+            //     //   label: "Dashboard",
+            //     // ),
+            //     BottomNavigationBarItem(
+            //       icon: Icon(Icons.view_list_sharp),
+            //       label: "Manage",
+            //     ),
+            //   ],
+            //   onTap: (value) => _onItemTapped(value),
+            // ),
+          
           ),
         );
       },
