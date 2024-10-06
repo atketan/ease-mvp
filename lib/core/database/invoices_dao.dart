@@ -43,6 +43,21 @@ class InvoicesDAO {
     return List.generate(maps.length, (i) => Invoice.fromJSON(maps[i]));
   }
 
+  Future<List<Invoice>> getSalesInvoicesByDateRange(
+      DateTime startDate, DateTime endDate) async {
+    final db = await _databaseHelper.database;
+    final List<Map<String, dynamic>> maps = await db.query(
+      'Invoices',
+      where:
+          'date >= ? AND date <= ? AND customer_id IS NOT NULL AND vendor_id IS NULL',
+      whereArgs: [
+        startDate.toIso8601String(),
+        endDate.toIso8601String(),
+      ],
+    );
+    return List.generate(maps.length, (i) => Invoice.fromJSON(maps[i]));
+  }
+
   Future<List<Invoice>> getInvoicesByDateRangeAndPaymentStatus(
       DateTime startDate, DateTime endDate, String paymentStatus) async {
     final db = await _databaseHelper.database;

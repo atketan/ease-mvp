@@ -1,9 +1,11 @@
+import 'package:ease/core/utils/developer_log.dart';
+import 'package:ease/features/home_invoices/widgets/all_sales_invoices_tab.dart';
 import 'package:ease/features/manage/presentation/manage_landing_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../data/invoices_provider.dart';
-import '../widgets/unpaid_invoices_tab.dart';
-import '../widgets/paid_invoices_tab.dart';
+// import '../widgets/unpaid_invoices_tab.dart';
+// import '../widgets/paid_invoices_tab.dart';
 
 class InvoicesHomePage extends StatefulWidget {
   @override
@@ -24,9 +26,10 @@ class _InvoicesHomePageState extends State<InvoicesHomePage> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 2,
+      length: 5,
       child: Consumer<InvoicesProvider>(
         builder: (context, invoicesProvider, child) {
+          debugLog('Invoices Home Rebuild triggered', name: "InvoicesHome");
           return Scaffold(
             appBar: AppBar(
               automaticallyImplyLeading: false,
@@ -86,7 +89,7 @@ class _InvoicesHomePageState extends State<InvoicesHomePage> {
               ],
               title: Text(
                 'Invoices',
-                style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                style: Theme.of(context).textTheme.titleLarge!.copyWith(
                       color: Theme.of(context).canvasColor,
                     ),
               ),
@@ -142,7 +145,7 @@ class _InvoicesHomePageState extends State<InvoicesHomePage> {
             //     ],
             //   ),
             // ),
-            
+
             body: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -161,7 +164,7 @@ class _InvoicesHomePageState extends State<InvoicesHomePage> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                    'Total Collection',
+                                    'Total Sales',
                                     textAlign: TextAlign.center,
                                     style:
                                         Theme.of(context).textTheme.titleSmall,
@@ -191,7 +194,7 @@ class _InvoicesHomePageState extends State<InvoicesHomePage> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                    'Potential',
+                                    'Balance Amount',
                                     textAlign: TextAlign.center,
                                     style:
                                         Theme.of(context).textTheme.titleSmall,
@@ -216,22 +219,41 @@ class _InvoicesHomePageState extends State<InvoicesHomePage> {
                     ),
                   ),
                 ),
-                Card(
+                Container(
                   color: Theme.of(context).primaryColor,
+                  margin: EdgeInsets.all(0.0),
                   child: TabBar(
                     isScrollable: true,
                     tabAlignment: TabAlignment.start,
                     tabs: [
-                      Tab(text: 'Unpaid'),
-                      Tab(text: 'Paid'),
+                      Tab(text: 'Sales'),
+                      Tab(text: 'Purchases'),
+                      Tab(text: 'Expenses'),
+                      Tab(text: 'Payments'),
+                      Tab(text: 'Reports'),
+                      // Tab(text: 'Unpaid'),
+                      // Tab(text: 'Paid'),
                     ],
                   ),
                 ),
                 Expanded(
                   child: TabBarView(
                     children: [
-                      UnpaidInvoicesTab(),
-                      PaidInvoicesTab(),
+                      AllSalesInvoicesTab(),
+                      Container(
+                        child: Center(child: Text("Coming soon")),
+                      ),
+                      Container(
+                        child: Center(child: Text("Coming soon")),
+                      ),
+                      Container(
+                        child: Center(child: Text("Coming soon")),
+                      ),
+                      Container(
+                        child: Center(child: Text("Coming soon")),
+                      ),
+                      // UnpaidInvoicesTab(),
+                      // PaidInvoicesTab(),
                     ],
                   ),
                 ),

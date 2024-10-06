@@ -29,6 +29,11 @@ class InvoicesProvider with ChangeNotifier {
   double _totalUnpaidAmount = 0.0;
   double _totalPaidAmount = 0.0;
 
+  List<Invoice> _allSalesInvoices = [];
+  List<Invoice> _allPurchaseInvoices = [];
+  List<Invoice> get allSalesInvoices => _allSalesInvoices;
+  List<Invoice> get allPurchaseInvoices => _allPurchaseInvoices;
+
   List<Invoice> get unpaidInvoices => _unpaidInvoices;
   List<Invoice> get paidInvoices => _paidInvoices;
   double get totalUnpaidAmount => _totalUnpaidAmount;
@@ -41,7 +46,8 @@ class InvoicesProvider with ChangeNotifier {
   bool get isFilterApplied => _isFilterApplied;
 
   void setDateRange(DateTime start, DateTime end) {
-    debugLog('setDateRange called with start: $start, end: $end', name: 'InvoicesProvider');
+    debugLog('setDateRange called with start: $start, end: $end',
+        name: 'InvoicesProvider');
     _startDate = DateTime(start.year, start.month, start.day)
         .copyWith(hour: 0, minute: 0, second: 0, millisecond: 0);
     _endDate = DateTime(end.year, end.month, end.day, 23, 59, 59, 999);
@@ -51,6 +57,7 @@ class InvoicesProvider with ChangeNotifier {
 
     fetchUnpaidInvoices();
     fetchPaidInvoices();
+    fetchAllSalesInvoices();
     notifyListeners();
   }
 
@@ -59,12 +66,32 @@ class InvoicesProvider with ChangeNotifier {
     _endDate = defaultEndDate;
     _isFilterApplied = false;
     fetchUnpaidInvoices();
+    fetchAllSalesInvoices();
     notifyListeners();
+  }
+
+  Future<void> fetchAllSalesInvoices() async {
+    debugLog(
+        'fetchAllSalesInvoices called with startDate: $_startDate, endDate: $_endDate',
+        name: 'InvoicesProvider');
+    try {
+      _allSalesInvoices =
+          await _invoicesDAO.getSalesInvoicesByDateRange(_startDate, _endDate);
+      debugLog('Fetched ${_allSalesInvoices.length} sales invoices',
+          name: 'InvoicesProvider');
+      _calculateTotalPaidAmount();
+      _calculateTotalUnpaidAmount();
+      notifyListeners();
+    } catch (e) {
+      debugLog('Error fetching paid invoices: $e', name: 'InvoicesProvider');
+      // Handle the error appropriately
+    }
   }
 
   Future<void> fetchUnpaidInvoices() async {
     debugLog(
-        'fetchUnpaidInvoices called with startDate: $_startDate, endDate: $_endDate', name: 'InvoicesProvider');
+        'fetchUnpaidInvoices called with startDate: $_startDate, endDate: $_endDate',
+        name: 'InvoicesProvider');
     try {
       _unpaidInvoices =
           await _invoicesDAO.getInvoicesByDateRangeAndPaymentStatus(
@@ -72,7 +99,8 @@ class InvoicesProvider with ChangeNotifier {
         _endDate,
         'unpaid', // Assuming 'unpaid' is the status for unpaid invoices
       );
-      debugLog('Fetched ${_unpaidInvoices.length} unpaid invoices', name: 'InvoicesProvider');
+      debugLog('Fetched ${_unpaidInvoices.length} unpaid invoices',
+          name: 'InvoicesProvider');
       _calculateTotalUnpaidAmount();
       notifyListeners();
     } catch (e) {
@@ -86,19 +114,22 @@ class InvoicesProvider with ChangeNotifier {
       0,
       (sum, invoice) => sum + invoice.grandTotal,
     );
-    debugLog('Total unpaid amount: $_totalUnpaidAmount', name: 'InvoicesProvider');
+    debugLog('Total unpaid amount: $_totalUnpaidAmount',
+        name: 'InvoicesProvider');
   }
 
   Future<void> fetchPaidInvoices() async {
     debugLog(
-        'fetchPaidInvoices called with startDate: $_startDate, endDate: $_endDate', name: 'InvoicesProvider');
+        'fetchPaidInvoices called with startDate: $_startDate, endDate: $_endDate',
+        name: 'InvoicesProvider');
     try {
       _paidInvoices = await _invoicesDAO.getInvoicesByDateRangeAndPaymentStatus(
         _startDate,
         _endDate,
         'paid', // Assuming 'paid' is the status for paid invoices
       );
-      debugLog('Fetched ${_paidInvoices.length} paid invoices', name: 'InvoicesProvider');
+      debugLog('Fetched ${_paidInvoices.length} paid invoices',
+          name: 'InvoicesProvider');
       _calculateTotalPaidAmount();
       notifyListeners();
     } catch (e) {
@@ -120,6 +151,7 @@ class InvoicesProvider with ChangeNotifier {
       await _invoicesDAO.markInvoiceAsPaid(invoice.id!);
       _unpaidInvoices.remove(invoice);
       _calculateTotalUnpaidAmount();
+      _calculateTotalPaidAmount();
       notifyListeners();
     } catch (e) {
       debugLog('Error marking invoice as paid: $e', name: 'InvoicesProvider');
