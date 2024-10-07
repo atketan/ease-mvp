@@ -12,6 +12,7 @@ class InvoiceBloc extends Cubit<Invoice> {
       : super(
           Invoice(
             invoiceNumber: '',
+            name: '',
             date: DateTime.now(),
             totalAmount: 0.0,
             discount: 0.0,

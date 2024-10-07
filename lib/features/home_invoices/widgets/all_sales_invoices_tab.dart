@@ -1,5 +1,6 @@
 import 'package:ease/core/models/invoice.dart';
 import 'package:ease/core/utils/developer_log.dart';
+import 'package:ease/features/home_invoices/widgets/custom_chip_tags_widget.dart';
 import 'package:ease/features/invoice_manager/bloc/invoice_manager_cubit.dart';
 import 'package:ease/features/invoice_manager/presentation/invoice_manager.dart';
 import 'package:ease/features/invoices/data_models/invoice_type_enum.dart';
@@ -170,30 +171,45 @@ class _AllSalesInvoicesTabState extends State<AllSalesInvoicesTab> {
                                 dense: true,
                                 title: Row(
                                   mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
-                                      '#${invoice.invoiceNumber}',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .titleSmall,
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          '${invoice.name}',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .labelLarge,
+                                        ),
+                                        Text(
+                                          '#${invoice.invoiceNumber}',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .labelMedium,
+                                        ),
+                                      ],
                                     ),
+
                                     SizedBox(width: 8),
                                     // Add the tag for paid/unpaid status
                                     if (invoice.status == "paid")
-                                      Chip(
-                                        label: Text('Paid'),
-                                        backgroundColor: Colors.green[100],
+                                      CustomChipTagsWidget(
+                                        tagTitle: 'Paid',
+                                        tagColor: Colors.green,
                                       )
                                     else
-                                      Chip(
-                                        label: Text('Unpaid'),
-                                        backgroundColor: Colors.red[100],
-                                      ),
+                                      CustomChipTagsWidget(
+                                        tagTitle: 'Unpaid',
+                                        tagColor: Colors.red,
+                                      )
                                   ],
                                 ),
                                 subtitle: Text(
                                   'Date: ${DateFormat.yMMMd().format(invoice.date)}',
-                                  style: Theme.of(context).textTheme.titleSmall,
+                                  style:
+                                      Theme.of(context).textTheme.labelMedium,
                                 ),
                                 trailing: Text(
                                   '₹${invoice.grandTotal.toStringAsFixed(2)}',

@@ -26,6 +26,7 @@ class InvoiceManagerCubit extends Cubit<InvoiceManagerCubitState> {
     if (invoice == null) {
       _invoice = Invoice(
         customerId: 0,
+        name: '',
         invoiceNumber: invoiceNumber,
         date: DateTime.now(),
         totalAmount: 0.0,
@@ -39,7 +40,7 @@ class InvoiceManagerCubit extends Cubit<InvoiceManagerCubitState> {
     } else {
       _invoice = invoice;
     }
-    emit(InvoiceManagerLoaded());
+    emit(InvoiceManagerLoaded(invoice: _invoice));
   }
 
   void populateInvoiceData() {
@@ -58,42 +59,42 @@ class InvoiceManagerCubit extends Cubit<InvoiceManagerCubitState> {
       debugLog('Invoice Item: ${item.toJSON()}', name: 'InvoiceManagerCubit');
     });
 
-    emit(InvoiceManagerLoaded());
+    emit(InvoiceManagerLoaded(invoice: _invoice));
   }
 
   void addInvoiceIteam(InvoiceItem invoiceItem) {
     _invoice.items.add(invoiceItem);
     _updateInvoiceAmounts();
-    emit(InvoiceManagerLoaded());
+    emit(InvoiceManagerLoaded(invoice: _invoice));
   }
 
   void removeInvoiceItem(int invoiceItemIndex) {
     _invoice.items.removeAt(invoiceItemIndex);
     _updateInvoiceAmounts();
-    emit(InvoiceManagerLoaded());
+    emit(InvoiceManagerLoaded(invoice: _invoice));
   }
 
   Invoice get invoice => _invoice;
 
   void setCustomerId(int customerId) {
     _invoice.customerId = customerId;
-    emit(InvoiceManagerLoaded());
+    emit(InvoiceManagerLoaded(invoice: _invoice));
   }
 
   void setVendorId(int vendorId) {
     _invoice.vendorId = vendorId;
-    emit(InvoiceManagerLoaded());
+    emit(InvoiceManagerLoaded(invoice: _invoice));
   }
 
   void setDiscount(double discount) async {
     _invoice.discount = discount;
     await _updateInvoiceAmounts();
-    emit(InvoiceManagerLoaded());
+    emit(InvoiceManagerLoaded(invoice: _invoice));
   }
 
   void updateInvoiceAmounts() async {
     await _updateInvoiceAmounts();
-    emit(InvoiceManagerLoaded());
+    emit(InvoiceManagerLoaded(invoice: _invoice));
   }
 
   Future<bool> _updateInvoiceAmounts() async {
@@ -105,12 +106,12 @@ class InvoiceManagerCubit extends Cubit<InvoiceManagerCubitState> {
 
   void updateStatus(String paymentStatus) {
     _invoice.status = paymentStatus;
-    emit(InvoiceManagerLoaded());
+    emit(InvoiceManagerLoaded(invoice: _invoice));
   }
 
   void updatePaymentType(String paymentType) {
     _invoice.paymentType = paymentType;
-    emit(InvoiceManagerLoaded());
+    emit(InvoiceManagerLoaded(invoice: _invoice));
   }
 
   Future<bool> saveInvoice() async {
@@ -200,20 +201,20 @@ class InvoiceManagerCubit extends Cubit<InvoiceManagerCubitState> {
       );
     }
     await _updateInvoiceAmounts();
-    emit(InvoiceManagerLoaded());
+    emit(InvoiceManagerLoaded(invoice: _invoice));
   }
 
   void setLoading(bool bool) {
     if (bool) {
       emit(InvoiceManagerLoading());
     } else {
-      emit(InvoiceManagerLoaded());
+      emit(InvoiceManagerLoaded(invoice: _invoice));
     }
   }
 
   void updateInvoiceNotes(String notes) {
     _invoice.notes = notes;
-    emit(InvoiceManagerLoaded());
+    emit(InvoiceManagerLoaded(invoice: _invoice));
   }
 
   String formatInvoiceDetails() {
@@ -238,5 +239,9 @@ class InvoiceManagerCubit extends Cubit<InvoiceManagerCubitState> {
         .writeln('Total Payable: ${(_invoice.grandTotal).toStringAsFixed(2)}');
 
     return buffer.toString();
+  }
+
+  void setEntityName(String clientName) {
+    invoice.name = clientName;
   }
 }

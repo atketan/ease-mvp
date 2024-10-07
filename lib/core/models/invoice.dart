@@ -4,6 +4,7 @@ class Invoice {
   int? id; // auto-increment ID from the DB - primary key
   int? customerId;
   int? vendorId;
+  String name; // customer name or vendor name
   String invoiceNumber;
   DateTime date;
   double totalAmount;
@@ -19,6 +20,7 @@ class Invoice {
     this.id,
     this.customerId,
     this.vendorId,
+    required this.name,
     required this.invoiceNumber,
     required this.date,
     required this.totalAmount,
@@ -42,6 +44,7 @@ class Invoice {
       id: json['id'],
       customerId: json['customer_id'],
       vendorId: json['vendor_id'],
+      name: json['name'],
       invoiceNumber: json['invoice_number'],
       date: DateTime.parse(json['date']),
       totalAmount: json['total_amount'],
@@ -62,6 +65,7 @@ class Invoice {
       'id': id,
       'customer_id': customerId,
       'vendor_id': vendorId,
+      'name': name,
       'invoice_number': invoiceNumber,
       'date': date.toIso8601String(),
       'total_amount': totalAmount,

@@ -62,6 +62,7 @@ class DatabaseHelper {
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         customer_id INTEGER,
         vendor_id INTEGER,
+        name TEXT NOT NULL,
         invoice_number TEXT NOT NULL,
         date DATETIME NOT NULL,
         total_amount REAL NOT NULL,

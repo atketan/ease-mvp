@@ -62,7 +62,6 @@ class InvoiceManagerState extends State<InvoiceManager> {
   final String invoiceNumber = generateShort12CharUniqueKey().toUpperCase();
   // final DateTime invoiceCreateDate = DateTime.now();
 
-  var selectedClientName;
   List<bool> _isOpen = [false, false, false, false];
 
   @override
@@ -154,6 +153,10 @@ class InvoiceManagerState extends State<InvoiceManager> {
                                   InvoiceManagerCubitState>(
                                 builder: (context, state) {
                                   if (state is InvoiceManagerLoaded) {
+                                    String? selectedClientName =
+                                        state.invoice.name;
+                                    if (selectedClientName.isEmpty)
+                                      selectedClientName = null;
                                     return Text(
                                       widget.invoiceType == InvoiceType.Sales
                                           ? '${selectedClientName ?? 'Select a customer'}'
@@ -180,7 +183,10 @@ class InvoiceManagerState extends State<InvoiceManager> {
                           child: EntityTypeAheadField(
                             invoiceType: widget.invoiceType,
                             onClientSelected: (clientName) {
-                              selectedClientName = clientName;
+                              context
+                                  .read<InvoiceManagerCubit>()
+                                  .setEntityName(clientName);
+                              // selectedClientName = clientName;
                             },
                           ),
                         ),
