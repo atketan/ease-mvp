@@ -1,5 +1,5 @@
 class Vendor {
-  int? id;
+  String? id;
   String name;
   String? address;
   String? phone;

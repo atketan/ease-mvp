@@ -1,15 +1,17 @@
 import 'package:sqflite/sqflite.dart';
 
-import '../models/customer.dart';
-import 'database_helper.dart';
+import '../../models/customer.dart';
+import '../database_helper.dart';
+import 'customers_data_source.dart';
 
-class CustomersDAO {
+class SqfliteCustomersDAO implements CustomersDataSource {
   final DatabaseHelper _databaseHelper = DatabaseHelper();
 
-  Future<int> insertCustomer(Customer customer) async {
+  @override
+  Future<String> insertCustomer(Customer customer) async {
     final db = await _databaseHelper.database;
     try {
-      return await db.insert('Customers', customer.toJSON());
+      return await db.insert('Customers', customer.toJSON()).toString();
     } on DatabaseException catch (e) {
       if (e.isUniqueConstraintError()) {
         throw Exception('Phone number already exists');
@@ -18,15 +20,14 @@ class CustomersDAO {
     }
   }
 
+  @override
   Future<List<Customer>> getAllCustomers() async {
     final db = await _databaseHelper.database;
     final List<Map<String, dynamic>> maps = await db.query('Customers');
-    List.generate(maps.length, (i) {
-      print(Customer.fromJSON(maps[i]).toJSON());
-    });
     return List.generate(maps.length, (i) => Customer.fromJSON(maps[i]));
   }
 
+  @override
   Future<Customer?> getCustomerByName(String name) async {
     final db = await _databaseHelper.database;
     final List<Map<String, dynamic>> maps =
@@ -39,7 +40,8 @@ class CustomersDAO {
     }
   }
 
-  Future<Customer?> getCustomerById(int customerId) async {
+  @override
+  Future<Customer?> getCustomerById(String customerId) async {
     final db = await _databaseHelper.database;
     final List<Map<String, dynamic>> maps =
         await db.query('Customers', where: 'id = ?', whereArgs: [customerId]);
@@ -51,24 +53,27 @@ class CustomersDAO {
     }
   }
 
+  @override
   Future<int> updateCustomer(Customer customer) async {
     final db = await _databaseHelper.database;
     return await db.update('Customers', customer.toJSON(),
         where: 'id = ?', whereArgs: [customer.id]);
   }
 
+  @override
   Future<int> deleteCustomer(int id) async {
     final db = await _databaseHelper.database;
     return await db.delete('Customers', where: 'id = ?', whereArgs: [id]);
   }
 
+  @override
   Future<List<Customer>> searchCustomers(String pattern) async {
     final db = await _databaseHelper.database;
     final lowercasePattern = pattern.toLowerCase();
     final result = await db.query(
-      'customers',
+      'Customers',
       where: 'LOWER(name) LIKE ? OR phone LIKE ?',
-      whereArgs: ['%$lowercasePattern%', '%$pattern%'],
+      whereArgs: ['%$lowercasePattern%', '%$lowercasePattern%'],
     );
     return result.map((map) => Customer.fromJSON(map)).toList();
   }

@@ -10,7 +10,7 @@ enum VendorsFormMode {
 
 class UpdateVendorsPage extends StatefulWidget {
   final VendorsFormMode mode;
-  final int? vendorId;
+  final String? vendorId;
 
   const UpdateVendorsPage({super.key, required this.mode, this.vendorId})
       : assert(mode == VendorsFormMode.Add || vendorId != null,
@@ -40,7 +40,7 @@ class _UpdateVendorsPageState extends State<UpdateVendorsPage> {
 
   Future<void> _fetchVendorDetails() async {
     // Fetch vendor details using the vendor ID
-    vendor = await _vendorsDAO.getVendorById(widget.vendorId ?? 0);
+    vendor = await _vendorsDAO.getVendorById(widget.vendorId ??'');
     if (vendor != null) {
       setState(() {
         _nameController.text = vendor!.name;

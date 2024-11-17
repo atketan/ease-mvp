@@ -2,8 +2,8 @@ import 'invoice_item.dart';
 
 class Invoice {
   int? id; // auto-increment ID from the DB - primary key
-  int? customerId;
-  int? vendorId;
+  String? customerId;
+  String? vendorId;
   String name; // customer name or vendor name
   String invoiceNumber;
   DateTime date;

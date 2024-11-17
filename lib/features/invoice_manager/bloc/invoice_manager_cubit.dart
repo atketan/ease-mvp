@@ -25,7 +25,7 @@ class InvoiceManagerCubit extends Cubit<InvoiceManagerCubitState> {
   void initialiseInvoiceModelInstance(Invoice? invoice, String invoiceNumber) {
     if (invoice == null) {
       _invoice = Invoice(
-        customerId: 0,
+        customerId: '',
         name: '',
         invoiceNumber: invoiceNumber,
         date: DateTime.now(),
@@ -76,12 +76,12 @@ class InvoiceManagerCubit extends Cubit<InvoiceManagerCubitState> {
 
   Invoice get invoice => _invoice;
 
-  void setCustomerId(int customerId) {
+  void setCustomerId(String customerId) {
     _invoice.customerId = customerId;
     emit(InvoiceManagerLoaded(invoice: _invoice));
   }
 
-  void setVendorId(int vendorId) {
+  void setVendorId(String vendorId) {
     _invoice.vendorId = vendorId;
     emit(InvoiceManagerLoaded(invoice: _invoice));
   }

@@ -1,4 +1,5 @@
-import 'package:ease/core/database/customers_dao.dart';
+import 'package:provider/provider.dart';
+import 'package:ease/core/database/customers/customers_dao.dart';
 import 'package:ease/core/database/vendors_dao.dart';
 import 'package:ease/core/models/customer.dart';
 import 'package:ease/core/models/vendor.dart';
@@ -122,8 +123,8 @@ class _AddEntityBottomSheetState extends State<AddEntityBottomSheet> {
       cubit.setLoading(true);
 
       try {
-        final int newId = widget.invoiceType == InvoiceType.Sales
-            ? await CustomersDAO().insertCustomer(Customer(
+        final String newId = widget.invoiceType == InvoiceType.Sales
+            ? await Provider.of<CustomersDAO>(context).insertCustomer(Customer(
                 name: _nameController.text,
                 phone: _mobileController.text,
                 createdAt: DateTime.now(),
@@ -132,7 +133,7 @@ class _AddEntityBottomSheetState extends State<AddEntityBottomSheet> {
                 name: _nameController.text,
                 phone: _mobileController.text,
                 createdAt: DateTime.now(),
-                updatedAt: DateTime.now()));
+                updatedAt: DateTime.now())).toString();
 
         if (!mounted) return;
 

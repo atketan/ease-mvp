@@ -1,5 +1,5 @@
 class Customer {
-  int? id;
+  String? id;
   String name;
   String? address;
   String? phone;
@@ -22,10 +22,14 @@ class Customer {
       id: json['id'],
       name: json['name'] ?? "",
       address: json['address'] ?? "",
-      phone: json['phone'] ?? "",
+      phone: json['phone'].toString(),
       email: json['email'] ?? "",
-      createdAt: DateTime.parse(json['created_at']),
-      updatedAt: DateTime.parse(json['updated_at']),
+      createdAt: (json['created_at'] != null)
+          ? DateTime.parse(json['created_at'])
+          : DateTime.now(),
+      updatedAt: (json['updated_at'] != null)
+          ? DateTime.parse(json['updated_at'])
+          : DateTime.now(),
     );
   }
 

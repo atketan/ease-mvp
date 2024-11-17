@@ -1,4 +1,6 @@
-import 'package:ease/core/database/customers_dao.dart';
+import 'package:ease/core/utils/developer_log.dart';
+import 'package:provider/provider.dart';
+import 'package:ease/core/database/customers/customers_dao.dart';
 import 'package:ease/core/database/vendors_dao.dart';
 import 'package:ease/core/models/customer.dart';
 import 'package:ease/core/models/vendor.dart';
@@ -12,7 +14,7 @@ import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'entity_add_new_bottomsheet.dart';
 
 class Entity {
-  final int? id;
+  final String? id;
   final String name;
   final String phone;
 
@@ -33,14 +35,17 @@ class EntityTypeAheadField extends StatefulWidget {
 }
 
 class _EntityTypeAheadFieldState extends State<EntityTypeAheadField> {
+  late CustomersDAO _customersDAO;
   final TextEditingController _controller = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   bool _isEditing = true;
 
   @override
   void initState() {
-    _getEntityDetails();
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _getEntityDetails();
+    });
   }
 
   @override
@@ -52,6 +57,7 @@ class _EntityTypeAheadFieldState extends State<EntityTypeAheadField> {
 
   @override
   Widget build(BuildContext context) {
+    _customersDAO = Provider.of<CustomersDAO>(context);
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: BlocBuilder<InvoiceManagerCubit, InvoiceManagerCubitState>(
@@ -90,12 +96,12 @@ class _EntityTypeAheadFieldState extends State<EntityTypeAheadField> {
       suggestionsCallback: (pattern) async {
         if (pattern.isEmpty) return <Entity>[];
         if (widget.invoiceType == InvoiceType.Sales) {
-          final customers = await CustomersDAO().searchCustomers(pattern);
+          final customers = await _customersDAO.searchCustomers(pattern);
           final matchedCustomers = customers
               .map((c) => Entity(id: c.id, name: c.name, phone: c.phone ?? ''))
               .toList();
           if (matchedCustomers.isEmpty) {
-            return [Entity(id: -1, name: "Add: $pattern", phone: '')];
+            return [Entity(id: '', name: "Add: $pattern", phone: '')];
           }
           return matchedCustomers;
         } else {
@@ -104,7 +110,7 @@ class _EntityTypeAheadFieldState extends State<EntityTypeAheadField> {
               .map((v) => Entity(id: v.id, name: v.name, phone: v.phone ?? ''))
               .toList();
           if (matchedVendors.isEmpty) {
-            return [Entity(id: -1, name: "Add: $pattern", phone: '')];
+            return [Entity(id: '', name: "Add: $pattern", phone: '')];
           }
           return matchedVendors;
         }
@@ -200,10 +206,10 @@ class _EntityTypeAheadFieldState extends State<EntityTypeAheadField> {
   }
 
   void _getEntityDetails() async {
-    int? customerId = context.read<InvoiceManagerCubit>().invoice.customerId;
-    int? vendorId = context.read<InvoiceManagerCubit>().invoice.vendorId;
-    if (customerId != null) {
-      Customer? customer = await CustomersDAO().getCustomerById(customerId);
+    String? customerId = context.read<InvoiceManagerCubit>().invoice.customerId;
+    String? vendorId = context.read<InvoiceManagerCubit>().invoice.vendorId;
+    if (customerId != null && customerId.isNotEmpty) {
+      Customer? customer = await _customersDAO.getCustomerById(customerId);
       if (customer != null) {
         _controller.text = customer.name;
         _phoneController.text = customer.phone ?? "";

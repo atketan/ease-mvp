@@ -23,12 +23,12 @@ class InvoiceBloc extends Cubit<Invoice> {
           ),
         );
 
-  void setCustomer(int customerId) {
+  void setCustomer(String customerId) {
     state.customerId = customerId;
     emit(state);
   }
 
-  void setVendor(int vendorId) {
+  void setVendor(String vendorId) {
     state.vendorId = vendorId;
     emit(state);
   }

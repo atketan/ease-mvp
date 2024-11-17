@@ -1,4 +1,5 @@
-import 'package:ease/core/database/customers_dao.dart';
+import 'package:provider/provider.dart';
+import 'package:ease/core/database/customers/customers_dao.dart';
 import 'package:ease/core/database/vendors_dao.dart';
 import 'package:ease/core/models/customer.dart';
 import 'package:ease/core/models/invoice.dart';
@@ -241,7 +242,7 @@ class EntitySearchDelegate extends SearchDelegate {
   Widget buildResults(BuildContext context) {
     return FutureBuilder(
       future: entityType == 'customer'
-          ? CustomersDAO().getAllCustomers()
+          ? Provider.of<CustomersDAO>(context).getAllCustomers()
           : VendorsDAO().getAllVendors(),
       builder: (context, snapshot) {
         print(snapshot.connectionState.name);
@@ -343,7 +344,8 @@ class _AddEntityDialogState extends State<AddEntityDialog> {
                 createdAt: DateTime.now(),
                 updatedAt: DateTime.now(),
               );
-              int customerID = await CustomersDAO().insertCustomer(customer);
+              String customerID = await Provider.of<CustomersDAO>(context)
+                  .insertCustomer(customer);
               entity = customer;
               (entity as Customer).id = customerID;
             } else {
@@ -352,7 +354,7 @@ class _AddEntityDialogState extends State<AddEntityDialog> {
                 createdAt: DateTime.now(),
                 updatedAt: DateTime.now(),
               );
-              int vendorID = await VendorsDAO().insertVendor(vendor);
+              String vendorID = await VendorsDAO().insertVendor(vendor);
               entity = vendor;
               (entity as Vendor).id = vendorID;
             }

@@ -1,5 +1,6 @@
 import 'dart:async';
-import 'package:ease/core/database/customers_dao.dart';
+import 'package:provider/provider.dart';
+import 'package:ease/core/database/customers/customers_dao.dart';
 import 'package:ease/core/models/customer.dart';
 import 'package:ease/features/customers/presentation/update_customers_page.dart';
 import 'package:flutter/material.dart';
@@ -11,13 +12,16 @@ class CustomersPage extends StatefulWidget {
 
 class _CustomersPageState extends State<CustomersPage> {
   List<Customer> _allCustomers = [];
-  final _customersDAO = CustomersDAO();
+  late CustomersDAO _customersDAO;
   final _streamController = StreamController<List<Customer>>();
 
   @override
   void initState() {
     super.initState();
-    _fetchCustomers();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _fetchCustomers();
+    });
   }
 
   void _fetchCustomers() async {
@@ -46,6 +50,7 @@ class _CustomersPageState extends State<CustomersPage> {
 
   @override
   Widget build(BuildContext context) {
+    _customersDAO = Provider.of<CustomersDAO>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text('Customers'),

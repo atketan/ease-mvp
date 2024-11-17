@@ -6,10 +6,10 @@ import 'database_helper.dart';
 class VendorsDAO {
   final DatabaseHelper _databaseHelper = DatabaseHelper();
 
-  Future<int> insertVendor(Vendor vendor) async {
+  Future<String> insertVendor(Vendor vendor) async {
     final db = await _databaseHelper.database;
     try {
-      return await db.insert('Vendors', vendor.toJSON());
+      return await db.insert('Vendors', vendor.toJSON()).toString();
     } on DatabaseException catch (e) {
       if (e.isUniqueConstraintError()) {
         throw Exception('Phone number already exists');
@@ -36,7 +36,7 @@ class VendorsDAO {
     }
   }
 
-  Future<Vendor?> getVendorById(int vendorId) async {
+  Future<Vendor?> getVendorById(String vendorId) async {
     final db = await _databaseHelper.database;
     final List<Map<String, dynamic>> maps =
         await db.query('Vendors', where: 'id = ?', whereArgs: [vendorId]);

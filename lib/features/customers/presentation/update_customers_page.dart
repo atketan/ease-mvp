@@ -1,4 +1,5 @@
-import 'package:ease/core/database/customers_dao.dart';
+import 'package:provider/provider.dart';
+import 'package:ease/core/database/customers/customers_dao.dart';
 import 'package:ease/core/models/customer.dart';
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
@@ -10,7 +11,7 @@ enum CustomersFormMode {
 
 class UpdateCustomersPage extends StatefulWidget {
   final CustomersFormMode mode;
-  final int? customerId;
+  final String? customerId;
 
   UpdateCustomersPage({required this.mode, this.customerId = null})
       : assert(mode == CustomersFormMode.Add || customerId != null,
@@ -26,7 +27,7 @@ class _UpdateCustomersPageState extends State<UpdateCustomersPage> {
   TextEditingController _addressController = TextEditingController();
   TextEditingController _phoneController = TextEditingController();
 
-  CustomersDAO _customersDAO = CustomersDAO();
+  late CustomersDAO _customersDAO;
   late Customer? customer;
 
   @override
@@ -34,13 +35,16 @@ class _UpdateCustomersPageState extends State<UpdateCustomersPage> {
     super.initState();
     if (widget.mode == CustomersFormMode.Edit) {
       // Fetch customer details using the customer ID
-      _fetchCustomerDetails();
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _fetchCustomerDetails();
+      });
     }
   }
 
   Future<void> _fetchCustomerDetails() async {
     // Fetch customer details using the customer ID
-    customer = await _customersDAO.getCustomerById(widget.customerId ?? 0);
+    customer = await _customersDAO
+        .getCustomerById(widget.customerId ?? '');
     if (customer != null) {
       setState(() {
         _nameController.text = customer!.name;
@@ -87,7 +91,8 @@ class _UpdateCustomersPageState extends State<UpdateCustomersPage> {
           createdAt: customer!.createdAt,
           updatedAt: DateTime.now(),
         );
-        await _customersDAO.updateCustomer(updatedCustomer);
+        await _customersDAO
+            .updateCustomer(updatedCustomer);
       }
       Navigator.pop(context);
     } on DatabaseException catch (e) {
@@ -103,61 +108,64 @@ class _UpdateCustomersPageState extends State<UpdateCustomersPage> {
 
   @override
   Widget build(BuildContext context) {
+    _customersDAO = Provider.of<CustomersDAO>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.mode == CustomersFormMode.Add
             ? 'Add Customer'
             : 'Edit Customer'),
       ),
-      body: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            TextField(
-              controller: _nameController,
-              keyboardType: TextInputType.name,
-              decoration: InputDecoration(labelText: 'Name'),
-            ),
-            SizedBox(height: 16.0),
-            TextField(
-              controller: _phoneController,
-              maxLength: 10,
-              keyboardType: TextInputType.phone,
-              decoration: InputDecoration(labelText: 'Phone'),
-            ),
-            SizedBox(height: 16.0),
-            TextField(
-              controller: _emailController,
-              keyboardType: TextInputType.emailAddress,
-              decoration: InputDecoration(labelText: 'Email'),
-            ),
-            SizedBox(height: 16.0),
-            TextField(
-              controller: _addressController,
-              maxLength: 50,
-              keyboardType: TextInputType.multiline,
-              decoration: InputDecoration(labelText: 'Address'),
-            ),
-            SizedBox(height: 24.0),
-            Row(
-              children: [
-                Expanded(flex: 4, child: Container()),
-                Spacer(flex: 1),
-                Expanded(
-                  flex: 4,
-                  child: TextButton(
-                    onPressed: () => _saveCustomer(),
-                    child: Text(
-                      'Save',
-                      style: TextStyle().copyWith(
-                        fontWeight: FontWeight.bold,
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              TextField(
+                controller: _nameController,
+                keyboardType: TextInputType.name,
+                decoration: InputDecoration(labelText: 'Name'),
+              ),
+              SizedBox(height: 16.0),
+              TextField(
+                controller: _phoneController,
+                maxLength: 10,
+                keyboardType: TextInputType.phone,
+                decoration: InputDecoration(labelText: 'Phone'),
+              ),
+              SizedBox(height: 16.0),
+              TextField(
+                controller: _emailController,
+                keyboardType: TextInputType.emailAddress,
+                decoration: InputDecoration(labelText: 'Email'),
+              ),
+              SizedBox(height: 16.0),
+              TextField(
+                controller: _addressController,
+                maxLength: 50,
+                keyboardType: TextInputType.multiline,
+                decoration: InputDecoration(labelText: 'Address'),
+              ),
+              SizedBox(height: 24.0),
+              Row(
+                children: [
+                  Expanded(flex: 4, child: Container()),
+                  Spacer(flex: 1),
+                  Expanded(
+                    flex: 4,
+                    child: TextButton(
+                      onPressed: () => _saveCustomer(),
+                      child: Text(
+                        'Save',
+                        style: TextStyle().copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ],
-            ),
-          ],
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

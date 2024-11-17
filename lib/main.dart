@@ -1,7 +1,12 @@
+
+import 'package:ease/core/database/customers/customers_dao.dart';
+import 'package:ease/core/database/customers/firestore_customers_dao.dart';
 import 'package:ease/core/database/database_helper.dart';
 import 'package:ease/core/utils/developer_log.dart';
 import 'package:ease/ease_app.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
 
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -17,7 +22,16 @@ void main() async {
     final dbHelper = DatabaseHelper();
     await dbHelper.database;
 
-    runApp(const EASEApp());
+    runApp(
+      MultiProvider(
+        providers: [
+          Provider<CustomersDAO>(
+            create: (_) => CustomersDAO(FirestoreCustomersDAO()),
+          ),
+        ],
+        child: const EASEApp(),
+      ),
+    );
   } catch (e, stackTrace) {
     debugLog('Error during initialization: $e', name: 'Main');
     debugLog('Stack trace: $stackTrace', name: 'Main');

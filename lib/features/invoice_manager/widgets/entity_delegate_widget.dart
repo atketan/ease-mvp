@@ -1,4 +1,5 @@
-import 'package:ease/core/database/customers_dao.dart';
+import 'package:provider/provider.dart';
+import 'package:ease/core/database/customers/customers_dao.dart';
 import 'package:ease/core/database/vendors_dao.dart';
 import 'package:ease/features/customers/presentation/update_customers_page.dart';
 import 'package:ease/features/invoice_manager/bloc/invoice_manager_cubit.dart';
@@ -97,7 +98,7 @@ class EntitySearchDelegate extends SearchDelegate {
   Widget buildResults(BuildContext context) {
     return FutureBuilder(
       future: entityType == 'customer'
-          ? CustomersDAO().getAllCustomers()
+          ? Provider.of<CustomersDAO>(context).getAllCustomers()
           : VendorsDAO().getAllVendors(),
       builder: (context, snapshot) {
         print(snapshot.connectionState.name);
