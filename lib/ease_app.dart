@@ -1,5 +1,6 @@
 import 'package:ease/core/providers/themes_provider.dart';
 import 'package:ease/features/account/presentation/bloc/login_cubit.dart';
+import 'package:ease/features/account/presentation/login_page.dart';
 import 'package:ease/features/home/presentation/home_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +30,7 @@ class _EASEAppState extends State<EASEApp> {
         debugShowCheckedModeBanner: false,
         theme: AppTheme.lightTheme,
         darkTheme: AppTheme.darkTheme,        
-        home: (_auth.currentUser != null) ? EASEHomePage() : EASEHomePage(),
+        home: (_auth.currentUser != null) ? EASEHomePage() : LoginPage(),
       ),
     );
   }
