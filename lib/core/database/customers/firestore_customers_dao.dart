@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ease/core/utils/string_casing_extension.dart';
-import 'package:flutter/foundation.dart';
 
 import '../../models/customer.dart';
 import 'customers_data_source.dart';
