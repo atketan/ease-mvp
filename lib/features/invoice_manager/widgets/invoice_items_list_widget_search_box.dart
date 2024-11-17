@@ -290,58 +290,49 @@ class _InvoiceItemsListWidgetSearchBoxState
     final TextEditingController uomController =
         TextEditingController(text: item.uom);
 
-    showModalBottomSheet(
+    showDialog(
       context: context,
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       builder: (BuildContext context) {
-        return Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                'Update details for "${item.name}"',
-                style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
-              ),
-              SizedBox(height: 8),
-              TextField(
-                controller: priceController,
-                keyboardType: TextInputType.numberWithOptions(
-                    decimal: true, signed: false),
-                decoration: InputDecoration(
-                  labelText: 'Current Price: ${item.unitPrice}',
-                ),
-              ),
-              TextField(
-                controller: uomController,
-                decoration: InputDecoration(
-                  labelText: 'Update UOM',
-                ),
-              ),
-              SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: Text('Cancel'),
+        return AlertDialog(
+          title: Text('Update details for "${item.name}"', style: Theme.of(context).textTheme.titleMedium,),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextField(
+                  controller: priceController,
+                  keyboardType: TextInputType.numberWithOptions(
+                      decimal: true, signed: false),
+                  decoration: InputDecoration(
+                    labelText: 'Current Price: ${item.unitPrice}',
                   ),
-                  TextButton(
-                    onPressed: () {
-                      item.unitPrice = double.parse(priceController.text);
-                      item.uom = uomController.text;
-                      Navigator.of(context).pop();
-                    },
-                    child: Text('Update'),
+                ),
+                SizedBox(height: 12),
+                TextField(
+                  controller: uomController,
+                  decoration: InputDecoration(
+                    labelText: 'Update UOM',
                   ),
-                ],
-              ),
-            ],
+                ),
+              ],
+            ),
           ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                item.unitPrice = double.parse(priceController.text);
+                item.uom = uomController.text;
+                Navigator.of(context).pop();
+              },
+              child: Text('Update'),
+            ),
+          ],
         );
       },
     ).then(
