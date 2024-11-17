@@ -1,7 +1,7 @@
 class InvoiceItem {
   int? id;
   int? invoiceId;
-  int? itemId;
+  String? itemId;
   String name;
   String? description;
   String uom;

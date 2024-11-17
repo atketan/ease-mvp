@@ -1,5 +1,5 @@
 import 'package:bloc/bloc.dart';
-import 'package:ease/core/database/inventory_items_dao.dart';
+import 'package:ease/core/database/inventory/inventory_items_dao.dart';
 import 'package:ease/core/database/invoice_items_dao.dart';
 import 'package:ease/core/database/invoices_dao.dart';
 import 'package:ease/core/database/payments_dao.dart';
@@ -13,10 +13,10 @@ import 'package:ease/core/utils/developer_log.dart';
 import 'invoice_manager_cubit_state.dart';
 
 class InvoiceManagerCubit extends Cubit<InvoiceManagerCubitState> {
-  InvoiceManagerCubit() : super(InvoiceManagerInitial());
+  InvoiceManagerCubit(this._inventoryItemsDAO) : super(InvoiceManagerInitial());
 
   InvoicesDAO _invoiceDAO = InvoicesDAO();
-  InventoryItemsDAO _inventoryItemsDAO = InventoryItemsDAO();
+  final InventoryItemsDAO _inventoryItemsDAO ;
   InvoiceItemsDAO _invoiceItemsDAO = InvoiceItemsDAO();
   PaymentsDAO _paymentsDAO = PaymentsDAO();
 

@@ -1,6 +1,7 @@
 import 'dart:async';
+import 'package:provider/provider.dart';
 
-import 'package:ease/core/database/inventory_items_dao.dart';
+import 'package:ease/core/database/inventory/inventory_items_dao.dart';
 import 'package:ease/core/models/inventory_item.dart';
 import 'package:ease/core/models/invoice_item.dart';
 
@@ -18,17 +19,19 @@ class InvoiceItemDelegateWidget extends StatefulWidget {
 
 class InvoiceItemDelegateWidgetState extends State<InvoiceItemDelegateWidget> {
   List<InventoryItem> _allItems = [];
-  final _itemsDAO = InventoryItemsDAO();
+  late InventoryItemsDAO _inventoryItemsDAO ;
   final _streamController = StreamController<List<InventoryItem>>();
 
   @override
   void initState() {
     super.initState();
-    _fetchItems();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _fetchItems();
+    });
   }
 
   void _fetchItems() async {
-    final items = await _itemsDAO.getAllInventoryItems();
+    final items = await _inventoryItemsDAO.getAllInventoryItems();
     setState(() {
       _allItems = items;
     });
@@ -53,6 +56,7 @@ class InvoiceItemDelegateWidgetState extends State<InvoiceItemDelegateWidget> {
 
   @override
   Widget build(BuildContext context) {
+    _inventoryItemsDAO = Provider.of<InventoryItemsDAO>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text('Inventory Items'),

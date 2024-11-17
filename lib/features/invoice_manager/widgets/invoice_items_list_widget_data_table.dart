@@ -1,8 +1,8 @@
-import 'package:ease/core/database/inventory_items_dao.dart';
+import 'package:ease/core/database/inventory/inventory_items_dao.dart';
 import 'package:ease/core/models/inventory_item.dart';
 import 'package:ease/core/models/invoice_item.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 
 import '../bloc/invoice_manager_cubit.dart';
@@ -16,7 +16,7 @@ class InvoiceItemsListWidgetDataTable extends StatefulWidget {
 class _InvoiceItemsListWidgetDataTableState
     extends State<InvoiceItemsListWidgetDataTable> {
   late List<InvoiceItem> _invoiceItems;
-  final InventoryItemsDAO _inventoryItemsDAO = InventoryItemsDAO();
+  late InventoryItemsDAO _inventoryItemsDAO;
 
   @override
   void initState() {
@@ -26,6 +26,7 @@ class _InvoiceItemsListWidgetDataTableState
 
   @override
   Widget build(BuildContext context) {
+    _inventoryItemsDAO = Provider.of<InventoryItemsDAO>(context);
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(

@@ -1,4 +1,5 @@
-import 'package:ease/core/database/inventory_items_dao.dart';
+import 'package:provider/provider.dart';
+import 'package:ease/core/database/inventory/inventory_items_dao.dart';
 import 'package:ease/core/models/inventory_item.dart';
 import 'package:flutter/material.dart';
 
@@ -9,7 +10,7 @@ enum InventoryItemsFormMode {
 
 class UpdateItemsPage extends StatefulWidget {
   final InventoryItemsFormMode mode;
-  final int? itemId;
+  final String? itemId;
 
   const UpdateItemsPage({Key? key, required this.mode, this.itemId})
       : assert(mode == InventoryItemsFormMode.Add || itemId != null,
@@ -24,7 +25,7 @@ class UpdateItemsPageState extends State<UpdateItemsPage> {
   TextEditingController _unitPriceController = TextEditingController();
   TextEditingController _descriptionController = TextEditingController();
 
-  InventoryItemsDAO _itemsDAO = InventoryItemsDAO();
+  late InventoryItemsDAO _itemsDAO;
   late InventoryItem? item;
 
   @override
@@ -32,20 +33,24 @@ class UpdateItemsPageState extends State<UpdateItemsPage> {
     super.initState();
     if (widget.mode == InventoryItemsFormMode.Edit) {
       // Fetch item details using the item ID
-      _fetchItemDetails();
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _fetchItemDetails();
+      });
     }
   }
 
   Future<void> _fetchItemDetails() async {
     // Fetch item details using the item ID
-    item = await _itemsDAO.getInventoryItemById(widget.itemId ?? 0);
-    if (item != null) {
-      setState(() {
-        _nameController.text = item!.name;
-        _unitController.text = item!.uom;
-        _descriptionController.text = item!.description ?? "";
-        _unitPriceController.text = item!.unitPrice.toString();
-      });
+    if (widget.itemId != null) {
+      item = await _itemsDAO.getInventoryItemById(widget.itemId ?? '');
+      if (item != null) {
+        setState(() {
+          _nameController.text = item!.name;
+          _unitController.text = item!.uom;
+          _descriptionController.text = item!.description ?? "";
+          _unitPriceController.text = item!.unitPrice.toString();
+        });
+      }
     }
   }
 
@@ -98,6 +103,7 @@ class UpdateItemsPageState extends State<UpdateItemsPage> {
 
   @override
   Widget build(BuildContext context) {
+    _itemsDAO = Provider.of<InventoryItemsDAO>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.mode == InventoryItemsFormMode.Add

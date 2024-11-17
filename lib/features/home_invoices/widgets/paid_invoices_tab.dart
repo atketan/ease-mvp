@@ -1,3 +1,4 @@
+import 'package:ease/core/database/inventory/inventory_items_dao.dart';
 import 'package:ease/features/invoice_manager/bloc/invoice_manager_cubit.dart';
 import 'package:ease/features/invoice_manager/presentation/invoice_manager.dart';
 import 'package:ease/features/invoices/data_models/invoice_type_enum.dart';
@@ -14,6 +15,7 @@ class PaidInvoicesTab extends StatefulWidget {
 }
 
 class _PaidInvoicesTabState extends State<PaidInvoicesTab> {
+  late InventoryItemsDAO _inventoryItemsDAO;
   @override
   void initState() {
     super.initState();
@@ -25,6 +27,7 @@ class _PaidInvoicesTabState extends State<PaidInvoicesTab> {
 
   @override
   Widget build(BuildContext context) {
+    _inventoryItemsDAO = Provider.of<InventoryItemsDAO>(context);
     final invoicesProvider = Provider.of<InvoicesProvider>(context);
 
     return Column(
@@ -61,7 +64,8 @@ class _PaidInvoicesTabState extends State<PaidInvoicesTab> {
                     context,
                     MaterialPageRoute(
                       builder: (BuildContext context) => BlocProvider(
-                        create: (context) => InvoiceManagerCubit(),
+                        create: (context) =>
+                            InvoiceManagerCubit(_inventoryItemsDAO),
                         child: InvoiceManager(
                           invoiceType: InvoiceType.Sales,
                           invoiceFormMode: InvoiceFormMode.Edit,

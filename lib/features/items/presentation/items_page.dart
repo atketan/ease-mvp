@@ -1,6 +1,6 @@
 import 'dart:async';
-
-import 'package:ease/core/database/inventory_items_dao.dart';
+import 'package:provider/provider.dart';
+import 'package:ease/core/database/inventory/inventory_items_dao.dart';
 import 'package:ease/core/models/inventory_item.dart';
 import 'package:ease/features/items/presentation/update_items_page.dart';
 import 'package:flutter/material.dart';
@@ -12,13 +12,15 @@ class ItemsPage extends StatefulWidget {
 
 class ItemsPageState extends State<ItemsPage> {
   List<InventoryItem> _allItems = [];
-  final _itemsDAO = InventoryItemsDAO();
+  late InventoryItemsDAO _itemsDAO;
   final _streamController = StreamController<List<InventoryItem>>();
 
   @override
   void initState() {
     super.initState();
-    _fetchItems();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _fetchItems();
+    });
   }
 
   void _fetchItems() async {
@@ -47,6 +49,7 @@ class ItemsPageState extends State<ItemsPage> {
 
   @override
   Widget build(BuildContext context) {
+    _itemsDAO = Provider.of<InventoryItemsDAO>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text('Inventory Items'),

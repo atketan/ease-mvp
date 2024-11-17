@@ -2,6 +2,8 @@
 import 'package:ease/core/database/customers/customers_dao.dart';
 import 'package:ease/core/database/customers/firestore_customers_dao.dart';
 import 'package:ease/core/database/database_helper.dart';
+import 'package:ease/core/database/inventory/firestore_inventory_items_dao.dart';
+import 'package:ease/core/database/inventory/inventory_items_dao.dart';
 import 'package:ease/core/utils/developer_log.dart';
 import 'package:ease/ease_app.dart';
 import 'package:flutter/material.dart';
@@ -27,6 +29,9 @@ void main() async {
         providers: [
           Provider<CustomersDAO>(
             create: (_) => CustomersDAO(FirestoreCustomersDAO()),
+          ),
+          Provider<InventoryItemsDAO>(
+            create: (_) => InventoryItemsDAO(FirestoreInventoryItemsDAO()),
           ),
         ],
         child: const EASEApp(),

@@ -1,9 +1,9 @@
-import 'package:ease/core/database/inventory_items_dao.dart';
+import 'package:ease/core/database/inventory/inventory_items_dao.dart';
 import 'package:ease/core/models/inventory_item.dart';
 import 'package:ease/core/models/invoice_item.dart';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 
 import '../bloc/invoice_manager_cubit.dart';
@@ -17,8 +17,9 @@ class InvoiceItemsListWidgetSearchBox extends StatefulWidget {
 class _InvoiceItemsListWidgetSearchBoxState
     extends State<InvoiceItemsListWidgetSearchBox> {
   late List<InvoiceItem> _invoiceItems;
+  late InventoryItemsDAO _inventoryItemsDAO;
+
   final TextEditingController _searchController = TextEditingController();
-  final InventoryItemsDAO _inventoryItemsDAO = InventoryItemsDAO();
 
   @override
   void initState() {
@@ -27,6 +28,7 @@ class _InvoiceItemsListWidgetSearchBoxState
 
   @override
   Widget build(BuildContext context) {
+    _inventoryItemsDAO = Provider.of<InventoryItemsDAO>(context);
     _invoiceItems = context.read<InvoiceManagerCubit>().invoice.items;
     return Padding(
       padding: const EdgeInsets.all(16.0),
@@ -294,7 +296,10 @@ class _InvoiceItemsListWidgetSearchBoxState
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Update details for "${item.name}"', style: Theme.of(context).textTheme.titleMedium,),
+          title: Text(
+            'Update details for "${item.name}"',
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
           content: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,

@@ -1,3 +1,4 @@
+import 'package:ease/core/database/inventory/inventory_items_dao.dart';
 import 'package:ease/core/utils/developer_log.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -27,6 +28,7 @@ class _EASEHomePageState extends State<EASEHomePage>
   int _selectedIndex = 0;
   late Animation<double> _animation;
   late AnimationController _animationController;
+  late InventoryItemsDAO _inventoryItemsDAO;
 
   @override
   void initState() {
@@ -72,6 +74,7 @@ class _EASEHomePageState extends State<EASEHomePage>
 
   @override
   Widget build(BuildContext context) {
+    _inventoryItemsDAO = Provider.of<InventoryItemsDAO>(context);
     return FutureBuilder<bool>(
       future: _requestPermissions(),
       builder: (context, snapshot) {
@@ -148,7 +151,8 @@ class _EASEHomePageState extends State<EASEHomePage>
                       context,
                       MaterialPageRoute(
                         builder: (BuildContext context) => BlocProvider(
-                          create: (context) => InvoiceManagerCubit(),
+                          create: (context) =>
+                              InvoiceManagerCubit(_inventoryItemsDAO),
                           child: InvoiceManager(
                             invoiceType: InvoiceType.Sales,
                             invoiceFormMode: InvoiceFormMode.Add,
@@ -237,7 +241,6 @@ class _EASEHomePageState extends State<EASEHomePage>
             //   ],
             //   onTap: (value) => _onItemTapped(value),
             // ),
-          
           ),
         );
       },
