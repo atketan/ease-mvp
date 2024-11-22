@@ -1,6 +1,6 @@
 import 'package:provider/provider.dart';
 import 'package:ease/core/database/customers/customers_dao.dart';
-import 'package:ease/core/database/vendors_dao.dart';
+import 'package:ease/core/database/vendors/vendors_dao.dart';
 import 'package:ease/core/models/customer.dart';
 import 'package:ease/core/models/vendor.dart';
 import 'package:ease/features/invoice_manager/bloc/invoice_manager_cubit.dart';
@@ -129,11 +129,13 @@ class _AddEntityBottomSheetState extends State<AddEntityBottomSheet> {
                 phone: _mobileController.text,
                 createdAt: DateTime.now(),
                 updatedAt: DateTime.now()))
-            : await VendorsDAO().insertVendor(Vendor(
-                name: _nameController.text,
-                phone: _mobileController.text,
-                createdAt: DateTime.now(),
-                updatedAt: DateTime.now())).toString();
+            : await Provider.of<VendorsDAO>(context)
+                .insertVendor(Vendor(
+                    name: _nameController.text,
+                    phone: _mobileController.text,
+                    createdAt: DateTime.now(),
+                    updatedAt: DateTime.now()))
+                .toString();
 
         if (!mounted) return;
 

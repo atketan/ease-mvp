@@ -1,5 +1,6 @@
 import 'dart:async';
-import 'package:ease/core/database/vendors_dao.dart';
+import 'package:provider/provider.dart';
+import 'package:ease/core/database/vendors/vendors_dao.dart';
 import 'package:ease/core/models/vendor.dart';
 
 import 'package:flutter/material.dart';
@@ -13,13 +14,16 @@ class VendorsPage extends StatefulWidget {
 
 class _VendorsPageState extends State<VendorsPage> {
   List<Vendor> _allVendors = [];
-  final _vendorsDAO = VendorsDAO();
+  late VendorsDAO _vendorsDAO;
   final _streamController = StreamController<List<Vendor>>();
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
     _fetchVendors();
+    });
+    
   }
 
   void _fetchVendors() async {
@@ -48,6 +52,7 @@ class _VendorsPageState extends State<VendorsPage> {
 
   @override
   Widget build(BuildContext context) {
+    _vendorsDAO = Provider.of<VendorsDAO>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text('Vendors'),

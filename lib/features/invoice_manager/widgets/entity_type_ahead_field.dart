@@ -1,6 +1,6 @@
 import 'package:provider/provider.dart';
 import 'package:ease/core/database/customers/customers_dao.dart';
-import 'package:ease/core/database/vendors_dao.dart';
+import 'package:ease/core/database/vendors/vendors_dao.dart';
 import 'package:ease/core/models/customer.dart';
 import 'package:ease/core/models/vendor.dart';
 import 'package:ease/features/invoice_manager/bloc/invoice_manager_cubit.dart';
@@ -35,6 +35,7 @@ class EntityTypeAheadField extends StatefulWidget {
 
 class _EntityTypeAheadFieldState extends State<EntityTypeAheadField> {
   late CustomersDAO _customersDAO;
+  late VendorsDAO _vendorsDAO;
   final TextEditingController _controller = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   bool _isEditing = true;
@@ -57,6 +58,7 @@ class _EntityTypeAheadFieldState extends State<EntityTypeAheadField> {
   @override
   Widget build(BuildContext context) {
     _customersDAO = Provider.of<CustomersDAO>(context);
+    _vendorsDAO = Provider.of<VendorsDAO>(context);
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: BlocBuilder<InvoiceManagerCubit, InvoiceManagerCubitState>(
@@ -104,7 +106,7 @@ class _EntityTypeAheadFieldState extends State<EntityTypeAheadField> {
           }
           return matchedCustomers;
         } else {
-          final vendors = await VendorsDAO().searchVendors(pattern);
+          final vendors = await _vendorsDAO.searchVendors(pattern);
           final matchedVendors = vendors
               .map((v) => Entity(id: v.id, name: v.name, phone: v.phone ?? ''))
               .toList();
@@ -214,7 +216,7 @@ class _EntityTypeAheadFieldState extends State<EntityTypeAheadField> {
         _phoneController.text = customer.phone ?? "";
       }
     } else if (vendorId != null) {
-      Vendor? vendor = await VendorsDAO().getVendorById(vendorId);
+      Vendor? vendor = await _vendorsDAO.getVendorById(vendorId);
       _controller.text = vendor!.name;
       _phoneController.text = vendor.phone ?? "";
     }

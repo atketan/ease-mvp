@@ -1,4 +1,5 @@
-import 'package:ease/core/database/vendors_dao.dart';
+import 'package:provider/provider.dart';
+import 'package:ease/core/database/vendors/vendors_dao.dart';
 import 'package:ease/core/models/vendor.dart';
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
@@ -26,7 +27,7 @@ class _UpdateVendorsPageState extends State<UpdateVendorsPage> {
   TextEditingController _addressController = TextEditingController();
   TextEditingController _phoneController = TextEditingController();
 
-  VendorsDAO _vendorsDAO = VendorsDAO();
+  late VendorsDAO _vendorsDAO;
   late Vendor? vendor;
 
   @override
@@ -34,13 +35,15 @@ class _UpdateVendorsPageState extends State<UpdateVendorsPage> {
     super.initState();
     if (widget.mode == VendorsFormMode.Edit) {
       // Fetch vendor details using the vendor ID
-      _fetchVendorDetails();
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _fetchVendorDetails();
+      });
     }
   }
 
   Future<void> _fetchVendorDetails() async {
     // Fetch vendor details using the vendor ID
-    vendor = await _vendorsDAO.getVendorById(widget.vendorId ??'');
+    vendor = await _vendorsDAO.getVendorById(widget.vendorId ?? '');
     if (vendor != null) {
       setState(() {
         _nameController.text = vendor!.name;
@@ -61,6 +64,7 @@ class _UpdateVendorsPageState extends State<UpdateVendorsPage> {
   }
 
   Future<void> _saveVendor() async {
+    debugPrint('Saving vendor');
     String name = _nameController.text;
     String email = _emailController.text;
     String phone = _phoneController.text;
@@ -103,60 +107,64 @@ class _UpdateVendorsPageState extends State<UpdateVendorsPage> {
 
   @override
   Widget build(BuildContext context) {
+    _vendorsDAO = Provider.of<VendorsDAO>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(
-            widget.mode == VendorsFormMode.Add ? 'Add Vendor' : 'Edit Vendor'),
+          widget.mode == VendorsFormMode.Add ? 'Add Vendor' : 'Edit Vendor',
+        ),
       ),
-      body: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            TextField(
-              controller: _nameController,
-              keyboardType: TextInputType.name,
-              decoration: InputDecoration(labelText: 'Name'),
-            ),
-            SizedBox(height: 16.0),
-            TextField(
-              controller: _phoneController,
-              maxLength: 10,
-              keyboardType: TextInputType.phone,
-              decoration: InputDecoration(labelText: 'Phone'),
-            ),
-            SizedBox(height: 16.0),
-            TextField(
-              controller: _emailController,
-              keyboardType: TextInputType.emailAddress,
-              decoration: InputDecoration(labelText: 'Email'),
-            ),
-            SizedBox(height: 16.0),
-            TextField(
-              controller: _addressController,
-              maxLength: 50,
-              keyboardType: TextInputType.multiline,
-              decoration: InputDecoration(labelText: 'Address'),
-            ),
-            SizedBox(height: 24.0),
-            Row(
-              children: [
-                Expanded(flex: 4, child: Container()),
-                Spacer(flex: 1),
-                Expanded(
-                  flex: 4,
-                  child: TextButton(
-                    onPressed: () => _saveVendor,
-                    child: Text(
-                      'Save',
-                      style: TextStyle().copyWith(
-                        fontWeight: FontWeight.bold,
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              TextField(
+                controller: _nameController,
+                keyboardType: TextInputType.name,
+                decoration: InputDecoration(labelText: 'Name'),
+              ),
+              SizedBox(height: 16.0),
+              TextField(
+                controller: _phoneController,
+                maxLength: 10,
+                keyboardType: TextInputType.phone,
+                decoration: InputDecoration(labelText: 'Phone'),
+              ),
+              SizedBox(height: 16.0),
+              TextField(
+                controller: _emailController,
+                keyboardType: TextInputType.emailAddress,
+                decoration: InputDecoration(labelText: 'Email'),
+              ),
+              SizedBox(height: 16.0),
+              TextField(
+                controller: _addressController,
+                maxLength: 50,
+                keyboardType: TextInputType.multiline,
+                decoration: InputDecoration(labelText: 'Address'),
+              ),
+              SizedBox(height: 24.0),
+              Row(
+                children: [
+                  Expanded(flex: 4, child: Container()),
+                  Spacer(flex: 1),
+                  Expanded(
+                    flex: 4,
+                    child: TextButton(
+                      onPressed: () => _saveVendor(),
+                      child: Text(
+                        'Save',
+                        style: TextStyle().copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ],
-            ),
-          ],
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

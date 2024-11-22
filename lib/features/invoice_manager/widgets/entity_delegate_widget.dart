@@ -1,6 +1,6 @@
 import 'package:provider/provider.dart';
 import 'package:ease/core/database/customers/customers_dao.dart';
-import 'package:ease/core/database/vendors_dao.dart';
+import 'package:ease/core/database/vendors/vendors_dao.dart';
 import 'package:ease/features/customers/presentation/update_customers_page.dart';
 import 'package:ease/features/invoice_manager/bloc/invoice_manager_cubit.dart';
 import 'package:ease/features/invoices/data_models/invoice_type_enum.dart';
@@ -99,7 +99,7 @@ class EntitySearchDelegate extends SearchDelegate {
     return FutureBuilder(
       future: entityType == 'customer'
           ? Provider.of<CustomersDAO>(context).getAllCustomers()
-          : VendorsDAO().getAllVendors(),
+          : Provider.of<VendorsDAO>(context).getAllVendors(),
       builder: (context, snapshot) {
         print(snapshot.connectionState.name);
         if (snapshot.connectionState == ConnectionState.waiting) {

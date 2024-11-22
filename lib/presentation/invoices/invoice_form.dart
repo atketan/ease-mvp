@@ -1,6 +1,6 @@
 import 'package:provider/provider.dart';
 import 'package:ease/core/database/customers/customers_dao.dart';
-import 'package:ease/core/database/vendors_dao.dart';
+import 'package:ease/core/database/vendors/vendors_dao.dart';
 import 'package:ease/core/models/customer.dart';
 import 'package:ease/core/models/invoice.dart';
 import 'package:ease/core/models/invoice_item.dart';
@@ -243,7 +243,7 @@ class EntitySearchDelegate extends SearchDelegate {
     return FutureBuilder(
       future: entityType == 'customer'
           ? Provider.of<CustomersDAO>(context).getAllCustomers()
-          : VendorsDAO().getAllVendors(),
+          : Provider.of<VendorsDAO>(context).getAllVendors(),
       builder: (context, snapshot) {
         print(snapshot.connectionState.name);
         if (snapshot.connectionState == ConnectionState.waiting) {
@@ -354,7 +354,8 @@ class _AddEntityDialogState extends State<AddEntityDialog> {
                 createdAt: DateTime.now(),
                 updatedAt: DateTime.now(),
               );
-              String vendorID = await VendorsDAO().insertVendor(vendor);
+              String vendorID =
+                  await Provider.of<VendorsDAO>(context).insertVendor(vendor);
               entity = vendor;
               (entity as Vendor).id = vendorID;
             }

@@ -43,8 +43,7 @@ class _UpdateCustomersPageState extends State<UpdateCustomersPage> {
 
   Future<void> _fetchCustomerDetails() async {
     // Fetch customer details using the customer ID
-    customer = await _customersDAO
-        .getCustomerById(widget.customerId ?? '');
+    customer = await _customersDAO.getCustomerById(widget.customerId ?? '');
     if (customer != null) {
       setState(() {
         _nameController.text = customer!.name;
@@ -91,8 +90,7 @@ class _UpdateCustomersPageState extends State<UpdateCustomersPage> {
           createdAt: customer!.createdAt,
           updatedAt: DateTime.now(),
         );
-        await _customersDAO
-            .updateCustomer(updatedCustomer);
+        await _customersDAO.updateCustomer(updatedCustomer);
       }
       Navigator.pop(context);
     } on DatabaseException catch (e) {
