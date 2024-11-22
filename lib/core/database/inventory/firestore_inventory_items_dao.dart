@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:ease/core/database/customers/firestore_customers_dao.dart';
 import 'package:ease/core/utils/string_casing_extension.dart';
 import '../../models/inventory_item.dart';
 import 'inventory_items_data_source.dart';
