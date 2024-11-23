@@ -1,7 +1,7 @@
+import 'package:ease/core/enums/invoice_type_enum.dart';
 import 'package:ease/core/models/invoice.dart';
 import 'package:ease/core/providers/short_uuid_generator.dart';
 import 'package:ease/features/invoice_manager/widgets/discount_manager_widget.dart';
-import 'package:ease/features/invoices/data_models/invoice_type_enum.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
