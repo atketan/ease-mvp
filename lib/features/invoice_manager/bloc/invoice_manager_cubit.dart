@@ -3,6 +3,7 @@ import 'package:ease/core/database/inventory/inventory_items_dao.dart';
 import 'package:ease/core/database/invoice_items_dao.dart';
 import 'package:ease/core/database/invoices_dao.dart';
 import 'package:ease/core/database/payments/payments_dao.dart';
+import 'package:ease/core/enums/payment_type_enum.dart';
 import 'package:ease/core/models/inventory_item.dart';
 import 'package:ease/core/models/invoice.dart';
 import 'package:ease/core/models/invoice_item.dart';
@@ -132,7 +133,9 @@ class InvoiceManagerCubit extends Cubit<InvoiceManagerCubitState> {
         createdAt: DateTime.now(),
         updatedAt: DateTime.now(),
         // using below paymentMethod field to simplify the MVP - this will act as a payment status field for time being
-        paymentMethod: _invoice.status, paymentType: '',
+        paymentMethod: _invoice.status,
+        paymentType: PaymentType
+            .credit, // TODO: this cannot be a default setting for each payment, check for conditions and fix it
       ),
     );
 

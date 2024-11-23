@@ -107,13 +107,14 @@ class DatabaseHelper {
     await db.execute('''
       CREATE TABLE Payments (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        invoice_id INTEGER NOT NULL,
+        invoice_id INTEGER,
         amount REAL NOT NULL,
-        payment_date DATETIME NOT NULL,
+        payment_date TEXT NOT NULL,
         payment_method TEXT NOT NULL,
-        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-        updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-        FOREIGN KEY (invoice_id) REFERENCES Invoices(id)
+        payment_type TEXT NOT NULL, -- Store enum as string
+        general_payment_description TEXT,
+        created_at TEXT,
+        updated_at TEXT
       )
     ''');
     await db.execute('''
