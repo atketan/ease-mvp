@@ -2,6 +2,9 @@ import 'package:ease/core/database/customers/customers_dao.dart';
 import 'package:ease/core/database/customers/customers_data_source.dart';
 import 'package:ease/core/database/customers/firestore_customers_dao.dart';
 import 'package:ease/core/database/database_helper.dart';
+import 'package:ease/core/database/expenses/expenses_dao.dart';
+import 'package:ease/core/database/expenses/expenses_data_source.dart';
+import 'package:ease/core/database/expenses/firestore_expenses_dao.dart';
 import 'package:ease/core/database/inventory/firestore_inventory_items_dao.dart';
 import 'package:ease/core/database/inventory/inventory_items_dao.dart';
 import 'package:ease/core/database/inventory/inventory_items_data_source.dart';
@@ -76,6 +79,12 @@ void main() async {
           ),
           ProxyProvider<InvoicesDataSource, InvoicesDAO>(
             update: (_, dataSource, __) => InvoicesDAO(dataSource),
+          ),
+          Provider<ExpensesDataSource>(
+            create: (_) => FirestoreExpensesDAO(), // or SqfliteExpensesDAO()
+          ),
+          ProxyProvider<ExpensesDataSource, ExpensesDAO>(
+            update: (_, dataSource, __) => ExpensesDAO(dataSource),
           ),
         ],
         child: const EASEApp(),

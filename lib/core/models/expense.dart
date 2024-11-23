@@ -1,5 +1,6 @@
 class Expense {
   int? id;
+  String? expenseId; // firestore doc id
   int categoryId;
   String description;
   double amount;
@@ -9,6 +10,7 @@ class Expense {
 
   Expense({
     this.id,
+    this.expenseId,
     required this.categoryId,
     required this.description,
     required this.amount,
@@ -20,6 +22,7 @@ class Expense {
   factory Expense.fromJSON(Map<String, dynamic> json) {
     return Expense(
       id: json['id'],
+      expenseId: json['expense_id'],
       categoryId: json['category_id'],
       description: json['description'],
       amount: json['amount'],
@@ -32,6 +35,7 @@ class Expense {
   Map<String, dynamic> toJSON() {
     return {
       'id': id,
+      'expense_id': expenseId,
       'category_id': categoryId,
       'description': description,
       'amount': amount,
