@@ -2,6 +2,9 @@ import 'package:ease/core/database/customers/customers_dao.dart';
 import 'package:ease/core/database/customers/customers_data_source.dart';
 import 'package:ease/core/database/customers/firestore_customers_dao.dart';
 import 'package:ease/core/database/database_helper.dart';
+import 'package:ease/core/database/expense_categories/expense_categories_dao.dart';
+import 'package:ease/core/database/expense_categories/expense_categories_data_source.dart';
+import 'package:ease/core/database/expense_categories/firestore_expense_categories_dao.dart';
 import 'package:ease/core/database/expenses/expenses_dao.dart';
 import 'package:ease/core/database/expenses/expenses_data_source.dart';
 import 'package:ease/core/database/expenses/firestore_expenses_dao.dart';
@@ -85,6 +88,13 @@ void main() async {
           ),
           ProxyProvider<ExpensesDataSource, ExpensesDAO>(
             update: (_, dataSource, __) => ExpensesDAO(dataSource),
+          ),
+          Provider<ExpenseCategoriesDataSource>(
+            create: (_) =>
+                FirestoreExpenseCategoriesDAO(), // or SqfliteExpenseCategoriesDAO()
+          ),
+          ProxyProvider<ExpenseCategoriesDataSource, ExpenseCategoriesDAO>(
+            update: (_, dataSource, __) => ExpenseCategoriesDAO(dataSource),
           ),
         ],
         child: const EASEApp(),
