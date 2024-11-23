@@ -1,14 +1,14 @@
 import 'package:bloc/bloc.dart';
-import 'package:ease/core/database/invoice_items_dao.dart';
-import 'package:ease/core/database/invoices_dao.dart';
+import 'package:ease/core/database/invoice_items/invoice_items_dao.dart';
+import 'package:ease/core/database/invoices/invoices_dao.dart';
 import 'package:ease/core/models/invoice.dart';
 import 'package:ease/core/models/invoice_item.dart';
 
 class InvoiceBloc extends Cubit<Invoice> {
-  final InvoicesDAO _invoicesDAO = InvoicesDAO();
-  final InvoiceItemsDAO _invoiceItemsDAO = InvoiceItemsDAO();
+  final InvoicesDAO _invoicesDAO;
+  final InvoiceItemsDAO _invoiceItemsDAO;
 
-  InvoiceBloc()
+  InvoiceBloc(this._invoicesDAO, this._invoiceItemsDAO)
       : super(
           Invoice(
             invoiceNumber: '',

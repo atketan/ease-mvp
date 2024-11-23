@@ -1,5 +1,5 @@
-import '../models/invoice.dart';
-import 'database_helper.dart';
+import '../../models/invoice.dart';
+import '../database_helper.dart';
 
 class InvoicesDAO {
   final DatabaseHelper _databaseHelper = DatabaseHelper();

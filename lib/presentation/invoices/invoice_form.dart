@@ -1,3 +1,5 @@
+import 'package:ease/core/database/invoice_items/invoice_items_dao.dart';
+import 'package:ease/core/database/invoices/invoices_dao.dart';
 import 'package:provider/provider.dart';
 import 'package:ease/core/database/customers/customers_dao.dart';
 import 'package:ease/core/database/vendors/vendors_dao.dart';
@@ -9,25 +11,31 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'invoice_bloc.dart';
 
-class InvoiceForm extends StatelessWidget {
+class InvoiceForm extends StatefulWidget {
   final bool isSale;
-
-  // If it's a Sale Invoice, then that would be for a customer transaction    - credit entry on ledger
-  // If it's a Purchase Invoice, then that would be for a vendor transaction  - debit entry on ledger
-
-  // final CustomersDAO _customersDAO = CustomersDAO();
-  // final VendorsDAO _vendorsDAO = VendorsDAO();
 
   InvoiceForm({Key? key, required this.isSale}) : super(key: key);
 
   @override
+  State<InvoiceForm> createState() => _InvoiceFormState();
+}
+
+class _InvoiceFormState extends State<InvoiceForm> {
+  late InvoicesDAO _invoicesDAO;
+  late InvoiceItemsDAO _invoiceItemsDAO;
+
+  @override
   Widget build(BuildContext context) {
+    _invoicesDAO = Provider.of<InvoicesDAO>(context);
+    _invoiceItemsDAO = Provider.of<InvoiceItemsDAO>(context);
+
     return BlocProvider(
-      create: (_) => InvoiceBloc(),
+      create: (_) => InvoiceBloc(_invoicesDAO, _invoiceItemsDAO),
       child: Scaffold(
         appBar: AppBar(
-            title: Text(isSale ? 'New Sale Invoice' : 'New Purchase Invoice')),
-        body: InvoiceFormBody(isSale: isSale),
+            title: Text(
+                widget.isSale ? 'New Sale Invoice' : 'New Purchase Invoice')),
+        body: InvoiceFormBody(isSale: widget.isSale),
       ),
     );
   }

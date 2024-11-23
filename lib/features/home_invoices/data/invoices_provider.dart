@@ -1,6 +1,6 @@
 import 'package:ease/core/utils/developer_log.dart';
 import 'package:flutter/material.dart';
-import '../../../core/database/invoices_dao.dart';
+import '../../../core/database/invoices/invoices_dao.dart';
 import '../../../core/models/invoice.dart';
 
 class InvoicesProvider with ChangeNotifier {

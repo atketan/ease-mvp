@@ -1,4 +1,5 @@
 import 'package:ease/core/database/inventory/inventory_items_dao.dart';
+import 'package:ease/core/database/invoice_items/invoice_items_dao.dart';
 import 'package:ease/core/database/payments/payments_dao.dart';
 import 'package:ease/core/enums/invoice_type_enum.dart';
 import 'package:ease/features/invoice_manager/bloc/invoice_manager_cubit.dart';
@@ -19,6 +20,8 @@ class PaidInvoicesTab extends StatefulWidget {
 class _PaidInvoicesTabState extends State<PaidInvoicesTab> {
   late InventoryItemsDAO _inventoryItemsDAO;
   late PaymentsDAO _paymentsDAO;
+  late InvoiceItemsDAO _invoiceItemsDAO;
+
   @override
   void initState() {
     super.initState();
@@ -32,6 +35,8 @@ class _PaidInvoicesTabState extends State<PaidInvoicesTab> {
   Widget build(BuildContext context) {
     _inventoryItemsDAO = Provider.of<InventoryItemsDAO>(context);
     _paymentsDAO = Provider.of<PaymentsDAO>(context);
+    _invoiceItemsDAO = Provider.of<InvoiceItemsDAO>(context);
+
     final invoicesProvider = Provider.of<InvoicesProvider>(context);
 
     return Column(
@@ -69,7 +74,7 @@ class _PaidInvoicesTabState extends State<PaidInvoicesTab> {
                     MaterialPageRoute(
                       builder: (BuildContext context) => BlocProvider(
                         create: (context) => InvoiceManagerCubit(
-                            _inventoryItemsDAO, _paymentsDAO),
+                            _inventoryItemsDAO, _paymentsDAO, _invoiceItemsDAO),
                         child: InvoiceManager(
                           invoiceType: InvoiceType.Sales,
                           invoiceFormMode: InvoiceFormMode.Edit,

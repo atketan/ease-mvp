@@ -1,35 +1,34 @@
-import '../models/invoice_item.dart';
-import 'database_helper.dart';
+import '../../models/invoice_item.dart';
+import '../database_helper.dart';
+import 'invoice_items_data_source.dart';
 
-class InvoiceItemsDAO {
+class SqfliteInvoiceItemsDAO implements InvoiceItemsDataSource {
   final DatabaseHelper _databaseHelper = DatabaseHelper();
 
+  @override
   Future<int> insertInvoiceItem(InvoiceItem invoiceItem) async {
     final db = await _databaseHelper.database;
     return await db.insert('InvoiceItems', invoiceItem.toJSON());
   }
 
-  Future<List<InvoiceItem>> getAllInvoiceItems() async {
+  @override
+  Future<List<InvoiceItem>> getInvoiceItemsByInvoiceId(String invoiceId) async {
     final db = await _databaseHelper.database;
-    final List<Map<String, dynamic>> maps = await db.query('InvoiceItems');
+    final List<Map<String, dynamic>> maps = await db
+        .query('InvoiceItems', where: 'invoice_id = ?', whereArgs: [invoiceId]);
     return List.generate(maps.length, (i) => InvoiceItem.fromJSON(maps[i]));
   }
 
+  @override
   Future<int> updateInvoiceItem(InvoiceItem invoiceItem) async {
     final db = await _databaseHelper.database;
     return await db.update('InvoiceItems', invoiceItem.toJSON(),
         where: 'id = ?', whereArgs: [invoiceItem.id]);
   }
 
-  Future<int> deleteInvoiceItem(int id) async {
+  @override
+  Future<int> deleteInvoiceItem(String id) async {
     final db = await _databaseHelper.database;
     return await db.delete('InvoiceItems', where: 'id = ?', whereArgs: [id]);
-  }
-
-  Future<List<InvoiceItem>> getAllInvoiceItemsByInvoiceId(int invoiceId) async {
-    final db = await _databaseHelper.database;
-    final List<Map<String, dynamic>> maps = await db
-        .query('InvoiceItems', where: 'invoice_id = ?', whereArgs: [invoiceId]);
-    return List.generate(maps.length, (i) => InvoiceItem.fromJSON(maps[i]));
   }
 }
