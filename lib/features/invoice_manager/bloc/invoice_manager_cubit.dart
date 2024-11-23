@@ -47,13 +47,13 @@ class InvoiceManagerCubit extends Cubit<InvoiceManagerCubitState> {
 
   void populateInvoiceData() {
     debugLog(_invoice.toJSON().toString(), name: 'InvoiceManagerCubit');
-    _getAllInvoiceItems(_invoice.id);
+    _getAllInvoiceItems(_invoice.invoiceId);
   }
 
-  void _getAllInvoiceItems(int? invoiceId) async {
+  void _getAllInvoiceItems(String? invoiceId) async {
     if (invoiceId == null) return;
     _invoice.items =
-        await _invoiceItemsDAO.getAllInvoiceItemsByInvoiceId(invoiceId);
+        await _invoiceItemsDAO.getInvoiceItemsByInvoiceId(invoiceId);
 
     updateInvoiceAmounts();
 

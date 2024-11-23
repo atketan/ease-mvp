@@ -2,6 +2,7 @@ import 'invoice_item.dart';
 
 class Invoice {
   int? id; // auto-increment ID from the DB - primary key
+  String? invoiceId; // Firestore doc id
   String? customerId;
   String? vendorId;
   String name; // customer name or vendor name
@@ -18,6 +19,7 @@ class Invoice {
 
   Invoice({
     this.id,
+    this.invoiceId,
     this.customerId,
     this.vendorId,
     required this.name,
@@ -42,6 +44,7 @@ class Invoice {
   factory Invoice.fromJSON(Map<String, dynamic> json) {
     return Invoice(
       id: json['id'],
+      invoiceId: json['invoice_id'],
       customerId: json['customer_id'],
       vendorId: json['vendor_id'],
       name: json['name'],
@@ -63,6 +66,7 @@ class Invoice {
   Map<String, dynamic> toJSON() {
     return {
       'id': id,
+      'invoice_id': invoiceId,
       'customer_id': customerId,
       'vendor_id': vendorId,
       'name': name,

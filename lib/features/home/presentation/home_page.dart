@@ -2,7 +2,6 @@ import 'package:ease/core/database/inventory/inventory_items_dao.dart';
 import 'package:ease/core/database/invoice_items/invoice_items_dao.dart';
 import 'package:ease/core/database/payments/payments_dao.dart';
 import 'package:ease/core/enums/invoice_type_enum.dart';
-import 'package:ease/core/models/invoice_item.dart';
 import 'package:ease/core/utils/developer_log.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
