@@ -1,4 +1,5 @@
 import 'package:ease/core/database/inventory/inventory_items_dao.dart';
+import 'package:ease/core/database/payments/payments_dao.dart';
 import 'package:ease/core/models/invoice.dart';
 import 'package:ease/core/utils/developer_log.dart';
 import 'package:ease/features/home_invoices/widgets/custom_chip_tags_widget.dart';
@@ -20,6 +21,7 @@ class AllSalesInvoicesTab extends StatefulWidget {
 
 class _AllSalesInvoicesTabState extends State<AllSalesInvoicesTab> {
   late InventoryItemsDAO _inventoryItemsDAO;
+  late PaymentsDAO _paymentsDAO;
 
   @override
   void initState() {
@@ -40,6 +42,7 @@ class _AllSalesInvoicesTabState extends State<AllSalesInvoicesTab> {
   @override
   Widget build(BuildContext context) {
     _inventoryItemsDAO = Provider.of<InventoryItemsDAO>(context);
+    _paymentsDAO = Provider.of<PaymentsDAO>(context);
     return Consumer<InvoicesProvider>(
       builder: (context, invoicesProvider, child) {
         debugLog(
@@ -151,7 +154,8 @@ class _AllSalesInvoicesTabState extends State<AllSalesInvoicesTab> {
                                             BlocProvider(
                                           create: (context) =>
                                               InvoiceManagerCubit(
-                                                  _inventoryItemsDAO),
+                                                  _inventoryItemsDAO,
+                                                  _paymentsDAO),
                                           child: InvoiceManager(
                                             invoiceType: InvoiceType.Sales,
                                             invoiceFormMode:
@@ -233,7 +237,8 @@ class _AllSalesInvoicesTabState extends State<AllSalesInvoicesTab> {
                                           BlocProvider(
                                         create: (context) =>
                                             InvoiceManagerCubit(
-                                                _inventoryItemsDAO),
+                                                _inventoryItemsDAO,
+                                                _paymentsDAO),
                                         child: InvoiceManager(
                                           invoiceType: InvoiceType.Sales,
                                           invoiceFormMode: InvoiceFormMode.Edit,

@@ -2,7 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:ease/core/database/inventory/inventory_items_dao.dart';
 import 'package:ease/core/database/invoice_items_dao.dart';
 import 'package:ease/core/database/invoices_dao.dart';
-import 'package:ease/core/database/payments_dao.dart';
+import 'package:ease/core/database/payments/payments_dao.dart';
 import 'package:ease/core/models/inventory_item.dart';
 import 'package:ease/core/models/invoice.dart';
 import 'package:ease/core/models/invoice_item.dart';
@@ -13,12 +13,13 @@ import 'package:ease/core/utils/developer_log.dart';
 import 'invoice_manager_cubit_state.dart';
 
 class InvoiceManagerCubit extends Cubit<InvoiceManagerCubitState> {
-  InvoiceManagerCubit(this._inventoryItemsDAO) : super(InvoiceManagerInitial());
+  InvoiceManagerCubit(this._inventoryItemsDAO, this._paymentsDAO)
+      : super(InvoiceManagerInitial());
 
   InvoicesDAO _invoiceDAO = InvoicesDAO();
-  final InventoryItemsDAO _inventoryItemsDAO ;
+  final InventoryItemsDAO _inventoryItemsDAO;
   InvoiceItemsDAO _invoiceItemsDAO = InvoiceItemsDAO();
-  PaymentsDAO _paymentsDAO = PaymentsDAO();
+  final PaymentsDAO _paymentsDAO;
 
   late Invoice _invoice;
 
@@ -124,13 +125,14 @@ class InvoiceManagerCubit extends Cubit<InvoiceManagerCubitState> {
 
     await _paymentsDAO.insertPayment(
       Payment(
-        invoiceId: invoiceId,
+        invoiceId: invoiceId
+            .toString(), // TODO: temporary fix for int to String issue, fix the code by removing toString() for it to be correct
         amount: _invoice.grandTotal,
         paymentDate: _invoice.date,
         createdAt: DateTime.now(),
         updatedAt: DateTime.now(),
         // using below paymentMethod field to simplify the MVP - this will act as a payment status field for time being
-        paymentMethod: _invoice.status,
+        paymentMethod: _invoice.status, paymentType: '',
       ),
     );
 
@@ -151,8 +153,9 @@ class InvoiceManagerCubit extends Cubit<InvoiceManagerCubitState> {
     }
 
     // Update payment if grand total or status has changed
-    final Payment? existingPayment =
-        await _paymentsDAO.getPaymentByInvoiceId(_invoice.id);
+    final Payment? existingPayment = await _paymentsDAO.getPaymentByInvoiceId(
+        _invoice.id
+            .toString()); // TODO: temporary fix for int to String issue, fix the code by removing toString() for it to be correct
     if (existingPayment != null) {
       if (existingPayment.amount != _invoice.grandTotal ||
           existingPayment.paymentMethod != _invoice.status) {
