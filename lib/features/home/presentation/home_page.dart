@@ -1,5 +1,6 @@
 import 'package:ease/core/database/inventory/inventory_items_dao.dart';
 import 'package:ease/core/database/invoice_items/invoice_items_dao.dart';
+import 'package:ease/core/database/invoices/invoices_dao.dart';
 import 'package:ease/core/database/payments/payments_dao.dart';
 import 'package:ease/core/enums/invoice_type_enum.dart';
 import 'package:ease/core/utils/developer_log.dart';
@@ -29,6 +30,7 @@ class _EASEHomePageState extends State<EASEHomePage>
   int _selectedIndex = 0;
   late Animation<double> _animation;
   late AnimationController _animationController;
+  late InvoicesDAO _invoicesDAO;
   late InventoryItemsDAO _inventoryItemsDAO;
   late PaymentsDAO _paymentsDAO;
   late InvoiceItemsDAO _invoiceItemsDAO;
@@ -77,6 +79,7 @@ class _EASEHomePageState extends State<EASEHomePage>
 
   @override
   Widget build(BuildContext context) {
+    _invoicesDAO = Provider.of<InvoicesDAO>(context);
     _inventoryItemsDAO = Provider.of<InventoryItemsDAO>(context);
     _paymentsDAO = Provider.of<PaymentsDAO>(context);
     _invoiceItemsDAO = Provider.of<InvoiceItemsDAO>(context);
@@ -103,7 +106,8 @@ class _EASEHomePageState extends State<EASEHomePage>
 
         return MultiProvider(
           providers: [
-            ChangeNotifierProvider(create: (context) => InvoicesProvider()),
+            ChangeNotifierProvider(
+                create: (context) => InvoicesProvider(_invoicesDAO)),
             // ChangeNotifierProvider(
             //     create: (context) => DashboardDataProvider()),
           ],
@@ -158,6 +162,7 @@ class _EASEHomePageState extends State<EASEHomePage>
                       MaterialPageRoute(
                         builder: (BuildContext context) => BlocProvider(
                           create: (context) => InvoiceManagerCubit(
+                              _invoicesDAO,
                               _inventoryItemsDAO,
                               _paymentsDAO,
                               _invoiceItemsDAO),

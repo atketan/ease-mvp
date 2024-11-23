@@ -14,10 +14,11 @@ import 'package:ease/core/utils/developer_log.dart';
 import 'invoice_manager_cubit_state.dart';
 
 class InvoiceManagerCubit extends Cubit<InvoiceManagerCubitState> {
-  InvoiceManagerCubit(this._inventoryItemsDAO, this._paymentsDAO, this._invoiceItemsDAO)
+  InvoiceManagerCubit(this._invoiceDAO, this._inventoryItemsDAO,
+      this._paymentsDAO, this._invoiceItemsDAO)
       : super(InvoiceManagerInitial());
 
-  InvoicesDAO _invoiceDAO = InvoicesDAO();
+  final InvoicesDAO _invoiceDAO;
   final InventoryItemsDAO _inventoryItemsDAO;
   final InvoiceItemsDAO _invoiceItemsDAO;
   final PaymentsDAO _paymentsDAO;

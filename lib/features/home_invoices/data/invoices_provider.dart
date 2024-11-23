@@ -9,7 +9,7 @@ class InvoicesProvider with ChangeNotifier {
   DateTime _startDate;
   DateTime _endDate;
 
-  InvoicesProvider()
+  InvoicesProvider(this._invoicesDAO)
       : defaultStartDate = DateTime.now().subtract(Duration(days: 30)).copyWith(
             hour: 0, minute: 0, second: 0, millisecond: 0, microsecond: 0),
         defaultEndDate = DateTime.now().copyWith(
@@ -19,7 +19,7 @@ class InvoicesProvider with ChangeNotifier {
         _endDate = DateTime.now().copyWith(
             hour: 23, minute: 59, second: 59, millisecond: 999, microsecond: 0);
 
-  final InvoicesDAO _invoicesDAO = InvoicesDAO();
+  final InvoicesDAO _invoicesDAO;
   // final VendorsDAO _vendorsDAO = VendorsDAO();
   // final CustomersDAO _customersDAO = CustomersDAO();
   // final PaymentHistoryDAO _paymentHistoryDAO = PaymentHistoryDAO();
@@ -148,7 +148,7 @@ class InvoicesProvider with ChangeNotifier {
 
   Future<void> markInvoiceAsPaid(Invoice invoice) async {
     try {
-      await _invoicesDAO.markInvoiceAsPaid(invoice.id!);
+      await _invoicesDAO.markInvoiceAsPaid(invoice.invoiceId!);
       _unpaidInvoices.remove(invoice);
       _calculateTotalUnpaidAmount();
       _calculateTotalPaidAmount();
