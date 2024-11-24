@@ -1,3 +1,4 @@
+import 'package:ease/core/enums/payment_method_enum.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -103,7 +104,8 @@ class AddPaymentForm extends StatefulWidget {
 class _AddPaymentFormState extends State<AddPaymentForm> {
   final _formKey = GlobalKey<FormState>();
   double _amount = 0.0;
-  String _paymentMethod = '';
+
+  PaymentMethod _selectedPaymentMethod = PaymentMethod.cash;
   TransactionType _transactionType = TransactionType.credit;
 
   @override
@@ -135,17 +137,24 @@ class _AddPaymentFormState extends State<AddPaymentForm> {
                 _amount = double.parse(value!);
               },
             ),
-            TextFormField(
-              decoration: InputDecoration(labelText: 'Payment Method'),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter a payment method';
-                }
-                return null;
-              },
-              onSaved: (value) {
-                _paymentMethod = value!;
-              },
+            Wrap(
+              spacing: 8.0,
+              children: PaymentMethod.values.map((method) {
+                return ChoiceChip(
+                  label: Text(method.name),
+                  selected: _selectedPaymentMethod == method,
+                  onSelected: (selected) {
+                    setState(() {
+                      _selectedPaymentMethod =
+                          selected ? method : _selectedPaymentMethod;
+                    });
+                  },
+                  selectedColor: Colors.blue,
+                  avatar: _selectedPaymentMethod == method
+                      ? Icon(Icons.check, color: Colors.white)
+                      : null,
+                );
+              }).toList(),
             ),
             DropdownButtonFormField<TransactionType>(
               decoration: InputDecoration(labelText: 'Transaction Type'),
@@ -180,7 +189,7 @@ class _AddPaymentFormState extends State<AddPaymentForm> {
                 invoiceId: widget.invoiceId,
                 amount: _amount,
                 paymentDate: DateTime.now(),
-                paymentMethod: _paymentMethod,
+                paymentMethod: _selectedPaymentMethod,
                 transactionType: _transactionType,
                 createdAt: DateTime.now(),
                 updatedAt: DateTime.now(),

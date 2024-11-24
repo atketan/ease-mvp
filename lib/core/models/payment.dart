@@ -1,3 +1,4 @@
+import 'package:ease/core/enums/payment_method_enum.dart';
 import 'package:ease/core/enums/transaction_type_enum.dart';
 
 class Payment {
@@ -5,7 +6,8 @@ class Payment {
   String? invoiceId; // Nullable, as it may not be associated with an invoice
   double amount;
   DateTime paymentDate;
-  String paymentMethod;
+  PaymentMethod
+      paymentMethod; // upi, cash, debit card, credit card, net banking, cheque, other
   TransactionType transactionType; // credit, debit
   String? generalPaymentDescription; // Nullable, for general payments
   DateTime? createdAt;
@@ -29,7 +31,7 @@ class Payment {
       invoiceId: json['invoice_id'],
       amount: json['amount'],
       paymentDate: DateTime.parse(json['payment_date']),
-      paymentMethod: json['payment_method'],
+      paymentMethod: json['payment_method'].toPaymentMethod(),
       transactionType: TransactionType.values.firstWhere(
           (e) => e.toString() == 'TransactionType.${json['transaction_type']}'),
       generalPaymentDescription: json['general_payment_description'],
@@ -48,7 +50,7 @@ class Payment {
       'invoice_id': invoiceId,
       'amount': amount,
       'payment_date': paymentDate.toIso8601String(),
-      'payment_method': paymentMethod,
+      'payment_method': paymentMethod.name.toLowerCase(),
       'transaction_type':
           transactionType.toString().split('.').last, // Convert enum to string
       'general_payment_description': generalPaymentDescription,

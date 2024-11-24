@@ -3,7 +3,6 @@ import 'package:ease/core/database/inventory/inventory_items_dao.dart';
 import 'package:ease/core/database/invoice_items/invoice_items_dao.dart';
 import 'package:ease/core/database/invoices/invoices_dao.dart';
 import 'package:ease/core/database/payments/payments_dao.dart';
-import 'package:ease/core/enums/transaction_type_enum.dart';
 import 'package:ease/core/models/inventory_item.dart';
 import 'package:ease/core/models/invoice.dart';
 import 'package:ease/core/models/invoice_item.dart';
@@ -170,7 +169,7 @@ class InvoiceManagerCubit extends Cubit<InvoiceManagerCubitState> {
       if (existingPayment.amount != _invoice.grandTotal ||
           existingPayment.paymentMethod != _invoice.status) {
         existingPayment.amount = _invoice.grandTotal;
-        existingPayment.paymentMethod = _invoice.status;
+        // existingPayment.paymentMethod = _invoice.status;
         existingPayment.updatedAt = DateTime.now();
 
         await _paymentsDAO.updatePayment(existingPayment);
