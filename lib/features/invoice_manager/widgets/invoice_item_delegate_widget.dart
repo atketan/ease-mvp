@@ -19,7 +19,7 @@ class InvoiceItemDelegateWidget extends StatefulWidget {
 
 class InvoiceItemDelegateWidgetState extends State<InvoiceItemDelegateWidget> {
   List<InventoryItem> _allItems = [];
-  late InventoryItemsDAO _inventoryItemsDAO ;
+  late InventoryItemsDAO _inventoryItemsDAO;
   final _streamController = StreamController<List<InventoryItem>>();
 
   @override
@@ -106,7 +106,8 @@ class InvoiceItemDelegateWidgetState extends State<InvoiceItemDelegateWidget> {
                       return ListTile(
                         onTap: () {
                           final invoiceItem = InvoiceItem(
-                            itemId: item.itemId,
+                            itemId: item.itemId ??
+                                '', // this value will be empty only in case of local SQFLite DB
                             name: item.name,
                             unitPrice: item.unitPrice,
                             quantity: 1,

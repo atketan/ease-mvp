@@ -68,7 +68,7 @@ class InvoiceBloc extends Cubit<Invoice> {
 
   Future<void> saveInvoice() async {
     if (state.id == null) {
-      int invoiceId = await _invoicesDAO.insertInvoice(state);
+      String invoiceId = await _invoicesDAO.insertInvoice(state);
       for (var item in state.items) {
         item.invoiceId = invoiceId;
         await _invoiceItemsDAO.insertInvoiceItem(item);

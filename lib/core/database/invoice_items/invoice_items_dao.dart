@@ -6,7 +6,7 @@ class InvoiceItemsDAO {
 
   InvoiceItemsDAO(this._dataSource);
 
-  Future<int> insertInvoiceItem(InvoiceItem invoiceItem) {
+  Future<String> insertInvoiceItem(InvoiceItem invoiceItem) {
     return _dataSource.insertInvoiceItem(invoiceItem);
   }
 

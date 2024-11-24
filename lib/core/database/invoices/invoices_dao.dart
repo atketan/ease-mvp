@@ -6,7 +6,7 @@ class InvoicesDAO {
 
   InvoicesDAO(this._dataSource);
 
-  Future<int> insertInvoice(Invoice invoice) {
+  Future<String> insertInvoice(Invoice invoice) {
     return _dataSource.insertInvoice(invoice);
   }
 

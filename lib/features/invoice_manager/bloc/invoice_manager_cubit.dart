@@ -118,7 +118,7 @@ class InvoiceManagerCubit extends Cubit<InvoiceManagerCubitState> {
   }
 
   Future<bool> saveInvoice() async {
-    int invoiceId = await _invoiceDAO.insertInvoice(_invoice);
+    String invoiceId = await _invoiceDAO.insertInvoice(_invoice);
 
     _invoice.items.forEach((element) async {
       element.invoiceId = invoiceId;
@@ -151,15 +151,15 @@ class InvoiceManagerCubit extends Cubit<InvoiceManagerCubitState> {
         await _invoiceItemsDAO.updateInvoiceItem(element);
       } else {
         // Insert new invoice item
-        element.invoiceId = _invoice.id; // Ensure the invoiceId is set
+        element.invoiceId = _invoice.invoiceId; // Ensure the invoiceId is set
         await _invoiceItemsDAO.insertInvoiceItem(element);
       }
     }
 
     // Update payment if grand total or status has changed
     final Payment? existingPayment = await _paymentsDAO.getPaymentByInvoiceId(
-        _invoice.id
-            .toString()); // TODO: temporary fix for int to String issue, fix the code by removing toString() for it to be correct
+      _invoice.invoiceId,
+    ); // Modified to use only string based document IDs from Firestore, may require a future fix to use SQFLite
     if (existingPayment != null) {
       if (existingPayment.amount != _invoice.grandTotal ||
           existingPayment.paymentMethod != _invoice.status) {
@@ -191,7 +191,7 @@ class InvoiceManagerCubit extends Cubit<InvoiceManagerCubitState> {
 
   Future<void> updateInvoiceItemUnitPrice(InvoiceItem item) async {
     // print('Updating invoice item unit price: $item, ${item.itemId}');
-    if (item.itemId != null) {
+    if (item.itemId.isNotEmpty) {
       _invoice.items
           .firstWhere((element) => element.itemId == item.itemId)
           .unitPrice = item.unitPrice;

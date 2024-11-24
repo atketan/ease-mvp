@@ -1,7 +1,7 @@
 class InvoiceItem {
   int? id;
-  int? invoiceId;
-  String? itemId;
+  String? invoiceId; // Firestore document ID from the invoices collection
+  String itemId; // Firestore document ID from the inventory collection
   String name;
   String? description;
   String uom;

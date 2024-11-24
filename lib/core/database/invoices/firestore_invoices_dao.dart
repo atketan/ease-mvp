@@ -6,10 +6,10 @@ class FirestoreInvoicesDAO implements InvoicesDataSource {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   @override
-  Future<int> insertInvoice(Invoice invoice) async {
+  Future<String> insertInvoice(Invoice invoice) async {
     final docRef =
         await _firestore.collection('invoices').add(invoice.toJSON());
-    return docRef.id.hashCode; // Firestore does not return an integer ID
+    return docRef.id; // Firestore does not return an integer ID
   }
 
   @override

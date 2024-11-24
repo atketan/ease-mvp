@@ -6,9 +6,11 @@ class SqfliteInvoiceItemsDAO implements InvoiceItemsDataSource {
   final DatabaseHelper _databaseHelper = DatabaseHelper();
 
   @override
-  Future<int> insertInvoiceItem(InvoiceItem invoiceItem) async {
+  Future<String> insertInvoiceItem(InvoiceItem invoiceItem) async {
     final db = await _databaseHelper.database;
-    return await db.insert('InvoiceItems', invoiceItem.toJSON());
+    return await db
+        .insert('InvoiceItems', invoiceItem.toJSON())
+        .toString(); // SQLite returns an integer ID
   }
 
   @override

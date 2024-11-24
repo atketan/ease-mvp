@@ -1,7 +1,7 @@
 import '../../models/invoice.dart';
 
 abstract class InvoicesDataSource {
-  Future<int> insertInvoice(Invoice invoice);
+  Future<String> insertInvoice(Invoice invoice);
   Future<List<Invoice>> getAllInvoices();
   Future<Invoice?> getInvoiceById(String invoiceId);
   Future<int> updateInvoice(Invoice invoice);
