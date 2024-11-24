@@ -26,7 +26,11 @@ class PaymentsDAO {
     return _dataSource.getPaymentById(paymentId);
   }
 
-  getPaymentByInvoiceId(String? invoiceId) {
+  Future<Payment?> getPaymentByInvoiceId(String? invoiceId) {
     return _dataSource.getPaymentByInvoiceId(invoiceId);
+  }
+
+  Future<List<Payment>> getPaymentsByInvoiceId(String invoiceId) {
+    return _dataSource.getPaymentsByInvoiceId(invoiceId);
   }
 }

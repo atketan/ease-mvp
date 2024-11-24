@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:intl/intl.dart';
 import '../../models/invoice.dart';
 import 'invoices_data_source.dart';
 
@@ -10,11 +11,16 @@ class FirestoreInvoicesDAO implements InvoicesDataSource {
 
   @override
   Future<String> insertInvoice(Invoice invoice) async {
+    // final invoiceSubCollectionName = getInvoiceSubCollectionName(
+    //   invoice.date,
+    // ); // Using time-based sharding collections to store invoices
+
     final docRef = await _firestore
         .collection('users')
         .doc(userId)
         .collection('invoices')
         .add(invoice.toJSON());
+
     return docRef.id; // Firestore does not return an integer ID
   }
 
@@ -23,17 +29,19 @@ class FirestoreInvoicesDAO implements InvoicesDataSource {
     final snapshot = await _firestore
         .collection('users')
         .doc(userId)
-        .collection('invoices').get();
+        .collection('invoices')
+        .get();
     return snapshot.docs.map((doc) => Invoice.fromJSON(doc.data())).toList();
   }
 
   @override
   Future<Invoice?> getInvoiceById(String invoiceId) async {
-    final doc =
-        await _firestore
+    final doc = await _firestore
         .collection('users')
         .doc(userId)
-        .collection('invoices').doc(invoiceId.toString()).get();
+        .collection('invoices')
+        .doc(invoiceId.toString())
+        .get();
     if (doc.exists) {
       return Invoice.fromJSON(doc.data()!);
     } else {
@@ -57,7 +65,9 @@ class FirestoreInvoicesDAO implements InvoicesDataSource {
     await _firestore
         .collection('users')
         .doc(userId)
-        .collection('invoices').doc(invoiceId.toString()).delete();
+        .collection('invoices')
+        .doc(invoiceId.toString())
+        .delete();
     return 1; // Firestore does not return a delete count
   }
 
@@ -103,4 +113,8 @@ class FirestoreInvoicesDAO implements InvoicesDataSource {
         .get();
     return snapshot.docs.map((doc) => Invoice.fromJSON(doc.data())).toList();
   }
+
+  // getInvoiceSubCollectionName(DateTime date) {
+  //   return 'invoices_' + DateFormat('yyyy_MM').format(date);
+  // }
 }

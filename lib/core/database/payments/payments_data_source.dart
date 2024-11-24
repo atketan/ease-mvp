@@ -6,5 +6,8 @@ abstract class PaymentsDataSource {
   Future<int> updatePayment(Payment payment);
   Future<int> deletePayment(String paymentId);
   Future<Payment?> getPaymentById(String paymentId);
-  Future<Payment?> getPaymentByInvoiceId(String? invoiceId);
+  Future<List<Payment>> getPaymentsByInvoiceId(String invoiceId);
+  Future<Payment?> getPaymentByInvoiceId(
+    String? invoiceId,
+  ); // To be deprecated, as each invoice can have multiple payments made against it
 }

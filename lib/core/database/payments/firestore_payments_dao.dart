@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../models/payment.dart';
 import 'payments_data_source.dart';
+import 'package:intl/intl.dart';
 
 class FirestorePaymentsDAO implements PaymentsDataSource {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -10,19 +11,49 @@ class FirestorePaymentsDAO implements PaymentsDataSource {
 
   @override
   Future<int> insertPayment(Payment payment) async {
-    final docRef = await _firestore
+    final paymentSubCollectionName =
+        getPaymentSubCollectionName(payment.paymentDate);
+
+    final paymentData = payment.toJSON();
+
+    // Store payment in the user's payments collection
+    final userPaymentsRef = await _firestore
         .collection('users')
         .doc(userId)
-        .collection('payments')
-        .add(payment.toJSON());
-    return docRef.id.hashCode; // Firestore does not return an integer ID
+        .collection(paymentSubCollectionName)
+        .add(paymentData);
+
+    // If the payment is associated with an invoice, store it as a subcollection under the invoice
+    if (payment.invoiceId != null) {
+      await _firestore
+          .collection('users')
+          .doc(userId)
+          .collection('invoices')
+          .doc(payment.invoiceId.toString())
+          .collection('payments')
+          .add(paymentData);
+    }
+
+    return userPaymentsRef
+        .id.hashCode; // Firestore does not return an integer ID
   }
 
   @override
   Future<List<Payment>> getAllPayments() async {
     final snapshot = await _firestore
+        .collectionGroup('payments')
+        .where('userId', isEqualTo: userId)
+        .get();
+    return snapshot.docs.map((doc) => Payment.fromJSON(doc.data())).toList();
+  }
+
+  @override
+  Future<List<Payment>> getPaymentsByInvoiceId(String invoiceId) async {
+    final snapshot = await _firestore
         .collection('users')
         .doc(userId)
+        .collection('invoices')
+        .doc(invoiceId)
         .collection('payments')
         .get();
     return snapshot.docs.map((doc) => Payment.fromJSON(doc.data())).toList();
@@ -30,39 +61,71 @@ class FirestorePaymentsDAO implements PaymentsDataSource {
 
   @override
   Future<int> updatePayment(Payment payment) async {
+    final subCollectionName = getPaymentSubCollectionName(payment.paymentDate);
     await _firestore
         .collection('users')
         .doc(userId)
-        .collection('payments')
+        .collection(subCollectionName)
         .doc(payment.id.toString())
         .update(payment.toJSON());
+
+    if (payment.invoiceId != null) {
+      await _firestore
+          .collection('users')
+          .doc(userId)
+          .collection('invoices')
+          .doc(payment.invoiceId.toString())
+          .collection('payments')
+          .doc(payment.id.toString())
+          .update(payment.toJSON());
+    }
+
     return 1; // Firestore does not return an update count
   }
 
   @override
   Future<int> deletePayment(String id) async {
+    final payment = await getPaymentById(id);
+    if (payment == null) {
+      throw Exception('Payment not found');
+    }
+
+    final subCollectionName = getPaymentSubCollectionName(payment.paymentDate);
     await _firestore
         .collection('users')
         .doc(userId)
-        .collection('payments')
-        .doc(id.toString())
+        .collection(subCollectionName)
+        .doc(id)
         .delete();
+
+    if (payment.invoiceId != null) {
+      await _firestore
+          .collection('users')
+          .doc(userId)
+          .collection('invoices')
+          .doc(payment.invoiceId.toString())
+          .collection('payments')
+          .doc(id)
+          .delete();
+    }
+
     return 1; // Firestore does not return a delete count
   }
 
-  @override
-  Future<Payment?> getPaymentById(String paymentId) async {
-    final doc = await _firestore
-        .collection('users')
-        .doc(userId)
-        .collection('payments')
-        .doc(paymentId.toString())
+  Future<Payment?> getPaymentById(String id) async {
+    final snapshot = await _firestore
+        .collectionGroup('payments')
+        .where('id', isEqualTo: id)
         .get();
-    if (doc.exists) {
-      return Payment.fromJSON(doc.data()!);
+    if (snapshot.docs.isNotEmpty) {
+      return Payment.fromJSON(snapshot.docs.first.data());
     } else {
       return null;
     }
+  }
+
+  String getPaymentSubCollectionName(DateTime date) {
+    return 'payments_' + DateFormat('yyyy_MM').format(date);
   }
 
   @override
@@ -70,9 +133,11 @@ class FirestorePaymentsDAO implements PaymentsDataSource {
     final snapshot = await _firestore
         .collection('users')
         .doc(userId)
+        .collection('invoices')
+        .doc(invoiceId)
         .collection('payments')
-        .where('invoice_id', isEqualTo: invoiceId)
         .get();
+
     if (snapshot.docs.isNotEmpty) {
       return Payment.fromJSON(snapshot.docs.first.data());
     } else {

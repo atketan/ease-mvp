@@ -56,4 +56,13 @@ class SqflitePaymentsDAO implements PaymentsDataSource {
       return null;
     }
   }
+
+  @override
+  Future<List<Payment>> getPaymentsByInvoiceId(String invoiceId) async {
+    final db = await _databaseHelper.database;
+    final List<Map<String, dynamic>> maps = await db
+        .query('Payments', where: 'invoice_id = ?', whereArgs: [invoiceId]);
+
+    return List.generate(maps.length, (i) => Payment.fromJSON(maps[i]));
+  }
 }

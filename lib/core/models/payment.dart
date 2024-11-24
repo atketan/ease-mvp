@@ -30,10 +30,15 @@ class Payment {
       amount: json['amount'],
       paymentDate: DateTime.parse(json['payment_date']),
       paymentMethod: json['payment_method'],
-      transactionType: TransactionType.values.firstWhere((e) => e.toString() == 'TransactionType.${json['transaction_type']}'),
+      transactionType: TransactionType.values.firstWhere(
+          (e) => e.toString() == 'TransactionType.${json['transaction_type']}'),
       generalPaymentDescription: json['general_payment_description'],
-      createdAt: json['created_at'] != null ? DateTime.parse(json['created_at']) : null,
-      updatedAt: json['updated_at'] != null ? DateTime.parse(json['updated_at']) : null,
+      createdAt: json['created_at'] != null
+          ? DateTime.parse(json['created_at'])
+          : null,
+      updatedAt: json['updated_at'] != null
+          ? DateTime.parse(json['updated_at'])
+          : null,
     );
   }
 
@@ -44,7 +49,8 @@ class Payment {
       'amount': amount,
       'payment_date': paymentDate.toIso8601String(),
       'payment_method': paymentMethod,
-      'transaction_type': transactionType.toString().split('.').last, // Convert enum to string
+      'transaction_type':
+          transactionType.toString().split('.').last, // Convert enum to string
       'general_payment_description': generalPaymentDescription,
       'created_at': createdAt?.toIso8601String(),
       'updated_at': updatedAt?.toIso8601String(),
