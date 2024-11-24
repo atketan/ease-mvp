@@ -1,7 +1,7 @@
 class InvoiceItem {
   int? id;
   String? invoiceId; // Firestore document ID from the invoices collection
-  String itemId; // Firestore document ID from the inventory collection
+  String inventoryId; // Firestore document ID from the inventory collection
   String name;
   String? description;
   String uom;
@@ -12,7 +12,7 @@ class InvoiceItem {
   InvoiceItem({
     this.id,
     this.invoiceId,
-    required this.itemId,
+    required this.inventoryId,
     required this.name,
     this.description,
     required this.uom,
@@ -25,7 +25,7 @@ class InvoiceItem {
     return InvoiceItem(
       id: json['id'],
       invoiceId: json['invoice_id'],
-      itemId: json['item_id'],
+      inventoryId: json['inventory_id'],
       name: json['name'],
       description: json['description'],
       uom: json['uom'],
@@ -39,7 +39,7 @@ class InvoiceItem {
     return {
       'id': id,
       'invoice_id': invoiceId,
-      'item_id': itemId,
+      'inventory_id': inventoryId,
       'name': name,
       'description': description,
       'uom': uom,

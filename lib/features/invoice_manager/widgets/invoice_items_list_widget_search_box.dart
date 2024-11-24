@@ -70,7 +70,7 @@ class _InvoiceItemsListWidgetSearchBoxState
           if (items.isEmpty) {
             return [
               InvoiceItem(
-                itemId:
+                inventoryId:
                     '', // this value will be empty only in case of local SQFLite DB
                 name: pattern,
                 unitPrice: 0,
@@ -86,7 +86,7 @@ class _InvoiceItemsListWidgetSearchBoxState
                     unitPrice: item.unitPrice,
                     quantity: 1,
                     totalPrice: item.unitPrice * 1,
-                    itemId: item.itemId ??
+                    inventoryId: item.itemId ??
                         '', // this value will be empty only in case of local SQFLite DB,
                     uom: item.uom,
                   ))
@@ -105,7 +105,7 @@ class _InvoiceItemsListWidgetSearchBoxState
           );
         },
         onSelected: (suggestion) {
-          if (suggestion.itemId.isEmpty && suggestion.unitPrice == 0) {
+          if (suggestion.inventoryId.isEmpty && suggestion.unitPrice == 0) {
             _addNewItem(suggestion.name);
           } else {
             _addExistingItem(suggestion);
@@ -271,7 +271,7 @@ class _InvoiceItemsListWidgetSearchBoxState
           unitPrice: 0,
           quantity: 1,
           totalPrice: 0,
-          itemId: _itemId,
+          inventoryId: _itemId,
           uom: '',
         ),
       );

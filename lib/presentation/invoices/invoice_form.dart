@@ -429,7 +429,7 @@ class _AddInvoiceItemDialogState extends State<AddInvoiceItemDialog> {
             var item = InvoiceItem(
               invoiceId: widget.invoiceId
                   .toString(), // Marking this as a string as this form is currently unused, to fix later in order to use this form properly
-              itemId:
+              inventoryId:
                   '', // this value will be empty only in case of local SQFLite DB,
               name: description,
               description: null,

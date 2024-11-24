@@ -58,10 +58,12 @@ class FirestoreInvoicesDAO implements InvoicesDataSource {
       DateTime startDate, DateTime endDate, String status) async {
     final snapshot = await _firestore
         .collection('invoices')
-        .where('date', isGreaterThanOrEqualTo: startDate.toIso8601String())
-        .where('date', isLessThanOrEqualTo: endDate.toIso8601String())
-        .where('status', isEqualTo: status)
+        // .where('date', isGreaterThanOrEqualTo: startDate.toIso8601String())
+        // .where('date', isLessThanOrEqualTo: endDate.toIso8601String())
+        // .where('status', isEqualTo: status)
         .get();
+    // TODO: temporarily removing the search filters to avoid index failure in Firestore
+    // Also, may need to rethink this entire logic to ensure the database is not overloaded with filtration especially since its a NoSQL database now
     return snapshot.docs.map((doc) => Invoice.fromJSON(doc.data())).toList();
   }
 
@@ -70,9 +72,11 @@ class FirestoreInvoicesDAO implements InvoicesDataSource {
       DateTime startDate, DateTime endDate) async {
     final snapshot = await _firestore
         .collection('invoices')
-        .where('date', isGreaterThanOrEqualTo: startDate.toIso8601String())
-        .where('date', isLessThanOrEqualTo: endDate.toIso8601String())
-        .where('type', isEqualTo: 'sales')
+        // .where('date', isGreaterThanOrEqualTo: startDate.toIso8601String())
+        // .where('date', isLessThanOrEqualTo: endDate.toIso8601String())
+        // .where('type', isEqualTo: 'sales')
+        // TODO: temporarily removing the search filters to avoid index failure in Firestore
+        // Also, may need to rethink this entire logic to ensure the database is not overloaded with filtration especially since its a NoSQL database now
         .get();
     return snapshot.docs.map((doc) => Invoice.fromJSON(doc.data())).toList();
   }

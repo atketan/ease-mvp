@@ -191,16 +191,16 @@ class InvoiceManagerCubit extends Cubit<InvoiceManagerCubitState> {
 
   Future<void> updateInvoiceItemUnitPrice(InvoiceItem item) async {
     // print('Updating invoice item unit price: $item, ${item.itemId}');
-    if (item.itemId.isNotEmpty) {
+    if (item.inventoryId.isNotEmpty) {
       _invoice.items
-          .firstWhere((element) => element.itemId == item.itemId)
+          .firstWhere((element) => element.inventoryId == item.inventoryId)
           .unitPrice = item.unitPrice;
       _invoice.items
-          .firstWhere((element) => element.itemId == item.itemId)
+          .firstWhere((element) => element.inventoryId == item.inventoryId)
           .totalPrice = item.unitPrice * item.quantity;
       _inventoryItemsDAO.updateInventoryItem(
         InventoryItem(
-          itemId: item.itemId,
+          itemId: item.inventoryId,
           name: item.name,
           unitPrice: item.unitPrice,
           uom: item.uom,

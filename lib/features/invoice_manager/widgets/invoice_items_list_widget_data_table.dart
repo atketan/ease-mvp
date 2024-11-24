@@ -169,7 +169,7 @@ class _InvoiceItemsListWidgetDataTableState
     if (items.isEmpty) {
       return [
         InvoiceItem(
-          itemId:
+          inventoryId:
               '', // this value will be empty only in case of local SQFLite DB
           name: pattern,
           unitPrice: 0,
@@ -185,7 +185,7 @@ class _InvoiceItemsListWidgetDataTableState
               unitPrice: item.unitPrice,
               quantity: 1,
               totalPrice: item.unitPrice * 1,
-              itemId: item.itemId ??
+              inventoryId: item.itemId ??
                   '', // this value will be empty only in case of local SQFLite DB,
               uom: item.uom,
             ))
@@ -193,7 +193,7 @@ class _InvoiceItemsListWidgetDataTableState
   }
 
   void _onItemSelected(InvoiceItem suggestion) async {
-    if (suggestion.itemId.isEmpty && suggestion.unitPrice == 0) {
+    if (suggestion.inventoryId.isEmpty && suggestion.unitPrice == 0) {
       await _addNewItem(suggestion.name);
     } else {
       _addExistingItem(suggestion);
@@ -210,7 +210,7 @@ class _InvoiceItemsListWidgetDataTableState
           unitPrice: 0,
           quantity: 1,
           totalPrice: 0,
-          itemId: _itemId,
+          inventoryId: _itemId,
           uom: '',
         ),
       );

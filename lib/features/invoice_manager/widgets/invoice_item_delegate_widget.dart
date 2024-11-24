@@ -106,7 +106,7 @@ class InvoiceItemDelegateWidgetState extends State<InvoiceItemDelegateWidget> {
                       return ListTile(
                         onTap: () {
                           final invoiceItem = InvoiceItem(
-                            itemId: item.itemId ??
+                            inventoryId: item.itemId ??
                                 '', // this value will be empty only in case of local SQFLite DB
                             name: item.name,
                             unitPrice: item.unitPrice,
