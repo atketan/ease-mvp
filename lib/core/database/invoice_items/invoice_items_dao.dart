@@ -18,7 +18,7 @@ class InvoiceItemsDAO {
     return _dataSource.updateInvoiceItem(invoiceItem);
   }
 
-  Future<int> deleteInvoiceItem(String id) {
-    return _dataSource.deleteInvoiceItem(id);
+  Future<int> deleteInvoiceItem(InvoiceItem invoiceItem) {
+    return _dataSource.deleteInvoiceItem(invoiceItem);
   }
 }

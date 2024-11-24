@@ -135,27 +135,10 @@ class InvoiceManagerCubit extends Cubit<InvoiceManagerCubitState> {
       await _paymentsDAO.insertPayment(element);
     });
 
-// // NEEDS FIXING
-//     await _paymentsDAO.insertPayment(
-//       Payment(
-//         invoiceId: invoiceId
-//             .toString(), // TODO: temporary fix for int to String issue, fix the code by removing toString() for it to be correct
-//         amount: _invoice.grandTotal,
-//         paymentDate: _invoice.date,
-//         createdAt: DateTime.now(),
-//         updatedAt: DateTime.now(),
-//         // using below paymentMethod field to simplify the MVP - this will act as a payment status field for time being
-//         paymentMethod: _invoice.status,
-//         transactionType: TransactionType
-//             .credit, // TODO: this cannot be a default setting for each payment, check for conditions and fix it
-//       ),
-//     );
-
     return Future.value(true);
   }
 
   Future<bool> updateInvoice() async {
-    // Update invoice items
     for (var element in _invoice.items) {
       if (element.id != null) {
         // Update existing invoice item
@@ -167,36 +150,20 @@ class InvoiceManagerCubit extends Cubit<InvoiceManagerCubitState> {
       }
     }
 
-    // Update payment if grand total or status has changed
-    final Payment? existingPayment = await _paymentsDAO.getPaymentByInvoiceId(
-      _invoice.invoiceId,
-    ); // Modified to use only string based document IDs from Firestore, may require a future fix to use SQFLite
-    if (existingPayment != null) {
-      if (existingPayment.amount != _invoice.grandTotal ||
-          existingPayment.paymentMethod != _invoice.status) {
-        existingPayment.amount = _invoice.grandTotal;
-        // existingPayment.paymentMethod = _invoice.status;
-        existingPayment.updatedAt = DateTime.now();
-
-        await _paymentsDAO.updatePayment(existingPayment);
+    for (var element in _invoice.payments) {
+      if (element.id != null) {
+        // Update existing payment
+        await _paymentsDAO.updatePayment(element);
+      } else {
+        // Insert new payment
+        element.invoiceId = _invoice.invoiceId; // Ensure the invoiceId is set
+        await _paymentsDAO.insertPayment(element);
       }
     }
-    // } else {
-    //   // If no existing payment, create a new one
-    //   await _paymentsDAO.insertPayment(
-    //     Payment(
-    //       invoiceId: _invoice.id,
-    //       amount: _invoice.grandTotal,
-    //       paymentDate: _invoice.date,
-    //       createdAt: existingPayment?.createdAt ?? DateTime.now(), // Keep the original createdAt
-    //       updatedAt: DateTime.now(),
-    //       paymentMethod: _invoice.status,
-    //     ),
-    //   );
-    // }
 
     debugLog("Update invoice: " + _invoice.toJSON().toString());
     await _invoiceDAO.updateInvoice(_invoice); // Update the invoice itself
+
     return Future.value(true);
   }
 

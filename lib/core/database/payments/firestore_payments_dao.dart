@@ -43,7 +43,12 @@ class FirestorePaymentsDAO implements PaymentsDataSource {
         .collectionGroup('payments')
         .where('userId', isEqualTo: userId)
         .get();
-    return snapshot.docs.map((doc) => Payment.fromJSON(doc.data())).toList();
+    return snapshot.docs.map((doc) {
+      final payment = Payment.fromJSON(doc.data());
+      payment.id = doc.id;
+      payment.invoiceId = doc['invoice_id'] ?? '';
+      return payment;
+    }).toList();
   }
 
   @override
@@ -51,7 +56,7 @@ class FirestorePaymentsDAO implements PaymentsDataSource {
     if (invoiceId.isEmpty) {
       return [];
     }
-    
+
     final snapshot = await _firestore
         .collection('users')
         .doc(userId)
@@ -59,7 +64,12 @@ class FirestorePaymentsDAO implements PaymentsDataSource {
         .doc(invoiceId)
         .collection('payments')
         .get();
-    return snapshot.docs.map((doc) => Payment.fromJSON(doc.data())).toList();
+    return snapshot.docs.map((doc) {
+      final payment = Payment.fromJSON(doc.data());
+      payment.id = doc.id;
+      payment.invoiceId = invoiceId;
+      return payment;
+    }).toList();
   }
 
   @override

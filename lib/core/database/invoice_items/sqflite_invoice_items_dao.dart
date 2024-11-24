@@ -29,8 +29,9 @@ class SqfliteInvoiceItemsDAO implements InvoiceItemsDataSource {
   }
 
   @override
-  Future<int> deleteInvoiceItem(String id) async {
+  Future<int> deleteInvoiceItem(InvoiceItem invoiceItem) async {
     final db = await _databaseHelper.database;
-    return await db.delete('InvoiceItems', where: 'id = ?', whereArgs: [id]);
+    return await db
+        .delete('InvoiceItems', where: 'id = ?', whereArgs: [invoiceItem.id]);
   }
 }

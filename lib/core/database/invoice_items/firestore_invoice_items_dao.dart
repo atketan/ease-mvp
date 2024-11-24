@@ -26,12 +26,15 @@ class FirestoreInvoiceItemsDAO implements InvoiceItemsDataSource {
         .collection('users')
         .doc(userId)
         .collection('invoices')
-        .doc(invoiceId.toString())
+        .doc(invoiceId)
         .collection('invoiceItems')
         .get();
-    return snapshot.docs
-        .map((doc) => InvoiceItem.fromJSON(doc.data()))
-        .toList();
+    return snapshot.docs.map((doc) {
+      final invoiceItem = InvoiceItem.fromJSON(doc.data());
+      invoiceItem.id = doc.id;
+      invoiceItem.invoiceId = invoiceId;
+      return invoiceItem;
+    }).toList();
   }
 
   @override
@@ -40,39 +43,23 @@ class FirestoreInvoiceItemsDAO implements InvoiceItemsDataSource {
         .collection('users')
         .doc(userId)
         .collection('invoices')
-        .doc(invoiceItem.invoiceId.toString())
+        .doc(invoiceItem.invoiceId)
         .collection('invoiceItems')
-        .doc(invoiceItem.id.toString())
+        .doc(invoiceItem.id)
         .update(invoiceItem.toJSON());
     return 1; // Firestore does not return an update count
   }
 
   @override
-  Future<int> deleteInvoiceItem(String invoiceItemId) async {
-    // Assuming you have the invoiceId to locate the document
-    final invoiceId = await _getInvoiceIdByInvoiceItemId(invoiceItemId);
+  Future<int> deleteInvoiceItem(InvoiceItem invoiceItem) async {
     await _firestore
         .collection('users')
         .doc(userId)
         .collection('invoices')
-        .doc(invoiceId.toString())
+        .doc(invoiceItem.invoiceId)
         .collection('invoiceItems')
-        .doc(invoiceItemId.toString())
+        .doc(invoiceItem.id)
         .delete();
     return 1; // Firestore does not return a delete count
-  }
-
-  Future<String> _getInvoiceIdByInvoiceItemId(String id) async {
-    // Implement logic to retrieve the invoiceId by invoiceItemId
-    // This is a placeholder implementation
-    final snapshot = await _firestore
-        .collectionGroup('invoiceItems')
-        .where('id', isEqualTo: id)
-        .get();
-    if (snapshot.docs.isNotEmpty) {
-      return snapshot.docs.first.reference.parent.parent!.id;
-    } else {
-      throw Exception('InvoiceItem not found');
-    }
   }
 }

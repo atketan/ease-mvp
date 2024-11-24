@@ -4,5 +4,5 @@ abstract class InvoiceItemsDataSource {
   Future<String> insertInvoiceItem(InvoiceItem invoiceItem);
   Future<List<InvoiceItem>> getInvoiceItemsByInvoiceId(String invoiceId);
   Future<int> updateInvoiceItem(InvoiceItem invoiceItem);
-  Future<int> deleteInvoiceItem(String id);
+  Future<int> deleteInvoiceItem(InvoiceItem invoiceItem);
 }
