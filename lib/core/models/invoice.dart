@@ -1,3 +1,5 @@
+import 'package:ease/core/models/payment.dart';
+
 import 'invoice_item.dart';
 
 class Invoice {
@@ -16,6 +18,7 @@ class Invoice {
   String status; // paid or unpaid
   String? notes;
   List<InvoiceItem> _items = [];
+  List<Payment> _payments = [];
 
   Invoice({
     this.id,
@@ -39,6 +42,12 @@ class Invoice {
 
   void set items(List<InvoiceItem> items) {
     _items = items;
+  }
+
+  List<Payment> get payments => _payments;
+
+  void set payments(List<Payment> payments) {
+    _payments = payments;
   }
 
   factory Invoice.fromJSON(Map<String, dynamic> json) {

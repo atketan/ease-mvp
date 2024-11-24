@@ -125,20 +125,26 @@ class InvoiceManagerCubit extends Cubit<InvoiceManagerCubitState> {
       await _invoiceItemsDAO.insertInvoiceItem(element);
     });
 
-    await _paymentsDAO.insertPayment(
-      Payment(
-        invoiceId: invoiceId
-            .toString(), // TODO: temporary fix for int to String issue, fix the code by removing toString() for it to be correct
-        amount: _invoice.grandTotal,
-        paymentDate: _invoice.date,
-        createdAt: DateTime.now(),
-        updatedAt: DateTime.now(),
-        // using below paymentMethod field to simplify the MVP - this will act as a payment status field for time being
-        paymentMethod: _invoice.status,
-        transactionType: TransactionType
-            .credit, // TODO: this cannot be a default setting for each payment, check for conditions and fix it
-      ),
-    );
+    _invoice.payments.forEach((element) async {
+      element.invoiceId = invoiceId;
+      await _paymentsDAO.insertPayment(element);
+    });
+
+// // NEEDS FIXING
+//     await _paymentsDAO.insertPayment(
+//       Payment(
+//         invoiceId: invoiceId
+//             .toString(), // TODO: temporary fix for int to String issue, fix the code by removing toString() for it to be correct
+//         amount: _invoice.grandTotal,
+//         paymentDate: _invoice.date,
+//         createdAt: DateTime.now(),
+//         updatedAt: DateTime.now(),
+//         // using below paymentMethod field to simplify the MVP - this will act as a payment status field for time being
+//         paymentMethod: _invoice.status,
+//         transactionType: TransactionType
+//             .credit, // TODO: this cannot be a default setting for each payment, check for conditions and fix it
+//       ),
+//     );
 
     return Future.value(true);
   }
@@ -250,5 +256,17 @@ class InvoiceManagerCubit extends Cubit<InvoiceManagerCubitState> {
 
   void setEntityName(String clientName) {
     invoice.name = clientName;
+  }
+
+  void getPaymentsByInvoiceId() async {
+    emit(InvoiceManagerPaymentsLoading());
+    invoice.payments =
+        await _paymentsDAO.getPaymentsByInvoiceId(invoice.invoiceId ?? "");
+    emit(InvoiceManagerPaymentsLoaded(payments: invoice.payments));
+  }
+
+  void addPayment(Payment newPayment) {
+    invoice.payments.add(newPayment);
+    emit(InvoiceManagerPaymentsLoaded(payments: invoice.payments));
   }
 }

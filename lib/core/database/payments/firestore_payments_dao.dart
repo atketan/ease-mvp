@@ -48,6 +48,10 @@ class FirestorePaymentsDAO implements PaymentsDataSource {
 
   @override
   Future<List<Payment>> getPaymentsByInvoiceId(String invoiceId) async {
+    if (invoiceId.isEmpty) {
+      return [];
+    }
+    
     final snapshot = await _firestore
         .collection('users')
         .doc(userId)

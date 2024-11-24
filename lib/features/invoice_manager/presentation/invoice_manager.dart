@@ -2,6 +2,7 @@ import 'package:ease/core/enums/invoice_type_enum.dart';
 import 'package:ease/core/models/invoice.dart';
 import 'package:ease/core/providers/short_uuid_generator.dart';
 import 'package:ease/features/invoice_manager/widgets/discount_manager_widget.dart';
+import 'package:ease/features/invoice_manager/widgets/payments_manager_widget.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -328,23 +329,38 @@ class InvoiceManagerState extends State<InvoiceManager> {
                         ),
                       ),
                       ExpansionPanel(
-                          canTapOnHeader: true,
-                          isExpanded: _isOpen[4],
-                          headerBuilder: (context, isExpanded) {
-                            return Container(
-                              color: isExpanded
-                                  ? Theme.of(context).secondaryHeaderColor
-                                  : Colors.transparent,
-                              child: ListTile(
-                                leading: Icon(Icons.payment_outlined),
-                                title: Text(
-                                  'PAYMENTS',
-                                  style: Theme.of(context).textTheme.labelLarge,
-                                ),
+                        canTapOnHeader: true,
+                        isExpanded: _isOpen[4],
+                        headerBuilder: (context, isExpanded) {
+                          return Container(
+                            color: isExpanded
+                                ? Theme.of(context).secondaryHeaderColor
+                                : Colors.transparent,
+                            child: ListTile(
+                              leading: Icon(Icons.payment_outlined),
+                              title: Text(
+                                'PAYMENTS',
+                                style: Theme.of(context).textTheme.labelLarge,
                               ),
-                            );
+                            ),
+                          );
+                        },
+                        body: BlocBuilder<InvoiceManagerCubit,
+                            InvoiceManagerCubitState>(
+                          builder: (context, state) {
+                            if (state is InvoiceManagerLoaded) {
+                              return PaymentsManagerWidget();
+                            } else if (state is InvoiceManagerLoading) {
+                              return Center(child: CircularProgressIndicator());
+                            } else if (state is InvoiceManagerError) {
+                              return Center(
+                                  child: Text('Error: ${state.message}'));
+                            } else {
+                              return Center(child: Text('Unknown state'));
+                            }
                           },
-                          body: Card()),
+                        ),
+                      ),
                     ],
                     expansionCallback: (panelIndex, isExpanded) => setState(() {
                       _isOpen[panelIndex] = isExpanded;
