@@ -1,4 +1,6 @@
+import 'package:ease/core/enums/payment_method_enum.dart';
 import 'package:ease/core/enums/transaction_type_enum.dart';
+import 'package:ease/core/models/payment.dart';
 import 'package:ease/core/utils/date_time_utils.dart';
 import 'package:ease/core/utils/string_casing_extension.dart';
 import 'package:flutter/material.dart';
@@ -43,7 +45,7 @@ class _PaymentsManagerWidgetState extends State<PaymentsManagerWidget> {
                   final payment = payments[index];
                   return ListTile(
                     title: Text(
-                      payment.paymentMethod.name.toTitleCase,
+                      payment.paymentMethod.displayName,
                       style: Theme.of(context).textTheme.labelLarge,
                     ),
                     subtitle: Text(

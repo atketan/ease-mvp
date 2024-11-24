@@ -9,7 +9,7 @@ enum PaymentMethod {
 }
 
 extension PaymentMethodExtension on PaymentMethod {
-  String get name {
+  String get displayName {
     switch (this) {
       case PaymentMethod.upi:
         return 'UPI';
