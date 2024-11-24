@@ -1,5 +1,4 @@
 import 'package:bloc/bloc.dart';
-import 'package:ease/core/database/customers/firestore_customers_dao.dart';
 import 'package:ease/core/database/inventory/inventory_items_dao.dart';
 import 'package:ease/core/database/invoice_items/invoice_items_dao.dart';
 import 'package:ease/core/database/invoices/invoices_dao.dart';
@@ -233,12 +232,8 @@ class InvoiceManagerCubit extends Cubit<InvoiceManagerCubitState> {
   }
 
   void _getPaymentsByInvoiceId() async {
-    emit(InvoiceManagerLoading());
     invoice.payments =
         await _paymentsDAO.getPaymentsByInvoiceId(invoice.invoiceId ?? "");
-    debugLog(invoice.payments.toList().length.toString(),
-        name: 'InvoiceManagerCubit');
-    emit(InvoiceManagerLoaded(invoice: _invoice));
   }
 
   void addPayment(Payment newPayment) {

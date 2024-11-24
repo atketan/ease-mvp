@@ -98,6 +98,10 @@ class FirestoreCustomersDAO implements CustomersDataSource {
         .where("name", isLessThanOrEqualTo: "${pattern.toTitleCase}\uf7ff")
         .get();
 
-    return snapshot.docs.map((doc) => Customer.fromJSON(doc.data())).toList();
+    return snapshot.docs.map((doc) {
+      final customer = Customer.fromJSON(doc.data());
+      customer.id = doc.id;
+      return customer;
+    }).toList();
   }
 }

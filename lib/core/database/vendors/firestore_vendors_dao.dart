@@ -94,6 +94,10 @@ class FirestoreVendorsDAO implements VendorsDataSource {
         .collection('vendors')
         .where('name', isGreaterThanOrEqualTo: pattern)
         .get();
-    return snapshot.docs.map((doc) => Vendor.fromJSON(doc.data())).toList();
+    return snapshot.docs.map((doc) {
+      final vendor = Vendor.fromJSON(doc.data());
+      vendor.id = doc.id;
+      return vendor;
+    }).toList();
   }
 }
