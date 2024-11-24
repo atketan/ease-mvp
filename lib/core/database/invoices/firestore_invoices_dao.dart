@@ -111,7 +111,11 @@ class FirestoreInvoicesDAO implements InvoicesDataSource {
         // TODO: temporarily removing the search filters to avoid index failure in Firestore
         // Also, may need to rethink this entire logic to ensure the database is not overloaded with filtration especially since its a NoSQL database now
         .get();
-    return snapshot.docs.map((doc) => Invoice.fromJSON(doc.data())).toList();
+    return snapshot.docs.map((doc) {
+      Invoice invoice = Invoice.fromJSON(doc.data());
+      invoice.invoiceId = doc.id;
+      return invoice;
+    }).toList();
   }
 
   // getInvoiceSubCollectionName(DateTime date) {

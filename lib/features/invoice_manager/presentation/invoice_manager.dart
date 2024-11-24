@@ -368,22 +368,22 @@ class InvoiceManagerState extends State<InvoiceManager> {
                   ),
                   InvoiceManagerSpacer(),
 
-                  // Payment type and status
-                  BlocBuilder<InvoiceManagerCubit, InvoiceManagerCubitState>(
-                    builder: (context, state) {
-                      if (state is InvoiceManagerLoaded) {
-                        return PaymentDetailsWidget();
-                      } else if (state is InvoiceManagerLoading) {
-                        return Center(child: CircularProgressIndicator());
-                      } else if (state is InvoiceManagerError) {
-                        return Center(child: Text('Error: ${state.message}'));
-                      } else {
-                        return Center(child: Text('Unknown state'));
-                      }
-                    },
-                  ),
+                  // // Payment type and status
+                  // BlocBuilder<InvoiceManagerCubit, InvoiceManagerCubitState>(
+                  //   builder: (context, state) {
+                  //     if (state is InvoiceManagerLoaded) {
+                  //       return PaymentDetailsWidget();
+                  //     } else if (state is InvoiceManagerLoading) {
+                  //       return Center(child: CircularProgressIndicator());
+                  //     } else if (state is InvoiceManagerError) {
+                  //       return Center(child: Text('Error: ${state.message}'));
+                  //     } else {
+                  //       return Center(child: Text('Unknown state'));
+                  //     }
+                  //   },
+                  // ),
 
-                  InvoiceManagerSpacer(height: 0),
+                  // InvoiceManagerSpacer(height: 0),
                 ],
               ),
             ),

@@ -31,7 +31,7 @@ class Payment {
       invoiceId: json['invoice_id'],
       amount: json['amount'],
       paymentDate: DateTime.parse(json['payment_date']),
-      paymentMethod: json['payment_method'].toPaymentMethod(),
+      paymentMethod: json['payment_method'].toString().toPaymentMethod(),
       transactionType: TransactionType.values.firstWhere(
           (e) => e.toString() == 'TransactionType.${json['transaction_type']}'),
       generalPaymentDescription: json['general_payment_description'],

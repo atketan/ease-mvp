@@ -42,6 +42,7 @@ class InvoiceManagerCubit extends Cubit<InvoiceManagerCubitState> {
     } else {
       _invoice = invoice;
     }
+    _getPaymentsByInvoiceId();
     emit(InvoiceManagerLoaded(invoice: _invoice));
   }
 
@@ -257,15 +258,18 @@ class InvoiceManagerCubit extends Cubit<InvoiceManagerCubitState> {
     invoice.name = clientName;
   }
 
-  void getPaymentsByInvoiceId() async {
-    emit(InvoiceManagerPaymentsLoading());
+  void _getPaymentsByInvoiceId() async {
+    emit(InvoiceManagerLoading());
+    debugLog( 'Getting payments by invoice I: ${invoice.invoiceId}', name: 'InvoiceManagerCubit');
     invoice.payments =
         await _paymentsDAO.getPaymentsByInvoiceId(invoice.invoiceId ?? "");
-    emit(InvoiceManagerPaymentsLoaded(payments: invoice.payments));
+    debugLog(invoice.payments.toList().length.toString(),
+        name: 'InvoiceManagerCubit');
+    emit(InvoiceManagerLoaded(invoice: _invoice));
   }
 
   void addPayment(Payment newPayment) {
     invoice.payments.add(newPayment);
-    emit(InvoiceManagerPaymentsLoaded(payments: invoice.payments));
+    emit(InvoiceManagerLoaded(invoice: _invoice));
   }
 }
