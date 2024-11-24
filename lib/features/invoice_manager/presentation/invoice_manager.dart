@@ -62,7 +62,7 @@ class InvoiceManagerState extends State<InvoiceManager> {
   final String invoiceNumber = generateShort12CharUniqueKey().toUpperCase();
   // final DateTime invoiceCreateDate = DateTime.now();
 
-  List<bool> _isOpen = [false, false, false, false];
+  List<bool> _isOpen = [false, false, false, false, false];
 
   @override
   void initState() {
@@ -354,70 +354,29 @@ class InvoiceManagerState extends State<InvoiceManager> {
                           // ),
                         ),
                       ),
+                      ExpansionPanel(
+                          canTapOnHeader: true,
+                          isExpanded: _isOpen[4],
+                          headerBuilder: (context, isExpanded) {
+                            return Container(
+                              color: isExpanded
+                                  ? Theme.of(context).secondaryHeaderColor
+                                  : Colors.transparent,
+                              child: ListTile(
+                                leading: Icon(Icons.payment_outlined),
+                                title: Text(
+                                  'PAYMENTS',
+                                  style: Theme.of(context).textTheme.labelLarge,
+                                ),
+                              ),
+                            );
+                          },
+                          body: Card()),
                     ],
                     expansionCallback: (panelIndex, isExpanded) => setState(() {
                       _isOpen[panelIndex] = isExpanded;
                     }),
                   ),
-                  ListTile(
-                    tileColor: Theme.of(context).primaryColorLight,
-                    leading: Icon(Icons.account_balance_outlined),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.zero, // Remove circular edges
-                    ),
-                    title: Text(
-                      "TOTAL PAYABLE",
-                      style: Theme.of(context).textTheme.labelLarge,
-                    ),
-                    trailing: BlocBuilder<InvoiceManagerCubit,
-                        InvoiceManagerCubitState>(
-                      builder: (context, state) {
-                        if (state is InvoiceManagerLoaded) {
-                          return Text(
-                            "₹" +
-                                context
-                                    .read<InvoiceManagerCubit>()
-                                    .invoice
-                                    .grandTotal
-                                    .toString(),
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyLarge!
-                                .copyWith(fontWeight: FontWeight.bold),
-                          );
-                        } else if (state is InvoiceManagerLoading) {
-                          return Center(child: CircularProgressIndicator());
-                        } else if (state is InvoiceManagerError) {
-                          return Center(child: Text('Error: ${state.message}'));
-                        } else {
-                          return Center(child: Text('Err'));
-                        }
-                      },
-                    ),
-                  ),
-                  SizedBox(height: 8),
-                  InvoiceManagerSpacer(height: 4, horizontalPadding: 0),
-
-                  // EntityTypeAheadField(
-                  //   invoiceType: widget.invoiceType,
-                  // ),
-                  // Add separation space
-                  // InvoiceManagerSpacer(),
-                  // Build invoice items list
-                  // BlocBuilder<InvoiceManagerCubit, InvoiceManagerCubitState>(
-                  //   builder: (context, state) {
-                  //     if (state is InvoiceManagerLoaded) {
-                  //       return InvoiceItemsListWidget.searchBoxLayout();
-                  //     } else if (state is InvoiceManagerLoading) {
-                  //       return Center(child: CircularProgressIndicator());
-                  //     } else if (state is InvoiceManagerError) {
-                  //       return Center(child: Text('Error: ${state.message}'));
-                  //     } else {
-                  //       return Center(child: Text('Unknown state'));
-                  //     }
-                  //   },
-                  // ),
-
                   InvoiceManagerSpacer(),
 
                   // Manage discount, taxes and gross total
@@ -457,85 +416,127 @@ class InvoiceManagerState extends State<InvoiceManager> {
               ),
             ),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+          Column(
             children: [
-              Expanded(
-                flex: 5,
-                child: Container(
-                  child: OutlinedButton(
-                    style: OutlinedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.zero,
-                      ),
-                    ),
-                    onPressed: () async {
-                      String formattedDetails = context
-                          .read<InvoiceManagerCubit>()
-                          .formatInvoiceDetails();
-                      await Share.share(formattedDetails);
-                    },
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.share_outlined),
-                        SizedBox(width: 4),
-                        Text('SHARE'),
-                      ],
-                    ),
-                  ),
+              ListTile(
+                tileColor: Theme.of(context).primaryColorLight,
+                leading: Icon(Icons.account_balance_outlined),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.zero, // Remove circular edges
                 ),
-              ),
-              Expanded(
-                flex: 5,
-                child: OutlinedButton(
-                  style: OutlinedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.zero,
-                    ),
-                  ),
-                  onPressed: () async {
-                    if (widget.invoiceFormMode == InvoiceFormMode.Edit) {
-                      await context
-                          .read<InvoiceManagerCubit>()
-                          .updateInvoice()
-                          .then(
-                        (value) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text('Invoice updated successfully!'),
-                            ),
-                          );
-                          Navigator.pop(context);
-                        },
+                title: Text(
+                  "TOTAL PAYABLE",
+                  style: Theme.of(context).textTheme.labelLarge,
+                ),
+                trailing:
+                    BlocBuilder<InvoiceManagerCubit, InvoiceManagerCubitState>(
+                  builder: (context, state) {
+                    if (state is InvoiceManagerLoaded) {
+                      return Text(
+                        "₹" +
+                            context
+                                .read<InvoiceManagerCubit>()
+                                .invoice
+                                .grandTotal
+                                .toString(),
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyLarge!
+                            .copyWith(fontWeight: FontWeight.bold),
                       );
+                    } else if (state is InvoiceManagerLoading) {
+                      return Center(child: CircularProgressIndicator());
+                    } else if (state is InvoiceManagerError) {
+                      return Center(child: Text('Error: ${state.message}'));
                     } else {
-                      await context
-                          .read<InvoiceManagerCubit>()
-                          .saveInvoice()
-                          .then(
-                        (value) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text('Invoice created successfully!'),
-                            ),
-                          );
-                          Navigator.pop(context);
-                        },
-                      );
+                      return Center(child: Text('Err'));
                     }
                   },
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.save_outlined),
-                      SizedBox(width: 4),
-                      Text('SAVE'),
-                    ],
-                  ),
                 ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Expanded(
+                    flex: 5,
+                    child: Container(
+                      child: OutlinedButton(
+                        style: OutlinedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.zero,
+                          ),
+                        ),
+                        onPressed: () async {
+                          String formattedDetails = context
+                              .read<InvoiceManagerCubit>()
+                              .formatInvoiceDetails();
+                          await Share.share(formattedDetails);
+                        },
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.share_outlined),
+                            SizedBox(width: 4),
+                            Text('SHARE'),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 5,
+                    child: OutlinedButton(
+                      style: OutlinedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.zero,
+                        ),
+                      ),
+                      onPressed: () async {
+                        if (widget.invoiceFormMode == InvoiceFormMode.Edit) {
+                          await context
+                              .read<InvoiceManagerCubit>()
+                              .updateInvoice()
+                              .then(
+                            (value) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content:
+                                      Text('Invoice updated successfully!'),
+                                ),
+                              );
+                              Navigator.pop(context);
+                            },
+                          );
+                        } else {
+                          await context
+                              .read<InvoiceManagerCubit>()
+                              .saveInvoice()
+                              .then(
+                            (value) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content:
+                                      Text('Invoice created successfully!'),
+                                ),
+                              );
+                              Navigator.pop(context);
+                            },
+                          );
+                        }
+                      },
+                      child: Row(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.save_outlined),
+                          SizedBox(width: 4),
+                          Text('SAVE'),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
