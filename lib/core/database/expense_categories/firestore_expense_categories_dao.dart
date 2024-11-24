@@ -4,17 +4,27 @@ import 'expense_categories_data_source.dart';
 
 class FirestoreExpenseCategoriesDAO implements ExpenseCategoriesDataSource {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final String userId;
+
+  FirestoreExpenseCategoriesDAO({required this.userId});
 
   @override
   Future<int> insertExpenseCategory(ExpenseCategory category) async {
-    final docRef =
-        await _firestore.collection('expenseCategories').add(category.toJSON());
+    final docRef = await _firestore
+        .collection('users')
+        .doc(userId)
+        .collection('expenseCategories')
+        .add(category.toJSON());
     return docRef.id.hashCode; // Firestore does not return an integer ID
   }
 
   @override
   Future<List<ExpenseCategory>> getAllExpenseCategories() async {
-    final snapshot = await _firestore.collection('expenseCategories').get();
+    final snapshot = await _firestore
+        .collection('users')
+        .doc(userId)
+        .collection('expenseCategories')
+        .get();
     return snapshot.docs
         .map((doc) => ExpenseCategory.fromJSON(doc.data()))
         .toList();
@@ -23,6 +33,8 @@ class FirestoreExpenseCategoriesDAO implements ExpenseCategoriesDataSource {
   @override
   Future<int> updateExpenseCategory(ExpenseCategory category) async {
     await _firestore
+        .collection('users')
+        .doc(userId)
         .collection('expenseCategories')
         .doc(category.id.toString())
         .update(category.toJSON());
@@ -32,6 +44,8 @@ class FirestoreExpenseCategoriesDAO implements ExpenseCategoriesDataSource {
   @override
   Future<int> deleteExpenseCategory(String expenseId) async {
     await _firestore
+        .collection('users')
+        .doc(userId)
         .collection('expenseCategories')
         .doc(expenseId.toString())
         .delete();

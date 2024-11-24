@@ -4,24 +4,36 @@ import 'invoices_data_source.dart';
 
 class FirestoreInvoicesDAO implements InvoicesDataSource {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final String userId;
+
+  FirestoreInvoicesDAO({required this.userId});
 
   @override
   Future<String> insertInvoice(Invoice invoice) async {
-    final docRef =
-        await _firestore.collection('invoices').add(invoice.toJSON());
+    final docRef = await _firestore
+        .collection('users')
+        .doc(userId)
+        .collection('invoices')
+        .add(invoice.toJSON());
     return docRef.id; // Firestore does not return an integer ID
   }
 
   @override
   Future<List<Invoice>> getAllInvoices() async {
-    final snapshot = await _firestore.collection('invoices').get();
+    final snapshot = await _firestore
+        .collection('users')
+        .doc(userId)
+        .collection('invoices').get();
     return snapshot.docs.map((doc) => Invoice.fromJSON(doc.data())).toList();
   }
 
   @override
   Future<Invoice?> getInvoiceById(String invoiceId) async {
     final doc =
-        await _firestore.collection('invoices').doc(invoiceId.toString()).get();
+        await _firestore
+        .collection('users')
+        .doc(userId)
+        .collection('invoices').doc(invoiceId.toString()).get();
     if (doc.exists) {
       return Invoice.fromJSON(doc.data()!);
     } else {
@@ -32,6 +44,8 @@ class FirestoreInvoicesDAO implements InvoicesDataSource {
   @override
   Future<int> updateInvoice(Invoice invoice) async {
     await _firestore
+        .collection('users')
+        .doc(userId)
         .collection('invoices')
         .doc(invoice.id.toString())
         .update(invoice.toJSON());
@@ -40,13 +54,18 @@ class FirestoreInvoicesDAO implements InvoicesDataSource {
 
   @override
   Future<int> deleteInvoice(String invoiceId) async {
-    await _firestore.collection('invoices').doc(invoiceId.toString()).delete();
+    await _firestore
+        .collection('users')
+        .doc(userId)
+        .collection('invoices').doc(invoiceId.toString()).delete();
     return 1; // Firestore does not return a delete count
   }
 
   @override
   Future<int> markInvoiceAsPaid(String invoiceId) async {
     await _firestore
+        .collection('users')
+        .doc(userId)
         .collection('invoices')
         .doc(invoiceId.toString())
         .update({'status': 'paid'});
@@ -57,6 +76,8 @@ class FirestoreInvoicesDAO implements InvoicesDataSource {
   Future<List<Invoice>> getInvoicesByDateRangeAndPaymentStatus(
       DateTime startDate, DateTime endDate, String status) async {
     final snapshot = await _firestore
+        .collection('users')
+        .doc(userId)
         .collection('invoices')
         // .where('date', isGreaterThanOrEqualTo: startDate.toIso8601String())
         // .where('date', isLessThanOrEqualTo: endDate.toIso8601String())
@@ -71,6 +92,8 @@ class FirestoreInvoicesDAO implements InvoicesDataSource {
   Future<List<Invoice>> getSalesInvoicesByDateRange(
       DateTime startDate, DateTime endDate) async {
     final snapshot = await _firestore
+        .collection('users')
+        .doc(userId)
         .collection('invoices')
         // .where('date', isGreaterThanOrEqualTo: startDate.toIso8601String())
         // .where('date', isLessThanOrEqualTo: endDate.toIso8601String())
