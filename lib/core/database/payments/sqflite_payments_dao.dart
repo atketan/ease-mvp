@@ -6,9 +6,9 @@ class SqflitePaymentsDAO implements PaymentsDataSource {
   final DatabaseHelper _databaseHelper = DatabaseHelper();
 
   @override
-  Future<int> insertPayment(Payment payment) async {
+  Future<String> insertPayment(Payment payment) async {
     final db = await _databaseHelper.database;
-    return await db.insert('Payments', payment.toJSON());
+    return await db.insert('Payments', payment.toJSON()).toString();
   }
 
   @override

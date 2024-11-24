@@ -6,7 +6,7 @@ class PaymentsDAO {
 
   PaymentsDAO(this._dataSource);
 
-  Future<int> insertPayment(Payment payment) {
+  Future<String> insertPayment(Payment payment) {
     return _dataSource.insertPayment(payment);
   }
 

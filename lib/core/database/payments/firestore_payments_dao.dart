@@ -10,7 +10,7 @@ class FirestorePaymentsDAO implements PaymentsDataSource {
   FirestorePaymentsDAO({required this.userId});
 
   @override
-  Future<int> insertPayment(Payment payment) async {
+  Future<String> insertPayment(Payment payment) async {
     final paymentSubCollectionName =
         getPaymentSubCollectionName(payment.paymentDate);
 
@@ -34,8 +34,7 @@ class FirestorePaymentsDAO implements PaymentsDataSource {
           .add(paymentData);
     }
 
-    return userPaymentsRef
-        .id.hashCode; // Firestore does not return an integer ID
+    return userPaymentsRef.id; // Firestore does not return an integer ID
   }
 
   @override

@@ -1,7 +1,7 @@
 import '../../models/payment.dart';
 
 abstract class PaymentsDataSource {
-  Future<int> insertPayment(Payment payment);
+  Future<String> insertPayment(Payment payment);
   Future<List<Payment>> getAllPayments();
   Future<int> updatePayment(Payment payment);
   Future<int> deletePayment(String paymentId);
