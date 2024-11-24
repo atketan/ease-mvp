@@ -325,33 +325,6 @@ class InvoiceManagerState extends State<InvoiceManager> {
                                     .notes ??
                                 "",
                           ),
-                          // Payment type and status
-                          //     BlocBuilder<InvoiceManagerCubit,
-                          //         InvoiceManagerCubitState>(
-                          //   builder: (context, state) {
-                          //     debugLog(context
-                          //         .read<InvoiceManagerCubit>()
-                          //         .invoice
-                          //         .notes
-                          //         .toString());
-                          //     if (state is InvoiceManagerLoaded) {
-                          //       return InvoiceNotesWidget(
-                          //           initialNotes: context
-                          //                   .read<InvoiceManagerCubit>()
-                          //                   .invoice
-                          //                   .notes ??
-                          //               "");
-                          //     } else if (state is InvoiceManagerLoading) {
-                          //       return Center(
-                          //           child: CircularProgressIndicator());
-                          //     } else if (state is InvoiceManagerError) {
-                          //       return Center(
-                          //           child: Text('Error: ${state.message}'));
-                          //     } else {
-                          //       return Center(child: Text('Unknown state'));
-                          //     }
-                          //   },
-                          // ),
                         ),
                       ),
                       ExpansionPanel(
@@ -378,23 +351,6 @@ class InvoiceManagerState extends State<InvoiceManager> {
                     }),
                   ),
                   InvoiceManagerSpacer(),
-
-                  // Manage discount, taxes and gross total
-                  // BlocBuilder<InvoiceManagerCubit, InvoiceManagerCubitState>(
-                  //   builder: (context, state) {
-                  //     if (state is InvoiceManagerLoaded) {
-                  //       return AmountSummaryWidget();
-                  //     } else if (state is InvoiceManagerLoading) {
-                  //       return Center(child: CircularProgressIndicator());
-                  //     } else if (state is InvoiceManagerError) {
-                  //       return Center(child: Text('Error: ${state.message}'));
-                  //     } else {
-                  //       return Center(child: Text('Unknown state'));
-                  //     }
-                  //   },
-                  // ),
-
-                  // InvoiceManagerSpacer(height: 0),
 
                   // Payment type and status
                   BlocBuilder<InvoiceManagerCubit, InvoiceManagerCubitState>(
