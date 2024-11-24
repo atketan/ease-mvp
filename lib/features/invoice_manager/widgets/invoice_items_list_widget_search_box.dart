@@ -1,6 +1,7 @@
 import 'package:ease/core/database/inventory/inventory_items_dao.dart';
 import 'package:ease/core/models/inventory_item.dart';
 import 'package:ease/core/models/invoice_item.dart';
+import 'package:ease/core/utils/string_casing_extension.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -262,7 +263,8 @@ class _InvoiceItemsListWidgetSearchBoxState
   }
 
   void _addNewItem(String name) async {
-    final newItem = InventoryItem(name: name, unitPrice: 0, uom: '');
+    final newItem =
+        InventoryItem(name: name.toTitleCase, unitPrice: 0, uom: '');
     var _itemId = await _inventoryItemsDAO.insertInventoryItem(newItem);
     setState(() {
       _invoiceItems.add(

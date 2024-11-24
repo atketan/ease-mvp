@@ -1,3 +1,5 @@
+import 'package:ease/core/database/customers/firestore_customers_dao.dart';
+import 'package:ease/core/utils/string_casing_extension.dart';
 import 'package:provider/provider.dart';
 import 'package:ease/core/database/inventory/inventory_items_dao.dart';
 import 'package:ease/core/models/inventory_item.dart';
@@ -90,7 +92,7 @@ class UpdateItemsPageState extends State<UpdateItemsPage> {
       // Update the existing inventory item
       final updatedItem = InventoryItem(
         itemId: widget.itemId,
-        name: name,
+        name: name.toTitleCase,
         description: description,
         uom: uom,
         unitPrice: unitPrice,

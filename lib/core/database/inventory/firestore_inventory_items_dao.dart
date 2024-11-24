@@ -94,10 +94,12 @@ class FirestoreInventoryItemsDAO implements InventoryItemsDataSource {
         .doc(userId)
         .collection('inventory')
         .where('name', isGreaterThanOrEqualTo: pattern.toTitleCase)
-        .where("name", isLessThanOrEqualTo: "${pattern.toTitleCase}\uf7ff")
+        .where('name', isLessThanOrEqualTo: "${pattern.toTitleCase}\uf7ff")
         .get();
-    return snapshot.docs
-        .map((doc) => InventoryItem.fromJSON(doc.data()))
-        .toList();
+    return snapshot.docs.map((doc) {
+      final item = InventoryItem.fromJSON(doc.data());
+      item.itemId = doc.id;
+      return item;
+    }).toList();
   }
 }

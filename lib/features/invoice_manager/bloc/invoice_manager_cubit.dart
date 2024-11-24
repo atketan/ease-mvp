@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:ease/core/database/customers/firestore_customers_dao.dart';
 import 'package:ease/core/database/inventory/inventory_items_dao.dart';
 import 'package:ease/core/database/invoice_items/invoice_items_dao.dart';
 import 'package:ease/core/database/invoices/invoices_dao.dart';
@@ -9,6 +10,7 @@ import 'package:ease/core/models/invoice_item.dart';
 import 'package:ease/core/models/payment.dart';
 import 'package:ease/core/utils/date_time_utils.dart';
 import 'package:ease/core/utils/developer_log.dart';
+import 'package:ease/core/utils/string_casing_extension.dart';
 
 import 'invoice_manager_cubit_state.dart';
 
@@ -179,7 +181,7 @@ class InvoiceManagerCubit extends Cubit<InvoiceManagerCubitState> {
       _inventoryItemsDAO.updateInventoryItem(
         InventoryItem(
           itemId: item.inventoryId,
-          name: item.name,
+          name: item.name.toTitleCase,
           unitPrice: item.unitPrice,
           uom: item.uom,
         ),
