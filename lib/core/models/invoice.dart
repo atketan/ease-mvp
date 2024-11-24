@@ -19,6 +19,8 @@ class Invoice {
   String? notes;
   List<InvoiceItem> _items = [];
   List<Payment> _payments = [];
+  double _totalPaid = 0;
+  double _totalDue = 0;
 
   Invoice({
     this.id,
@@ -39,15 +41,23 @@ class Invoice {
             'Either customerId or vendorId must be non-null');
 
   List<InvoiceItem> get items => _items;
-
   void set items(List<InvoiceItem> items) {
     _items = items;
   }
 
   List<Payment> get payments => _payments;
-
   void set payments(List<Payment> payments) {
     _payments = payments;
+  }
+
+  double get totalPaid => _totalPaid;
+  set totalPaid(double totalPaid) {
+    _totalPaid = totalPaid;
+  }
+
+  double get totalDue => _totalDue;
+  set totalDue(double totalDue) {
+    _totalDue = totalDue;
   }
 
   factory Invoice.fromJSON(Map<String, dynamic> json) {

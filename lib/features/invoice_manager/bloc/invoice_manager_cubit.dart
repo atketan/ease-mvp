@@ -104,6 +104,11 @@ class InvoiceManagerCubit extends Cubit<InvoiceManagerCubitState> {
     _invoice.totalAmount = _invoice.items.fold(
         0.0, (previousValue, element) => previousValue + element.totalPrice);
     _invoice.grandTotal = _invoice.totalAmount - _invoice.discount;
+
+    _invoice.totalPaid = _invoice.payments
+        .fold(0.0, (previousValue, element) => previousValue + element.amount);
+    _invoice.totalDue = _invoice.grandTotal - _invoice.totalPaid;
+
     return Future.value(true);
   }
 
@@ -260,7 +265,6 @@ class InvoiceManagerCubit extends Cubit<InvoiceManagerCubitState> {
 
   void _getPaymentsByInvoiceId() async {
     emit(InvoiceManagerLoading());
-    debugLog( 'Getting payments by invoice I: ${invoice.invoiceId}', name: 'InvoiceManagerCubit');
     invoice.payments =
         await _paymentsDAO.getPaymentsByInvoiceId(invoice.invoiceId ?? "");
     debugLog(invoice.payments.toList().length.toString(),
