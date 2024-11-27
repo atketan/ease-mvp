@@ -11,7 +11,6 @@ class FirestoreVendorsDAO implements VendorsDataSource {
 
   @override
   Future<String> insertVendor(Vendor vendor) async {
-    debugPrint('Inserting vendor: ${vendor.name}');
     final docRef = await _firestore
         .collection('users')
         .doc(userId)

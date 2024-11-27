@@ -129,14 +129,19 @@ class _EntityTypeAheadFieldState extends State<EntityTypeAheadField> {
           _isEditing = false;
           widget.onClientSelected(suggestion.name);
         });
-        if (suggestion.id != -1 && suggestion.id != null) {
+        if (suggestion.id!.isNotEmpty) {
           if (widget.invoiceType == InvoiceType.Sales) {
             context.read<InvoiceManagerCubit>().setCustomerId(suggestion.id!);
+            context.read<InvoiceManagerCubit>().invoice.name = suggestion.name;
+            context.read<InvoiceManagerCubit>().phoneNumber = suggestion.phone;
           } else {
             context.read<InvoiceManagerCubit>().setVendorId(suggestion.id!);
+            context.read<InvoiceManagerCubit>().invoice.name = suggestion.name;
+            context.read<InvoiceManagerCubit>().phoneNumber = suggestion.phone;
           }
+          context.read<InvoiceManagerCubit>().setLoading(false);
         } else {
-          if (suggestion.id == -1) {
+          if (suggestion.id!.isEmpty) {
             _isEditing = true;
             await _showAddEntityBottomSheet(
               context,
@@ -194,21 +199,21 @@ class _EntityTypeAheadFieldState extends State<EntityTypeAheadField> {
           child: AddEntityBottomSheet(
             initialName: initialName,
             invoiceType: widget.invoiceType,
-            onEntityAdded: (String name, String phone) {
-              _controller.text = name;
-              _phoneController.text = phone;
-              _isEditing = false;
-            },
           ),
         );
       },
     );
-    setState(() {});
+    setState(() {
+      _controller.text = cubit.invoice.name;
+      _phoneController.text = cubit.phoneNumber;
+      _isEditing = false;
+    });
   }
 
   void _getEntityDetails() async {
     String? customerId = context.read<InvoiceManagerCubit>().invoice.customerId;
     String? vendorId = context.read<InvoiceManagerCubit>().invoice.vendorId;
+
     if (customerId != null && customerId.isNotEmpty) {
       Customer? customer = await _customersDAO.getCustomerById(customerId);
       if (customer != null) {
@@ -220,6 +225,7 @@ class _EntityTypeAheadFieldState extends State<EntityTypeAheadField> {
       _controller.text = vendor!.name;
       _phoneController.text = vendor.phone ?? "";
     }
+
     setState(() {
       (customerId == null || vendorId == null)
           ? _isEditing = true

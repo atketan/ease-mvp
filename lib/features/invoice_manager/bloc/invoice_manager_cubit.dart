@@ -1,12 +1,16 @@
 import 'package:bloc/bloc.dart';
+import 'package:ease/core/database/customers/customers_dao.dart';
 import 'package:ease/core/database/inventory/inventory_items_dao.dart';
 import 'package:ease/core/database/invoice_items/invoice_items_dao.dart';
 import 'package:ease/core/database/invoices/invoices_dao.dart';
 import 'package:ease/core/database/payments/payments_dao.dart';
+import 'package:ease/core/database/vendors/vendors_dao.dart';
+import 'package:ease/core/models/customer.dart';
 import 'package:ease/core/models/inventory_item.dart';
 import 'package:ease/core/models/invoice.dart';
 import 'package:ease/core/models/invoice_item.dart';
 import 'package:ease/core/models/payment.dart';
+import 'package:ease/core/models/vendor.dart';
 import 'package:ease/core/utils/date_time_utils.dart';
 import 'package:ease/core/utils/developer_log.dart';
 import 'package:ease/core/utils/string_casing_extension.dart';
@@ -14,16 +18,25 @@ import 'package:ease/core/utils/string_casing_extension.dart';
 import 'invoice_manager_cubit_state.dart';
 
 class InvoiceManagerCubit extends Cubit<InvoiceManagerCubitState> {
-  InvoiceManagerCubit(this._invoiceDAO, this._inventoryItemsDAO,
-      this._paymentsDAO, this._invoiceItemsDAO)
-      : super(InvoiceManagerInitial());
+  InvoiceManagerCubit(
+    this._invoiceDAO,
+    this._inventoryItemsDAO,
+    this._paymentsDAO,
+    this._invoiceItemsDAO,
+    this._customersDAO,
+    this._vendorsDAO,
+  ) : super(InvoiceManagerInitial());
 
   final InvoicesDAO _invoiceDAO;
   final InventoryItemsDAO _inventoryItemsDAO;
   final InvoiceItemsDAO _invoiceItemsDAO;
   final PaymentsDAO _paymentsDAO;
+  final CustomersDAO _customersDAO;
+  final VendorsDAO _vendorsDAO;
 
   late Invoice _invoice;
+
+  late String phoneNumber; // Used to store the phone number of the customer/vendor temporarily for displaying in the entity typeahead field
 
   void initialiseInvoiceModelInstance(Invoice? invoice, String invoiceNumber) {
     if (invoice == null) {
@@ -43,12 +56,15 @@ class InvoiceManagerCubit extends Cubit<InvoiceManagerCubitState> {
     } else {
       _invoice = invoice;
     }
-    _getPaymentsByInvoiceId();
     emit(InvoiceManagerLoaded(invoice: _invoice));
   }
 
-  void populateInvoiceData() {
-    debugLog(_invoice.toJSON().toString(), name: 'InvoiceManagerCubit');
+  void populateInvoiceData() async {
+    debugLog(
+        "Populating invoice data, preset invoice data: " +
+            _invoice.toJSON().toString(),
+        name: 'InvoiceManagerCubit');
+    await _getPaymentsByInvoiceId();
     _getAllInvoiceItems(_invoice.invoiceId);
   }
 
@@ -82,12 +98,12 @@ class InvoiceManagerCubit extends Cubit<InvoiceManagerCubitState> {
 
   void setCustomerId(String customerId) {
     _invoice.customerId = customerId;
-    emit(InvoiceManagerLoaded(invoice: _invoice));
+    // emit(InvoiceManagerLoaded(invoice: _invoice));
   }
 
   void setVendorId(String vendorId) {
     _invoice.vendorId = vendorId;
-    emit(InvoiceManagerLoaded(invoice: _invoice));
+    // emit(InvoiceManagerLoaded(invoice: _invoice));
   }
 
   void setDiscount(double discount) async {
@@ -231,13 +247,50 @@ class InvoiceManagerCubit extends Cubit<InvoiceManagerCubitState> {
     invoice.name = clientName;
   }
 
-  void _getPaymentsByInvoiceId() async {
+  Future<void> _getPaymentsByInvoiceId() async {
     invoice.payments =
         await _paymentsDAO.getPaymentsByInvoiceId(invoice.invoiceId ?? "");
   }
 
   void addPayment(Payment newPayment) {
     invoice.payments.add(newPayment);
-    emit(InvoiceManagerLoaded(invoice: _invoice));
+    updateInvoiceAmounts();
+    // emit(InvoiceManagerLoaded(invoice: _invoice));
+  }
+
+  Future<void> insertNewCustomer({String name = '', String phone = ''}) async {
+    if (name.isEmpty || phone.isEmpty) {
+      return;
+    } else {
+      final newId = await _customersDAO.insertCustomer(
+        Customer(
+          name: name,
+          phone: phone,
+          createdAt: DateTime.now(),
+          updatedAt: DateTime.now(),
+        ),
+      );
+      setCustomerId(newId);
+      invoice.name = name;
+      phoneNumber = phone;
+    }
+  }
+
+  Future<void> insertNewVendor({String name = '', String phone = ''}) async {
+    if (name.isEmpty || phone.isEmpty) {
+      return;
+    } else {
+      final newId = await _vendorsDAO.insertVendor(
+        Vendor(
+          name: name,
+          phone: phone,
+          createdAt: DateTime.now(),
+          updatedAt: DateTime.now(),
+        ),
+      );
+      setVendorId(newId);
+      invoice.name = name;
+      phoneNumber = phone;
+    }
   }
 }

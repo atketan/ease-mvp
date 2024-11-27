@@ -64,7 +64,6 @@ class _UpdateVendorsPageState extends State<UpdateVendorsPage> {
   }
 
   Future<void> _saveVendor() async {
-    debugPrint('Saving vendor');
     String name = _nameController.text;
     String email = _emailController.text;
     String phone = _phoneController.text;

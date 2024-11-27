@@ -1,11 +1,5 @@
 import 'package:ease/core/enums/invoice_type_enum.dart';
-import 'package:provider/provider.dart';
-import 'package:ease/core/database/customers/customers_dao.dart';
-import 'package:ease/core/database/vendors/vendors_dao.dart';
-import 'package:ease/core/models/customer.dart';
-import 'package:ease/core/models/vendor.dart';
 import 'package:ease/features/invoice_manager/bloc/invoice_manager_cubit.dart';
-
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,12 +10,10 @@ import '../bloc/invoice_manager_cubit_state.dart';
 class AddEntityBottomSheet extends StatefulWidget {
   final String initialName;
   final InvoiceType invoiceType;
-  final Function(String, String) onEntityAdded;
 
   AddEntityBottomSheet({
     required this.initialName,
     required this.invoiceType,
-    required this.onEntityAdded,
   });
 
   @override
@@ -91,6 +83,7 @@ class _AddEntityBottomSheetState extends State<AddEntityBottomSheet> {
                 ),
                 SizedBox(width: 16),
                 BlocBuilder<InvoiceManagerCubit, InvoiceManagerCubitState>(
+                  bloc: context.read<InvoiceManagerCubit>(),
                   builder: (context, state) {
                     return TextButton(
                       onPressed:
@@ -124,29 +117,18 @@ class _AddEntityBottomSheetState extends State<AddEntityBottomSheet> {
       cubit.setLoading(true);
 
       try {
-        final String newId = widget.invoiceType == InvoiceType.Sales
-            ? await Provider.of<CustomersDAO>(context).insertCustomer(Customer(
+        widget.invoiceType == InvoiceType.Sales
+            ? await cubit.insertNewCustomer(
                 name: _nameController.text,
                 phone: _mobileController.text,
-                createdAt: DateTime.now(),
-                updatedAt: DateTime.now()))
-            : await Provider.of<VendorsDAO>(context)
-                .insertVendor(Vendor(
-                    name: _nameController.text,
-                    phone: _mobileController.text,
-                    createdAt: DateTime.now(),
-                    updatedAt: DateTime.now()))
-                .toString();
+              )
+            : await cubit.insertNewVendor(
+                name: _nameController.text,
+                phone: _mobileController.text,
+              );
 
         if (!mounted) return;
 
-        if (widget.invoiceType == InvoiceType.Sales) {
-          cubit.setCustomerId(newId);
-        } else {
-          cubit.setVendorId(newId);
-        }
-
-        widget.onEntityAdded(_nameController.text, _mobileController.text);
         Navigator.pop(context);
       } on DatabaseException catch (e) {
         if (!mounted) return;

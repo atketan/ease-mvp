@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ease/core/utils/developer_log.dart';
 import '../../models/payment.dart';
 import 'payments_data_source.dart';
 import 'package:intl/intl.dart';
@@ -13,6 +14,9 @@ class FirestorePaymentsDAO implements PaymentsDataSource {
   Future<String> insertPayment(Payment payment) async {
     final paymentSubCollectionName =
         getPaymentSubCollectionName(payment.paymentDate);
+
+    debugLog('Inserting payment: ${payment.toJSON()}',
+        name: 'FirestorePaymentsDAO');
 
     final paymentData = payment.toJSON();
 
@@ -75,6 +79,8 @@ class FirestorePaymentsDAO implements PaymentsDataSource {
   @override
   Future<int> updatePayment(Payment payment) async {
     final subCollectionName = getPaymentSubCollectionName(payment.paymentDate);
+    debugLog('Updating payment: ${payment.toJSON()}',
+        name: 'FirestorePaymentsDAO');
     await _firestore
         .collection('users')
         .doc(userId)

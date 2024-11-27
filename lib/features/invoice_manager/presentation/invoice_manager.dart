@@ -1,6 +1,7 @@
 import 'package:ease/core/enums/invoice_type_enum.dart';
 import 'package:ease/core/models/invoice.dart';
 import 'package:ease/core/providers/short_uuid_generator.dart';
+import 'package:ease/core/utils/developer_log.dart';
 import 'package:ease/features/invoice_manager/widgets/discount_manager_widget.dart';
 import 'package:ease/features/invoice_manager/widgets/payments_manager_widget.dart';
 
@@ -271,6 +272,7 @@ class InvoiceManagerState extends State<InvoiceManager> {
                               trailing: BlocBuilder<InvoiceManagerCubit,
                                   InvoiceManagerCubitState>(
                                 builder: (context, state) {
+                                  debugLog('Discount builder, cubit state: $state', name: 'InvoiceManager');
                                   if (state is InvoiceManagerLoaded) {
                                     return Text(
                                       "-₹" +
