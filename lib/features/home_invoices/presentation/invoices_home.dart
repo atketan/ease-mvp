@@ -4,8 +4,6 @@ import 'package:ease/features/manage/presentation/manage_landing_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../data/invoices_provider.dart';
-// import '../widgets/unpaid_invoices_tab.dart';
-// import '../widgets/paid_invoices_tab.dart';
 
 class InvoicesHomePage extends StatefulWidget {
   @override
@@ -16,9 +14,6 @@ class _InvoicesHomePageState extends State<InvoicesHomePage> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      // Provider.of<InvoicesProvider>(context, listen: false).fetchPaidInvoices();
-      // Provider.of<InvoicesProvider>(context, listen: false)
-      //     .fetchUnpaidInvoices();
       Provider.of<InvoicesProvider>(context, listen: false)
           .subscribeToInvoices();
     });
@@ -130,7 +125,7 @@ class _InvoicesHomePageState extends State<InvoicesHomePage> {
                                   Text(
                                     "₹" +
                                         invoicesProvider.totalSalesAmount
-                                            .toString(), // Replace with dynamic value
+                                            .toString(),
                                     style: Theme.of(context)
                                         .textTheme
                                         .bodyLarge!
@@ -222,4 +217,4 @@ class _InvoicesHomePageState extends State<InvoicesHomePage> {
       ),
     );
   }
-} // Add this closing brace
+}
