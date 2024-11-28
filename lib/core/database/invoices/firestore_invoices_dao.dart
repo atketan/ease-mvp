@@ -31,7 +31,11 @@ class FirestoreInvoicesDAO implements InvoicesDataSource {
         .doc(userId)
         .collection('invoices')
         .get();
-    return snapshot.docs.map((doc) => Invoice.fromJSON(doc.data())).toList();
+    return snapshot.docs.map((doc) {
+      final invoice = Invoice.fromJSON(doc.data());
+      invoice.invoiceId = doc.id;
+      return invoice;
+    }).toList();
   }
 
   @override
@@ -55,7 +59,7 @@ class FirestoreInvoicesDAO implements InvoicesDataSource {
         .collection('users')
         .doc(userId)
         .collection('invoices')
-        .doc(invoice.id.toString())
+        .doc(invoice.invoiceId.toString())
         .update(invoice.toJSON());
     return 1; // Firestore does not return an update count
   }

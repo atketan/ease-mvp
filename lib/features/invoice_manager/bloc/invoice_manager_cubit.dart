@@ -36,7 +36,8 @@ class InvoiceManagerCubit extends Cubit<InvoiceManagerCubitState> {
 
   late Invoice _invoice;
 
-  late String phoneNumber; // Used to store the phone number of the customer/vendor temporarily for displaying in the entity typeahead field
+  late String
+      phoneNumber; // Used to store the phone number of the customer/vendor temporarily for displaying in the entity typeahead field
 
   void initialiseInvoiceModelInstance(Invoice? invoice, String invoiceNumber) {
     if (invoice == null) {
@@ -125,6 +126,11 @@ class InvoiceManagerCubit extends Cubit<InvoiceManagerCubitState> {
     _invoice.totalPaid = _invoice.payments
         .fold(0.0, (previousValue, element) => previousValue + element.amount);
     _invoice.totalDue = _invoice.grandTotal - _invoice.totalPaid;
+
+    if (_invoice.totalDue == 0.0)
+      _invoice.status = 'paid';
+    else
+      _invoice.status = 'unpaid';
 
     return Future.value(true);
   }
