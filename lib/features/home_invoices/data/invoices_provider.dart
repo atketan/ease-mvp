@@ -28,6 +28,7 @@ class InvoicesProvider with ChangeNotifier {
   List<Invoice> _paidInvoices = [];
   double _totalUnpaidAmount = 0.0;
   double _totalPaidAmount = 0.0;
+  double _totalSalesAmount = 0.0;
 
   List<Invoice> _allSalesInvoices = [];
   List<Invoice> _allPurchaseInvoices = [];
@@ -38,6 +39,7 @@ class InvoicesProvider with ChangeNotifier {
   List<Invoice> get paidInvoices => _paidInvoices;
   double get totalUnpaidAmount => _totalUnpaidAmount;
   double get totalPaidAmount => _totalPaidAmount;
+  double get totalSalesAmount => _totalSalesAmount;
 
   DateTime get startDate => _startDate;
   DateTime get endDate => _endDate;
@@ -107,6 +109,40 @@ class InvoicesProvider with ChangeNotifier {
       debugLog('Error fetching unpaid invoices: $e', name: 'InvoicesProvider');
       // Handle the error appropriately
     }
+  }
+
+  void subscribeToInvoices() {
+    _invoicesDAO.subscribeToInvoices(_startDate, _endDate).listen((invoices) {
+      _allSalesInvoices = invoices
+          .where((invoice) =>
+              invoice.customerId != null && invoice.vendorId == null)
+          .toList();
+      _allPurchaseInvoices = invoices
+          .where((invoice) =>
+              invoice.vendorId != null && invoice.customerId == null)
+          .toList();
+
+      debugLog(
+          'SubscribeToInvoices, Fetched ${_allSalesInvoices.length} sales invoices',
+          name: 'InvoicesProvider');
+      debugLog(
+          'SubscribeToInvoices, Fetched ${_allPurchaseInvoices.length} purchase invoices',
+          name: 'InvoicesProvider');
+
+
+      // TODO: Grand total cannot be treated as total paid amount. Although it could be used as Total Sales amount, so that's correct.
+      _totalSalesAmount = _allSalesInvoices.fold(
+        0,
+        (sum, invoice) => sum + invoice.grandTotal,
+      );
+      debugLog('SubscribeToInvoices, Total paid amount: $_totalPaidAmount',
+          name: 'InvoicesProvider');
+
+      notifyListeners();
+    }, onError: (e) {
+      debugLog('Error fetching sales invoices: $e', name: 'InvoicesProvider');
+      // Handle the error appropriately
+    });
   }
 
   void _calculateTotalUnpaidAmount() {

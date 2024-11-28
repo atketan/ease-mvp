@@ -88,4 +88,11 @@ class SqfliteInvoicesDAO implements InvoicesDataSource {
     );
     return List.generate(maps.length, (i) => Invoice.fromJSON(maps[i]));
   }
+
+  @override
+  Stream<List<Invoice>> subscribeToInvoices(
+      DateTime startDate, DateTime endDate) {
+    // TODO: implement subscribeToInvoices
+    throw UnimplementedError();
+  }
 }

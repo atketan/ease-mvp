@@ -16,9 +16,11 @@ class _InvoicesHomePageState extends State<InvoicesHomePage> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<InvoicesProvider>(context, listen: false).fetchPaidInvoices();
+      // Provider.of<InvoicesProvider>(context, listen: false).fetchPaidInvoices();
+      // Provider.of<InvoicesProvider>(context, listen: false)
+      //     .fetchUnpaidInvoices();
       Provider.of<InvoicesProvider>(context, listen: false)
-          .fetchUnpaidInvoices();
+          .subscribeToInvoices();
     });
     super.initState();
   }
@@ -102,50 +104,6 @@ class _InvoicesHomePageState extends State<InvoicesHomePage> {
               //   ],
               // ),
             ),
-            // drawer: Drawer(
-            //   child: ListView(
-            //     padding: EdgeInsets.zero,
-            //     children: <Widget>[
-            //       DrawerHeader(
-            //         decoration: BoxDecoration(
-            //           color: Colors.blue,
-            //         ),
-            //         child: Text(
-            //           'Drawer Header',
-            //           style: TextStyle(
-            //             color: Colors.white,
-            //             fontSize: 24,
-            //           ),
-            //         ),
-            //       ),
-            //       ListTile(
-            //         leading: Icon(Icons.home),
-            //         title: Text('Home'),
-            //         onTap: () {
-            //           // Handle navigation to home
-            //           Navigator.pop(context); // Close the drawer
-            //         },
-            //       ),
-            //       ListTile(
-            //         leading: Icon(Icons.settings),
-            //         title: Text('Settings'),
-            //         onTap: () {
-            //           // Handle navigation to settings
-            //           Navigator.pop(context); // Close the drawer
-            //         },
-            //       ),
-            //       ListTile(
-            //         leading: Icon(Icons.info),
-            //         title: Text('About'),
-            //         onTap: () {
-            //           // Handle navigation to about
-            //           Navigator.pop(context); // Close the drawer
-            //         },
-            //       ),
-            //     ],
-            //   ),
-            // ),
-
             body: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -171,7 +129,7 @@ class _InvoicesHomePageState extends State<InvoicesHomePage> {
                                   ),
                                   Text(
                                     "₹" +
-                                        invoicesProvider.totalPaidAmount
+                                        invoicesProvider.totalSalesAmount
                                             .toString(), // Replace with dynamic value
                                     style: Theme.of(context)
                                         .textTheme

@@ -125,4 +125,21 @@ class FirestoreInvoicesDAO implements InvoicesDataSource {
   // getInvoiceSubCollectionName(DateTime date) {
   //   return 'invoices_' + DateFormat('yyyy_MM').format(date);
   // }
+
+@override 
+  Stream<List<Invoice>> subscribeToInvoices(
+      DateTime startDate, DateTime endDate) {
+    return _firestore
+        .collection('users')
+        .doc(userId)
+        .collection('invoices')
+        .snapshots()
+        .map((snapshot) {
+      return snapshot.docs
+          .map((doc) => Invoice.fromJSON(doc.data()))
+          .where((invoice) =>
+              invoice.date.isAfter(startDate) && invoice.date.isBefore(endDate))
+          .toList();
+    });
+  }
 }

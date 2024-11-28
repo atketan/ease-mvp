@@ -40,4 +40,9 @@ class InvoicesDAO {
       DateTime startDate, DateTime endDate) {
     return _dataSource.getSalesInvoicesByDateRange(startDate, endDate);
   }
+
+  Stream<List<Invoice>> subscribeToInvoices(
+      DateTime startDate, DateTime endDate) {
+    return _dataSource.subscribeToInvoices(startDate, endDate);
+  }
 }

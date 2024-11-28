@@ -11,4 +11,6 @@ abstract class InvoicesDataSource {
       DateTime startDate, DateTime endDate, String status);
   Future<List<Invoice>> getSalesInvoicesByDateRange(
       DateTime startDate, DateTime endDate);
+  Stream<List<Invoice>> subscribeToInvoices(
+      DateTime startDate, DateTime endDate);
 }
