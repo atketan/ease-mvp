@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ease/core/database/database_helper.dart';
 import 'package:ease/core/utils/developer_log.dart';
 import 'package:ease/ease_app.dart';
@@ -12,6 +13,11 @@ void main() async {
 
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
+    );
+
+    // Enable Firestore offline support
+    FirebaseFirestore.instance.settings = const Settings(
+      persistenceEnabled: true,
     );
 
     final dbHelper = DatabaseHelper();
