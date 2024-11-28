@@ -55,6 +55,10 @@ class _EASEAppState extends State<EASEApp> {
         child: Consumer<String?>(builder: (context, userId, child) {
           if (userId == null) {
             return MaterialApp(
+              title: 'EASE',
+              debugShowCheckedModeBanner: false,
+              theme: AppTheme.lightTheme,
+              darkTheme: AppTheme.darkTheme,
               home: LoginPage(),
             );
           }
