@@ -6,9 +6,9 @@ import 'package:ease/core/database/payments/payments_dao.dart';
 import 'package:ease/core/database/vendors/vendors_dao.dart';
 import 'package:ease/core/enums/invoice_type_enum.dart';
 import 'package:ease/core/utils/developer_log.dart';
+import 'package:ease/ease_app.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:ease/features/account/presentation/login_page.dart';
 import 'package:ease/features/invoice_manager/bloc/invoice_manager_cubit.dart';
 import 'package:ease/features/invoice_manager/presentation/invoice_manager.dart';
 import 'package:ease/features/home_invoices/data/invoices_provider.dart';
@@ -139,10 +139,9 @@ class _EASEHomePageState extends State<EASEHomePage>
                     title: const Text("Logout"),
                     onTap: () {
                       FirebaseAuth.instance.signOut();
-                      Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(builder: (context) => LoginPage()),
-                        (route) => false,
+                      Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(builder: (context) => EASEApp()),
+                        (Route<dynamic> route) => false,
                       );
                     },
                   ),

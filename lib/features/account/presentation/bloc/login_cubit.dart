@@ -64,11 +64,6 @@ class LoginCubit extends Cubit<LoginState> {
           actualCode = verificationId;
           emit(LoginLoading(state: false));
           emit(LoginOTPSent(phoneNumber: phoneNumber));
-          // await Navigator.of(context).push(
-          //   MaterialPageRoute(
-          //     builder: (_) => OTPPage(mobileNumber: phoneNumber),
-          //   ),
-          // );
         },
         codeAutoRetrievalTimeout: (String verificationId) {
           actualCode = verificationId;
@@ -92,32 +87,30 @@ class LoginCubit extends Cubit<LoginState> {
       if (userCredential.user != null) {
         print('Authentication successful');
         emit(LoginSuccess(message: 'Authentication successful'));
-        // onAuthenticationSuccessful( authResult);
         firebaseUser = userCredential.user;
       }
     });
   }
 
-  // Future<void> onAuthenticationSuccessful(AuthResult result) async {
-  // isLoginLoading = true;
-  // isOtpLoading = true;
-
-  // firebaseUser = result.user;
-
-  // Navigator.of(context).pushAndRemoveUntil(
-  //     MaterialPageRoute(builder: (_) => const EASEHomePage()),
-  //     (Route<dynamic> route) => false);
-
-  // isLoginLoading = false;
-  // isOtpLoading = false;
-  // }
+  Future<void> loginWithEmailAndPassword(String email, String password) async {
+    emit(LoginLoading(state: true));
+    try {
+      UserCredential userCredential = await _auth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      firebaseUser = userCredential.user;
+      emit(LoginSuccess(message: 'Authentication successful'));
+    } on FirebaseAuthException catch (e) {
+      emit(LoginFailure(message: e.message ?? 'Login failed'));
+    } finally {
+      emit(LoginLoading(state: false));
+    }
+  }
 
   Future<void> signOut() async {
     await _auth.signOut();
     emit(LoginSignedOut());
-    // await Navigator.of(context).pushAndRemoveUntil(
-    //     MaterialPageRoute(builder: (_) => LoginPage()),
-    //     (Route<dynamic> route) => false);
     firebaseUser = null;
   }
 }

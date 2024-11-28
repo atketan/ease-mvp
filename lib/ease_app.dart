@@ -1,6 +1,6 @@
 import 'package:ease/core/providers/themes_provider.dart';
 import 'package:ease/features/account/presentation/bloc/login_cubit.dart';
-import 'package:ease/features/account/presentation/login_page.dart';
+import 'package:ease/features/account/presentation/email_login_page.dart';
 import 'package:ease/features/home/presentation/home_page.dart';
 import 'package:ease/core/database/customers/customers_dao.dart';
 import 'package:ease/core/database/customers/customers_data_source.dart';
@@ -59,7 +59,7 @@ class _EASEAppState extends State<EASEApp> {
               debugShowCheckedModeBanner: false,
               theme: AppTheme.lightTheme,
               darkTheme: AppTheme.darkTheme,
-              home: LoginPage(),
+              home: EmailLoginPage(),
             );
           }
 

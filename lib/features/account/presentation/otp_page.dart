@@ -1,6 +1,6 @@
+import 'package:ease/ease_app.dart';
 import 'package:ease/features/account/presentation/bloc/login_cubit.dart';
 import 'package:ease/features/account/presentation/bloc/login_state.dart';
-import 'package:ease/features/home/presentation/home_page.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -54,7 +54,7 @@ class _OTPPageState extends State<OTPPage> {
       listener: (context, state) {
         if (state is LoginSuccess) {
           Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (context) => const EASEHomePage()),
+            MaterialPageRoute(builder: (context) => const EASEApp()),
             (Route<dynamic> route) => false,
           );
           ScaffoldMessenger.of(context).showSnackBar(

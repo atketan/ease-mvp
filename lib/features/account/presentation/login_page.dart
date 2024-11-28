@@ -1,7 +1,6 @@
 import 'package:ease/features/account/presentation/bloc/login_cubit.dart';
 import 'package:ease/features/account/presentation/bloc/login_state.dart';
 import 'package:ease/features/account/presentation/otp_page.dart';
-import 'package:ease/features/home/presentation/home_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -109,10 +108,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               );
             } else if (state is LoginSuccess) {
-              Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(builder: (_) => const EASEHomePage()),
-                (Route<dynamic> route) => false,
-              );
+              Navigator.of(context).pop();
             }
           },
           child: Container(
