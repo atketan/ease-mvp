@@ -63,15 +63,15 @@ class ManageLandingPageState extends State<ManageLandingPage> {
               },
             ),
             Divider(),
-            ListTile(
-              title: Text("Reset Database"),
-              subtitle: Text("Delete database and recreate new"),
-              trailing: Icon(Icons.delete_forever),
-              onTap: () async {
-                await DatabaseHelper().deleteLocalDatabase();
-              },
-            ),
-            Divider(),
+            // ListTile(
+            //   title: Text("Reset Database"),
+            //   subtitle: Text("Delete database and recreate new"),
+            //   trailing: Icon(Icons.delete_forever),
+            //   onTap: () async {
+            //     await DatabaseHelper().deleteLocalDatabase();
+            //   },
+            // ),
+            // Divider(),
           ],
         ),
       ),
