@@ -272,7 +272,9 @@ class InvoiceManagerState extends State<InvoiceManager> {
                               trailing: BlocBuilder<InvoiceManagerCubit,
                                   InvoiceManagerCubitState>(
                                 builder: (context, state) {
-                                  debugLog('Discount builder, cubit state: $state', name: 'InvoiceManager');
+                                  debugLog(
+                                      'Discount builder, cubit state: $state',
+                                      name: 'InvoiceManager');
                                   if (state is InvoiceManagerLoaded) {
                                     return Text(
                                       "-₹" +
@@ -351,7 +353,8 @@ class InvoiceManagerState extends State<InvoiceManager> {
                             InvoiceManagerCubitState>(
                           builder: (context, state) {
                             if (state is InvoiceManagerLoaded) {
-                              return PaymentsManagerWidget();
+                              return PaymentsManagerWidget(
+                                  invoiceType: widget.invoiceType);
                             } else if (state is InvoiceManagerLoading) {
                               return Center(child: CircularProgressIndicator());
                             } else if (state is InvoiceManagerError) {

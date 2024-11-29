@@ -1,3 +1,4 @@
+import 'package:ease/core/enums/invoice_type_enum.dart';
 import 'package:ease/core/enums/payment_method_enum.dart';
 import 'package:ease/core/enums/transaction_type_enum.dart';
 import 'package:ease/core/models/payment.dart';
@@ -8,11 +9,14 @@ class AddPaymentForm extends StatefulWidget {
   final String invoiceId;
   final double totalAmountPayable;
   final double totalPaid;
+  final InvoiceType invoiceType;
 
-  AddPaymentForm(
-      {required this.invoiceId,
-      required this.totalAmountPayable,
-      required this.totalPaid});
+  AddPaymentForm({
+    required this.invoiceId,
+    required this.totalAmountPayable,
+    required this.totalPaid,
+    this.invoiceType = InvoiceType.Sales,
+  });
 
   @override
   _AddPaymentFormState createState() => _AddPaymentFormState();
@@ -23,7 +27,15 @@ class _AddPaymentFormState extends State<AddPaymentForm> {
   double _amount = 0.0;
 
   PaymentMethod _selectedPaymentMethod = PaymentMethod.cash;
-  TransactionType _transactionType = TransactionType.credit;
+  late TransactionType _transactionType;
+
+  @override
+  void initState() {
+    _transactionType = (widget.invoiceType == InvoiceType.Sales)
+        ? TransactionType.credit
+        : TransactionType.debit;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -1,3 +1,4 @@
+import 'package:ease/core/enums/invoice_type_enum.dart';
 import 'package:ease/core/enums/payment_method_enum.dart';
 import 'package:ease/core/enums/transaction_type_enum.dart';
 import 'package:ease/core/utils/date_time_utils.dart';
@@ -9,6 +10,10 @@ import '../bloc/invoice_manager_cubit_state.dart';
 import 'payments_add_payment_form.dart';
 
 class PaymentsManagerWidget extends StatefulWidget {
+  final InvoiceType invoiceType;
+
+  const PaymentsManagerWidget({super.key, required this.invoiceType});
+
   @override
   State<PaymentsManagerWidget> createState() => _PaymentsManagerWidgetState();
 }
@@ -70,6 +75,7 @@ class _PaymentsManagerWidgetState extends State<PaymentsManagerWidget> {
                         totalAmountPayable:
                             _invoiceManagerCubit.invoice.grandTotal,
                         totalPaid: totalPaid,
+                        invoiceType: widget.invoiceType,
                       ),
                     ).then((newPayment) {
                       if (newPayment != null) {

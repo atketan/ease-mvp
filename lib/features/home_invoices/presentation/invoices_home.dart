@@ -1,4 +1,3 @@
-import 'package:ease/core/utils/developer_log.dart';
 import 'package:ease/features/home_invoices/widgets/all_sales_invoices_tab.dart';
 import 'package:ease/features/manage/presentation/manage_landing_page.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +25,6 @@ class _InvoicesHomePageState extends State<InvoicesHomePage> {
       length: 5,
       child: Consumer<InvoicesProvider>(
         builder: (context, invoicesProvider, child) {
-          debugLog('Invoices Home Rebuild triggered', name: "InvoicesHome");
           return Scaffold(
             appBar: AppBar(
               automaticallyImplyLeading: false,
