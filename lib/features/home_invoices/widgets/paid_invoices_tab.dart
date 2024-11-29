@@ -93,7 +93,6 @@ class _PaidInvoicesTabState extends State<PaidInvoicesTab> {
                               .Sales, // if we are tracking unpaid invoices, it could either be Sales/Purchases both, so we need to pass the invoice type dynamically
                         ),
                         child: InvoiceManager(
-                          invoiceType: InvoiceType.Sales,
                           invoiceFormMode: InvoiceFormMode.Edit,
                           invoice: invoice,
                         ),

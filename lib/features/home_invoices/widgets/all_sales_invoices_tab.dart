@@ -177,7 +177,6 @@ class _AllSalesInvoicesTabState extends State<AllSalesInvoicesTab> {
                                             InvoiceType.Sales,
                                           ),
                                           child: InvoiceManager(
-                                            invoiceType: InvoiceType.Sales,
                                             invoiceFormMode:
                                                 InvoiceFormMode.Edit,
                                             invoice: invoice,
@@ -266,7 +265,6 @@ class _AllSalesInvoicesTabState extends State<AllSalesInvoicesTab> {
                                           InvoiceType.Sales,
                                         ),
                                         child: InvoiceManager(
-                                          invoiceType: InvoiceType.Sales,
                                           invoiceFormMode: InvoiceFormMode.Edit,
                                           invoice: invoice,
                                         ),

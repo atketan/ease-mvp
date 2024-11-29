@@ -150,8 +150,6 @@ class InvoicesProvider with ChangeNotifier {
       0,
       (sum, invoice) => sum + invoice.grandTotal,
     );
-    debugLog('Total unpaid amount: $_totalUnpaidAmount',
-        name: 'InvoicesProvider');
   }
 
   Future<void> fetchPaidInvoices() async {
@@ -179,7 +177,6 @@ class InvoicesProvider with ChangeNotifier {
       0,
       (sum, invoice) => sum + invoice.grandTotal,
     );
-    debugLog('Total paid amount: $_totalPaidAmount', name: 'InvoicesProvider');
   }
 
   Future<void> markInvoiceAsPaid(Invoice invoice) async {

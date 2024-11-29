@@ -176,7 +176,6 @@ class _EASEHomePageState extends State<EASEHomePage>
                             InvoiceType.Sales,
                           ),
                           child: InvoiceManager(
-                            invoiceType: InvoiceType.Sales,
                             invoiceFormMode: InvoiceFormMode.Add,
                           ),
                         ),
@@ -209,7 +208,6 @@ class _EASEHomePageState extends State<EASEHomePage>
                             InvoiceType.Purchase,
                           ),
                           child: InvoiceManager(
-                            invoiceType: InvoiceType.Purchase,
                             invoiceFormMode: InvoiceFormMode.Add,
                           ),
                         ),

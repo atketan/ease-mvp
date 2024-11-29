@@ -5,6 +5,7 @@ import 'package:ease/core/database/invoice_items/invoice_items_dao.dart';
 import 'package:ease/core/database/invoices/invoices_dao.dart';
 import 'package:ease/core/database/payments/payments_dao.dart';
 import 'package:ease/core/database/vendors/vendors_dao.dart';
+import 'package:ease/core/enums/invoice_type_enum.dart';
 import 'package:ease/core/models/customer.dart';
 import 'package:ease/core/models/inventory_item.dart';
 import 'package:ease/core/models/invoice.dart';
@@ -25,6 +26,7 @@ class InvoiceManagerCubit extends Cubit<InvoiceManagerCubitState> {
     this._invoiceItemsDAO,
     this._customersDAO,
     this._vendorsDAO,
+    this.invoiceType,
   ) : super(InvoiceManagerInitial());
 
   final InvoicesDAO _invoiceDAO;
@@ -38,6 +40,7 @@ class InvoiceManagerCubit extends Cubit<InvoiceManagerCubitState> {
 
   late String
       phoneNumber; // Used to store the phone number of the customer/vendor temporarily for displaying in the entity typeahead field
+      final InvoiceType invoiceType ;
 
   void initialiseInvoiceModelInstance(Invoice? invoice, String invoiceNumber) {
     if (invoice == null) {

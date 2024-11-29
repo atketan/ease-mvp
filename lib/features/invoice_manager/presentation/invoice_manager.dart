@@ -42,13 +42,11 @@ enum InvoiceFormMode {
 // The form will have a field to show the total amount paid
 
 class InvoiceManager extends StatefulWidget {
-  final InvoiceType invoiceType;
   final InvoiceFormMode invoiceFormMode;
   final Invoice? invoice;
 
   InvoiceManager({
     Key? key,
-    required this.invoiceType,
     required this.invoiceFormMode,
     this.invoice,
   }) : super(key: key) {
