@@ -173,6 +173,7 @@ class _EASEHomePageState extends State<EASEHomePage>
                             _invoiceItemsDAO,
                             _customersDAO,
                             _vendorsDAO,
+                            InvoiceType.Sales,
                           ),
                           child: InvoiceManager(
                             invoiceType: InvoiceType.Sales,
@@ -196,10 +197,21 @@ class _EASEHomePageState extends State<EASEHomePage>
                     _animationController.reverse();
                     Navigator.push(
                       context,
-                      new MaterialPageRoute(
-                        builder: (BuildContext context) => InvoiceManager(
-                          invoiceType: InvoiceType.Purchase,
-                          invoiceFormMode: InvoiceFormMode.Add,
+                      MaterialPageRoute(
+                        builder: (BuildContext context) => BlocProvider(
+                          create: (context) => InvoiceManagerCubit(
+                            _invoicesDAO,
+                            _inventoryItemsDAO,
+                            _paymentsDAO,
+                            _invoiceItemsDAO,
+                            _customersDAO,
+                            _vendorsDAO,
+                            InvoiceType.Purchase,
+                          ),
+                          child: InvoiceManager(
+                            invoiceType: InvoiceType.Purchase,
+                            invoiceFormMode: InvoiceFormMode.Add,
+                          ),
                         ),
                       ),
                     );

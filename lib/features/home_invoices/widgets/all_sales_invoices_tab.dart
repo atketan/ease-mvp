@@ -174,6 +174,7 @@ class _AllSalesInvoicesTabState extends State<AllSalesInvoicesTab> {
                                             _invoiceItemsDAO,
                                             _customersDAO,
                                             _vendorsDAO,
+                                            InvoiceType.Sales,
                                           ),
                                           child: InvoiceManager(
                                             invoiceType: InvoiceType.Sales,
@@ -262,6 +263,7 @@ class _AllSalesInvoicesTabState extends State<AllSalesInvoicesTab> {
                                           _invoiceItemsDAO,
                                           _customersDAO,
                                           _vendorsDAO,
+                                          InvoiceType.Sales,
                                         ),
                                         child: InvoiceManager(
                                           invoiceType: InvoiceType.Sales,

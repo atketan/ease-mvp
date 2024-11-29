@@ -62,6 +62,7 @@ class InvoiceManager extends StatefulWidget {
 
 class InvoiceManagerState extends State<InvoiceManager> {
   final String invoiceNumber = generateShort12CharUniqueKey().toUpperCase();
+  late InvoiceType invoiceType;
   // final DateTime invoiceCreateDate = DateTime.now();
 
   List<bool> _isOpen = [false, false, false, false, false];
@@ -69,6 +70,7 @@ class InvoiceManagerState extends State<InvoiceManager> {
   @override
   void initState() {
     super.initState();
+    invoiceType = context.read<InvoiceManagerCubit>().invoiceType;
     context
         .read<InvoiceManagerCubit>()
         .initialiseInvoiceModelInstance(widget.invoice, invoiceNumber);
@@ -97,7 +99,7 @@ class InvoiceManagerState extends State<InvoiceManager> {
                   .copyWith(color: Theme.of(context).colorScheme.surface),
             ),
             Text(
-              '${widget.invoiceFormMode == InvoiceFormMode.Add ? 'NEW' : 'UPDATE'} | ${widget.invoiceType == InvoiceType.Sales ? 'SALE' : 'PURCHASE'}',
+              '${widget.invoiceFormMode == InvoiceFormMode.Add ? 'NEW' : 'UPDATE'} | ${invoiceType == InvoiceType.Sales ? 'SALE' : 'PURCHASE'}',
               style: Theme.of(context)
                   .textTheme
                   .labelMedium!
@@ -146,7 +148,7 @@ class InvoiceManagerState extends State<InvoiceManager> {
                             child: ListTile(
                               leading: Icon(Icons.person_2_outlined),
                               title: Text(
-                                widget.invoiceType == InvoiceType.Sales
+                                invoiceType == InvoiceType.Sales
                                     ? 'CUSTOMER'
                                     : 'VENDOR',
                                 style: Theme.of(context).textTheme.labelLarge,
@@ -160,7 +162,7 @@ class InvoiceManagerState extends State<InvoiceManager> {
                                     if (selectedClientName.isEmpty)
                                       selectedClientName = null;
                                     return Text(
-                                      widget.invoiceType == InvoiceType.Sales
+                                      invoiceType == InvoiceType.Sales
                                           ? '${selectedClientName ?? 'Select a customer'}'
                                           : '${selectedClientName ?? 'Select a vendor'}',
                                       style: Theme.of(context)
@@ -183,7 +185,7 @@ class InvoiceManagerState extends State<InvoiceManager> {
                         },
                         body: Card(
                           child: EntityTypeAheadField(
-                            invoiceType: widget.invoiceType,
+                            invoiceType: invoiceType,
                             onClientSelected: (clientName) {
                               context
                                   .read<InvoiceManagerCubit>()
@@ -353,8 +355,7 @@ class InvoiceManagerState extends State<InvoiceManager> {
                             InvoiceManagerCubitState>(
                           builder: (context, state) {
                             if (state is InvoiceManagerLoaded) {
-                              return PaymentsManagerWidget(
-                                  invoiceType: widget.invoiceType);
+                              return PaymentsManagerWidget();
                             } else if (state is InvoiceManagerLoading) {
                               return Center(child: CircularProgressIndicator());
                             } else if (state is InvoiceManagerError) {
