@@ -29,9 +29,15 @@ class _PaymentsManagerWidgetState extends State<PaymentsManagerWidget> {
         if (state is InvoiceManagerLoading) {
           return Center(child: CircularProgressIndicator());
         } else if (state is InvoiceManagerLoaded) {
-          final payments = state.invoice.payments.toList();
-          final totalPaid =
-              payments.fold(0.0, (sum, payment) => sum + payment.amount);
+          final payments = state.invoice.payments.toList()
+            ..sort((a, b) => b.paymentDate.compareTo(a.paymentDate));
+          final totalPaid = payments.fold(
+              0.0,
+              (previousValue, element) =>
+                  previousValue +
+                  (element.transactionType == TransactionType.credit
+                      ? element.amount
+                      : -element.amount));
 
           return Column(
             children: [

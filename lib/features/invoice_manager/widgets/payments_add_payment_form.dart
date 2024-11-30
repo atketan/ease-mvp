@@ -58,8 +58,15 @@ class _AddPaymentFormState extends State<AddPaymentForm> {
                   if (amount == null || amount <= 0) {
                     return 'Please enter a valid amount';
                   }
-                  if (widget.totalPaid + amount > widget.totalAmountPayable) {
+                  if (_transactionType == TransactionType.credit &&
+                      widget.totalPaid + amount > widget.totalAmountPayable) {
+                    debugPrint(
+                        'Total Paid: ${widget.totalPaid}, Amount: $amount, totalPayable: ${widget.totalAmountPayable}');
                     return 'Amount cannot exceed total payable';
+                  }
+                  if (_transactionType == TransactionType.debit &&
+                      widget.totalPaid - amount < 0.0) {
+                    return 'Amount cannot be paid from a negative balance';
                   }
                   return null;
                 },

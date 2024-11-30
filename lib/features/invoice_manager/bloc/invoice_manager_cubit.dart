@@ -6,6 +6,7 @@ import 'package:ease/core/database/invoices/invoices_dao.dart';
 import 'package:ease/core/database/payments/payments_dao.dart';
 import 'package:ease/core/database/vendors/vendors_dao.dart';
 import 'package:ease/core/enums/invoice_type_enum.dart';
+import 'package:ease/core/enums/transaction_type_enum.dart';
 import 'package:ease/core/models/customer.dart';
 import 'package:ease/core/models/inventory_item.dart';
 import 'package:ease/core/models/invoice.dart';
@@ -40,7 +41,7 @@ class InvoiceManagerCubit extends Cubit<InvoiceManagerCubitState> {
 
   late String
       phoneNumber; // Used to store the phone number of the customer/vendor temporarily for displaying in the entity typeahead field
-      final InvoiceType invoiceType ;
+  final InvoiceType invoiceType;
 
   void initialiseInvoiceModelInstance(Invoice? invoice, String invoiceNumber) {
     if (invoice == null) {
@@ -126,8 +127,13 @@ class InvoiceManagerCubit extends Cubit<InvoiceManagerCubitState> {
         0.0, (previousValue, element) => previousValue + element.totalPrice);
     _invoice.grandTotal = _invoice.totalAmount - _invoice.discount;
 
-    _invoice.totalPaid = _invoice.payments
-        .fold(0.0, (previousValue, element) => previousValue + element.amount);
+    _invoice.totalPaid = _invoice.payments.fold(
+        0.0,
+        (previousValue, element) =>
+            previousValue +
+            (element.transactionType == TransactionType.credit
+                ? element.amount
+                : -element.amount));
     _invoice.totalDue = _invoice.grandTotal - _invoice.totalPaid;
 
     if (_invoice.totalDue == 0.0)
