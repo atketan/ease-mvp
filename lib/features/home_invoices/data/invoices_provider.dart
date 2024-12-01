@@ -57,8 +57,8 @@ class InvoicesProvider with ChangeNotifier {
     _isFilterApplied =
         !((_startDate == defaultStartDate) && (_endDate == defaultEndDate));
 
-    fetchUnpaidInvoices();
-    fetchPaidInvoices();
+    // fetchUnpaidInvoices();
+    // fetchPaidInvoices();
     fetchAllSalesInvoices();
     notifyListeners();
   }

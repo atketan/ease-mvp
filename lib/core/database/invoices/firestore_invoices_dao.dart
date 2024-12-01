@@ -109,8 +109,8 @@ class FirestoreInvoicesDAO implements InvoicesDataSource {
         .collection('users')
         .doc(userId)
         .collection('invoices')
-        // .where('date', isGreaterThanOrEqualTo: startDate.toIso8601String())
-        // .where('date', isLessThanOrEqualTo: endDate.toIso8601String())
+        .where('date', isGreaterThanOrEqualTo: startDate.toIso8601String())
+        .where('date', isLessThanOrEqualTo: endDate.toIso8601String())
         // .where('type', isEqualTo: 'sales')
         // TODO: temporarily removing the search filters to avoid index failure in Firestore
         // Also, may need to rethink this entire logic to ensure the database is not overloaded with filtration especially since its a NoSQL database now

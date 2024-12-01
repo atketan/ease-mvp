@@ -1,5 +1,7 @@
+import 'package:ease/core/utils/developer_log.dart';
 import 'package:ease/features/home_invoices/widgets/all_sales_invoices_tab.dart';
 import 'package:ease/features/manage/presentation/manage_landing_page.dart';
+import 'package:ease/widgets/time_range_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../data/invoices_provider.dart';
@@ -100,6 +102,18 @@ class _InvoicesHomePageState extends State<InvoicesHomePage> {
             body: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                TimeRangeSelector(
+                  onRangeSelected: (startDate, endDate) {
+                    debugLog(
+                      'Selected range: ${startDate.toString()} - ${endDate.toString()}',
+                      name: 'InvoicesHomePage',
+                    );
+                    invoicesProvider.setDateRange(
+                      startDate,
+                      endDate,
+                    );
+                  },
+                ),
                 Center(
                   child: IntrinsicHeight(
                     child: Row(
