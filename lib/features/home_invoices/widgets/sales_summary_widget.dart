@@ -1,4 +1,6 @@
 import 'package:ease/features/home_invoices/data/invoices_provider.dart';
+import 'package:ease/features/sales_invoices/presentation/sales_invoices_page.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
@@ -28,7 +30,14 @@ class SalesSummaryWidgetState extends State<SalesSummaryWidget> {
               children: [
                 Text('Sales', style: Theme.of(context).textTheme.titleMedium),
                 IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => SalesInvoicesProviderWidget(),
+                      ),
+                    );
+                  },
                   icon: Icon(
                     Icons.chevron_right_outlined,
                     size: 16.0,

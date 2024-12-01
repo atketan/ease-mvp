@@ -118,7 +118,7 @@ class _InvoicesHomePageState extends State<InvoicesHomePage> {
                   },
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.only(right: 8.0, left: 8.0, bottom: 8.0),
                   child: Row(
                     children: [
                       Expanded(flex: 5, child: SalesSummaryWidget()),
