@@ -2,12 +2,14 @@ import 'package:ease/core/utils/developer_log.dart';
 import 'package:flutter/material.dart';
 import '../../../core/database/invoices/invoices_dao.dart';
 import '../../../core/models/invoice.dart';
+import 'dart:async';
 
 class InvoicesProvider with ChangeNotifier {
   DateTime defaultStartDate;
   DateTime defaultEndDate;
   DateTime _startDate;
   DateTime _endDate;
+  StreamSubscription<dynamic>? _invoicesSubscription;
 
   InvoicesProvider(this._invoicesDAO)
       : defaultStartDate = DateTime.now().subtract(Duration(days: 30)).copyWith(
@@ -29,17 +31,28 @@ class InvoicesProvider with ChangeNotifier {
   double _totalUnpaidAmount = 0.0;
   double _totalPaidAmount = 0.0;
   double _totalSalesAmount = 0.0;
+  double _totalPurchaseAmount = 0.0;
 
   List<Invoice> _allSalesInvoices = [];
   List<Invoice> _allPurchaseInvoices = [];
   List<Invoice> get allSalesInvoices => _allSalesInvoices;
   List<Invoice> get allPurchaseInvoices => _allPurchaseInvoices;
 
-  List<Invoice> get unpaidInvoices => _unpaidInvoices;
-  List<Invoice> get paidInvoices => _paidInvoices;
+  List<Invoice> get unpaidInvoices =>
+      _allSalesInvoices.where((invoice) => invoice.status == 'unpaid').toList();
+  List<Invoice> get paidInvoices =>
+      _allSalesInvoices.where((invoice) => invoice.status == 'paid').toList();
+  List<Invoice> get unpaidPurchases => _allPurchaseInvoices
+      .where((invoice) => invoice.status == 'unpaid')
+      .toList();
+  List<Invoice> get paidPurchases => _allPurchaseInvoices
+      .where((invoice) => invoice.status == 'paid')
+      .toList();
+      
   double get totalUnpaidAmount => _totalUnpaidAmount;
   double get totalPaidAmount => _totalPaidAmount;
   double get totalSalesAmount => _totalSalesAmount;
+  double get totalPurchaseAmount => _totalPurchaseAmount;
 
   DateTime get startDate => _startDate;
   DateTime get endDate => _endDate;
@@ -50,6 +63,10 @@ class InvoicesProvider with ChangeNotifier {
   void setDateRange(DateTime start, DateTime end) {
     debugLog('setDateRange called with start: $start, end: $end',
         name: 'InvoicesProvider');
+
+    // Cancel existing subscription
+    _invoicesSubscription?.cancel();
+
     _startDate = DateTime(start.year, start.month, start.day)
         .copyWith(hour: 0, minute: 0, second: 0, millisecond: 0);
     _endDate = DateTime(end.year, end.month, end.day, 23, 59, 59, 999);
@@ -57,10 +74,7 @@ class InvoicesProvider with ChangeNotifier {
     _isFilterApplied =
         !((_startDate == defaultStartDate) && (_endDate == defaultEndDate));
 
-    // fetchUnpaidInvoices();
-    // fetchPaidInvoices();
-    fetchAllSalesInvoices();
-    // notifyListeners();
+    subscribeToInvoices();
   }
 
   void clearFilter() {
@@ -112,7 +126,9 @@ class InvoicesProvider with ChangeNotifier {
   }
 
   void subscribeToInvoices() {
-    _invoicesDAO.subscribeToInvoices(_startDate, _endDate).listen((invoices) {
+    _invoicesSubscription = _invoicesDAO
+        .subscribeToInvoices(_startDate, _endDate)
+        .listen((invoices) {
       _allSalesInvoices = invoices
           .where((invoice) =>
               invoice.customerId != null && invoice.vendorId == null)
@@ -129,20 +145,28 @@ class InvoicesProvider with ChangeNotifier {
           'SubscribeToInvoices, Fetched ${_allPurchaseInvoices.length} purchase invoices',
           name: 'InvoicesProvider');
 
-
-      // TODO: Grand total cannot be treated as total paid amount. Although it could be used as Total Sales amount, so that's correct.
-      _totalSalesAmount = _allSalesInvoices.fold(
-        0,
-        (sum, invoice) => sum + invoice.grandTotal,
-      );
-      debugLog('SubscribeToInvoices, Total paid amount: $_totalPaidAmount',
-          name: 'InvoicesProvider');
+      _calculateTotalSalesAmount();
+      _calculateTotalPurchaseAmount();
 
       notifyListeners();
     }, onError: (e) {
       debugLog('Error fetching sales invoices: $e', name: 'InvoicesProvider');
       // Handle the error appropriately
     });
+  }
+
+  void _calculateTotalSalesAmount() {
+    _totalSalesAmount = _allSalesInvoices.fold(
+      0,
+      (sum, invoice) => sum + invoice.grandTotal,
+    );
+  }
+
+  void _calculateTotalPurchaseAmount() {
+    _totalPurchaseAmount = _allPurchaseInvoices.fold(
+      0,
+      (sum, invoice) => sum + invoice.grandTotal,
+    );
   }
 
   void _calculateTotalUnpaidAmount() {
@@ -190,5 +214,11 @@ class InvoicesProvider with ChangeNotifier {
       debugLog('Error marking invoice as paid: $e', name: 'InvoicesProvider');
       // Handle the error appropriately
     }
+  }
+
+  @override
+  void dispose() {
+    _invoicesSubscription?.cancel();
+    super.dispose();
   }
 }

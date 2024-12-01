@@ -1,5 +1,7 @@
 import 'package:ease/core/utils/developer_log.dart';
 import 'package:ease/features/home_invoices/widgets/all_sales_invoices_tab.dart';
+import 'package:ease/features/home_invoices/widgets/purchases_summary_widget.dart';
+import 'package:ease/features/home_invoices/widgets/sales_summary_widget.dart';
 import 'package:ease/features/manage/presentation/manage_options_bottomsheet.dart';
 import 'package:ease/widgets/time_range_selector.dart';
 import 'package:flutter/material.dart';
@@ -114,6 +116,16 @@ class _InvoicesHomePageState extends State<InvoicesHomePage> {
                       endDate,
                     );
                   },
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    children: [
+                      Expanded(flex: 5, child: SalesSummaryWidget()),
+                      SizedBox(width: 8.0),
+                      Expanded(flex: 5, child: PurchasesSummaryWidget()),
+                    ],
+                  ),
                 ),
                 Center(
                   child: IntrinsicHeight(
