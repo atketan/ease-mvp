@@ -1,6 +1,6 @@
 import 'package:ease/core/utils/developer_log.dart';
 import 'package:ease/features/home_invoices/widgets/all_sales_invoices_tab.dart';
-import 'package:ease/features/manage/presentation/manage_landing_page.dart';
+import 'package:ease/features/manage/presentation/manage_options_bottomsheet.dart';
 import 'package:ease/widgets/time_range_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -37,52 +37,53 @@ class _InvoicesHomePageState extends State<InvoicesHomePage> {
                     showModalBottomSheet(
                       context: context,
                       // isScrollControlled: true, // Allow full-screen height
+                      showDragHandle: true,
                       builder: (BuildContext context) {
-                        return ManageLandingPage(); // Your full-screen dialog content
+                        return ManageOptionsBottomsheet();
                       },
                     );
                   },
                   icon: Icon(Icons.apps_outlined),
                 ),
-                Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    IconButton(
-                      icon: Icon(Icons.calendar_month_outlined),
-                      onPressed: () async {
-                        final picked = await showDateRangePicker(
-                          context: context,
-                          firstDate: DateTime(2000),
-                          lastDate: DateTime.now(),
-                          initialEntryMode: DatePickerEntryMode.input,
-                          initialDateRange: DateTimeRange(
-                            start: invoicesProvider.startDate,
-                            end: invoicesProvider.endDate,
-                          ),
-                        );
-                        if (picked != null) {
-                          invoicesProvider.setDateRange(
-                            picked.start,
-                            picked.end,
-                          );
-                        }
-                      },
-                    ),
-                    if (invoicesProvider.isFilterApplied)
-                      Positioned(
-                        top: 8,
-                        right: 8,
-                        child: Container(
-                          width: 8,
-                          height: 8,
-                          decoration: BoxDecoration(
-                            color: Colors.red,
-                            shape: BoxShape.circle,
-                          ),
-                        ),
-                      ),
-                  ],
-                ),
+                // Stack(
+                //   alignment: Alignment.center,
+                //   children: [
+                //     IconButton(
+                //       icon: Icon(Icons.calendar_month_outlined),
+                //       onPressed: () async {
+                //         final picked = await showDateRangePicker(
+                //           context: context,
+                //           firstDate: DateTime(2000),
+                //           lastDate: DateTime.now(),
+                //           initialEntryMode: DatePickerEntryMode.input,
+                //           initialDateRange: DateTimeRange(
+                //             start: invoicesProvider.startDate,
+                //             end: invoicesProvider.endDate,
+                //           ),
+                //         );
+                //         if (picked != null) {
+                //           invoicesProvider.setDateRange(
+                //             picked.start,
+                //             picked.end,
+                //           );
+                //         }
+                //       },
+                //     ),
+                //     if (invoicesProvider.isFilterApplied)
+                //       Positioned(
+                //         top: 8,
+                //         right: 8,
+                //         child: Container(
+                //           width: 8,
+                //           height: 8,
+                //           decoration: BoxDecoration(
+                //             color: Colors.red,
+                //             shape: BoxShape.circle,
+                //           ),
+                //         ),
+                //       ),
+                //   ],
+                // ),
               ],
               title: Text(
                 'Invoices',
