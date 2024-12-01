@@ -60,7 +60,7 @@ class InvoicesProvider with ChangeNotifier {
     // fetchUnpaidInvoices();
     // fetchPaidInvoices();
     fetchAllSalesInvoices();
-    notifyListeners();
+    // notifyListeners();
   }
 
   void clearFilter() {

@@ -57,21 +57,24 @@ class _VendorsPageState extends State<VendorsPage> {
       appBar: AppBar(
         title: Text('Vendors'),
         actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context)
-                  .push(
-                    MaterialPageRoute(
-                      builder: (_) => UpdateVendorsPage(
-                        mode: VendorsFormMode.Add,
+          Padding(
+            padding: const EdgeInsets.only(right: 8.0),
+            child: TextButton(
+              onPressed: () {
+                Navigator.of(context)
+                    .push(
+                      MaterialPageRoute(
+                        builder: (_) => UpdateVendorsPage(
+                          mode: VendorsFormMode.Add,
+                        ),
                       ),
-                    ),
-                  )
-                  .then(
-                    (value) => _fetchVendors(),
-                  );
-            },
-            child: Text('Add'),
+                    )
+                    .then(
+                      (value) => _fetchVendors(),
+                    );
+              },
+              child: Text('Add'),
+            ),
           ),
         ],
       ),

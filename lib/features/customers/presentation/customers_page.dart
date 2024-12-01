@@ -55,21 +55,24 @@ class _CustomersPageState extends State<CustomersPage> {
       appBar: AppBar(
         title: Text('Customers'),
         actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context)
-                  .push(
-                    MaterialPageRoute(
-                      builder: (_) => UpdateCustomersPage(
-                        mode: CustomersFormMode.Add,
+          Padding(
+            padding: const EdgeInsets.only(right: 8.0),
+            child: TextButton(
+              onPressed: () {
+                Navigator.of(context)
+                    .push(
+                      MaterialPageRoute(
+                        builder: (_) => UpdateCustomersPage(
+                          mode: CustomersFormMode.Add,
+                        ),
                       ),
-                    ),
-                  )
-                  .then(
-                    (value) => _fetchCustomers(),
-                  );
-            },
-            child: Text('Add'),
+                    )
+                    .then(
+                      (value) => _fetchCustomers(),
+                    );
+              },
+              child: Text('Add'),
+            ),
           ),
         ],
       ),

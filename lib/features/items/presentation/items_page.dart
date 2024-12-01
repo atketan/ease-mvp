@@ -54,21 +54,24 @@ class ItemsPageState extends State<ItemsPage> {
       appBar: AppBar(
         title: Text('Inventory Items'),
         actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context)
-                  .push(
-                    MaterialPageRoute(
-                      builder: (_) => UpdateItemsPage(
-                        mode: InventoryItemsFormMode.Add,
+          Padding(
+            padding: const EdgeInsets.only(right: 8.0),
+            child: TextButton(
+              onPressed: () {
+                Navigator.of(context)
+                    .push(
+                      MaterialPageRoute(
+                        builder: (_) => UpdateItemsPage(
+                          mode: InventoryItemsFormMode.Add,
+                        ),
                       ),
-                    ),
-                  )
-                  .then(
-                    (value) => _fetchItems(),
-                  );
-            },
-            child: Text('Add'),
+                    )
+                    .then(
+                      (value) => _fetchItems(),
+                    );
+              },
+              child: Text('Add'),
+            ),
           ),
         ],
       ),
