@@ -127,76 +127,76 @@ class _InvoicesHomePageState extends State<InvoicesHomePage> {
                     ],
                   ),
                 ),
-                Center(
-                  child: IntrinsicHeight(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Expanded(
-                          flex: 5,
-                          child: Card(
-                            child: Padding(
-                              padding: const EdgeInsets.all(16.0),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    'Total Sales',
-                                    textAlign: TextAlign.center,
-                                    style:
-                                        Theme.of(context).textTheme.titleSmall,
-                                  ),
-                                  Text(
-                                    "₹" +
-                                        invoicesProvider.totalSalesAmount
-                                            .toString(),
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyLarge!
-                                        .copyWith(
-                                            color: Colors.green,
-                                            fontWeight: FontWeight.bold),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          flex: 5,
-                          child: Card(
-                            child: Padding(
-                              padding: const EdgeInsets.all(16.0),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    'Balance Amount',
-                                    textAlign: TextAlign.center,
-                                    style:
-                                        Theme.of(context).textTheme.titleSmall,
-                                  ),
-                                  Text(
-                                    "₹" +
-                                        invoicesProvider.totalUnpaidAmount
-                                            .toString(), // Replace with dynamic value
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyLarge!
-                                        .copyWith(
-                                            color: Colors.red,
-                                            fontWeight: FontWeight.bold),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+                // Center(
+                //   child: IntrinsicHeight(
+                //     child: Row(
+                //       mainAxisAlignment: MainAxisAlignment.center,
+                //       mainAxisSize: MainAxisSize.min,
+                //       children: [
+                //         Expanded(
+                //           flex: 5,
+                //           child: Card(
+                //             child: Padding(
+                //               padding: const EdgeInsets.all(16.0),
+                //               child: Column(
+                //                 mainAxisAlignment: MainAxisAlignment.center,
+                //                 children: [
+                //                   Text(
+                //                     'Total Sales',
+                //                     textAlign: TextAlign.center,
+                //                     style:
+                //                         Theme.of(context).textTheme.titleSmall,
+                //                   ),
+                //                   Text(
+                //                     "₹" +
+                //                         invoicesProvider.totalSalesAmount
+                //                             .toString(),
+                //                     style: Theme.of(context)
+                //                         .textTheme
+                //                         .bodyLarge!
+                //                         .copyWith(
+                //                             color: Colors.green,
+                //                             fontWeight: FontWeight.bold),
+                //                   ),
+                //                 ],
+                //               ),
+                //             ),
+                //           ),
+                //         ),
+                //         Expanded(
+                //           flex: 5,
+                //           child: Card(
+                //             child: Padding(
+                //               padding: const EdgeInsets.all(16.0),
+                //               child: Column(
+                //                 mainAxisAlignment: MainAxisAlignment.center,
+                //                 children: [
+                //                   Text(
+                //                     'Balance Amount',
+                //                     textAlign: TextAlign.center,
+                //                     style:
+                //                         Theme.of(context).textTheme.titleSmall,
+                //                   ),
+                //                   Text(
+                //                     "₹" +
+                //                         invoicesProvider.totalUnpaidAmount
+                //                             .toString(), // Replace with dynamic value
+                //                     style: Theme.of(context)
+                //                         .textTheme
+                //                         .bodyLarge!
+                //                         .copyWith(
+                //                             color: Colors.red,
+                //                             fontWeight: FontWeight.bold),
+                //                   ),
+                //                 ],
+                //               ),
+                //             ),
+                //           ),
+                //         ),
+                //       ],
+                //     ),
+                //   ),
+                // ),
                 Container(
                   color: Theme.of(context).primaryColor,
                   margin: EdgeInsets.all(0.0),
