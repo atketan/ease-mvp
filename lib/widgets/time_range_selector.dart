@@ -149,7 +149,7 @@ class _TimeRangeSelectorState extends State<TimeRangeSelector> {
                   value: type,
                   child: Text(
                     type.displayName,
-                    style: Theme.of(context).textTheme.labelLarge,
+                    style: Theme.of(context).textTheme.labelMedium,
                   ),
                 );
               }).toList(),
@@ -196,7 +196,7 @@ class _TimeRangeSelectorState extends State<TimeRangeSelector> {
                   child: Text(
                     _getRangeText(),
                     textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.labelLarge,
+                    style: Theme.of(context).textTheme.labelMedium,
                   ),
                 ),
                 if (_selectedType != TimeRangeType.custom)
