@@ -13,7 +13,6 @@ import 'package:ease/features/invoice_manager/bloc/invoice_manager_cubit.dart';
 import 'package:ease/features/invoice_manager/presentation/invoice_manager.dart';
 import 'package:ease/features/home_invoices/data/invoices_provider.dart';
 import 'package:ease/features/home_invoices/presentation/invoices_home.dart';
-import 'package:ease/features/manage/presentation/manage_landing_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:floating_action_bubble/floating_action_bubble.dart';
 
@@ -29,7 +28,6 @@ class EASEHomePage extends StatefulWidget {
 
 class _EASEHomePageState extends State<EASEHomePage>
     with SingleTickerProviderStateMixin {
-  int _selectedIndex = 0;
   late Animation<double> _animation;
   late AnimationController _animationController;
   late InvoicesDAO _invoicesDAO;
@@ -52,12 +50,6 @@ class _EASEHomePageState extends State<EASEHomePage>
     _animation = Tween<double>(begin: 0, end: 1).animate(curvedAnimation);
   }
 
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
-
   Future<bool> _requestPermissions() async {
     try {
       // Request permissions
@@ -75,11 +67,6 @@ class _EASEHomePageState extends State<EASEHomePage>
       return false;
     }
   }
-
-  static List<Widget> _widgetOptions = <Widget>[
-    InvoicesHomePage(),
-    ManageLandingPage(),
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -118,7 +105,7 @@ class _EASEHomePageState extends State<EASEHomePage>
             //     create: (context) => DashboardDataProvider()),
           ],
           child: Scaffold(
-            body: _widgetOptions.elementAt(_selectedIndex),
+            body: InvoicesHomePage(),
             drawer: Drawer(
               child: ListView(
                 padding: EdgeInsets.zero,
@@ -249,29 +236,6 @@ class _EASEHomePageState extends State<EASEHomePage>
               iconData: Icons.add,
               backGroundColor: Theme.of(context).colorScheme.surface,
             ),
-            // bottomNavigationBar: BottomNavigationBar(
-            //   selectedItemColor: Theme.of(context).colorScheme.primary,
-            //   unselectedItemColor: Theme.of(context).colorScheme.secondary,
-            //   enableFeedback: true,
-            //   currentIndex: _selectedIndex,
-            //   showSelectedLabels: true,
-            //   showUnselectedLabels: true,
-            //   items: [
-            //     BottomNavigationBarItem(
-            //       icon: Icon(Icons.inventory_sharp),
-            //       label: "Invoices",
-            //     ),
-            //     // BottomNavigationBarItem(
-            //     //   icon: Icon(Icons.dashboard_sharp),
-            //     //   label: "Dashboard",
-            //     // ),
-            //     BottomNavigationBarItem(
-            //       icon: Icon(Icons.view_list_sharp),
-            //       label: "Manage",
-            //     ),
-            //   ],
-            //   onTap: (value) => _onItemTapped(value),
-            // ),
           ),
         );
       },
