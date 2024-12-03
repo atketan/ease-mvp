@@ -1,11 +1,10 @@
 class Expense {
   int? id;
   String? expenseId; // firestore doc id
-  int categoryId;
+  String categoryId; // firestore doc id for expense category
   String description;
   double amount;
-  DateTime date;
-  DateTime? createdAt;
+  DateTime createdAt;
   DateTime? updatedAt;
 
   Expense({
@@ -14,8 +13,7 @@ class Expense {
     required this.categoryId,
     required this.description,
     required this.amount,
-    required this.date,
-    this.createdAt,
+    required this.createdAt,
     this.updatedAt,
   });
 
@@ -26,7 +24,6 @@ class Expense {
       categoryId: json['category_id'],
       description: json['description'],
       amount: json['amount'],
-      date: DateTime.parse(json['date']),
       createdAt: DateTime.parse(json['created_at']),
       updatedAt: DateTime.parse(json['updated_at']),
     );
@@ -39,8 +36,7 @@ class Expense {
       'category_id': categoryId,
       'description': description,
       'amount': amount,
-      'date': date.toIso8601String(),
-      'created_at': createdAt?.toIso8601String(),
+      'created_at': createdAt.toIso8601String(),
       'updated_at': updatedAt?.toIso8601String(),
     };
   }

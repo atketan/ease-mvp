@@ -1,4 +1,5 @@
 import 'package:ease/features/customers/presentation/customers_page.dart';
+import 'package:ease/features/expense_categories/presentation/expense_categories_landing_page.dart';
 import 'package:ease/features/items/presentation/items_page.dart';
 import 'package:ease/features/vendors/presentation/vendors_page.dart';
 import 'package:flutter/material.dart';
@@ -29,6 +30,12 @@ class ManageOptionsBottomsheetState extends State<ManageOptionsBottomsheet> {
       'page': ItemsPage(),
     },
     // Add more menu items here for 3x3 grid
+    {
+      'title': 'Expense',
+      'subtitle': 'Categories',
+      'icon': Icons.bar_chart,
+      'page': ExpenseCategoriesLandingPage(),
+    },
     {
       'title': 'Reports',
       'subtitle': 'Analytics',

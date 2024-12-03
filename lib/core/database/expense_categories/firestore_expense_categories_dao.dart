@@ -51,4 +51,19 @@ class FirestoreExpenseCategoriesDAO implements ExpenseCategoriesDataSource {
         .delete();
     return 1; // Firestore does not return a delete count
   }
+
+  Stream<List<ExpenseCategory>> subscribeToExpenseCategories() {
+    return _firestore
+        .collection('users')
+        .doc(userId)
+        .collection('expenseCategories')
+        .snapshots()
+        .map((snapshot) {
+      return snapshot.docs.map((doc) {
+        final expenseCategory = ExpenseCategory.fromJSON(doc.data());
+        expenseCategory.categoryId = doc.id;
+        return expenseCategory;
+      }).toList();
+    });
+  }
 }
