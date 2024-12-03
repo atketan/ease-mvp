@@ -1,4 +1,5 @@
 import 'package:ease/core/enums/invoice_type_enum.dart';
+import 'package:ease/core/enums/payment_against_enum.dart';
 import 'package:ease/core/enums/payment_method_enum.dart';
 import 'package:ease/core/enums/transaction_type_enum.dart';
 import 'package:ease/core/models/payment.dart';
@@ -135,6 +136,9 @@ class _AddPaymentFormState extends State<AddPaymentForm> {
                 paymentDate: DateTime.now(),
                 paymentMethod: _selectedPaymentMethod,
                 transactionType: _transactionType,
+                paymentAgainst: (widget.invoiceType == InvoiceType.Sales)
+                    ? PaymentAgainst.salesInvoice
+                    : PaymentAgainst.purchaseInvoice,
                 createdAt: DateTime.now(),
                 updatedAt: DateTime.now(),
               );

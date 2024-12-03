@@ -1,3 +1,4 @@
+import 'package:ease/core/enums/payment_against_enum.dart';
 import 'package:ease/core/enums/payment_method_enum.dart';
 import 'package:ease/core/enums/transaction_type_enum.dart';
 
@@ -10,6 +11,7 @@ class Payment {
       paymentMethod; // upi, cash, debit card, credit card, net banking, cheque, other
   TransactionType transactionType; // credit, debit
   String? generalPaymentDescription; // Nullable, for general payments
+  PaymentAgainst paymentAgainst; // sales/purchase invoice, expense, other
   DateTime? createdAt;
   DateTime? updatedAt;
 
@@ -21,6 +23,7 @@ class Payment {
     required this.paymentMethod,
     required this.transactionType,
     this.generalPaymentDescription,
+    required this.paymentAgainst,
     this.createdAt,
     this.updatedAt,
   });
@@ -35,6 +38,7 @@ class Payment {
       transactionType: TransactionType.values.firstWhere(
           (e) => e.toString() == 'TransactionType.${json['transaction_type']}'),
       generalPaymentDescription: json['general_payment_description'],
+      paymentAgainst: json['payment_against'].toString().toPaymentAgainst(),
       createdAt: json['created_at'] != null
           ? DateTime.parse(json['created_at'])
           : null,
@@ -54,6 +58,7 @@ class Payment {
       'transaction_type':
           transactionType.toString().split('.').last, // Convert enum to string
       'general_payment_description': generalPaymentDescription,
+      'payment_against': paymentAgainst.name,
       'created_at': createdAt?.toIso8601String(),
       'updated_at': updatedAt?.toIso8601String(),
     };
