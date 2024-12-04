@@ -13,7 +13,8 @@ class FirestoreExpensesDAO implements ExpensesDataSource {
     final docRef = await _firestore
         .collection('users')
         .doc(userId)
-        .collection('expenses').add(expense.toJSON());
+        .collection('expenses')
+        .add(expense.toJSON());
     return docRef.id.hashCode; // Firestore does not return an integer ID
   }
 
@@ -22,7 +23,8 @@ class FirestoreExpensesDAO implements ExpensesDataSource {
     final snapshot = await _firestore
         .collection('users')
         .doc(userId)
-        .collection('expenses').get();
+        .collection('expenses')
+        .get();
     return snapshot.docs.map((doc) => Expense.fromJSON(doc.data())).toList();
   }
 
@@ -31,7 +33,9 @@ class FirestoreExpensesDAO implements ExpensesDataSource {
     await _firestore
         .collection('users')
         .doc(userId)
-        .collection('expenses').doc(expense.id.toString()).update(expense.toJSON());
+        .collection('expenses')
+        .doc(expense.id.toString())
+        .update(expense.toJSON());
     return 1; // Firestore does not return an update count
   }
 
@@ -40,7 +44,24 @@ class FirestoreExpensesDAO implements ExpensesDataSource {
     await _firestore
         .collection('users')
         .doc(userId)
-        .collection('expenses').doc(expenseId.toString()).delete();
+        .collection('expenses')
+        .doc(expenseId.toString())
+        .delete();
     return 1; // Firestore does not return a delete count
+  }
+
+  Stream<List<Expense>> subscribeToExpenses() {
+    return _firestore
+        .collection('users')
+        .doc(userId)
+        .collection('expenses')
+        .snapshots()
+        .map((snapshot) {
+      return snapshot.docs.map((doc) {
+        final expense = Expense.fromJSON(doc.data());
+        expense.expenseId = doc.id;
+        return expense;
+      }).toList();
+    });
   }
 }

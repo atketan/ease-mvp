@@ -10,4 +10,6 @@ abstract class PaymentsDataSource {
   Future<Payment?> getPaymentByInvoiceId(
     String? invoiceId,
   ); // To be deprecated, as each invoice can have multiple payments made against it
+  Future<List<Payment>> getPaymentsByExpenseId(
+      String expenseId); // to get all payments made against an expense entry
 }

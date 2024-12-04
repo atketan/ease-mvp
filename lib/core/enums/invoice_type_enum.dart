@@ -1,6 +1,7 @@
 enum InvoiceType {
   Sales,
   Purchase,
+  Expense,
   // Add other types as needed
 }
 
@@ -11,6 +12,8 @@ extension InvoiceTypeExtension on InvoiceType {
         return 'Sale';
       case InvoiceType.Purchase:
         return 'Purchase';
+      case InvoiceType.Expense:
+        return 'Expense';
       // Add cases for other types
     }
   }

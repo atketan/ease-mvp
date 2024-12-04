@@ -178,4 +178,25 @@ class FirestorePaymentsDAO implements PaymentsDataSource {
       return null;
     }
   }
+
+  @override
+  Future<List<Payment>> getPaymentsByExpenseId(String expenseId) async {
+    if (expenseId.isEmpty) {
+      return [];
+    }
+
+    final snapshot = await _firestore
+        .collection('users')
+        .doc(userId)
+        .collection('expenses')
+        .doc(expenseId)
+        .collection('payments')
+        .get();
+    return snapshot.docs.map((doc) {
+      final payment = Payment.fromJSON(doc.data());
+      payment.id = doc.id;
+      payment.invoiceId = expenseId;
+      return payment;
+    }).toList();
+  }
 }

@@ -1,4 +1,5 @@
 import 'package:ease/core/utils/developer_log.dart';
+import 'package:ease/features/expenses/presentation/expenses_landing_page.dart';
 import 'package:ease/features/home_invoices/widgets/all_sales_invoices_tab.dart';
 import 'package:ease/features/home_invoices/widgets/purchases_summary_widget.dart';
 import 'package:ease/features/home_invoices/widgets/sales_summary_widget.dart';
@@ -118,7 +119,8 @@ class _InvoicesHomePageState extends State<InvoicesHomePage> {
                   },
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(right: 8.0, left: 8.0, bottom: 8.0),
+                  padding:
+                      const EdgeInsets.only(right: 8.0, left: 8.0, bottom: 8.0),
                   child: Row(
                     children: [
                       Expanded(flex: 5, child: SalesSummaryWidget()),
@@ -221,9 +223,7 @@ class _InvoicesHomePageState extends State<InvoicesHomePage> {
                       Container(
                         child: Center(child: Text("Coming soon")),
                       ),
-                      Container(
-                        child: Center(child: Text("Coming soon")),
-                      ),
+                      ExpensesLandingPage(),
                       Container(
                         child: Center(child: Text("Coming soon")),
                       ),

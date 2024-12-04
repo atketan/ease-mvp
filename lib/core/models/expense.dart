@@ -1,28 +1,31 @@
 class Expense {
   int? id;
-  String? expenseId; // firestore doc id
-  String categoryId; // firestore doc id for expense category
-  String description;
+  String? expenseId; // Firestore document ID
+  String? notes;
+  String? name; // category name - to avoid calling categories collection
+  String? categoryId;
   double amount;
   DateTime createdAt;
-  DateTime? updatedAt;
+  DateTime updatedAt;
 
   Expense({
     this.id,
     this.expenseId,
-    required this.categoryId,
-    required this.description,
+    required this.name,
+    this.notes,
+    this.categoryId,
     required this.amount,
     required this.createdAt,
-    this.updatedAt,
+    required this.updatedAt,
   });
 
   factory Expense.fromJSON(Map<String, dynamic> json) {
     return Expense(
       id: json['id'],
       expenseId: json['expense_id'],
+      name: json['name'],
+      notes: json['notes'],
       categoryId: json['category_id'],
-      description: json['description'],
       amount: json['amount'],
       createdAt: DateTime.parse(json['created_at']),
       updatedAt: DateTime.parse(json['updated_at']),
@@ -33,11 +36,12 @@ class Expense {
     return {
       'id': id,
       'expense_id': expenseId,
+      'name': name,
+      'notes': notes,
       'category_id': categoryId,
-      'description': description,
       'amount': amount,
       'created_at': createdAt.toIso8601String(),
-      'updated_at': updatedAt?.toIso8601String(),
+      'updated_at': updatedAt.toIso8601String(),
     };
   }
 }
