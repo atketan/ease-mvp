@@ -13,6 +13,9 @@ class ExpensesProvider with ChangeNotifier {
   List<Expense> _expenses = [];
   List<Expense> get expenses => _expenses;
 
+  List<Payment> _payments = [];
+  List<Payment> get payments => _payments;
+
   ExpensesProvider(this._expensesDAO, this._paymentsDAO) {
     subscribeToExpenses();
   }
@@ -61,16 +64,21 @@ class ExpensesProvider with ChangeNotifier {
 
   Future<List<Payment>> getPaymentsForExpense(String expenseId) async {
     try {
-      return await _paymentsDAO.getPaymentsByExpenseId(expenseId);
+      _payments = await _paymentsDAO.getPaymentsByExpenseId(expenseId);
     } catch (e) {
       debugPrint('Error fetching payments: $e');
-      return [];
+      _payments = [];
     }
+    return _payments;
   }
 
   @override
   void dispose() {
     _expensesSubscription?.cancel();
     super.dispose();
+  }
+
+  void addPaymentToArray(newPayment) {
+    _payments.add(newPayment);
   }
 }

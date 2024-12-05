@@ -66,7 +66,9 @@ class _AddPaymentFormState extends State<AddPaymentForm> {
                     return 'Amount cannot exceed total payable';
                   }
                   if (_transactionType == TransactionType.debit &&
-                      widget.totalPaid - amount < 0.0) {
+                      widget.totalAmountPayable - amount < 0.0) {
+                    debugPrint(
+                        'Total Paid: ${widget.totalPaid}, Amount: $amount, totalPayable: ${widget.totalAmountPayable}');
                     return 'Amount cannot be paid from a negative balance';
                   }
                   return null;

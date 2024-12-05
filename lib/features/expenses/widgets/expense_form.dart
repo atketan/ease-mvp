@@ -1,6 +1,7 @@
 import 'package:ease/core/enums/invoice_type_enum.dart';
 import 'package:ease/core/enums/transaction_type_enum.dart';
 import 'package:ease/core/models/expense.dart';
+import 'package:ease/core/providers/short_uuid_generator.dart';
 import 'package:ease/core/utils/date_time_utils.dart';
 import 'package:ease/features/expense_categories/presentation/widgets/expense_category_form.dart';
 import 'package:ease/features/expense_categories/providers/expense_category_provider.dart';
@@ -24,7 +25,9 @@ class _ExpenseFormState extends State<ExpenseForm> {
   String? _notes;
   String? _categoryId;
   double? _amount;
-  bool _isExpanded = true;
+  double totalPaid = 0.0;
+
+  final String expenseNumber = generateShort12CharUniqueKey().toUpperCase();
 
   @override
   void initState() {
@@ -43,11 +46,29 @@ class _ExpenseFormState extends State<ExpenseForm> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.expense == null ? 'Add Expense' : 'Edit Expense'),
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'EXPENSE: #$expenseNumber',
+              style: Theme.of(context)
+                  .textTheme
+                  .labelLarge!
+                  .copyWith(color: Theme.of(context).colorScheme.surface),
+            ),
+            Text(
+              widget.expense == null ? 'Add Expense' : 'Edit Expense',
+              style: Theme.of(context)
+                  .textTheme
+                  .labelMedium!
+                  .copyWith(color: Theme.of(context).colorScheme.surface),
+            ),
+          ],
+        ),
       ),
       body: Form(
         key: _formKey,
-        child: Stack(
+        child: Column(
           children: [
             Padding(
               padding: const EdgeInsets.all(16.0),
@@ -103,8 +124,8 @@ class _ExpenseFormState extends State<ExpenseForm> {
                         ),
                       ),
                       const SizedBox(width: 8),
-                      TextButton(
-                        child: Text('Add'),
+                      OutlinedButton(
+                        child: Text('+ Add'),
                         onPressed: () {
                           Navigator.push(
                             context,
@@ -133,8 +154,14 @@ class _ExpenseFormState extends State<ExpenseForm> {
                       }
                       return null;
                     },
+                    onChanged: (value) {
+                      debugPrint('Amount: $value');
+                      _amount = double.parse(value);
+                    },
                     onSaved: (value) {
-                      _amount = double.parse(value!);
+                      setState(() {
+                        _amount = double.parse(value!);
+                      });
                     },
                   ),
                   const SizedBox(height: 16),
@@ -152,105 +179,103 @@ class _ExpenseFormState extends State<ExpenseForm> {
                     },
                   ),
                   SizedBox(height: 16),
-                  ExpansionPanelList(
-                    expandedHeaderPadding: EdgeInsets.all(0),
-                    expansionCallback: (int index, bool isExpanded) {
-                      setState(() {
-                        _isExpanded = !isExpanded;
-                      });
-                    },
-                    children: [
-                      ExpansionPanel(
-                        headerBuilder: (BuildContext context, bool isExpanded) {
-                          return ListTile(
-                            title: Text('Payments'),
-                          );
-                        },
-                        body: Column(
-                          children: [
-                            Consumer<ExpensesProvider>(
-                              builder: (context, provider, child) {
-                                return FutureBuilder(
-                                  future: provider.getPaymentsForExpense(
-                                      widget.expense?.expenseId ?? ''),
-                                  builder: (context, snapshot) {
-                                    if (snapshot.connectionState ==
-                                        ConnectionState.waiting) {
-                                      return CircularProgressIndicator();
-                                    } else if (snapshot.hasError) {
-                                      return Text('Error: ${snapshot.error}');
-                                    } else if (!snapshot.hasData ||
-                                        (snapshot.data as List).isEmpty) {
-                                      return Text('No payments found');
-                                    } else {
-                                      final payments = snapshot.data as List;
-                                      return Column(
-                                        children: payments.map((payment) {
-                                          return ListTile(
-                                            title: Text(
-                                              payment.paymentMethod.displayName,
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .labelLarge,
-                                            ),
-                                            subtitle: Text(
-                                              formatInvoiceDate(
-                                                  payment.paymentDate),
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .labelSmall,
-                                            ),
-                                            trailing: Text(
-                                              (payment.transactionType ==
-                                                      TransactionType.credit)
-                                                  ? '+' + '₹${payment.amount}'
-                                                  : '-' + '₹${payment.amount}',
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .titleSmall,
-                                            ),
-                                          );
-                                        }).toList(),
-                                      );
-                                    }
-                                  },
-                                );
-                              },
-                            ),
-                            // Padding(
-                            //   padding: const EdgeInsets.all(8.0),
-                            //   child: ElevatedButton(
-                            //     onPressed: () {
-                            //       showDialog(
-                            //         context: context,
-                            //         builder: (context) => AddPaymentForm(
-                            //           invoiceId: _invoiceManagerCubit
-                            //                   .invoice.invoiceId ??
-                            //               "",
-                            //           totalAmountPayable: _amount!,
-                            //           totalPaid: totalPaid,
-                            //           invoiceType: InvoiceType.Expense,
-                            //         ),
-                            //       ).then((newPayment) {
-                            //         if (newPayment != null) {
-                            //           _invoiceManagerCubit
-                            //               .addPayment(newPayment);
-                            //         }
-                            //       });
-                            //     },
-                            //     child: Text('Add Payment'),
-                            //   ),
-                            // ),
-                          ],
+                  Card(
+                    child: Column(
+                      children: [
+                        ListTile(
+                          title: Text('Payments'),
                         ),
-                        isExpanded: _isExpanded,
-                      ),
-                    ],
+                        Consumer<ExpensesProvider>(
+                          builder: (context, provider, child) {
+                            return FutureBuilder(
+                              future: provider.getPaymentsForExpense(
+                                  widget.expense?.expenseId ?? ''),
+                              builder: (context, snapshot) {
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return CircularProgressIndicator();
+                                } else if (snapshot.hasError) {
+                                  return Text('Error: ${snapshot.error}');
+                                } else if (!snapshot.hasData ||
+                                    (snapshot.data as List).isEmpty) {
+                                  return Text('No payments found');
+                                } else {
+                                  final payments = snapshot.data as List;
+                                  return Column(
+                                    children: payments.map((payment) {
+                                      totalPaid = totalPaid +
+                                          (payment.transactionType ==
+                                                  TransactionType.credit
+                                              ? payment.amount
+                                              : -payment.amount);
+                                      return ListTile(
+                                        title: Text(
+                                          payment.paymentMethod.displayName,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .labelLarge,
+                                        ),
+                                        subtitle: Text(
+                                          formatInvoiceDate(
+                                              payment.paymentDate),
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .labelSmall,
+                                        ),
+                                        trailing: Text(
+                                          (payment.transactionType ==
+                                                  TransactionType.credit)
+                                              ? '+' + '₹${payment.amount}'
+                                              : '-' + '₹${payment.amount}',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .titleSmall,
+                                        ),
+                                      );
+                                    }).toList(),
+                                  );
+                                }
+                              },
+                            );
+                          },
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Consumer<ExpensesProvider>(
+                              builder: (context, provider, child) {
+                            return ElevatedButton(
+                              onPressed: () {
+                                debugPrint(
+                                    'Add Payment, Expense ID: $expenseNumber, Total Paid: $totalPaid, Amount: $_amount');
+                                showDialog(
+                                  context: context,
+                                  builder: (context) => AddPaymentForm(
+                                    invoiceId: expenseNumber,
+                                    totalAmountPayable: _amount ?? 0.0,
+                                    totalPaid: totalPaid,
+                                    invoiceType: InvoiceType.Expense,
+                                  ),
+                                ).then((newPayment) {
+                                  if (newPayment != null) {
+                                    newPayment.invoiceId = expenseNumber;
+                                    provider.addPaymentToArray(
+                                        newPayment);
+                                  }
+                                });
+                              },
+                              child: Text('Add Payment'),
+                            );
+                          }),
+                        ),
+                      ],
+                    ),
                   ),
+
                   const SizedBox(height: 16),
                 ],
               ),
             ),
+            Spacer(),
             Align(
               alignment: Alignment.bottomCenter,
               child: Row(
@@ -284,25 +309,43 @@ class _ExpenseFormState extends State<ExpenseForm> {
                               context,
                               listen: false);
                           if (widget.expense == null) {
-                            provider.insertExpense(Expense(
-                              name: _name,
-                              notes: _notes,
-                              categoryId: _categoryId,
-                              amount: _amount!,
-                              createdAt: DateTime.now(),
-                              updatedAt: DateTime.now(),
-                            ));
+                            provider.insertExpense(
+                              Expense(
+                                expenseNumber: expenseNumber,
+                                name: _name,
+                                notes: _notes,
+                                categoryId: _categoryId,
+                                amount: _amount!,
+                                totalPaid: totalPaid,
+                                status: (_amount == totalPaid)
+                                    ? 'paid'
+                                    : (_amount! > totalPaid)
+                                        ? 'partially paid'
+                                        : 'unpaid',
+                                createdAt: DateTime.now(),
+                                updatedAt: DateTime.now(),
+                              ),
+                            );
                           } else {
-                            provider.updateExpense(Expense(
-                              id: widget.expense!.id,
-                              expenseId: widget.expense!.expenseId,
-                              name: _name,
-                              notes: _notes,
-                              categoryId: _categoryId,
-                              amount: _amount!,
-                              createdAt: widget.expense!.createdAt,
-                              updatedAt: DateTime.now(),
-                            ));
+                            provider.updateExpense(
+                              Expense(
+                                id: widget.expense!.id,
+                                expenseId: widget.expense!.expenseId,
+                                expenseNumber: widget.expense!.expenseNumber,
+                                name: _name,
+                                notes: _notes,
+                                categoryId: _categoryId,
+                                amount: _amount!,
+                                totalPaid: totalPaid,
+                                status: (_amount == totalPaid)
+                                    ? 'paid'
+                                    : (_amount! > totalPaid)
+                                        ? 'partially paid'
+                                        : 'unpaid',
+                                createdAt: widget.expense!.createdAt,
+                                updatedAt: DateTime.now(),
+                              ),
+                            );
                           }
                           Navigator.pop(context);
                         }
