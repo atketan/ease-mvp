@@ -213,7 +213,7 @@ class _InvoicesHomePageState extends State<InvoicesHomePage> {
                       Tab(text: 'Purchases'),
                       Tab(text: 'Expenses'),
                       Tab(text: 'Payments'),
-                      Tab(text: 'Reports'),
+                      // Tab(text: 'Reports'),
                       // Tab(text: 'Unpaid'),
                       // Tab(text: 'Paid'),
                     ],
@@ -230,9 +230,9 @@ class _InvoicesHomePageState extends State<InvoicesHomePage> {
                       Container(
                         child: Center(child: Text("Coming soon")),
                       ),
-                      Container(
-                        child: Center(child: Text("Coming soon")),
-                      ),
+                      // Container(
+                      //   child: Center(child: Text("Coming soon")),
+                      // ),
                       // UnpaidInvoicesTab(),
                       // PaidInvoicesTab(),
                     ],

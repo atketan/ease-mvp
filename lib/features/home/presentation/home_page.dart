@@ -208,7 +208,7 @@ class _EASEHomePageState extends State<EASEHomePage>
                   title: "Expense",
                   iconColor: Theme.of(context).colorScheme.primary,
                   bubbleColor: Theme.of(context).colorScheme.surface,
-                  icon: Icons.home,
+                  icon: Icons.payment_outlined,
                   titleStyle: TextStyle(
                       fontSize: 16,
                       color: Theme.of(context).colorScheme.primary),
@@ -222,18 +222,18 @@ class _EASEHomePageState extends State<EASEHomePage>
                     );
                   },
                 ),
-                Bubble(
-                  title: "Payment",
-                  iconColor: Theme.of(context).colorScheme.primary,
-                  bubbleColor: Theme.of(context).colorScheme.surface,
-                  icon: Icons.home,
-                  titleStyle: TextStyle(
-                      fontSize: 16,
-                      color: Theme.of(context).colorScheme.primary),
-                  onPress: () {
-                    _animationController.reverse();
-                  },
-                ),
+                // Bubble(
+                //   title: "Payment",
+                //   iconColor: Theme.of(context).colorScheme.primary,
+                //   bubbleColor: Theme.of(context).colorScheme.surface,
+                //   icon: Icons.home,
+                //   titleStyle: TextStyle(
+                //       fontSize: 16,
+                //       color: Theme.of(context).colorScheme.primary),
+                //   onPress: () {
+                //     _animationController.reverse();
+                //   },
+                // ),
               ],
               animation: _animation,
               onPress: () => _animationController.isCompleted
