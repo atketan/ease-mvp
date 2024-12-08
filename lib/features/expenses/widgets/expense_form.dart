@@ -1,6 +1,8 @@
 import 'package:ease/core/enums/invoice_type_enum.dart';
+import 'package:ease/core/enums/payment_method_enum.dart';
 import 'package:ease/core/enums/transaction_type_enum.dart';
 import 'package:ease/core/models/expense.dart';
+import 'package:ease/core/models/payment.dart';
 import 'package:ease/core/providers/short_uuid_generator.dart';
 import 'package:ease/core/utils/date_time_utils.dart';
 import 'package:ease/features/expense_categories/presentation/widgets/expense_category_form.dart';
@@ -39,6 +41,20 @@ class _ExpenseFormState extends State<ExpenseForm> {
       _amount = widget.expense!.amount;
     } else {
       _name = '';
+    }
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _populatePaymentsForExpense();
+    });
+  }
+
+  void _populatePaymentsForExpense() async {
+    if (widget.expense != null) {
+      final provider = Provider.of<ExpensesProvider>(context, listen: false);
+      await provider.getPaymentsForExpense(widget.expense!.expenseId ?? '');
+      // setState(() {
+      //   totalPaid = payments.fold(0.0, (sum, payment) => sum + payment.amount);
+      // });
     }
   }
 
@@ -188,8 +204,7 @@ class _ExpenseFormState extends State<ExpenseForm> {
                         Consumer<ExpensesProvider>(
                           builder: (context, provider, child) {
                             return FutureBuilder(
-                              future: provider.getPaymentsForExpense(
-                                  widget.expense?.expenseId ?? ''),
+                              future: Future.value(provider.payments),
                               builder: (context, snapshot) {
                                 if (snapshot.connectionState ==
                                     ConnectionState.waiting) {
@@ -200,7 +215,8 @@ class _ExpenseFormState extends State<ExpenseForm> {
                                     (snapshot.data as List).isEmpty) {
                                   return Text('No payments found');
                                 } else {
-                                  final payments = snapshot.data as List;
+                                  final List<Payment> payments =
+                                      snapshot.data as List<Payment>;
                                   return Column(
                                     children: payments.map((payment) {
                                       totalPaid = totalPaid +
@@ -258,8 +274,7 @@ class _ExpenseFormState extends State<ExpenseForm> {
                                 ).then((newPayment) {
                                   if (newPayment != null) {
                                     newPayment.invoiceId = expenseNumber;
-                                    provider.addPaymentToArray(
-                                        newPayment);
+                                    provider.addPaymentToArray(newPayment);
                                   }
                                 });
                               },

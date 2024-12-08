@@ -1,5 +1,6 @@
 import 'package:ease/core/utils/developer_log.dart';
-import 'package:ease/features/expenses/presentation/expenses_landing_page.dart';
+import 'package:ease/features/expenses/presentation/expenses_list_page.dart';
+import 'package:ease/features/expenses/providers/expense_provider.dart';
 import 'package:ease/features/home_invoices/widgets/all_sales_invoices_tab.dart';
 import 'package:ease/features/home_invoices/widgets/purchases_summary_widget.dart';
 import 'package:ease/features/home_invoices/widgets/sales_summary_widget.dart';
@@ -116,6 +117,8 @@ class _InvoicesHomePageState extends State<InvoicesHomePage> {
                       startDate,
                       endDate,
                     );
+                    Provider.of<ExpensesProvider>(context, listen: false)
+                        .setDateRange(startDate, endDate);
                   },
                 ),
                 Padding(
@@ -223,7 +226,7 @@ class _InvoicesHomePageState extends State<InvoicesHomePage> {
                       Container(
                         child: Center(child: Text("Coming soon")),
                       ),
-                      ExpensesLandingPage(),
+                      ExpensesListPage(),
                       Container(
                         child: Center(child: Text("Coming soon")),
                       ),

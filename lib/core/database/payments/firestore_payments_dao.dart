@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ease/core/enums/payment_against_enum.dart';
 import 'package:ease/core/utils/developer_log.dart';
 import '../../models/payment.dart';
 import 'payments_data_source.dart';
@@ -29,14 +30,26 @@ class FirestorePaymentsDAO implements PaymentsDataSource {
 
       // If the payment is associated with an invoice, store it as a subcollection under the invoice
       if (payment.invoiceId != null) {
-        final invoicePaymentsRef = _firestore
-            .collection('users')
-            .doc(userId)
-            .collection('invoices')
-            .doc(payment.invoiceId.toString())
-            .collection('payments')
-            .doc(userPaymentsRef.id); // Use the same document ID
-        transaction.set(invoicePaymentsRef, paymentData);
+        if (payment.paymentAgainst == PaymentAgainst.salesInvoice ||
+            payment.paymentAgainst == PaymentAgainst.purchaseInvoice) {
+          final invoicePaymentsRef = _firestore
+              .collection('users')
+              .doc(userId)
+              .collection('invoices')
+              .doc(payment.invoiceId.toString())
+              .collection('payments')
+              .doc(userPaymentsRef.id); // Use the same document ID
+          transaction.set(invoicePaymentsRef, paymentData);
+        } else if (payment.paymentAgainst == PaymentAgainst.expense) {
+          final invoicePaymentsRef = _firestore
+              .collection('users')
+              .doc(userId)
+              .collection('expenses')
+              .doc(payment.invoiceId.toString())
+              .collection('payments')
+              .doc(userPaymentsRef.id); // Use the same document ID
+          transaction.set(invoicePaymentsRef, paymentData);
+        }
       }
 
       return userPaymentsRef.id; // Firestore does not return an integer ID
@@ -97,14 +110,26 @@ class FirestorePaymentsDAO implements PaymentsDataSource {
 
       // If the payment is associated with an invoice, update it in the subcollection under the invoice
       if (payment.invoiceId != null) {
-        final invoicePaymentsRef = _firestore
-            .collection('users')
-            .doc(userId)
-            .collection('invoices')
-            .doc(payment.invoiceId.toString())
-            .collection('payments')
-            .doc(payment.id.toString());
-        transaction.update(invoicePaymentsRef, paymentData);
+        if (payment.paymentAgainst == PaymentAgainst.salesInvoice ||
+            payment.paymentAgainst == PaymentAgainst.purchaseInvoice) {
+          final invoicePaymentsRef = _firestore
+              .collection('users')
+              .doc(userId)
+              .collection('invoices')
+              .doc(payment.invoiceId.toString())
+              .collection('payments')
+              .doc(payment.id.toString());
+          transaction.update(invoicePaymentsRef, paymentData);
+        } else if (payment.paymentAgainst == PaymentAgainst.expense) {
+          final invoicePaymentsRef = _firestore
+              .collection('users')
+              .doc(userId)
+              .collection('expenses')
+              .doc(payment.invoiceId.toString())
+              .collection('payments')
+              .doc(payment.id.toString());
+          transaction.update(invoicePaymentsRef, paymentData);
+        }
       }
 
       return 1; // Firestore does not return an update count
@@ -131,14 +156,26 @@ class FirestorePaymentsDAO implements PaymentsDataSource {
 
       // If the payment is associated with an invoice, delete it from the subcollection under the invoice
       if (payment.invoiceId != null) {
-        final invoicePaymentsRef = _firestore
-            .collection('users')
-            .doc(userId)
-            .collection('invoices')
-            .doc(payment.invoiceId.toString())
-            .collection('payments')
-            .doc(id);
-        transaction.delete(invoicePaymentsRef);
+        if (payment.paymentAgainst == PaymentAgainst.salesInvoice ||
+            payment.paymentAgainst == PaymentAgainst.purchaseInvoice) {
+          final invoicePaymentsRef = _firestore
+              .collection('users')
+              .doc(userId)
+              .collection('invoices')
+              .doc(payment.invoiceId.toString())
+              .collection('payments')
+              .doc(id);
+          transaction.delete(invoicePaymentsRef);
+        } else if (payment.paymentAgainst == PaymentAgainst.expense) {
+          final invoicePaymentsRef = _firestore
+              .collection('users')
+              .doc(userId)
+              .collection('expenses')
+              .doc(payment.invoiceId.toString())
+              .collection('payments')
+              .doc(id);
+          transaction.delete(invoicePaymentsRef);
+        }
       }
 
       return 1; // Firestore does not return a delete count

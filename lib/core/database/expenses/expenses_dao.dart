@@ -6,7 +6,7 @@ class ExpensesDAO {
 
   ExpensesDAO(this._dataSource);
 
-  Future<int> insertExpense(Expense expense) {
+  Future<String> insertExpense(Expense expense) {
     return _dataSource.insertExpense(expense);
   }
 

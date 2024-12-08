@@ -4,26 +4,26 @@ import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import '../widgets/expense_form.dart';
 
-class ExpensesLandingPage extends StatelessWidget {
+class ExpensesListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Expenses'),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.add),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ExpenseForm(),
-                ),
-              );
-            },
-          ),
-        ],
-      ),
+      // appBar: AppBar(
+        // title: Text('Expenses'),
+        // actions: [
+        //   IconButton(
+        //     icon: Icon(Icons.add),
+        //     onPressed: () {
+        //       Navigator.push(
+        //         context,
+        //         MaterialPageRoute(
+        //           builder: (context) => ExpenseForm(),
+        //         ),
+        //       );
+        //     },
+        //   ),
+        // ],
+      // ),
       body: Consumer<ExpensesProvider>(
         builder: (context, provider, child) {
           if (provider.expenses.isEmpty) {
@@ -51,19 +51,25 @@ class ExpensesLandingPage extends StatelessWidget {
                 ),
                 title: Text(expense.name ?? ''),
                 subtitle: Text(expense.expenseId ?? ''),
-                trailing: IconButton(
-                  icon: Icon(Icons.edit),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ExpenseForm(
-                          expense: expense,
-                        ),
-                      ),
-                    );
-                  },
+                trailing: Text(
+                  "₹ " + expense.amount.toString(),
+                  style: Theme.of(context).textTheme.titleMedium,
                 ),
+                onLongPress: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ExpenseForm(
+                        expense: expense,
+                      ),
+                    ),
+                  );
+                },
+                // trailing: IconButton(
+                //   icon: Icon(Icons.edit),
+                //   onPressed: () {
+                //   },
+                // ),
               );
             },
           );

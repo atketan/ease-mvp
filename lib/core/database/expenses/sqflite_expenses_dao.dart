@@ -6,9 +6,9 @@ class SqfliteExpensesDAO implements ExpensesDataSource {
   final DatabaseHelper _databaseHelper = DatabaseHelper();
 
   @override
-  Future<int> insertExpense(Expense expense) async {
+  Future<String> insertExpense(Expense expense) async {
     final db = await _databaseHelper.database;
-    return await db.insert('Expenses', expense.toJSON());
+    return await db.insert('Expenses', expense.toJSON()).toString();
   }
 
   @override

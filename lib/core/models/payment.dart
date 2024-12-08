@@ -10,7 +10,7 @@ class Payment {
   PaymentMethod
       paymentMethod; // upi, cash, debit card, credit card, net banking, cheque, other
   TransactionType transactionType; // credit, debit
-  String? generalPaymentDescription; // Nullable, for general payments
+  String? notes; // Nullable, for general payment description
   PaymentAgainst paymentAgainst; // sales/purchase invoice, expense, other
   DateTime? createdAt;
   DateTime? updatedAt;
@@ -22,7 +22,7 @@ class Payment {
     required this.paymentDate,
     required this.paymentMethod,
     required this.transactionType,
-    this.generalPaymentDescription,
+    this.notes,
     required this.paymentAgainst,
     this.createdAt,
     this.updatedAt,
@@ -37,7 +37,7 @@ class Payment {
       paymentMethod: json['payment_method'].toString().toPaymentMethod(),
       transactionType: TransactionType.values.firstWhere(
           (e) => e.toString() == 'TransactionType.${json['transaction_type']}'),
-      generalPaymentDescription: json['general_payment_description'],
+      notes: json['general_payment_description'],
       paymentAgainst: json['payment_against'].toString().toPaymentAgainst(),
       createdAt: json['created_at'] != null
           ? DateTime.parse(json['created_at'])
@@ -57,7 +57,7 @@ class Payment {
       'payment_method': paymentMethod.name.toLowerCase(),
       'transaction_type':
           transactionType.toString().split('.').last, // Convert enum to string
-      'general_payment_description': generalPaymentDescription,
+      'notes': notes,
       'payment_against': paymentAgainst.name,
       'created_at': createdAt?.toIso8601String(),
       'updated_at': updatedAt?.toIso8601String(),
