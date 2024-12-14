@@ -81,49 +81,49 @@ class InvoicesProvider with ChangeNotifier {
     _startDate = defaultStartDate;
     _endDate = defaultEndDate;
     _isFilterApplied = false;
-    fetchUnpaidInvoices();
-    fetchAllSalesInvoices();
+    // fetchUnpaidInvoices();
+    // fetchAllSalesInvoices();
     notifyListeners();
   }
 
-  Future<void> fetchAllSalesInvoices() async {
-    debugLog(
-        'fetchAllSalesInvoices called with startDate: $_startDate, endDate: $_endDate',
-        name: 'InvoicesProvider');
-    try {
-      _allSalesInvoices =
-          await _invoicesDAO.getSalesInvoicesByDateRange(_startDate, _endDate);
-      debugLog('Fetched ${_allSalesInvoices.length} sales invoices',
-          name: 'InvoicesProvider');
-      _calculateTotalPaidAmount();
-      _calculateTotalUnpaidAmount();
-      notifyListeners();
-    } catch (e) {
-      debugLog('Error fetching paid invoices: $e', name: 'InvoicesProvider');
-      // Handle the error appropriately
-    }
-  }
+  // Future<void> fetchAllSalesInvoices() async {
+  //   debugLog(
+  //       'fetchAllSalesInvoices called with startDate: $_startDate, endDate: $_endDate',
+  //       name: 'InvoicesProvider');
+  //   try {
+  //     _allSalesInvoices =
+  //         await _invoicesDAO.getSalesInvoicesByDateRange(_startDate, _endDate);
+  //     debugLog('Fetched ${_allSalesInvoices.length} sales invoices',
+  //         name: 'InvoicesProvider');
+  //     _calculateTotalPaidAmount();
+  //     _calculateTotalUnpaidAmount();
+  //     notifyListeners();
+  //   } catch (e) {
+  //     debugLog('Error fetching paid invoices: $e', name: 'InvoicesProvider');
+  //     // Handle the error appropriately
+  //   }
+  // }
 
-  Future<void> fetchUnpaidInvoices() async {
-    debugLog(
-        'fetchUnpaidInvoices called with startDate: $_startDate, endDate: $_endDate',
-        name: 'InvoicesProvider');
-    try {
-      _unpaidInvoices =
-          await _invoicesDAO.getInvoicesByDateRangeAndPaymentStatus(
-        _startDate,
-        _endDate,
-        'unpaid', // Assuming 'unpaid' is the status for unpaid invoices
-      );
-      debugLog('Fetched ${_unpaidInvoices.length} unpaid invoices',
-          name: 'InvoicesProvider');
-      _calculateTotalUnpaidAmount();
-      notifyListeners();
-    } catch (e) {
-      debugLog('Error fetching unpaid invoices: $e', name: 'InvoicesProvider');
-      // Handle the error appropriately
-    }
-  }
+  // Future<void> fetchUnpaidInvoices() async {
+  //   debugLog(
+  //       'fetchUnpaidInvoices called with startDate: $_startDate, endDate: $_endDate',
+  //       name: 'InvoicesProvider');
+  //   try {
+  //     _unpaidInvoices =
+  //         await _invoicesDAO.getInvoicesByDateRangeAndPaymentStatus(
+  //       _startDate,
+  //       _endDate,
+  //       'unpaid', // Assuming 'unpaid' is the status for unpaid invoices
+  //     );
+  //     debugLog('Fetched ${_unpaidInvoices.length} unpaid invoices',
+  //         name: 'InvoicesProvider');
+  //     _calculateTotalUnpaidAmount();
+  //     notifyListeners();
+  //   } catch (e) {
+  //     debugLog('Error fetching unpaid invoices: $e', name: 'InvoicesProvider');
+  //     // Handle the error appropriately
+  //   }
+  // }
 
   void subscribeToInvoices() {
     _invoicesSubscription = _invoicesDAO
@@ -176,25 +176,25 @@ class InvoicesProvider with ChangeNotifier {
     );
   }
 
-  Future<void> fetchPaidInvoices() async {
-    debugLog(
-        'fetchPaidInvoices called with startDate: $_startDate, endDate: $_endDate',
-        name: 'InvoicesProvider');
-    try {
-      _paidInvoices = await _invoicesDAO.getInvoicesByDateRangeAndPaymentStatus(
-        _startDate,
-        _endDate,
-        'paid', // Assuming 'paid' is the status for paid invoices
-      );
-      debugLog('Fetched ${_paidInvoices.length} paid invoices',
-          name: 'InvoicesProvider');
-      _calculateTotalPaidAmount();
-      notifyListeners();
-    } catch (e) {
-      debugLog('Error fetching paid invoices: $e', name: 'InvoicesProvider');
-      // Handle the error appropriately
-    }
-  }
+  // Future<void> fetchPaidInvoices() async {
+  //   debugLog(
+  //       'fetchPaidInvoices called with startDate: $_startDate, endDate: $_endDate',
+  //       name: 'InvoicesProvider');
+  //   try {
+  //     _paidInvoices = await _invoicesDAO.getInvoicesByDateRangeAndPaymentStatus(
+  //       _startDate,
+  //       _endDate,
+  //       'paid', // Assuming 'paid' is the status for paid invoices
+  //     );
+  //     debugLog('Fetched ${_paidInvoices.length} paid invoices',
+  //         name: 'InvoicesProvider');
+  //     _calculateTotalPaidAmount();
+  //     notifyListeners();
+  //   } catch (e) {
+  //     debugLog('Error fetching paid invoices: $e', name: 'InvoicesProvider');
+  //     // Handle the error appropriately
+  //   }
+  // }
 
   void _calculateTotalPaidAmount() {
     _totalPaidAmount = _paidInvoices.fold(

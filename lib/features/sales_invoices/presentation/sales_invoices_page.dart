@@ -46,15 +46,14 @@ class _SalesInvoicesPageState extends State<SalesInvoicesPage> {
     super.initState();
     // not needed if the parent is calling same method, use when to be run as a separate widget
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<InvoicesProvider>(context, listen: false)
-          .fetchAllSalesInvoices();
+      // Provider.of<InvoicesProvider>(context, listen: false)
+      //     .fetchAllSalesInvoices();
     });
   }
 
   void _refreshInvoices() {
     debugLog('Refresh all sales invoices called', name: 'AllSalesInvoicesTab');
-    Provider.of<InvoicesProvider>(context, listen: false)
-        .fetchAllSalesInvoices();
+    Provider.of<InvoicesProvider>(context, listen: false).subscribeToInvoices();
   }
 
   @override
@@ -117,9 +116,9 @@ class _SalesInvoicesPageState extends State<SalesInvoicesPage> {
                                               content: Text(
                                                   'Invoice marked as paid')),
                                         );
-                                        Provider.of<InvoicesProvider>(context,
-                                                listen: false)
-                                            .fetchAllSalesInvoices();
+                                        // Provider.of<InvoicesProvider>(context,
+                                        //         listen: false)
+                                        //     .fetchAllSalesInvoices();
                                       },
                                       icon: Icons.check,
                                       label: 'Mark as Paid',

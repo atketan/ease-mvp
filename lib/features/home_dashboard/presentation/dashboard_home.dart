@@ -14,9 +14,9 @@ class DashboardHomePageState extends State<DashboardHomePage> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<InvoicesProvider>(context, listen: false)
-          .fetchUnpaidInvoices();
-      Provider.of<InvoicesProvider>(context, listen: false).fetchPaidInvoices();
+      // Provider.of<InvoicesProvider>(context, listen: false)
+      //     .fetchUnpaidInvoices();
+      // Provider.of<InvoicesProvider>(context, listen: false).fetchPaidInvoices();
     });
     super.initState();
   }

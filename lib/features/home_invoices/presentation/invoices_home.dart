@@ -90,7 +90,7 @@ class _InvoicesHomePageState extends State<InvoicesHomePage> {
                 // ),
               ],
               title: Text(
-                'Invoices',
+                'SimpleKhata',
                 style: Theme.of(context).textTheme.titleLarge!.copyWith(
                       color: Theme.of(context).canvasColor,
                     ),
