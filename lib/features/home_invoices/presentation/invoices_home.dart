@@ -90,10 +90,11 @@ class _InvoicesHomePageState extends State<InvoicesHomePage> {
                 // ),
               ],
               title: Text(
-                'SimpleKhata',
-                style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                      color: Theme.of(context).canvasColor,
-                    ),
+                'BillBox',
+                style: Theme.of(context)
+                    .textTheme
+                    .titleLarge!
+                    .copyWith(color: Theme.of(context).canvasColor),
               ),
               // bottom: TabBar(
               //   isScrollable: true,
