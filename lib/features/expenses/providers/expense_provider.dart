@@ -50,7 +50,9 @@ class ExpensesProvider with ChangeNotifier {
     _expensesSubscription = _expensesDAO
         .subscribeToExpenses(_startDate, _endDate)
         .listen((expenses) {
-      _expenses = expenses;
+      _expenses = expenses
+        ..sort((a, b) => b.createdAt
+            .compareTo(a.createdAt)); // Sort by startDate in descending order
 
       debugLog('SubscribeToExpenses, Fetched ${_expenses.length} expenses',
           name: 'ExpenseProvider');
