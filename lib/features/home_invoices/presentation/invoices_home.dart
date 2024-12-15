@@ -90,7 +90,7 @@ class _InvoicesHomePageState extends State<InvoicesHomePage> {
                 // ),
               ],
               title: Text(
-                'BillBox',
+                'SimpleHisaab',
                 style: Theme.of(context)
                     .textTheme
                     .titleLarge!
