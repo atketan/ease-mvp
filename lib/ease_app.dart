@@ -1,4 +1,5 @@
 import 'package:ease/core/providers/themes_provider.dart';
+import 'package:ease/core/service_locator/service_locator.dart';
 import 'package:ease/features/account/presentation/bloc/login_cubit.dart';
 import 'package:ease/features/account/presentation/email_login_page.dart';
 import 'package:ease/features/expense_categories/providers/expense_category_provider.dart';
@@ -42,6 +43,13 @@ class EASEApp extends StatefulWidget {
 }
 
 class _EASEAppState extends State<EASEApp> {
+  @override
+  void initState() {
+    super.initState();
+    registerDAOs();
+    registerProviders();
+  }
+
   Future<String?> fetchUserId() async {
     final user = FirebaseAuth.instance.currentUser;
     return user?.uid;

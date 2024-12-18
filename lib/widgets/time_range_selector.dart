@@ -143,7 +143,7 @@ class _TimeRangeSelectorState extends State<TimeRangeSelector> {
             child: DropdownButton<TimeRangeType>(
               value: _selectedType,
               isExpanded: true,
-              underline: Container(), 
+              underline: Container(),
               items: TimeRangeType.values.map((TimeRangeType type) {
                 return DropdownMenuItem<TimeRangeType>(
                   value: type,
@@ -181,7 +181,9 @@ class _TimeRangeSelectorState extends State<TimeRangeSelector> {
               borderRadius: BorderRadius.circular(8),
             ),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: (_selectedType == TimeRangeType.custom)
+                  ? MainAxisAlignment.spaceAround
+                  : MainAxisAlignment.spaceBetween,
               children: [
                 if (_selectedType != TimeRangeType.custom)
                   IconButton(

@@ -5,8 +5,10 @@ import 'package:ease/features/home_invoices/widgets/purchases_summary_widget.dar
 import 'package:ease/features/home_invoices/widgets/sales_invoices_list_page.dart';
 import 'package:ease/features/home_invoices/widgets/sales_summary_widget.dart';
 import 'package:ease/features/manage/presentation/manage_options_bottomsheet.dart';
+import 'package:ease/widgets/time_range_provider.dart';
 import 'package:ease/widgets/time_range_selector.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import '../data/invoices_provider.dart';
 
@@ -28,7 +30,7 @@ class _InvoicesHomePageState extends State<InvoicesHomePage> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 5,
+      length: 4,
       child: Consumer<InvoicesProvider>(
         builder: (context, invoicesProvider, child) {
           return Scaffold(
@@ -227,7 +229,9 @@ class _InvoicesHomePageState extends State<InvoicesHomePage> {
                       Container(
                         child: Center(child: Text("Coming soon")),
                       ),
-                      ExpensesListPage(),
+                      ExpensesListPage(
+                        timeRangeProvider: GetIt.instance<TimeRangeProvider>(),
+                      ),
                       Container(
                         child: Center(child: Text("Coming soon")),
                       ),
