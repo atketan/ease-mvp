@@ -120,8 +120,8 @@ class _InvoicesHomePageState extends State<InvoicesHomePage> {
                       startDate,
                       endDate,
                     );
-                    Provider.of<ExpensesProvider>(context, listen: false)
-                        .setDateRange(startDate, endDate);
+                    // Provider.of<ExpensesProvider>(context, listen: false)
+                    //     .setDateRange(startDate, endDate);
                   },
                 ),
                 Padding(

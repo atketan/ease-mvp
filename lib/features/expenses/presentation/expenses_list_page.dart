@@ -5,21 +5,37 @@ import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import '../widgets/expense_form.dart';
 
-class ExpensesListPage extends StatelessWidget {
+class ExpensesListPage extends StatefulWidget {
   final TimeRangeProvider timeRangeProvider;
 
   ExpensesListPage({Key? key, required this.timeRangeProvider})
       : super(key: key);
 
   @override
+  State<ExpensesListPage> createState() => _ExpensesListPageState();
+}
+
+class _ExpensesListPageState extends State<ExpensesListPage> {
+  @override
+  void initState() {
+    super.initState();
+    final expenseProvider =
+        Provider.of<ExpensesProvider>(context, listen: false);
+    expenseProvider.setDateRange(
+      widget.timeRangeProvider.startDate,
+      widget.timeRangeProvider.endDate,
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Consumer<ExpensesProvider>(
       builder: (context, expenseProvider, child) {
         // Listen to date range changes
-        timeRangeProvider.addListener(() {
+        widget.timeRangeProvider.addListener(() {
           expenseProvider.setDateRange(
-            timeRangeProvider.startDate,
-            timeRangeProvider.endDate,
+            widget.timeRangeProvider.startDate,
+            widget.timeRangeProvider.endDate,
           );
         });
 
