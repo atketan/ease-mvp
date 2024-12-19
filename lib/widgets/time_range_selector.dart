@@ -33,7 +33,7 @@ class _TimeRangeSelectorState extends State<TimeRangeSelector> {
     super.initState();
     // _currentDate = DateTime.now();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      timeRangeProvider.setSelectedType(TimeRangeType.monthly);
+      timeRangeProvider.refresh();
       widget.onRangeSelected(
         timeRangeProvider.startDate,
         timeRangeProvider.endDate,
@@ -166,10 +166,10 @@ class _TimeRangeSelectorState extends State<TimeRangeSelector> {
               }).toList(),
               onChanged: (TimeRangeType? newValue) {
                 if (newValue != null) {
+                  timeRangeProvider.setSelectedType(newValue);
                   if (newValue == TimeRangeType.custom) {
                     _showCustomDatePicker();
                   } else {
-                    timeRangeProvider.setSelectedType(newValue);
                     widget.onRangeSelected(
                       timeRangeProvider.startDate,
                       timeRangeProvider.endDate,
@@ -202,51 +202,53 @@ class _TimeRangeSelectorState extends State<TimeRangeSelector> {
               border: Border.all(color: Theme.of(context).primaryColorLight),
               borderRadius: BorderRadius.circular(8),
             ),
-            child: Row(
-              mainAxisAlignment:
-                  (timeRangeProvider.selectedType == TimeRangeType.custom)
-                      ? MainAxisAlignment.spaceAround
-                      : MainAxisAlignment.spaceBetween,
-              children: [
-                if (timeRangeProvider.selectedType != TimeRangeType.custom)
-                  IconButton(
-                    icon: Icon(Icons.chevron_left),
-                    onPressed:
-                        timeRangeProvider.selectedType != TimeRangeType.allTime
-                            ? () {
-                                timeRangeProvider.navigateRange(false);
-                                widget.onRangeSelected(
-                                  timeRangeProvider.startDate,
-                                  timeRangeProvider.endDate,
-                                );
-                              }
-                            : null,
+            child: Builder(builder: (context) {
+              return Row(
+                mainAxisAlignment:
+                    (timeRangeProvider.selectedType == TimeRangeType.custom)
+                        ? MainAxisAlignment.spaceAround
+                        : MainAxisAlignment.spaceBetween,
+                children: [
+                  if (timeRangeProvider.selectedType != TimeRangeType.custom)
+                    IconButton(
+                      icon: Icon(Icons.chevron_left),
+                      onPressed: timeRangeProvider.selectedType !=
+                              TimeRangeType.allTime
+                          ? () {
+                              timeRangeProvider.navigateRange(false);
+                              widget.onRangeSelected(
+                                timeRangeProvider.startDate,
+                                timeRangeProvider.endDate,
+                              );
+                            }
+                          : null,
+                    ),
+                  Container(
+                    height: 48,
+                    alignment: Alignment.center,
+                    child: Text(
+                      _getRangeText(timeRangeProvider),
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.labelMedium,
+                    ),
                   ),
-                Container(
-                  height: 48,
-                  alignment: Alignment.center,
-                  child: Text(
-                    _getRangeText(timeRangeProvider),
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.labelMedium,
-                  ),
-                ),
-                if (timeRangeProvider.selectedType != TimeRangeType.custom)
-                  IconButton(
-                    icon: Icon(Icons.chevron_right),
-                    onPressed:
-                        timeRangeProvider.selectedType != TimeRangeType.allTime
-                            ? () {
-                                timeRangeProvider.navigateRange(true);
-                                widget.onRangeSelected(
-                                  timeRangeProvider.startDate,
-                                  timeRangeProvider.endDate,
-                                );
-                              }
-                            : null,
-                  ),
-              ],
-            ),
+                  if (timeRangeProvider.selectedType != TimeRangeType.custom)
+                    IconButton(
+                      icon: Icon(Icons.chevron_right),
+                      onPressed: timeRangeProvider.selectedType !=
+                              TimeRangeType.allTime
+                          ? () {
+                              timeRangeProvider.navigateRange(true);
+                              widget.onRangeSelected(
+                                timeRangeProvider.startDate,
+                                timeRangeProvider.endDate,
+                              );
+                            }
+                          : null,
+                    ),
+                ],
+              );
+            }),
           ),
         ),
       ],

@@ -1,6 +1,5 @@
 import 'package:ease/core/utils/developer_log.dart';
 import 'package:ease/features/expenses/presentation/expenses_list_page.dart';
-import 'package:ease/features/expenses/providers/expense_provider.dart';
 import 'package:ease/features/home_invoices/widgets/purchases_summary_widget.dart';
 import 'package:ease/features/home_invoices/widgets/sales_invoices_list_page.dart';
 import 'package:ease/features/home_invoices/widgets/sales_summary_widget.dart';

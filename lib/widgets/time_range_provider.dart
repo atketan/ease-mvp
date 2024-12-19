@@ -22,6 +22,11 @@ class TimeRangeProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void refresh() {
+    _calculateDateRange();
+    notifyListeners();
+  }
+
   void _calculateDateRange() {
     switch (_selectedType) {
       case TimeRangeType.allTime:
@@ -61,6 +66,7 @@ class TimeRangeProvider with ChangeNotifier {
         break;
       case TimeRangeType.custom:
         // Handle custom date range
+        // in this case the date range is set by calling setCustomDateRange, after showing the date picker
         break;
     }
   }
@@ -74,25 +80,16 @@ class TimeRangeProvider with ChangeNotifier {
   void navigateRange(bool forward) {
     switch (_selectedType) {
       case TimeRangeType.yearly:
-        _currentDate = DateTime(
-            _currentDate.year + (forward ? 1 : -1), 
-            _currentDate.month, 
-            _currentDate.day
-        );
+        _currentDate = DateTime(_currentDate.year + (forward ? 1 : -1),
+            _currentDate.month, _currentDate.day);
         break;
       case TimeRangeType.quarterly:
-        _currentDate = DateTime(
-            _currentDate.year,
-            _currentDate.month + (forward ? 3 : -3),
-            _currentDate.day
-        );
+        _currentDate = DateTime(_currentDate.year,
+            _currentDate.month + (forward ? 3 : -3), _currentDate.day);
         break;
       case TimeRangeType.monthly:
-        _currentDate = DateTime(
-            _currentDate.year,
-            _currentDate.month + (forward ? 1 : -1),
-            _currentDate.day
-        );
+        _currentDate = DateTime(_currentDate.year,
+            _currentDate.month + (forward ? 1 : -1), _currentDate.day);
         break;
       case TimeRangeType.weekly:
         _currentDate = _currentDate.add(Duration(days: forward ? 7 : -7));
