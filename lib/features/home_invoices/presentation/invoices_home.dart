@@ -1,5 +1,6 @@
 import 'package:ease/core/utils/developer_log.dart';
 import 'package:ease/features/expenses/presentation/expenses_list_page.dart';
+import 'package:ease/features/home_invoices/widgets/purchase_invoices_list_page.dart';
 import 'package:ease/features/home_invoices/widgets/purchases_summary_widget.dart';
 import 'package:ease/features/home_invoices/widgets/sales_invoices_list_page.dart';
 import 'package:ease/features/home_invoices/widgets/sales_summary_widget.dart';
@@ -225,9 +226,7 @@ class _InvoicesHomePageState extends State<InvoicesHomePage> {
                   child: TabBarView(
                     children: [
                       SalesInvoicesListPage(),
-                      Container(
-                        child: Center(child: Text("Coming soon")),
-                      ),
+                      PurchaseInvoicesListPage(),
                       ExpensesListPage(
                         timeRangeProvider: GetIt.instance<TimeRangeProvider>(),
                       ),

@@ -19,12 +19,13 @@ import 'package:provider/provider.dart';
 
 import '../data/invoices_provider.dart';
 
-class SalesInvoicesListPage extends StatefulWidget {
+class PurchaseInvoicesListPage extends StatefulWidget {
   @override
-  _SalesInvoicesListPageState createState() => _SalesInvoicesListPageState();
+  _PurchaseInvoicesListPageState createState() =>
+      _PurchaseInvoicesListPageState();
 }
 
-class _SalesInvoicesListPageState extends State<SalesInvoicesListPage> {
+class _PurchaseInvoicesListPageState extends State<PurchaseInvoicesListPage> {
   late InvoicesDAO _invoicesDAO;
   late InventoryItemsDAO _inventoryItemsDAO;
   late PaymentsDAO _paymentsDAO;
@@ -38,8 +39,8 @@ class _SalesInvoicesListPageState extends State<SalesInvoicesListPage> {
   }
 
   void _refreshInvoices() {
-    debugLog('Refresh all sales invoices called',
-        name: 'SalesInvoicesListPage');
+    debugLog('Refresh all purchase invoices called',
+        name: 'PurchaseInvoicesListPage');
     Provider.of<InvoicesProvider>(context, listen: false).subscribeToInvoices();
   }
 
@@ -55,17 +56,17 @@ class _SalesInvoicesListPageState extends State<SalesInvoicesListPage> {
     return Consumer<InvoicesProvider>(
       builder: (context, invoicesProvider, child) {
         debugLog(
-            'Building AllSalesInvoicesTab with ${invoicesProvider.allSalesInvoices.length} invoices',
+            'Building AllPurchaseInvoicesTab with ${invoicesProvider.allPurchaseInvoices.length} invoices',
             name: 'InvoicesProvider');
         final groupedInvoices =
-            _groupInvoicesByMonth(invoicesProvider.allSalesInvoices);
+            _groupInvoicesByMonth(invoicesProvider.allPurchaseInvoices);
 
         return Column(
           children: [
-            if(groupedInvoices.isEmpty)
+            if (groupedInvoices.isEmpty)
               Expanded(
                 child: Center(
-                  child: Text('No sales found for the selected period'),
+                  child: Text('No purchases found for the selected period'),
                 ),
               ),
             Expanded(
@@ -110,7 +111,7 @@ class _SalesInvoicesListPageState extends State<SalesInvoicesListPage> {
                             //               );
                             //               // Provider.of<InvoicesProvider>(context,
                             //               //         listen: false)
-                            //               //     .fetchAllSalesInvoices();
+                            //               //     .fetchAllPurchaseInvoices();
                             //             },
                             //             backgroundColor: Colors.blueGrey,
                             //             foregroundColor: Colors.white,
@@ -162,7 +163,7 @@ class _SalesInvoicesListPageState extends State<SalesInvoicesListPage> {
                                             _invoiceItemsDAO,
                                             _customersDAO,
                                             _vendorsDAO,
-                                            InvoiceType.Sales,
+                                            InvoiceType.Purchase,
                                           ),
                                           child: InvoiceManager(
                                             invoiceFormMode:
@@ -245,7 +246,7 @@ class _SalesInvoicesListPageState extends State<SalesInvoicesListPage> {
                                         _invoiceItemsDAO,
                                         _customersDAO,
                                         _vendorsDAO,
-                                        InvoiceType.Sales,
+                                        InvoiceType.Purchase,
                                       ),
                                       child: InvoiceManager(
                                         invoiceFormMode: InvoiceFormMode.Edit,
