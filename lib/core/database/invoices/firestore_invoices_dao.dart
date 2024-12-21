@@ -126,7 +126,7 @@ class FirestoreInvoicesDAO implements InvoicesDataSource {
   //   return 'invoices_' + DateFormat('yyyy_MM').format(date);
   // }
 
-@override 
+  @override
   Stream<List<Invoice>> subscribeToInvoices(
       DateTime startDate, DateTime endDate) {
     return _firestore
@@ -136,7 +136,11 @@ class FirestoreInvoicesDAO implements InvoicesDataSource {
         .snapshots()
         .map((snapshot) {
       return snapshot.docs
-          .map((doc) => Invoice.fromJSON(doc.data()))
+          .map((doc) {
+            final invoice = Invoice.fromJSON(doc.data());
+            invoice.invoiceId = doc.id;
+            return invoice;
+          })
           .where((invoice) =>
               invoice.date.isAfter(startDate) && invoice.date.isBefore(endDate))
           .toList();
