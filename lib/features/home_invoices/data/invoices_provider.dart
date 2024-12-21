@@ -48,7 +48,7 @@ class InvoicesProvider with ChangeNotifier {
   List<Invoice> get paidPurchases => _allPurchaseInvoices
       .where((invoice) => invoice.status == 'paid')
       .toList();
-      
+
   double get totalUnpaidAmount => _totalUnpaidAmount;
   double get totalPaidAmount => _totalPaidAmount;
   double get totalSalesAmount => _totalSalesAmount;
@@ -135,7 +135,8 @@ class InvoicesProvider with ChangeNotifier {
           .toList();
       _allPurchaseInvoices = invoices
           .where((invoice) =>
-              invoice.vendorId != null && invoice.customerId == null)
+              invoice.vendorId.toString().isNotEmpty &&
+              invoice.customerId.toString().isEmpty)
           .toList();
 
       debugLog(
