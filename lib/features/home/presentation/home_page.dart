@@ -112,7 +112,7 @@ class _EASEHomePageState extends State<EASEHomePage>
                 padding: EdgeInsets.zero,
                 children: <Widget>[
                   DrawerHeader(
-                    child: const Text("EASE"),
+                    child: const Text("Simple Hisaab"),
                     decoration: BoxDecoration(
                       color: Theme.of(context).colorScheme.primary,
                     ),
