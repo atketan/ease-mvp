@@ -73,6 +73,14 @@ class ManageOptionsBottomsheetState extends State<ManageOptionsBottomsheet> {
                     builder: (_) => item['page'],
                   ),
                 );
+              } else {
+                Navigator.of(context).pop();
+                // Show a snackbar or toast message
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('Coming soon!'),
+                  ),
+                );
               }
             },
             child: Card(
