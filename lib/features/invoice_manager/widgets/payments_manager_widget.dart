@@ -32,12 +32,7 @@ class _PaymentsManagerWidgetState extends State<PaymentsManagerWidget> {
           final payments = state.invoice.payments.toList()
             ..sort((a, b) => b.paymentDate.compareTo(a.paymentDate));
           final totalPaid = payments.fold(
-              0.0,
-              (previousValue, element) =>
-                  previousValue +
-                  (element.transactionType == TransactionType.credit
-                      ? element.amount
-                      : -element.amount));
+              0.0, (previousValue, element) => previousValue + element.amount);
 
           return Column(
             children: [

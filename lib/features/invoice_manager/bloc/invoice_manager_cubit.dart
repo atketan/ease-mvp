@@ -127,13 +127,8 @@ class InvoiceManagerCubit extends Cubit<InvoiceManagerCubitState> {
         0.0, (previousValue, element) => previousValue + element.totalPrice);
     _invoice.grandTotal = _invoice.totalAmount - _invoice.discount;
 
-    _invoice.totalPaid = _invoice.payments.fold(
-        0.0,
-        (previousValue, element) =>
-            previousValue +
-            (element.transactionType == TransactionType.credit
-                ? element.amount
-                : -element.amount));
+    _invoice.totalPaid = _invoice.payments
+        .fold(0.0, (previousValue, element) => previousValue + element.amount);
     _invoice.totalDue = _invoice.grandTotal - _invoice.totalPaid;
 
     if (_invoice.totalDue == 0.0)
