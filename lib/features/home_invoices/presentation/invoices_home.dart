@@ -36,6 +36,14 @@ class _InvoicesHomePageState extends State<InvoicesHomePage> {
           return Scaffold(
             appBar: AppBar(
               automaticallyImplyLeading: false,
+              backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+              surfaceTintColor: Theme.of(context).scaffoldBackgroundColor,
+              leading: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Image(
+                  image: AssetImage('assets/images/icon-512.png'),
+                ),
+              ),
               actions: [
                 IconButton(
                   onPressed: () {
@@ -49,7 +57,10 @@ class _InvoicesHomePageState extends State<InvoicesHomePage> {
                       },
                     );
                   },
-                  icon: Icon(Icons.apps_outlined),
+                  icon: Icon(
+                    Icons.apps_outlined,
+                    color: Theme.of(context).primaryColor,
+                  ),
                 ),
                 // Stack(
                 //   alignment: Alignment.center,
@@ -92,24 +103,23 @@ class _InvoicesHomePageState extends State<InvoicesHomePage> {
                 // ),
               ],
               title: Text(
-                'SimpleHisaab',
-                style: Theme.of(context)
-                    .textTheme
-                    .titleLarge!
-                    .copyWith(color: Theme.of(context).canvasColor),
+                'Simple Hisaab',
+                style: Theme.of(context).textTheme.titleMedium,
               ),
-              // bottom: TabBar(
-              //   isScrollable: true,
-              //   tabAlignment: TabAlignment.start,
-              //   tabs: [
-              //     Tab(text: 'Unpaid'),
-              //     Tab(text: 'Paid'),
-              //   ],
-              // ),
             ),
             body: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                Container(
+                  height: 1,
+                  margin: EdgeInsets.only(
+                    left: 8.0,
+                    right: 8.0,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).primaryColorLight,
+                  ),
+                ),
                 TimeRangeSelector(
                   onRangeSelected: (startDate, endDate) {
                     debugLog(
@@ -135,76 +145,6 @@ class _InvoicesHomePageState extends State<InvoicesHomePage> {
                     ],
                   ),
                 ),
-                // Center(
-                //   child: IntrinsicHeight(
-                //     child: Row(
-                //       mainAxisAlignment: MainAxisAlignment.center,
-                //       mainAxisSize: MainAxisSize.min,
-                //       children: [
-                //         Expanded(
-                //           flex: 5,
-                //           child: Card(
-                //             child: Padding(
-                //               padding: const EdgeInsets.all(16.0),
-                //               child: Column(
-                //                 mainAxisAlignment: MainAxisAlignment.center,
-                //                 children: [
-                //                   Text(
-                //                     'Total Sales',
-                //                     textAlign: TextAlign.center,
-                //                     style:
-                //                         Theme.of(context).textTheme.titleSmall,
-                //                   ),
-                //                   Text(
-                //                     "₹" +
-                //                         invoicesProvider.totalSalesAmount
-                //                             .toString(),
-                //                     style: Theme.of(context)
-                //                         .textTheme
-                //                         .bodyLarge!
-                //                         .copyWith(
-                //                             color: Colors.green,
-                //                             fontWeight: FontWeight.bold),
-                //                   ),
-                //                 ],
-                //               ),
-                //             ),
-                //           ),
-                //         ),
-                //         Expanded(
-                //           flex: 5,
-                //           child: Card(
-                //             child: Padding(
-                //               padding: const EdgeInsets.all(16.0),
-                //               child: Column(
-                //                 mainAxisAlignment: MainAxisAlignment.center,
-                //                 children: [
-                //                   Text(
-                //                     'Balance Amount',
-                //                     textAlign: TextAlign.center,
-                //                     style:
-                //                         Theme.of(context).textTheme.titleSmall,
-                //                   ),
-                //                   Text(
-                //                     "₹" +
-                //                         invoicesProvider.totalUnpaidAmount
-                //                             .toString(), // Replace with dynamic value
-                //                     style: Theme.of(context)
-                //                         .textTheme
-                //                         .bodyLarge!
-                //                         .copyWith(
-                //                             color: Colors.red,
-                //                             fontWeight: FontWeight.bold),
-                //                   ),
-                //                 ],
-                //               ),
-                //             ),
-                //           ),
-                //         ),
-                //       ],
-                //     ),
-                //   ),
-                // ),
                 Container(
                   color: Theme.of(context).primaryColor,
                   margin: EdgeInsets.all(0.0),
