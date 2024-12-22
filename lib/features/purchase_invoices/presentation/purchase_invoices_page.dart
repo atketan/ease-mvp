@@ -18,22 +18,22 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
-class SalesInvoicesProviderWidget extends StatelessWidget {
+class PurchaseInvoicesProviderWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (context) => InvoicesProvider(context.read<InvoicesDAO>()),
-      child: SalesInvoicesPage(),
+      child: PurchaseInvoicesPage(),
     );
   }
 }
 
-class SalesInvoicesPage extends StatefulWidget {
+class PurchaseInvoicesPage extends StatefulWidget {
   @override
-  State<SalesInvoicesPage> createState() => _SalesInvoicesPageState();
+  State<PurchaseInvoicesPage> createState() => _PurchaseInvoicesPageState();
 }
 
-class _SalesInvoicesPageState extends State<SalesInvoicesPage> {
+class _PurchaseInvoicesPageState extends State<PurchaseInvoicesPage> {
   late InvoicesDAO _invoicesDAO;
   late InventoryItemsDAO _inventoryItemsDAO;
   late PaymentsDAO _paymentsDAO;
@@ -47,7 +47,8 @@ class _SalesInvoicesPageState extends State<SalesInvoicesPage> {
   }
 
   void _refreshInvoices() {
-    debugLog('Refresh all sales invoices called', name: 'SalesInvoicesPage');
+    debugLog('Refresh all purchase invoices called',
+        name: 'PurchaseInvoicesPage');
     Provider.of<InvoicesProvider>(context, listen: false).subscribeToInvoices();
   }
 
@@ -63,12 +64,12 @@ class _SalesInvoicesPageState extends State<SalesInvoicesPage> {
     return Consumer<InvoicesProvider>(
       builder: (context, invoicesProvider, child) {
         debugLog(
-            'Building SalesInvoicesPage with ${invoicesProvider.allSalesInvoices.length} invoices',
-            name: 'SalesInvoicesPage');
+            'Building PurchaseInvoicesPage with ${invoicesProvider.allPurchaseInvoices.length} invoices',
+            name: 'PurchaseInvoicesPage');
 
         return Scaffold(
           appBar: AppBar(
-            title: Text('Sales Invoices'),
+            title: Text('Purchase Invoices'),
           ),
           body: Column(
             children: [
@@ -76,7 +77,7 @@ class _SalesInvoicesPageState extends State<SalesInvoicesPage> {
                 onRangeSelected: (startDate, endDate) {
                   debugLog(
                     'Selected range: ${startDate.toString()} - ${endDate.toString()}',
-                    name: 'SalesInvoicesPage',
+                    name: 'PurchaseInvoicesPage',
                   );
                   invoicesProvider.setDateRange(
                     startDate,
@@ -87,9 +88,9 @@ class _SalesInvoicesPageState extends State<SalesInvoicesPage> {
               Divider(),
               Expanded(
                 child: ListView.builder(
-                  itemCount: invoicesProvider.allSalesInvoices.length,
+                  itemCount: invoicesProvider.allPurchaseInvoices.length,
                   itemBuilder: (context, index) {
-                    final invoice = invoicesProvider.allSalesInvoices[index];
+                    final invoice = invoicesProvider.allPurchaseInvoices[index];
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -113,7 +114,7 @@ class _SalesInvoicesPageState extends State<SalesInvoicesPage> {
                                           _invoiceItemsDAO,
                                           _customersDAO,
                                           _vendorsDAO,
-                                          InvoiceType.Sales,
+                                          InvoiceType.Purchase,
                                         ),
                                         child: InvoiceManager(
                                           invoiceFormMode: InvoiceFormMode.Edit,
@@ -190,7 +191,7 @@ class _SalesInvoicesPageState extends State<SalesInvoicesPage> {
                                       _invoiceItemsDAO,
                                       _customersDAO,
                                       _vendorsDAO,
-                                      InvoiceType.Sales,
+                                      InvoiceType.Purchase,
                                     ),
                                     child: InvoiceManager(
                                       invoiceFormMode: InvoiceFormMode.Edit,

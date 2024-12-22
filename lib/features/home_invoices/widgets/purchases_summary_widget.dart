@@ -1,4 +1,5 @@
 import 'package:ease/features/home_invoices/data/invoices_provider.dart';
+import 'package:ease/features/purchase_invoices/presentation/purchase_invoices_page.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
@@ -29,7 +30,14 @@ class _PurchasesSummaryWidgetState extends State<PurchasesSummaryWidget> {
                 Text('Purchases',
                     style: Theme.of(context).textTheme.titleMedium),
                 IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => PurchaseInvoicesProviderWidget(),
+                      ),
+                    );
+                  },
                   icon: Icon(
                     Icons.chevron_right_outlined,
                     size: 16.0,

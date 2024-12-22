@@ -6,7 +6,6 @@ import 'package:ease/core/database/invoices/invoices_dao.dart';
 import 'package:ease/core/database/payments/payments_dao.dart';
 import 'package:ease/core/database/vendors/vendors_dao.dart';
 import 'package:ease/core/enums/invoice_type_enum.dart';
-import 'package:ease/core/enums/transaction_type_enum.dart';
 import 'package:ease/core/models/customer.dart';
 import 'package:ease/core/models/inventory_item.dart';
 import 'package:ease/core/models/invoice.dart';
