@@ -6,6 +6,9 @@ class Customer {
   String? email;
   DateTime createdAt;
   DateTime updatedAt;
+  // openingBalance - is the carry forward balance either from previous year
+  // or from the older app/process which was used to manage the accounts
+  double openingBalance;
 
   Customer({
     this.id,
@@ -15,6 +18,7 @@ class Customer {
     this.email,
     required this.createdAt,
     required this.updatedAt,
+    required this.openingBalance,
   });
 
   factory Customer.fromJSON(Map<String, dynamic> json) {
@@ -30,6 +34,7 @@ class Customer {
       updatedAt: (json['updated_at'] != null)
           ? DateTime.parse(json['updated_at'])
           : DateTime.now(),
+      openingBalance: json['opening_balance'] ?? 0.0,
     );
   }
 
@@ -42,6 +47,7 @@ class Customer {
       'email': email,
       'created_at': createdAt.toIso8601String(),
       'updated_at': updatedAt.toIso8601String(),
+      'opening_balance': openingBalance,
     };
   }
 }

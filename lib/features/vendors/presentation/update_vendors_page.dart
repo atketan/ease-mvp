@@ -26,6 +26,7 @@ class _UpdateVendorsPageState extends State<UpdateVendorsPage> {
   TextEditingController _emailController = TextEditingController();
   TextEditingController _addressController = TextEditingController();
   TextEditingController _phoneController = TextEditingController();
+  TextEditingController _openingBalanceController = TextEditingController();
 
   late VendorsDAO _vendorsDAO;
   late Vendor? vendor;
@@ -50,6 +51,7 @@ class _UpdateVendorsPageState extends State<UpdateVendorsPage> {
         _emailController.text = vendor!.email ?? "";
         _addressController.text = vendor!.address ?? "";
         _phoneController.text = vendor!.phone ?? "";
+        _openingBalanceController.text = vendor!.openingBalance.toString();
       });
     }
   }
@@ -60,6 +62,7 @@ class _UpdateVendorsPageState extends State<UpdateVendorsPage> {
     _emailController.dispose();
     _addressController.dispose();
     _phoneController.dispose();
+    _openingBalanceController.dispose();
     super.dispose();
   }
 
@@ -68,6 +71,8 @@ class _UpdateVendorsPageState extends State<UpdateVendorsPage> {
     String email = _emailController.text;
     String phone = _phoneController.text;
     String address = _addressController.text;
+    double openingBalance =
+        double.tryParse(_openingBalanceController.text.trim()) ?? 0.0;
 
     try {
       if (widget.mode == VendorsFormMode.Add) {
@@ -78,6 +83,7 @@ class _UpdateVendorsPageState extends State<UpdateVendorsPage> {
           address: address,
           createdAt: DateTime.now(),
           updatedAt: DateTime.now(),
+          openingBalance: openingBalance,
         );
         await _vendorsDAO.insertVendor(newVendor);
       } else {
@@ -89,6 +95,8 @@ class _UpdateVendorsPageState extends State<UpdateVendorsPage> {
           address: address,
           createdAt: vendor!.createdAt,
           updatedAt: DateTime.now(),
+          openingBalance: vendor!
+              .openingBalance, // this value cannot be updated once added during vendor creation
         );
         await _vendorsDAO.updateVendor(updatedVendor);
       }
@@ -142,6 +150,20 @@ class _UpdateVendorsPageState extends State<UpdateVendorsPage> {
                 maxLength: 50,
                 keyboardType: TextInputType.multiline,
                 decoration: InputDecoration(labelText: 'Address'),
+              ),
+              SizedBox(height: 16.0),
+              TextField(
+                controller: _openingBalanceController,
+                maxLength: 50,
+                enabled: widget.mode == VendorsFormMode.Add,
+                keyboardType: TextInputType.numberWithOptions(
+                  decimal: true,
+                  signed: true,
+                ),
+                decoration: InputDecoration(
+                  labelText: 'Opening Balance',
+                  prefixText: '₹ ',
+                ),
               ),
               SizedBox(height: 24.0),
               Row(

@@ -271,7 +271,10 @@ class InvoiceManagerCubit extends Cubit<InvoiceManagerCubitState> {
     // emit(InvoiceManagerLoaded(invoice: _invoice));
   }
 
-  Future<void> insertNewCustomer({String name = '', String phone = ''}) async {
+  Future<void> insertNewCustomer(
+      {String name = '',
+      String phone = '',
+      required double openingBalance}) async {
     if (name.isEmpty || phone.isEmpty) {
       return;
     } else {
@@ -281,6 +284,7 @@ class InvoiceManagerCubit extends Cubit<InvoiceManagerCubitState> {
           phone: phone,
           createdAt: DateTime.now(),
           updatedAt: DateTime.now(),
+          openingBalance: openingBalance,
         ),
       );
       setCustomerId(newId);
@@ -289,7 +293,10 @@ class InvoiceManagerCubit extends Cubit<InvoiceManagerCubitState> {
     }
   }
 
-  Future<void> insertNewVendor({String name = '', String phone = ''}) async {
+  Future<void> insertNewVendor(
+      {String name = '',
+      String phone = '',
+      required double openingBalance}) async {
     if (name.isEmpty || phone.isEmpty) {
       return;
     } else {
@@ -299,6 +306,7 @@ class InvoiceManagerCubit extends Cubit<InvoiceManagerCubitState> {
           phone: phone,
           createdAt: DateTime.now(),
           updatedAt: DateTime.now(),
+          openingBalance: openingBalance,
         ),
       );
       setVendorId(newId);

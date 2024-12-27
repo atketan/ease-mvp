@@ -11,6 +11,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'invoice_bloc.dart';
 
+// NOTE: THIS FORM IS NOT USED IN THE APP, IT IS JUST A SNIPPET FOR REFERENCE
+
 class InvoiceForm extends StatefulWidget {
   final bool isSale;
 
@@ -351,6 +353,7 @@ class _AddEntityDialogState extends State<AddEntityDialog> {
                 name: name,
                 createdAt: DateTime.now(),
                 updatedAt: DateTime.now(),
+                openingBalance: 0.0, // Assuming InvoiceForm is no more used
               );
               String customerID = await Provider.of<CustomersDAO>(context)
                   .insertCustomer(customer);
@@ -361,6 +364,7 @@ class _AddEntityDialogState extends State<AddEntityDialog> {
                 name: name,
                 createdAt: DateTime.now(),
                 updatedAt: DateTime.now(),
+                openingBalance: 0.0, // Assuming InvoiceForm is no more used
               );
               String vendorID =
                   await Provider.of<VendorsDAO>(context).insertVendor(vendor);

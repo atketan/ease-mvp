@@ -26,6 +26,7 @@ class _UpdateCustomersPageState extends State<UpdateCustomersPage> {
   TextEditingController _emailController = TextEditingController();
   TextEditingController _addressController = TextEditingController();
   TextEditingController _phoneController = TextEditingController();
+  TextEditingController _openingBalanceController = TextEditingController();
 
   late CustomersDAO _customersDAO;
   late Customer? customer;
@@ -50,6 +51,7 @@ class _UpdateCustomersPageState extends State<UpdateCustomersPage> {
         _emailController.text = customer!.email ?? "";
         _addressController.text = customer!.address ?? "";
         _phoneController.text = customer!.phone ?? "";
+        _openingBalanceController.text = customer!.openingBalance.toString();
       });
     }
   }
@@ -60,6 +62,7 @@ class _UpdateCustomersPageState extends State<UpdateCustomersPage> {
     _emailController.dispose();
     _addressController.dispose();
     _phoneController.dispose();
+    _openingBalanceController.dispose();
     super.dispose();
   }
 
@@ -68,6 +71,8 @@ class _UpdateCustomersPageState extends State<UpdateCustomersPage> {
     String email = _emailController.text;
     String phone = _phoneController.text;
     String address = _addressController.text;
+    double openingBalance =
+        double.tryParse(_openingBalanceController.text.trim()) ?? 0.0;
 
     try {
       if (widget.mode == CustomersFormMode.Add) {
@@ -78,6 +83,7 @@ class _UpdateCustomersPageState extends State<UpdateCustomersPage> {
           address: address,
           createdAt: DateTime.now(),
           updatedAt: DateTime.now(),
+          openingBalance: openingBalance,
         );
         await _customersDAO.insertCustomer(newCustomer);
       } else {
@@ -89,6 +95,8 @@ class _UpdateCustomersPageState extends State<UpdateCustomersPage> {
           address: address,
           createdAt: customer!.createdAt,
           updatedAt: DateTime.now(),
+          openingBalance: customer!
+              .openingBalance, // this value cannot be updated once added during customer creation
         );
         await _customersDAO.updateCustomer(updatedCustomer);
       }
@@ -142,6 +150,20 @@ class _UpdateCustomersPageState extends State<UpdateCustomersPage> {
                 maxLength: 50,
                 keyboardType: TextInputType.multiline,
                 decoration: InputDecoration(labelText: 'Address'),
+              ),
+              SizedBox(height: 16.0),
+              TextField(
+                controller: _openingBalanceController,
+                maxLength: 50,
+                enabled: widget.mode == CustomersFormMode.Add,
+                keyboardType: TextInputType.numberWithOptions(
+                  decimal: true,
+                  signed: true,
+                ),
+                decoration: InputDecoration(
+                  labelText: 'Opening Balance',
+                  prefixText: '₹ ',
+                ),
               ),
               SizedBox(height: 24.0),
               Row(

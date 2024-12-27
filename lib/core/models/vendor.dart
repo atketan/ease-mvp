@@ -6,6 +6,10 @@ class Vendor {
   String? email;
   DateTime? createdAt;
   DateTime? updatedAt;
+  // openingBalance - is the carry forward balance either from previous year
+  // or from the older app/process which was used to manage the accounts
+  double openingBalance;
+
 
   Vendor({
     this.id,
@@ -15,6 +19,7 @@ class Vendor {
     this.email,
     this.createdAt,
     this.updatedAt,
+    required this.openingBalance,
   });
 
   factory Vendor.fromJSON(Map<String, dynamic> json) {
@@ -26,6 +31,7 @@ class Vendor {
       email: json['email'],
       createdAt: DateTime.parse(json['created_at']),
       updatedAt: DateTime.parse(json['updated_at']),
+      openingBalance: json['opening_balance'],
     );
   }
 
@@ -38,6 +44,7 @@ class Vendor {
       'email': email,
       'created_at': createdAt?.toIso8601String(),
       'updated_at': updatedAt?.toIso8601String(),
+      'opening_balance': openingBalance,
     };
   }
 }

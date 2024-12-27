@@ -24,18 +24,21 @@ class _AddEntityBottomSheetState extends State<AddEntityBottomSheet> {
   final _formKey = GlobalKey<FormState>();
   late TextEditingController _nameController;
   late TextEditingController _mobileController;
+  late TextEditingController _openingBalanceController;
 
   @override
   void initState() {
     super.initState();
     _nameController = TextEditingController(text: widget.initialName);
     _mobileController = TextEditingController();
+    _openingBalanceController = TextEditingController();
   }
 
   @override
   void dispose() {
     _nameController.dispose();
     _mobileController.dispose();
+    _openingBalanceController.dispose();
     super.dispose();
   }
 
@@ -72,6 +75,19 @@ class _AddEntityBottomSheetState extends State<AddEntityBottomSheet> {
                   return 'Mobile number must be 10 digits';
                 return null;
               },
+            ),
+            SizedBox(height: 16.0),
+            TextField(
+              controller: _openingBalanceController,
+              maxLength: 50,
+              keyboardType: TextInputType.numberWithOptions(
+                decimal: true,
+                signed: true,
+              ),
+              decoration: InputDecoration(
+                labelText: 'Opening Balance',
+                prefixText: '₹ ',
+              ),
             ),
             SizedBox(height: 24),
             Row(
@@ -121,10 +137,16 @@ class _AddEntityBottomSheetState extends State<AddEntityBottomSheet> {
             ? await cubit.insertNewCustomer(
                 name: _nameController.text,
                 phone: _mobileController.text,
+                openingBalance:
+                    double.tryParse(_openingBalanceController.text.trim()) ??
+                        0.0,
               )
             : await cubit.insertNewVendor(
                 name: _nameController.text,
                 phone: _mobileController.text,
+                openingBalance:
+                    double.tryParse(_openingBalanceController.text.trim()) ??
+                        0.0,
               );
 
         if (!mounted) return;
