@@ -1,7 +1,10 @@
 import 'package:ease/core/utils/developer_log.dart';
 import 'package:ease/features/expenses/presentation/expenses_list_page.dart';
+import 'package:ease/features/home_invoices/widgets/expenses_summary_widget.dart';
+import 'package:ease/features/home_invoices/widgets/payments_summary_widget.dart';
 import 'package:ease/features/home_invoices/widgets/purchase_invoices_list_page.dart';
 import 'package:ease/features/home_invoices/widgets/purchases_summary_widget.dart';
+import 'package:ease/features/home_invoices/widgets/receivables_summary_widget.dart';
 import 'package:ease/features/home_invoices/widgets/sales_invoices_list_page.dart';
 import 'package:ease/features/home_invoices/widgets/sales_summary_widget.dart';
 import 'package:ease/features/manage/presentation/manage_options_bottomsheet.dart';
@@ -142,6 +145,48 @@ class _InvoicesHomePageState extends State<InvoicesHomePage> {
                       Expanded(flex: 5, child: SalesSummaryWidget()),
                       SizedBox(width: 8.0),
                       Expanded(flex: 5, child: PurchasesSummaryWidget()),
+                    ],
+                  ),
+                ),
+                // Padding(
+                //   padding:
+                //       const EdgeInsets.only(right: 8.0, left: 8.0, bottom: 8.0),
+                //   child: Row(
+                //     children: [
+                //       // Expanded(flex: 5, child: SalesSummaryWidget()),
+                //       // SizedBox(width: 8.0),
+                //       Expanded(flex: 5, child: PurchasesSummaryWidget()),
+                //     ],
+                //   ),
+                // ),
+                Padding(
+                  padding:
+                      const EdgeInsets.only(right: 8.0, left: 8.0, bottom: 8.0),
+                  child: Row(
+                    children: [
+                      Expanded(flex: 5, child: PaymentsSummaryWidget()),
+                      SizedBox(width: 8.0),
+                      Expanded(flex: 5, child: ReceivablesSummaryWidget()),
+                    ],
+                  ),
+                ),
+                // Padding(
+                //   padding:
+                //       const EdgeInsets.only(right: 8.0, left: 8.0, bottom: 8.0),
+                //   child: Row(
+                //     children: [
+                //       // Expanded(flex: 5, child: PaymentsSummaryWidget()),
+                //       // SizedBox(width: 8.0),
+                //       Expanded(flex: 5, child: ReceivablesSummaryWidget()),
+                //     ],
+                //   ),
+                // ),
+                Padding(
+                  padding:
+                      const EdgeInsets.only(right: 8.0, left: 8.0, bottom: 8.0),
+                  child: Row(
+                    children: [
+                      Expanded(flex: 5, child: ExpensesSummaryWidget()),
                     ],
                   ),
                 ),
