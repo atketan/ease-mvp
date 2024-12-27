@@ -5,6 +5,8 @@ import 'package:ease/core/database/invoices/invoices_dao.dart';
 import 'package:ease/core/database/payments/payments_dao.dart';
 import 'package:ease/core/database/vendors/vendors_dao.dart';
 import 'package:ease/core/enums/invoice_type_enum.dart';
+import 'package:ease/core/models/app_user_configuration.dart';
+import 'package:ease/core/service_locator/service_locator.dart';
 import 'package:ease/core/utils/developer_log.dart';
 import 'package:ease/ease_app.dart';
 import 'package:ease/features/expenses/widgets/expense_form.dart';
@@ -49,6 +51,10 @@ class _EASEHomePageState extends State<EASEHomePage>
     final curvedAnimation =
         CurvedAnimation(curve: Curves.easeInOut, parent: _animationController);
     _animation = Tween<double>(begin: 0, end: 1).animate(curvedAnimation);
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _checkEnterpriseConfiguration();
+    });
   }
 
   Future<bool> _requestPermissions() async {
@@ -65,6 +71,47 @@ class _EASEHomePageState extends State<EASEHomePage>
       }
     } catch (e) {
       debugLog('Error requesting permissions: $e');
+      return false;
+    }
+  }
+
+  Future<bool> _checkEnterpriseConfiguration() async {
+    try {
+      final appUserConfiguration = await getIt<AppUserConfiguration>();
+      debugLog(
+        'Enterprise configuration: ${appUserConfiguration.enterpriseId}',
+        name: 'EASEHomePage',
+      );
+      if (appUserConfiguration.enterpriseId.isNotEmpty) {
+        return true;
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              'Enterprise configuration not found. \nKindly contact support.',
+              textAlign: TextAlign.center,
+            ),
+            backgroundColor: Colors.red,
+            duration: Duration(days: 1), // Non-dismissible
+            behavior: SnackBarBehavior.floating,
+            showCloseIcon: false,
+            dismissDirection: DismissDirection.none,
+          ),
+        );
+        return false;
+      }
+    } catch (e) {
+      debugLog('Error checking app configuration: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error checking app configuration: $e'),
+          backgroundColor: Colors.red,
+          duration: Duration(days: 1), // Non-dismissible
+          behavior: SnackBarBehavior.floating,
+          showCloseIcon: false,
+          dismissDirection: DismissDirection.none,
+        ),
+      );
       return false;
     }
   }

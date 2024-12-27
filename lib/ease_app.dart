@@ -1,5 +1,8 @@
+import 'package:ease/core/database/app_user_configuration/firestore_app_user_configuration_dao.dart';
+import 'package:ease/core/models/app_user_configuration.dart';
 import 'package:ease/core/providers/themes_provider.dart';
 import 'package:ease/core/service_locator/service_locator.dart';
+import 'package:ease/core/utils/developer_log.dart';
 import 'package:ease/features/account/presentation/bloc/login_cubit.dart';
 import 'package:ease/features/account/presentation/email_login_page.dart';
 import 'package:ease/features/expense_categories/providers/expense_category_provider.dart';
@@ -48,11 +51,26 @@ class _EASEAppState extends State<EASEApp> {
     super.initState();
     registerDAOs();
     registerProviders();
+    registerDataSources();
   }
 
   Future<String?> fetchUserId() async {
-    final user = FirebaseAuth.instance.currentUser;
+    final user = await FirebaseAuth.instance.currentUser;
+    await populateAppUserConfiguration();
     return user?.uid;
+  }
+
+  Future<AppUserConfiguration?> populateAppUserConfiguration() async {
+    final appUserConfiguration = await getIt<FirestoreAppUserConfigurationDAO>()
+        .getAppUserConfiguration(FirebaseAuth.instance.currentUser!.uid);
+    debugLog(
+        'AppUserConfiguration: ${appUserConfiguration?.toJson().toString()}',
+        name: 'EASEApp');
+    if (appUserConfiguration != null) {
+      getIt<AppUserConfiguration>().enterpriseId =
+          appUserConfiguration.enterpriseId;
+    }
+    return appUserConfiguration;
   }
 
   @override
