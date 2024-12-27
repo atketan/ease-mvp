@@ -5,9 +5,9 @@ import 'invoices_data_source.dart';
 
 class FirestoreInvoicesDAO implements InvoicesDataSource {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final String userId;
+  final String enterpriseId;
 
-  FirestoreInvoicesDAO({required this.userId});
+  FirestoreInvoicesDAO({required this.enterpriseId});
 
   @override
   Future<String> insertInvoice(Invoice invoice) async {
@@ -16,8 +16,8 @@ class FirestoreInvoicesDAO implements InvoicesDataSource {
     // ); // Using time-based sharding collections to store invoices
 
     final docRef = await _firestore
-        .collection('users')
-        .doc(userId)
+        .collection('enterprises')
+        .doc(enterpriseId)
         .collection('invoices')
         .add(invoice.toJSON());
 
@@ -27,8 +27,8 @@ class FirestoreInvoicesDAO implements InvoicesDataSource {
   @override
   Future<List<Invoice>> getAllInvoices() async {
     final snapshot = await _firestore
-        .collection('users')
-        .doc(userId)
+        .collection('enterprises')
+        .doc(enterpriseId)
         .collection('invoices')
         .get();
     return snapshot.docs.map((doc) {
@@ -41,8 +41,8 @@ class FirestoreInvoicesDAO implements InvoicesDataSource {
   @override
   Future<Invoice?> getInvoiceById(String invoiceId) async {
     final doc = await _firestore
-        .collection('users')
-        .doc(userId)
+        .collection('enterprises')
+        .doc(enterpriseId)
         .collection('invoices')
         .doc(invoiceId.toString())
         .get();
@@ -56,8 +56,8 @@ class FirestoreInvoicesDAO implements InvoicesDataSource {
   @override
   Future<int> updateInvoice(Invoice invoice) async {
     await _firestore
-        .collection('users')
-        .doc(userId)
+        .collection('enterprises')
+        .doc(enterpriseId)
         .collection('invoices')
         .doc(invoice.invoiceId.toString())
         .update(invoice.toJSON());
@@ -67,8 +67,8 @@ class FirestoreInvoicesDAO implements InvoicesDataSource {
   @override
   Future<int> deleteInvoice(String invoiceId) async {
     await _firestore
-        .collection('users')
-        .doc(userId)
+        .collection('enterprises')
+        .doc(enterpriseId)
         .collection('invoices')
         .doc(invoiceId.toString())
         .delete();
@@ -78,8 +78,8 @@ class FirestoreInvoicesDAO implements InvoicesDataSource {
   @override
   Future<int> markInvoiceAsPaid(String invoiceId) async {
     await _firestore
-        .collection('users')
-        .doc(userId)
+        .collection('enterprises')
+        .doc(enterpriseId)
         .collection('invoices')
         .doc(invoiceId.toString())
         .update({'status': 'paid'});
@@ -90,8 +90,8 @@ class FirestoreInvoicesDAO implements InvoicesDataSource {
   Future<List<Invoice>> getInvoicesByDateRangeAndPaymentStatus(
       DateTime startDate, DateTime endDate, String status) async {
     final snapshot = await _firestore
-        .collection('users')
-        .doc(userId)
+        .collection('enterprises')
+        .doc(enterpriseId)
         .collection('invoices')
         // .where('date', isGreaterThanOrEqualTo: startDate.toIso8601String())
         // .where('date', isLessThanOrEqualTo: endDate.toIso8601String())
@@ -106,8 +106,8 @@ class FirestoreInvoicesDAO implements InvoicesDataSource {
   Future<List<Invoice>> getSalesInvoicesByDateRange(
       DateTime startDate, DateTime endDate) async {
     final snapshot = await _firestore
-        .collection('users')
-        .doc(userId)
+        .collection('enterprises')
+        .doc(enterpriseId)
         .collection('invoices')
         .where('date', isGreaterThanOrEqualTo: startDate.toIso8601String())
         .where('date', isLessThanOrEqualTo: endDate.toIso8601String())
@@ -130,8 +130,8 @@ class FirestoreInvoicesDAO implements InvoicesDataSource {
   Stream<List<Invoice>> subscribeToInvoices(
       DateTime startDate, DateTime endDate) {
     return _firestore
-        .collection('users')
-        .doc(userId)
+        .collection('enterprises')
+        .doc(enterpriseId)
         .collection('invoices')
         .snapshots()
         .map((snapshot) {

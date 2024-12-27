@@ -4,15 +4,15 @@ import 'expense_categories_data_source.dart';
 
 class FirestoreExpenseCategoriesDAO implements ExpenseCategoriesDataSource {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final String userId;
+  final String enterpriseId;
 
-  FirestoreExpenseCategoriesDAO({required this.userId});
+  FirestoreExpenseCategoriesDAO({required this.enterpriseId});
 
   @override
   Future<int> insertExpenseCategory(ExpenseCategory category) async {
     final docRef = await _firestore
-        .collection('users')
-        .doc(userId)
+        .collection('enterprises')
+        .doc(enterpriseId)
         .collection('expenseCategories')
         .add(category.toJSON());
     return docRef.id.hashCode; // Firestore does not return an integer ID
@@ -21,8 +21,8 @@ class FirestoreExpenseCategoriesDAO implements ExpenseCategoriesDataSource {
   @override
   Future<List<ExpenseCategory>> getAllExpenseCategories() async {
     final snapshot = await _firestore
-        .collection('users')
-        .doc(userId)
+        .collection('enterprises')
+        .doc(enterpriseId)
         .collection('expenseCategories')
         .get();
     return snapshot.docs
@@ -33,8 +33,8 @@ class FirestoreExpenseCategoriesDAO implements ExpenseCategoriesDataSource {
   @override
   Future<int> updateExpenseCategory(ExpenseCategory category) async {
     await _firestore
-        .collection('users')
-        .doc(userId)
+        .collection('enterprises')
+        .doc(enterpriseId)
         .collection('expenseCategories')
         .doc(category.id.toString())
         .update(category.toJSON());
@@ -44,8 +44,8 @@ class FirestoreExpenseCategoriesDAO implements ExpenseCategoriesDataSource {
   @override
   Future<int> deleteExpenseCategory(String expenseId) async {
     await _firestore
-        .collection('users')
-        .doc(userId)
+        .collection('enterprises')
+        .doc(enterpriseId)
         .collection('expenseCategories')
         .doc(expenseId.toString())
         .delete();
@@ -54,8 +54,8 @@ class FirestoreExpenseCategoriesDAO implements ExpenseCategoriesDataSource {
 
   Stream<List<ExpenseCategory>> subscribeToExpenseCategories() {
     return _firestore
-        .collection('users')
-        .doc(userId)
+        .collection('enterprises')
+        .doc(enterpriseId)
         .collection('expenseCategories')
         .snapshots()
         .map((snapshot) {

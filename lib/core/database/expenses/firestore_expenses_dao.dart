@@ -5,9 +5,9 @@ import 'expenses_data_source.dart';
 
 class FirestoreExpensesDAO implements ExpensesDataSource {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final String userId;
+  final String enterpriseId;
 
-  FirestoreExpensesDAO({required this.userId});
+  FirestoreExpensesDAO({required this.enterpriseId});
 
   @override
   Future<String> insertExpense(Expense expense) async {
@@ -15,8 +15,8 @@ class FirestoreExpensesDAO implements ExpensesDataSource {
         name: "FirestoreExpensesDAO");
 
     final docRef = await _firestore
-        .collection('users')
-        .doc(userId)
+        .collection('enterprises')
+        .doc(enterpriseId)
         .collection('expenses')
         .add(expense.toJSON());
     return docRef.id; // Firestore does not return an integer ID
@@ -25,8 +25,8 @@ class FirestoreExpensesDAO implements ExpensesDataSource {
   @override
   Future<List<Expense>> getAllExpenses() async {
     final snapshot = await _firestore
-        .collection('users')
-        .doc(userId)
+        .collection('enterprises')
+        .doc(enterpriseId)
         .collection('expenses')
         .get();
     return snapshot.docs.map((doc) => Expense.fromJSON(doc.data())).toList();
@@ -38,8 +38,8 @@ class FirestoreExpensesDAO implements ExpensesDataSource {
         name: "FirestoreExpensesDAO");
 
     await _firestore
-        .collection('users')
-        .doc(userId)
+        .collection('enterprises')
+        .doc(enterpriseId)
         .collection('expenses')
         .doc(expense.id.toString())
         .update(expense.toJSON());
@@ -52,8 +52,8 @@ class FirestoreExpensesDAO implements ExpensesDataSource {
         name: "FirestoreExpensesDAO");
 
     await _firestore
-        .collection('users')
-        .doc(userId)
+        .collection('enterprises')
+        .doc(enterpriseId)
         .collection('expenses')
         .doc(expenseId.toString())
         .delete();
@@ -63,8 +63,8 @@ class FirestoreExpensesDAO implements ExpensesDataSource {
   Stream<List<Expense>> subscribeToExpenses(
       DateTime startDate, DateTime endDate) {
     return _firestore
-        .collection('users')
-        .doc(userId)
+        .collection('enterprises')
+        .doc(enterpriseId)
         .collection('expenses')
         .snapshots()
         .map((snapshot) {

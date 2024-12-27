@@ -5,15 +5,15 @@ import 'inventory_items_data_source.dart';
 
 class FirestoreInventoryItemsDAO implements InventoryItemsDataSource {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final String userId;
+  final String enterpriseId;
 
-  FirestoreInventoryItemsDAO({required this.userId});
+  FirestoreInventoryItemsDAO({required this.enterpriseId});
 
   @override
   Future<String> insertInventoryItem(InventoryItem inventoryItem) async {
     final docRef = await _firestore
-        .collection('users')
-        .doc(userId)
+        .collection('enterprises')
+        .doc(enterpriseId)
         .collection('inventory')
         .add(inventoryItem.toJSON());
     return docRef.id; // Firestore does not return an integer ID
@@ -22,8 +22,8 @@ class FirestoreInventoryItemsDAO implements InventoryItemsDataSource {
   @override
   Future<List<InventoryItem>> getAllInventoryItems() async {
     final snapshot = await _firestore
-        .collection('users')
-        .doc(userId)
+        .collection('enterprises')
+        .doc(enterpriseId)
         .collection('inventory')
         .get();
     return snapshot.docs.map((doc) {
@@ -36,8 +36,8 @@ class FirestoreInventoryItemsDAO implements InventoryItemsDataSource {
   @override
   Future<int> updateInventoryItem(InventoryItem inventoryItem) async {
     await _firestore
-        .collection('users')
-        .doc(userId)
+        .collection('enterprises')
+        .doc(enterpriseId)
         .collection('inventory')
         .doc(inventoryItem.itemId)
         .update(inventoryItem.toJSON());
@@ -47,8 +47,8 @@ class FirestoreInventoryItemsDAO implements InventoryItemsDataSource {
   @override
   Future<int> deleteInventoryItem(String id) async {
     await _firestore
-        .collection('users')
-        .doc(userId)
+        .collection('enterprises')
+        .doc(enterpriseId)
         .collection('inventory')
         .doc(id)
         .delete();
@@ -58,8 +58,8 @@ class FirestoreInventoryItemsDAO implements InventoryItemsDataSource {
   @override
   Future<InventoryItem?> getInventoryItemByName(String name) async {
     final snapshot = await _firestore
-        .collection('users')
-        .doc(userId)
+        .collection('enterprises')
+        .doc(enterpriseId)
         .collection('inventory')
         .where('name', isGreaterThanOrEqualTo: name.toTitleCase)
         .where("name", isLessThanOrEqualTo: "${name.toTitleCase}\uf7ff")
@@ -74,8 +74,8 @@ class FirestoreInventoryItemsDAO implements InventoryItemsDataSource {
   @override
   Future<InventoryItem?> getInventoryItemById(String itemId) async {
     final doc = await _firestore
-        .collection('users')
-        .doc(userId)
+        .collection('enterprises')
+        .doc(enterpriseId)
         .collection('inventory')
         .doc(itemId)
         .get();
@@ -90,8 +90,8 @@ class FirestoreInventoryItemsDAO implements InventoryItemsDataSource {
   Future<List<InventoryItem>> getAllInventoryItemsWhereNameLike(
       String pattern) async {
     final snapshot = await _firestore
-        .collection('users')
-        .doc(userId)
+        .collection('enterprises')
+        .doc(enterpriseId)
         .collection('inventory')
         .where('name', isGreaterThanOrEqualTo: pattern.toTitleCase)
         .where('name', isLessThanOrEqualTo: "${pattern.toTitleCase}\uf7ff")

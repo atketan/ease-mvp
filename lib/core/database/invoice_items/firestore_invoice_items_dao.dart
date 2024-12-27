@@ -4,15 +4,15 @@ import 'invoice_items_data_source.dart';
 
 class FirestoreInvoiceItemsDAO implements InvoiceItemsDataSource {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final String userId;
+  final String enterpriseId;
 
-  FirestoreInvoiceItemsDAO({required this.userId});
+  FirestoreInvoiceItemsDAO({required this.enterpriseId});
 
   @override
   Future<String> insertInvoiceItem(InvoiceItem invoiceItem) async {
     final docRef = await _firestore
-        .collection('users')
-        .doc(userId)
+        .collection('enterprises')
+        .doc(enterpriseId)
         .collection('invoices')
         .doc(invoiceItem.invoiceId.toString())
         .collection('invoiceItems')
@@ -23,8 +23,8 @@ class FirestoreInvoiceItemsDAO implements InvoiceItemsDataSource {
   @override
   Future<List<InvoiceItem>> getInvoiceItemsByInvoiceId(String invoiceId) async {
     final snapshot = await _firestore
-        .collection('users')
-        .doc(userId)
+        .collection('enterprises')
+        .doc(enterpriseId)
         .collection('invoices')
         .doc(invoiceId)
         .collection('invoiceItems')
@@ -40,8 +40,8 @@ class FirestoreInvoiceItemsDAO implements InvoiceItemsDataSource {
   @override
   Future<int> updateInvoiceItem(InvoiceItem invoiceItem) async {
     await _firestore
-        .collection('users')
-        .doc(userId)
+        .collection('enterprises')
+        .doc(enterpriseId)
         .collection('invoices')
         .doc(invoiceItem.invoiceId)
         .collection('invoiceItems')
@@ -53,8 +53,8 @@ class FirestoreInvoiceItemsDAO implements InvoiceItemsDataSource {
   @override
   Future<int> deleteInvoiceItem(InvoiceItem invoiceItem) async {
     await _firestore
-        .collection('users')
-        .doc(userId)
+        .collection('enterprises')
+        .doc(enterpriseId)
         .collection('invoices')
         .doc(invoiceItem.invoiceId)
         .collection('invoiceItems')

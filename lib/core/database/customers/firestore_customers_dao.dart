@@ -6,15 +6,15 @@ import 'customers_data_source.dart';
 
 class FirestoreCustomersDAO implements CustomersDataSource {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final String userId;
+  final String enterpriseId;
 
-  FirestoreCustomersDAO({required this.userId});
+  FirestoreCustomersDAO({required this.enterpriseId});
 
   @override
   Future<String> insertCustomer(Customer customer) async {
     final snapshot = await _firestore
-        .collection('users')
-        .doc(userId)
+        .collection('enterprises')
+        .doc(enterpriseId)
         .collection('customers')
         .add(customer.toJSON());
     return snapshot.id; // Firestore does not return an ID like sqflite
@@ -23,8 +23,8 @@ class FirestoreCustomersDAO implements CustomersDataSource {
   @override
   Future<List<Customer>> getAllCustomers() async {
     final snapshot = await _firestore
-        .collection('users')
-        .doc(userId)
+        .collection('enterprises')
+        .doc(enterpriseId)
         .collection('customers')
         .get();
     return snapshot.docs.map((doc) {
@@ -37,8 +37,8 @@ class FirestoreCustomersDAO implements CustomersDataSource {
   @override
   Future<Customer?> getCustomerByName(String name) async {
     final snapshot = await _firestore
-        .collection('users')
-        .doc(userId)
+        .collection('enterprises')
+        .doc(enterpriseId)
         .collection('customers')
         .where('name', isEqualTo: name)
         .get();
@@ -53,8 +53,8 @@ class FirestoreCustomersDAO implements CustomersDataSource {
   @override
   Future<Customer?> getCustomerById(String customerId) async {
     final snapshot = await _firestore
-        .collection('users')
-        .doc(userId)
+        .collection('enterprises')
+        .doc(enterpriseId)
         .collection('customers')
         .doc(customerId)
         .get();
@@ -69,8 +69,8 @@ class FirestoreCustomersDAO implements CustomersDataSource {
   @override
   Future<int> updateCustomer(Customer customer) async {
     await _firestore
-        .collection('users')
-        .doc(userId)
+        .collection('enterprises')
+        .doc(enterpriseId)
         .collection('customers')
         .doc(customer.id.toString()) // Assuming ID is a string in Firestore
         .update(customer.toJSON());
@@ -80,8 +80,8 @@ class FirestoreCustomersDAO implements CustomersDataSource {
   @override
   Future<int> deleteCustomer(int id) async {
     await _firestore
-        .collection('users')
-        .doc(userId)
+        .collection('enterprises')
+        .doc(enterpriseId)
         .collection('customers')
         .doc(id.toString())
         .delete();
@@ -91,8 +91,8 @@ class FirestoreCustomersDAO implements CustomersDataSource {
   @override
   Future<List<Customer>> searchCustomers(String pattern) async {
     final snapshot = await _firestore
-        .collection('users')
-        .doc(userId)
+        .collection('enterprises')
+        .doc(enterpriseId)
         .collection('customers')
         .where('name', isGreaterThanOrEqualTo: pattern.toTitleCase)
         .where("name", isLessThanOrEqualTo: "${pattern.toTitleCase}\uf7ff")

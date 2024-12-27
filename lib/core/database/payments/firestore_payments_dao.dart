@@ -7,9 +7,9 @@ import 'package:intl/intl.dart';
 
 class FirestorePaymentsDAO implements PaymentsDataSource {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final String userId;
+  final String enterpriseId;
 
-  FirestorePaymentsDAO({required this.userId});
+  FirestorePaymentsDAO({required this.enterpriseId});
 
   @override
   Future<String> insertPayment(Payment payment) async {
@@ -22,8 +22,8 @@ class FirestorePaymentsDAO implements PaymentsDataSource {
     return await _firestore.runTransaction((transaction) async {
       // Store payment in the user's payments collection
       final userPaymentsRef = _firestore
-          .collection('users')
-          .doc(userId)
+          .collection('enterprises')
+          .doc(enterpriseId)
           .collection(subCollectionName)
           .doc();
       transaction.set(userPaymentsRef, paymentData);
@@ -33,8 +33,8 @@ class FirestorePaymentsDAO implements PaymentsDataSource {
         if (payment.paymentAgainst == PaymentAgainst.salesInvoice ||
             payment.paymentAgainst == PaymentAgainst.purchaseInvoice) {
           final invoicePaymentsRef = _firestore
-              .collection('users')
-              .doc(userId)
+              .collection('enterprises')
+              .doc(enterpriseId)
               .collection('invoices')
               .doc(payment.invoiceId.toString())
               .collection('payments')
@@ -42,8 +42,8 @@ class FirestorePaymentsDAO implements PaymentsDataSource {
           transaction.set(invoicePaymentsRef, paymentData);
         } else if (payment.paymentAgainst == PaymentAgainst.expense) {
           final invoicePaymentsRef = _firestore
-              .collection('users')
-              .doc(userId)
+              .collection('enterprises')
+              .doc(enterpriseId)
               .collection('expenses')
               .doc(payment.invoiceId.toString())
               .collection('payments')
@@ -60,7 +60,7 @@ class FirestorePaymentsDAO implements PaymentsDataSource {
   Future<List<Payment>> getAllPayments() async {
     final snapshot = await _firestore
         .collectionGroup('payments')
-        .where('userId', isEqualTo: userId)
+        .where('enterpriseId', isEqualTo: enterpriseId)
         .get();
     return snapshot.docs.map((doc) {
       final payment = Payment.fromJSON(doc.data());
@@ -77,8 +77,8 @@ class FirestorePaymentsDAO implements PaymentsDataSource {
     }
 
     final snapshot = await _firestore
-        .collection('users')
-        .doc(userId)
+        .collection('enterprises')
+        .doc(enterpriseId)
         .collection('invoices')
         .doc(invoiceId)
         .collection('payments')
@@ -102,8 +102,8 @@ class FirestorePaymentsDAO implements PaymentsDataSource {
     return await _firestore.runTransaction((transaction) async {
       // Update payment in the user's payments collection
       final userPaymentsRef = _firestore
-          .collection('users')
-          .doc(userId)
+          .collection('enterprises')
+          .doc(enterpriseId)
           .collection(subCollectionName)
           .doc(payment.id.toString());
       transaction.update(userPaymentsRef, paymentData);
@@ -113,8 +113,8 @@ class FirestorePaymentsDAO implements PaymentsDataSource {
         if (payment.paymentAgainst == PaymentAgainst.salesInvoice ||
             payment.paymentAgainst == PaymentAgainst.purchaseInvoice) {
           final invoicePaymentsRef = _firestore
-              .collection('users')
-              .doc(userId)
+              .collection('enterprises')
+              .doc(enterpriseId)
               .collection('invoices')
               .doc(payment.invoiceId.toString())
               .collection('payments')
@@ -122,8 +122,8 @@ class FirestorePaymentsDAO implements PaymentsDataSource {
           transaction.update(invoicePaymentsRef, paymentData);
         } else if (payment.paymentAgainst == PaymentAgainst.expense) {
           final invoicePaymentsRef = _firestore
-              .collection('users')
-              .doc(userId)
+              .collection('enterprises')
+              .doc(enterpriseId)
               .collection('expenses')
               .doc(payment.invoiceId.toString())
               .collection('payments')
@@ -148,8 +148,8 @@ class FirestorePaymentsDAO implements PaymentsDataSource {
     return await _firestore.runTransaction((transaction) async {
       // Delete payment from the user's payments collection
       final userPaymentsRef = _firestore
-          .collection('users')
-          .doc(userId)
+          .collection('enterprises')
+          .doc(enterpriseId)
           .collection(subCollectionName)
           .doc(id);
       transaction.delete(userPaymentsRef);
@@ -159,8 +159,8 @@ class FirestorePaymentsDAO implements PaymentsDataSource {
         if (payment.paymentAgainst == PaymentAgainst.salesInvoice ||
             payment.paymentAgainst == PaymentAgainst.purchaseInvoice) {
           final invoicePaymentsRef = _firestore
-              .collection('users')
-              .doc(userId)
+              .collection('enterprises')
+              .doc(enterpriseId)
               .collection('invoices')
               .doc(payment.invoiceId.toString())
               .collection('payments')
@@ -168,8 +168,8 @@ class FirestorePaymentsDAO implements PaymentsDataSource {
           transaction.delete(invoicePaymentsRef);
         } else if (payment.paymentAgainst == PaymentAgainst.expense) {
           final invoicePaymentsRef = _firestore
-              .collection('users')
-              .doc(userId)
+              .collection('enterprises')
+              .doc(enterpriseId)
               .collection('expenses')
               .doc(payment.invoiceId.toString())
               .collection('payments')
@@ -202,8 +202,8 @@ class FirestorePaymentsDAO implements PaymentsDataSource {
   @override
   Future<Payment?> getPaymentByInvoiceId(String? invoiceId) async {
     final snapshot = await _firestore
-        .collection('users')
-        .doc(userId)
+        .collection('enterprises')
+        .doc(enterpriseId)
         .collection('invoices')
         .doc(invoiceId)
         .collection('payments')
@@ -223,8 +223,8 @@ class FirestorePaymentsDAO implements PaymentsDataSource {
     }
 
     final snapshot = await _firestore
-        .collection('users')
-        .doc(userId)
+        .collection('enterprises')
+        .doc(enterpriseId)
         .collection('expenses')
         .doc(expenseId)
         .collection('payments')

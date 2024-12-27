@@ -95,7 +95,7 @@ class _EASEAppState extends State<EASEApp> {
             providers: [
               Provider<CustomersDataSource>(
                 create: (_) => FirestoreCustomersDAO(
-                  userId: userId,
+                  enterpriseId: getIt<AppUserConfiguration>().enterpriseId,
                 ), // or SqfliteCustomersDAO()
               ),
               ProxyProvider<CustomersDataSource, CustomersDAO>(
@@ -103,7 +103,7 @@ class _EASEAppState extends State<EASEApp> {
               ),
               Provider<VendorsDataSource>(
                 create: (_) => FirestoreVendorsDAO(
-                  userId: userId,
+                  enterpriseId: getIt<AppUserConfiguration>().enterpriseId,
                 ), // or SqfliteVendorsDAO()
               ),
               ProxyProvider<VendorsDataSource, VendorsDAO>(
@@ -111,7 +111,7 @@ class _EASEAppState extends State<EASEApp> {
               ),
               Provider<InvoiceItemsDataSource>(
                 create: (_) => FirestoreInvoiceItemsDAO(
-                  userId: userId,
+                  enterpriseId: getIt<AppUserConfiguration>().enterpriseId,
                 ), // or SqfliteInvoiceItemsDAO()
               ),
               ProxyProvider<InvoiceItemsDataSource, InvoiceItemsDAO>(
@@ -119,7 +119,7 @@ class _EASEAppState extends State<EASEApp> {
               ),
               Provider<InvoicesDataSource>(
                 create: (_) => FirestoreInvoicesDAO(
-                  userId: userId,
+                  enterpriseId: getIt<AppUserConfiguration>().enterpriseId,
                 ), // or SqfliteInvoicesDAO()
               ),
               ProxyProvider<InvoicesDataSource, InvoicesDAO>(
@@ -127,7 +127,7 @@ class _EASEAppState extends State<EASEApp> {
               ),
               Provider<PaymentsDataSource>(
                 create: (_) => FirestorePaymentsDAO(
-                  userId: userId,
+                  enterpriseId: getIt<AppUserConfiguration>().enterpriseId,
                 ), // or SqflitePaymentsDAO()
               ),
               ProxyProvider<PaymentsDataSource, PaymentsDAO>(
@@ -135,7 +135,7 @@ class _EASEAppState extends State<EASEApp> {
               ),
               Provider<ExpenseCategoriesDataSource>(
                 create: (_) => FirestoreExpenseCategoriesDAO(
-                  userId: userId,
+                  enterpriseId: getIt<AppUserConfiguration>().enterpriseId,
                 ), // or SqfliteExpenseCategoriesDAO()
               ),
               ProxyProvider<ExpenseCategoriesDataSource, ExpenseCategoriesDAO>(
@@ -143,7 +143,7 @@ class _EASEAppState extends State<EASEApp> {
               ),
               Provider<ExpensesDataSource>(
                 create: (_) => FirestoreExpensesDAO(
-                  userId: userId,
+                  enterpriseId: getIt<AppUserConfiguration>().enterpriseId,
                 ), // or SqfliteExpensesDAO()
               ),
               ProxyProvider<ExpensesDataSource, ExpensesDAO>(
@@ -151,7 +151,7 @@ class _EASEAppState extends State<EASEApp> {
               ),
               Provider<InventoryItemsDataSource>(
                 create: (_) => FirestoreInventoryItemsDAO(
-                  userId: userId,
+                  enterpriseId: getIt<AppUserConfiguration>().enterpriseId,
                 ), // or SqfliteInventoryItemsDAO()
               ),
               ProxyProvider<InventoryItemsDataSource, InventoryItemsDAO>(
@@ -159,13 +159,19 @@ class _EASEAppState extends State<EASEApp> {
               ),
               ChangeNotifierProvider(
                 create: (context) => ExpensesProvider(
-                  FirestoreExpensesDAO(userId: userId),
-                  FirestorePaymentsDAO(userId: userId),
+                  FirestoreExpensesDAO(
+                    enterpriseId: getIt<AppUserConfiguration>().enterpriseId,
+                  ),
+                  FirestorePaymentsDAO(
+                    enterpriseId: getIt<AppUserConfiguration>().enterpriseId,
+                  ),
                 ),
               ),
               ChangeNotifierProvider(
                 create: (context) => ExpenseCategoryProvider(
-                  FirestoreExpenseCategoriesDAO(userId: userId),
+                  FirestoreExpenseCategoriesDAO(
+                    enterpriseId: getIt<AppUserConfiguration>().enterpriseId,
+                  ),
                 ),
               ),
             ],

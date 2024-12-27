@@ -4,15 +4,15 @@ import 'vendors_data_source.dart';
 
 class FirestoreVendorsDAO implements VendorsDataSource {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final String userId;
+  final String enterpriseId;
 
-  FirestoreVendorsDAO({required this.userId});
+  FirestoreVendorsDAO({required this.enterpriseId});
 
   @override
   Future<String> insertVendor(Vendor vendor) async {
     final docRef = await _firestore
-        .collection('users')
-        .doc(userId)
+        .collection('enterprises')
+        .doc(enterpriseId)
         .collection('vendors')
         .add(vendor.toJSON());
     return docRef.id;
@@ -21,8 +21,8 @@ class FirestoreVendorsDAO implements VendorsDataSource {
   @override
   Future<List<Vendor>> getAllVendors() async {
     final snapshot = await _firestore
-        .collection('users')
-        .doc(userId)
+        .collection('enterprises')
+        .doc(enterpriseId)
         .collection('vendors')
         .get();
     return snapshot.docs.map((doc) {
@@ -35,8 +35,8 @@ class FirestoreVendorsDAO implements VendorsDataSource {
   @override
   Future<int> updateVendor(Vendor vendor) async {
     await _firestore
-        .collection('users')
-        .doc(userId)
+        .collection('enterprises')
+        .doc(enterpriseId)
         .collection('vendors')
         .doc(vendor.id)
         .update(vendor.toJSON());
@@ -46,8 +46,8 @@ class FirestoreVendorsDAO implements VendorsDataSource {
   @override
   Future<int> deleteVendor(String vendorId) async {
     await _firestore
-        .collection('users')
-        .doc(userId)
+        .collection('enterprises')
+        .doc(enterpriseId)
         .collection('vendors')
         .doc(vendorId)
         .delete();
@@ -57,8 +57,8 @@ class FirestoreVendorsDAO implements VendorsDataSource {
   @override
   Future<Vendor?> getVendorByPhoneNumber(String phoneNumber) async {
     final snapshot = await _firestore
-        .collection('users')
-        .doc(userId)
+        .collection('enterprises')
+        .doc(enterpriseId)
         .collection('vendors')
         .where('phone_number', isEqualTo: phoneNumber)
         .get();
@@ -72,8 +72,8 @@ class FirestoreVendorsDAO implements VendorsDataSource {
   @override
   Future<Vendor?> getVendorById(String vendorId) async {
     final doc = await _firestore
-        .collection('users')
-        .doc(userId)
+        .collection('enterprises')
+        .doc(enterpriseId)
         .collection('vendors')
         .doc(vendorId.toString())
         .get();
@@ -87,8 +87,8 @@ class FirestoreVendorsDAO implements VendorsDataSource {
   @override
   Future<List<Vendor>> searchVendors(String pattern) async {
     final snapshot = await _firestore
-        .collection('users')
-        .doc(userId)
+        .collection('enterprises')
+        .doc(enterpriseId)
         .collection('vendors')
         .where('name', isGreaterThanOrEqualTo: pattern)
         .get();
