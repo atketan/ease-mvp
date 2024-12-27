@@ -14,6 +14,8 @@ class InvoiceBloc extends Cubit<Invoice> {
             invoiceNumber: '',
             name: '',
             date: DateTime.now(),
+            createdAt: DateTime.now(),
+            updatedAt: DateTime.now(),
             totalAmount: 0.0,
             discount: 0.0,
             taxes: 0.0,

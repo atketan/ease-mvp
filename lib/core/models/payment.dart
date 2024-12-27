@@ -5,13 +5,15 @@ import 'package:ease/core/enums/transaction_type_enum.dart';
 class Payment {
   String? id;
   String? invoiceId; // Nullable, as it may not be associated with an invoice
+  String? customerId; // Nullable, as it may not be associated with a customer/client
+  String? vendorId; // Nullable, as it may not be associated with a vendor/supplier
   double amount;
   DateTime paymentDate;
   PaymentMethod
       paymentMethod; // upi, cash, debit card, credit card, net banking, cheque, other
   TransactionType transactionType; // credit, debit
   String? notes; // Nullable, for general payment description
-  PaymentAgainst paymentAgainst; // sales/purchase invoice, expense, other
+  PaymentAgainst paymentAgainst; // sales/purchase invoice, expense, client, vendor, other
   DateTime? createdAt;
   DateTime? updatedAt;
 

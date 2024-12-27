@@ -2,6 +2,8 @@ enum PaymentAgainst {
   salesInvoice,
   purchaseInvoice, // aka, purchase order
   expense,
+  client,
+  vendor,
   other,
 }
 
@@ -14,6 +16,10 @@ extension PaymentAgainstExtension on PaymentAgainst {
         return 'Purchase';
       case PaymentAgainst.expense:
         return 'Expense';
+      case PaymentAgainst.client:
+        return 'Client';
+      case PaymentAgainst.vendor:
+        return 'Vendor';
       case PaymentAgainst.other:
         return 'Other';
     }
@@ -29,6 +35,10 @@ extension StringPaymentAgainstExtension on String {
         return PaymentAgainst.purchaseInvoice;
       case 'Expense':
         return PaymentAgainst.expense;
+      case 'Client':
+        return PaymentAgainst.client;
+      case 'Vendor':
+        return PaymentAgainst.vendor;
       case 'Other':
         return PaymentAgainst.other;
       default:

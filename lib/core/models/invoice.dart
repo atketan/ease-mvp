@@ -10,6 +10,8 @@ class Invoice {
   String name; // customer name or vendor name
   String invoiceNumber;
   DateTime date;
+  DateTime createdAt;
+  DateTime updatedAt;
   double totalAmount;
   double discount;
   double taxes;
@@ -30,6 +32,8 @@ class Invoice {
     required this.name,
     required this.invoiceNumber,
     required this.date,
+    required this.createdAt,
+    required this.updatedAt,
     required this.totalAmount,
     required this.discount,
     required this.taxes,
@@ -69,6 +73,8 @@ class Invoice {
       name: json['name'],
       invoiceNumber: json['invoice_number'],
       date: DateTime.parse(json['date']),
+      createdAt: DateTime.parse(json['created_at']),
+      updatedAt: DateTime.parse(json['updated_at']),
       totalAmount: json['total_amount'],
       discount: json['discount'],
       taxes: json['taxes'],
@@ -91,6 +97,8 @@ class Invoice {
       'name': name,
       'invoice_number': invoiceNumber,
       'date': date.toIso8601String(),
+      'created_at': createdAt.toIso8601String(),
+      'updated_at': updatedAt.toIso8601String(),
       'total_amount': totalAmount,
       'discount': discount,
       'taxes': taxes,

@@ -49,6 +49,8 @@ class InvoiceManagerCubit extends Cubit<InvoiceManagerCubitState> {
         name: '',
         invoiceNumber: invoiceNumber,
         date: DateTime.now(),
+        createdAt: DateTime.now(),
+        updatedAt: DateTime.now(),
         totalAmount: 0.0,
         discount: 0.0,
         taxes: 0.0,
@@ -165,6 +167,8 @@ class InvoiceManagerCubit extends Cubit<InvoiceManagerCubitState> {
   }
 
   Future<bool> updateInvoice() async {
+    _invoice.updatedAt = DateTime.now();
+
     for (var element in _invoice.items) {
       if (element.id != null) {
         // Update existing invoice item
