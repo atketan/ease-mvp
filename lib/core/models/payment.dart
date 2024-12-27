@@ -39,7 +39,7 @@ class Payment {
       paymentMethod: json['payment_method'].toString().toPaymentMethod(),
       transactionType: TransactionType.values.firstWhere(
           (e) => e.toString() == 'TransactionType.${json['transaction_type']}'),
-      notes: json['general_payment_description'],
+      notes: json['notes'],
       paymentAgainst: json['payment_against'].toString().toPaymentAgainst(),
       createdAt: json['created_at'] != null
           ? DateTime.parse(json['created_at'])
