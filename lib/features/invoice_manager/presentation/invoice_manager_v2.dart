@@ -3,49 +3,29 @@ import 'package:ease/core/models/invoice.dart';
 import 'package:ease/core/providers/short_uuid_generator.dart';
 import 'package:ease/core/utils/developer_log.dart';
 import 'package:ease/features/invoice_manager/widgets/discount_manager_widget.dart';
+import 'package:ease/features/invoice_manager/widgets/entity_type_ahead_field.dart';
+import 'package:ease/features/invoice_manager/widgets/invoice_items_list_widget.dart';
+import 'package:ease/features/invoice_manager/widgets/invoice_notes_widget.dart';
+import 'package:ease/features/invoice_manager/widgets/invoice_order_details_widget.dart';
+import 'package:ease/features/invoice_manager/widgets/payment_details_widget.dart';
 import 'package:ease/features/invoice_manager/widgets/payments_manager_widget.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../bloc/invoice_manager_cubit.dart';
 import '../bloc/invoice_manager_cubit_state.dart';
-// import '../widgets/amount_summary_widget.dart';
-// import '../widgets/entity_delegate_widget.dart';
-import '../widgets/entity_type_ahead_field.dart';
-import '../widgets/invoice_items_list_widget.dart';
 import '../widgets/invoice_manager_spacer.dart';
-import '../widgets/invoice_notes_widget.dart';
-import '../widgets/invoice_order_details_widget.dart';
-import '../widgets/payment_details_widget.dart';
 
 enum InvoiceFormMode {
   Add,
   Edit,
 }
 
-// This is the main widget that will be used to create/update invoices
-// It will act as a common form to create/update invoices
-// Based on whether it is a sales or a purchase invoice, the form will have different fields
-// In either case, the form will depend on InventoryItemsDAO to fetch the list of items
-// For Sales invoices, the form will also depend on CustomersDAO to fetch the list of customers
-// For Purchase invoices, the form will also depend on VendorsDAO to fetch the list of vendors
-// Invoice items will be stored in a separate table in the database - InvoiceItems
-// The form will have a list of items that can be added/removed
-// The form will also have a field to add taxes
-// The form will have a field to add discounts
-// The form will have a field to add notes
-// The form will have a field to show the total amount
-// The form will have a field to show the total amount after taxes and discounts
-// The form will have a field to show the total amount due
-// The form will have a field to show the total amount paid
-
-class InvoiceManager extends StatefulWidget {
+class InvoiceManagerV2 extends StatefulWidget {
   final InvoiceFormMode invoiceFormMode;
   final Invoice? invoice;
-
-  InvoiceManager({
+  InvoiceManagerV2({
     Key? key,
     required this.invoiceFormMode,
     this.invoice,
@@ -55,10 +35,10 @@ class InvoiceManager extends StatefulWidget {
   }
 
   @override
-  InvoiceManagerState createState() => InvoiceManagerState();
+  InvoiceManagerV2State createState() => InvoiceManagerV2State();
 }
 
-class InvoiceManagerState extends State<InvoiceManager> {
+class InvoiceManagerV2State extends State<InvoiceManagerV2> {
   final String invoiceNumber = generateShort12CharUniqueKey().toUpperCase();
   late InvoiceType invoiceType;
   // final DateTime invoiceCreateDate = DateTime.now();
@@ -129,73 +109,53 @@ class InvoiceManagerState extends State<InvoiceManager> {
                     },
                   ),
                   InvoiceManagerSpacer(height: 4, horizontalPadding: 0),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16.0,
+                      vertical: 8.0,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          flex: 3,
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.person_2_outlined,
+                              ),
+                              Text(
+                                invoiceType == InvoiceType.Sales
+                                    ? 'CUSTOMER'
+                                    : 'VENDOR',
+                                style: Theme.of(context).textTheme.labelLarge,
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(width: 16.0),
+                        Expanded(
+                          flex: 7,
+                          child: EntityTypeAheadField(
+                            invoiceType: invoiceType,
+                            onClientSelected: (clientName) {
+                              context
+                                  .read<InvoiceManagerCubit>()
+                                  .setEntityName(clientName);
+                              // selectedClientName = clientName;
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  InvoiceManagerSpacer(height: 0),
                   ExpansionPanelList(
                     expandIconColor: Theme.of(context).primaryColorDark,
                     materialGapSize: 2,
                     expandedHeaderPadding: EdgeInsets.symmetric(vertical: 0),
                     dividerColor: Theme.of(context).primaryColorLight,
                     children: [
-                      ExpansionPanel(
-                        canTapOnHeader: true,
-                        isExpanded: _isOpen[0],
-                        headerBuilder: (context, isExpanded) {
-                          return Container(
-                            color: isExpanded
-                                ? Theme.of(context).secondaryHeaderColor
-                                : Colors.transparent,
-                            child: ListTile(
-                              leading: Icon(Icons.person_2_outlined),
-                              title: Text(
-                                invoiceType == InvoiceType.Sales
-                                    ? 'CUSTOMER'
-                                    : 'VENDOR',
-                                style: Theme.of(context).textTheme.labelLarge,
-                              ),
-                              trailing: BlocBuilder<InvoiceManagerCubit,
-                                  InvoiceManagerCubitState>(
-                                builder: (context, state) {
-                                  if (state is InvoiceManagerLoaded) {
-                                    String? selectedClientName =
-                                        state.invoice.name;
-                                    if (selectedClientName.isEmpty)
-                                      selectedClientName = null;
-                                    return Text(
-                                      invoiceType == InvoiceType.Sales
-                                          ? '${selectedClientName ?? 'Select a customer'}'
-                                          : '${selectedClientName ?? 'Select a vendor'}',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .labelLarge,
-                                    );
-                                  } else if (state is InvoiceManagerLoading) {
-                                    return Center(
-                                        child: CircularProgressIndicator());
-                                  } else if (state is InvoiceManagerError) {
-                                    return Center(
-                                        child: Text('Error: ${state.message}'));
-                                  } else {
-                                    return Center(child: Text('Err'));
-                                  }
-                                },
-                              ),
-                            ),
-                          );
-                        },
-                        body: Card(
-                          child: Padding(
-                            padding: const EdgeInsets.all(16.0),
-                            child: EntityTypeAheadField(
-                              invoiceType: invoiceType,
-                              onClientSelected: (clientName) {
-                                context
-                                    .read<InvoiceManagerCubit>()
-                                    .setEntityName(clientName);
-                                // selectedClientName = clientName;
-                              },
-                            ),
-                          ),
-                        ),
-                      ),
                       ExpansionPanel(
                         canTapOnHeader: true,
                         isExpanded: _isOpen[1],
@@ -310,36 +270,6 @@ class InvoiceManagerState extends State<InvoiceManager> {
                       ),
                       ExpansionPanel(
                         canTapOnHeader: true,
-                        isExpanded: _isOpen[3],
-                        headerBuilder: (context, isExpanded) {
-                          return Container(
-                            color: isExpanded
-                                ? Theme.of(context).secondaryHeaderColor
-                                : Colors.transparent,
-                            child: ListTile(
-                              leading: Icon(Icons.notes_outlined),
-                              title: Text(
-                                'NOTES',
-                                style: Theme.of(context).textTheme.labelLarge,
-                              ),
-                            ),
-                          );
-                        },
-                        body: Card(
-                          child: Padding(
-                            padding: const EdgeInsets.all(16.0),
-                            child: InvoiceNotesWidget(
-                              initialNotes: context
-                                      .read<InvoiceManagerCubit>()
-                                      .invoice
-                                      .notes ??
-                                  "",
-                            ),
-                          ),
-                        ),
-                      ),
-                      ExpansionPanel(
-                        canTapOnHeader: true,
                         isExpanded: _isOpen[4],
                         headerBuilder: (context, isExpanded) {
                           return Container(
@@ -377,23 +307,55 @@ class InvoiceManagerState extends State<InvoiceManager> {
                     }),
                   ),
                   InvoiceManagerSpacer(),
-
-                  // Payment details
-                  BlocBuilder<InvoiceManagerCubit, InvoiceManagerCubitState>(
-                    builder: (context, state) {
-                      if (state is InvoiceManagerLoaded) {
-                        return PaymentDetailsWidget();
-                      } else if (state is InvoiceManagerLoading) {
-                        return Center(child: CircularProgressIndicator());
-                      } else if (state is InvoiceManagerError) {
-                        return Center(child: Text('Error: ${state.message}'));
-                      } else {
-                        return Center(child: Text('Unknown state'));
-                      }
-                    },
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16.0,
+                      vertical: 8.0,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          flex: 3,
+                          child: Row(
+                            children: [
+                              Icon(Icons.notes_outlined),
+                              Text(
+                                'NOTES',
+                                style: Theme.of(context).textTheme.labelLarge,
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(width: 16.0),
+                        Expanded(
+                          flex: 7,
+                          child: InvoiceNotesWidget(
+                            initialNotes: context
+                                    .read<InvoiceManagerCubit>()
+                                    .invoice
+                                    .notes ??
+                                "",
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
 
-                  // InvoiceManagerSpacer(height: 0),
+                  // Payment details
+                  // BlocBuilder<InvoiceManagerCubit, InvoiceManagerCubitState>(
+                  //   builder: (context, state) {
+                  //     if (state is InvoiceManagerLoaded) {
+                  //       return PaymentDetailsWidget();
+                  //     } else if (state is InvoiceManagerLoading) {
+                  //       return Center(child: CircularProgressIndicator());
+                  //     } else if (state is InvoiceManagerError) {
+                  //       return Center(child: Text('Error: ${state.message}'));
+                  //     } else {
+                  //       return Center(child: Text('Unknown state'));
+                  //     }
+                  //   },
+                  // ),
                 ],
               ),
             ),
@@ -407,7 +369,7 @@ class InvoiceManagerState extends State<InvoiceManager> {
                   borderRadius: BorderRadius.zero, // Remove circular edges
                 ),
                 title: Text(
-                  "TOTAL PAYABLE",
+                  "TOTAL BALANCE",
                   style: Theme.of(context).textTheme.labelLarge,
                 ),
                 trailing:

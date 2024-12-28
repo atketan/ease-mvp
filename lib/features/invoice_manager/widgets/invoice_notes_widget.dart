@@ -13,14 +13,14 @@ class InvoiceNotesWidget extends StatelessWidget {
     String notes = initialNotes;
     _notesTextController.text = initialNotes;
     return Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(0.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'Additional Notes',
-            style: Theme.of(context).textTheme.labelLarge,
-          ),
+          // Text(
+          //   'Additional Notes',
+          //   style: Theme.of(context).textTheme.labelLarge,
+          // ),
           TextField(
             controller: _notesTextController,
             maxLines: 3,

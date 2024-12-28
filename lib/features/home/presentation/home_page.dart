@@ -10,10 +10,11 @@ import 'package:ease/core/service_locator/service_locator.dart';
 import 'package:ease/core/utils/developer_log.dart';
 import 'package:ease/ease_app.dart';
 import 'package:ease/features/expenses/widgets/expense_form.dart';
+import 'package:ease/features/invoice_manager/presentation/invoice_manager_v2.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:ease/features/invoice_manager/bloc/invoice_manager_cubit.dart';
-import 'package:ease/features/invoice_manager/presentation/invoice_manager.dart';
+// import 'package:ease/features/invoice_manager/presentation/invoice_manager.dart';
 import 'package:ease/features/home_invoices/data/invoices_provider.dart';
 import 'package:ease/features/home_invoices/presentation/invoices_home.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -210,7 +211,7 @@ class _EASEHomePageState extends State<EASEHomePage>
                             _vendorsDAO,
                             InvoiceType.Sales,
                           ),
-                          child: InvoiceManager(
+                          child: InvoiceManagerV2(
                             invoiceFormMode: InvoiceFormMode.Add,
                           ),
                         ),
@@ -242,7 +243,7 @@ class _EASEHomePageState extends State<EASEHomePage>
                             _vendorsDAO,
                             InvoiceType.Purchase,
                           ),
-                          child: InvoiceManager(
+                          child: InvoiceManagerV2(
                             invoiceFormMode: InvoiceFormMode.Add,
                           ),
                         ),

@@ -59,20 +59,17 @@ class _EntityTypeAheadFieldState extends State<EntityTypeAheadField> {
   Widget build(BuildContext context) {
     _customersDAO = Provider.of<CustomersDAO>(context);
     _vendorsDAO = Provider.of<VendorsDAO>(context);
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: BlocBuilder<InvoiceManagerCubit, InvoiceManagerCubitState>(
-        builder: (context, state) {
-          if (state is InvoiceManagerLoaded) {
-            widget.onClientSelected(_controller.text);
-            return _isEditing
-                ? _buildTypeAheadField()
-                : _buildSelectedEntityField();
-          } else {
-            return Center(child: CircularProgressIndicator());
-          }
-        },
-      ),
+    return BlocBuilder<InvoiceManagerCubit, InvoiceManagerCubitState>(
+      builder: (context, state) {
+        if (state is InvoiceManagerLoaded) {
+          widget.onClientSelected(_controller.text);
+          return _isEditing
+              ? _buildTypeAheadField()
+              : _buildSelectedEntityField();
+        } else {
+          return Center(child: CircularProgressIndicator());
+        }
+      },
     );
   }
 
