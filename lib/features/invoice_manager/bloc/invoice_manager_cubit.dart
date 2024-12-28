@@ -314,4 +314,9 @@ class InvoiceManagerCubit extends Cubit<InvoiceManagerCubitState> {
       phoneNumber = phone;
     }
   }
+
+  void setInvoiceDate(DateTime value) {
+    _invoice.date = value;
+    emit(InvoiceManagerLoaded(invoice: _invoice));
+  }
 }

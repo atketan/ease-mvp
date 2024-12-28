@@ -24,7 +24,8 @@ class InvoiceOrderDetailsWidget extends StatelessWidget {
           ),
           Container(
             width: double.infinity,
-            child: Container( // previously Card
+            child: Container(
+              // previously Card
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
@@ -61,10 +62,33 @@ class InvoiceOrderDetailsWidget extends StatelessWidget {
                               .titleSmall!
                               .copyWith(fontWeight: FontWeight.bold),
                         ),
-                        Text(
-                          formatInvoiceDate(
-                              context.read<InvoiceManagerCubit>().invoice.date),
-                          style: Theme.of(context).textTheme.titleSmall,
+                        InkWell(
+                          onTap: () {
+                            showDatePicker(
+                              context: context,
+                              initialDate: DateTime.now(),
+                              firstDate: DateTime(2000),
+                              lastDate: DateTime(2100),
+                            ).then((value) {
+                              if (value != null) {
+                                context
+                                    .read<InvoiceManagerCubit>()
+                                    .setInvoiceDate(value);
+                              }
+                            });
+                          },
+                          child: Text(
+                            formatInvoiceDateWithoutTime(
+                              context.read<InvoiceManagerCubit>().invoice.date,
+                            ),
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleSmall
+                                ?.copyWith(
+                                  color: Theme.of(context).primaryColor,
+                                  decoration: TextDecoration.underline,
+                                ),
+                          ),
                         ),
                       ],
                     ),
