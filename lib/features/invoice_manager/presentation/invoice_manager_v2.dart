@@ -7,6 +7,7 @@ import 'package:ease/features/invoice_manager/widgets/entity_type_ahead_field.da
 import 'package:ease/features/invoice_manager/widgets/invoice_items_list_widget.dart';
 import 'package:ease/features/invoice_manager/widgets/invoice_notes_widget.dart';
 import 'package:ease/features/invoice_manager/widgets/invoice_order_details_widget.dart';
+import 'package:ease/features/invoice_manager/widgets/invoice_upload_widget.dart';
 import 'package:ease/features/invoice_manager/widgets/payment_details_widget.dart';
 import 'package:ease/features/invoice_manager/widgets/payments_manager_widget.dart';
 import 'package:flutter/material.dart';
@@ -150,6 +151,9 @@ class InvoiceManagerV2State extends State<InvoiceManagerV2> {
                     ),
                   ),
                   InvoiceManagerSpacer(height: 0),
+                  InvoiceUploadWidget(),
+                  InvoiceManagerSpacer(height: 0),
+
                   ExpansionPanelList(
                     expandIconColor: Theme.of(context).primaryColorDark,
                     materialGapSize: 2,

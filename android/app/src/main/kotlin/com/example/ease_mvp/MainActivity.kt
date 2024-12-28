@@ -1,4 +1,4 @@
-package com.example.ease_mvp
+package com.atketan.ease
 
 import io.flutter.embedding.android.FlutterActivity
 

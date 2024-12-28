@@ -319,4 +319,6 @@ class InvoiceManagerCubit extends Cubit<InvoiceManagerCubitState> {
     _invoice.date = value;
     emit(InvoiceManagerLoaded(invoice: _invoice));
   }
+
+  void updateInvoiceUrl(String downloadUrl) {}
 }
