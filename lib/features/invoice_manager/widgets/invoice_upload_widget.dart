@@ -16,6 +16,7 @@ class InvoiceUploadWidget extends StatefulWidget {
 class _InvoiceUploadWidgetState extends State<InvoiceUploadWidget> {
   final ImagePicker _picker = ImagePicker();
   bool _isUploading = false;
+  String downloadUrl = "";
 
   Future<void> _pickImage(ImageSource source) async {
     final status = await Permission.camera.request();
@@ -41,10 +42,11 @@ class _InvoiceUploadWidgetState extends State<InvoiceUploadWidget> {
   Future<void> _uploadFile(XFile file) async {
     try {
       final fileName = path.basename(file.path);
-      final storageRef = FirebaseStorage.instance.ref().child('invoices/$fileName');
+      final storageRef =
+          FirebaseStorage.instance.ref().child('invoices/$fileName');
       final uploadTask = storageRef.putFile(File(file.path));
       final snapshot = await uploadTask.whenComplete(() => null);
-      final downloadUrl = await snapshot.ref.getDownloadURL();
+      downloadUrl = await snapshot.ref.getDownloadURL();
 
       context.read<InvoiceManagerCubit>().updateInvoiceUrl(downloadUrl);
     } catch (e) {
@@ -64,18 +66,97 @@ class _InvoiceUploadWidgetState extends State<InvoiceUploadWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        OutlinedButton(
-          onPressed: () => _pickImage(ImageSource.camera),
-          child: Text('Pick Image from Camera'),
-        ),
-        OutlinedButton(
-          onPressed: () => _pickImage(ImageSource.gallery),
-          child: Text('Pick Image from Gallery'),
-        ),
-        if (_isUploading) CircularProgressIndicator(),
-      ],
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8.0),
+      child: Row(
+        children: [
+          Expanded(
+            flex: 7,
+            child: (downloadUrl.isEmpty)
+                ? Card(
+                    elevation: 1,
+                    child: Container(
+                      width: double.maxFinite,
+                      height: 150,
+                      child: Center(
+                        child: (_isUploading)
+                            ? CircularProgressIndicator()
+                            : Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text('Upload invoice '),
+                                  InkWell(
+                                    onTap: () =>
+                                        _pickImage(ImageSource.gallery),
+                                    child: Text(
+                                      'from Gallery',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleSmall
+                                          ?.copyWith(
+                                            color: Colors.blue[700],
+                                            decoration:
+                                                TextDecoration.underline,
+                                          ),
+                                    ),
+                                  ),
+                                  Text(' or '),
+                                  InkWell(
+                                    onTap: () => _pickImage(ImageSource.camera),
+                                    child: Text(
+                                      'from Camera',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleSmall
+                                          ?.copyWith(
+                                            color: Colors.blue[700],
+                                            decoration:
+                                                TextDecoration.underline,
+                                          ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                      ),
+                    ),
+                  )
+                : Image.network(
+                    downloadUrl,
+                    fit: BoxFit.fitHeight,
+                  ),
+          ),
+          // SizedBox(width: 16.0),
+          // Expanded(
+          //   flex: 3,
+          //   child: Column(
+          //     crossAxisAlignment: CrossAxisAlignment.start,
+          //     children: [
+          //       // Text('Upload from'),
+          //       ElevatedButton(
+          //         onPressed: () => _pickImage(ImageSource.camera),
+          //         child: Text('Camera'),
+          //         style: OutlinedButton.styleFrom(
+          //           shape: RoundedRectangleBorder(
+          //             borderRadius: BorderRadius.circular(5.0),
+          //           ),
+          //         ),
+          //       ),
+          //       ElevatedButton(
+          //         onPressed: () => _pickImage(ImageSource.gallery),
+          //         child: Text('Gallery'),
+          //         style: OutlinedButton.styleFrom(
+          //           shape: RoundedRectangleBorder(
+          //             borderRadius: BorderRadius.circular(5.0),
+          //           ),
+          //         ),
+          //       ),
+          //       if (_isUploading) CircularProgressIndicator(),
+          //     ],
+          //   ),
+          // ),
+        ],
+      ),
     );
   }
 }

@@ -4,11 +4,9 @@ import 'package:ease/core/providers/short_uuid_generator.dart';
 import 'package:ease/core/utils/developer_log.dart';
 import 'package:ease/features/invoice_manager/widgets/discount_manager_widget.dart';
 import 'package:ease/features/invoice_manager/widgets/entity_type_ahead_field.dart';
-import 'package:ease/features/invoice_manager/widgets/invoice_items_list_widget.dart';
 import 'package:ease/features/invoice_manager/widgets/invoice_notes_widget.dart';
 import 'package:ease/features/invoice_manager/widgets/invoice_order_details_widget.dart';
 import 'package:ease/features/invoice_manager/widgets/invoice_upload_widget.dart';
-import 'package:ease/features/invoice_manager/widgets/payment_details_widget.dart';
 import 'package:ease/features/invoice_manager/widgets/payments_manager_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -160,68 +158,6 @@ class InvoiceManagerV2State extends State<InvoiceManagerV2> {
                     expandedHeaderPadding: EdgeInsets.symmetric(vertical: 0),
                     dividerColor: Theme.of(context).primaryColorLight,
                     children: [
-                      ExpansionPanel(
-                        canTapOnHeader: true,
-                        isExpanded: _isOpen[1],
-                        headerBuilder: (context, isExpanded) {
-                          return Container(
-                            color: isExpanded
-                                ? Theme.of(context).secondaryHeaderColor
-                                : Colors.transparent,
-                            child: ListTile(
-                              leading: Icon(Icons.shopping_cart_outlined),
-                              title: Text(
-                                'ITEMS',
-                                style: Theme.of(context).textTheme.labelLarge,
-                              ),
-                              trailing: BlocBuilder<InvoiceManagerCubit,
-                                  InvoiceManagerCubitState>(
-                                builder: (context, state) {
-                                  if (state is InvoiceManagerLoaded) {
-                                    return Text(
-                                      "+₹" +
-                                          context
-                                              .read<InvoiceManagerCubit>()
-                                              .invoice
-                                              .totalAmount
-                                              .toString(),
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .labelLarge,
-                                    );
-                                  } else if (state is InvoiceManagerLoading) {
-                                    return Center(
-                                        child: CircularProgressIndicator());
-                                  } else if (state is InvoiceManagerError) {
-                                    return Center(
-                                        child: Text('Error: ${state.message}'));
-                                  } else {
-                                    return Center(child: Text('Err'));
-                                  }
-                                },
-                              ),
-                            ),
-                          );
-                        },
-                        body: Card(
-                          child: BlocBuilder<InvoiceManagerCubit,
-                              InvoiceManagerCubitState>(
-                            builder: (context, state) {
-                              if (state is InvoiceManagerLoaded) {
-                                return InvoiceItemsListWidget.searchBoxLayout();
-                              } else if (state is InvoiceManagerLoading) {
-                                return Center(
-                                    child: CircularProgressIndicator());
-                              } else if (state is InvoiceManagerError) {
-                                return Center(
-                                    child: Text('Error: ${state.message}'));
-                              } else {
-                                return Center(child: Text('Unknown state'));
-                              }
-                            },
-                          ),
-                        ),
-                      ),
                       ExpansionPanel(
                         canTapOnHeader: true,
                         isExpanded: _isOpen[2],
