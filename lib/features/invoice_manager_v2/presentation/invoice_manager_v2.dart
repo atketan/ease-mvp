@@ -1,20 +1,20 @@
 import 'package:ease/core/enums/invoice_type_enum.dart';
 import 'package:ease/core/models/invoice.dart';
 import 'package:ease/core/providers/short_uuid_generator.dart';
-import 'package:ease/core/utils/developer_log.dart';
-import 'package:ease/features/invoice_manager/widgets/discount_manager_widget.dart';
-import 'package:ease/features/invoice_manager/widgets/entity_type_ahead_field.dart';
-import 'package:ease/features/invoice_manager/widgets/invoice_notes_widget.dart';
-import 'package:ease/features/invoice_manager/widgets/invoice_order_details_widget.dart';
-import 'package:ease/features/invoice_manager/widgets/invoice_upload_widget.dart';
-import 'package:ease/features/invoice_manager/widgets/payments_manager_widget.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:share_plus/share_plus.dart';
 
-import '../bloc/invoice_manager_cubit.dart';
-import '../bloc/invoice_manager_cubit_state.dart';
-import '../widgets/invoice_manager_spacer.dart';
+import '../../invoice_manager/widgets/invoice_manager_spacer.dart';
+import '../bloc/invoice_manager_v2_cubit.dart';
+import '../bloc/invoice_manager_v2_cubit_state.dart';
+import '../widgets/all_amounts_input_widget.dart';
+import '../widgets/entity_type_ahead_field_widget.dart';
+import '../widgets/invoice_notes_widget.dart';
+import '../widgets/invoice_order_details_widget.dart';
+import '../widgets/invoice_upload_widget.dart';
+import '../widgets/payments_manager_widget.dart';
 
 enum InvoiceFormMode {
   Add,
@@ -120,9 +120,7 @@ class InvoiceManagerV2State extends State<InvoiceManagerV2> {
                           flex: 3,
                           child: Row(
                             children: [
-                              Icon(
-                                Icons.person_2_outlined,
-                              ),
+                              Icon(Icons.person_2_outlined),
                               Text(
                                 invoiceType == InvoiceType.Sales
                                     ? 'CUSTOMER'
@@ -151,6 +149,8 @@ class InvoiceManagerV2State extends State<InvoiceManagerV2> {
                   InvoiceManagerSpacer(height: 0),
                   InvoiceUploadWidget(),
                   InvoiceManagerSpacer(height: 0),
+                  AllAmountsInputWidget(),
+                  InvoiceManagerSpacer(height: 0),
 
                   ExpansionPanelList(
                     expandIconColor: Theme.of(context).primaryColorDark,
@@ -158,56 +158,6 @@ class InvoiceManagerV2State extends State<InvoiceManagerV2> {
                     expandedHeaderPadding: EdgeInsets.symmetric(vertical: 0),
                     dividerColor: Theme.of(context).primaryColorLight,
                     children: [
-                      ExpansionPanel(
-                        canTapOnHeader: true,
-                        isExpanded: _isOpen[2],
-                        headerBuilder: (context, isExpanded) {
-                          return Container(
-                            color: isExpanded
-                                ? Theme.of(context).secondaryHeaderColor
-                                : Colors.transparent,
-                            child: ListTile(
-                              leading: Icon(Icons.discount_outlined),
-                              title: Text(
-                                'DISCOUNT',
-                                style: Theme.of(context).textTheme.labelLarge,
-                              ),
-                              trailing: BlocBuilder<InvoiceManagerCubit,
-                                  InvoiceManagerCubitState>(
-                                builder: (context, state) {
-                                  debugLog(
-                                      'Discount builder, cubit state: $state',
-                                      name: 'InvoiceManager');
-                                  if (state is InvoiceManagerLoaded) {
-                                    return Text(
-                                      "-₹" +
-                                          context
-                                              .read<InvoiceManagerCubit>()
-                                              .invoice
-                                              .discount
-                                              .toString(),
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .labelLarge,
-                                    );
-                                  } else if (state is InvoiceManagerLoading) {
-                                    return Center(
-                                        child: CircularProgressIndicator());
-                                  } else if (state is InvoiceManagerError) {
-                                    return Center(
-                                        child: Text('Error: ${state.message}'));
-                                  } else {
-                                    return Center(child: Text('Err'));
-                                  }
-                                },
-                              ),
-                            ),
-                          );
-                        },
-                        body: Card(
-                          child: DiscountManagerWidget(),
-                        ),
-                      ),
                       ExpansionPanel(
                         canTapOnHeader: true,
                         isExpanded: _isOpen[4],
