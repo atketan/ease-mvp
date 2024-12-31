@@ -13,7 +13,7 @@ import 'package:ease/core/utils/developer_log.dart';
 
 import 'invoice_manager_v2_cubit_state.dart';
 
-// Note: Invoice Manager V2 considers usage of invoice screenshots and 
+// Note: Invoice Manager V2 considers usage of invoice screenshots and
 // removes inventory feature for items tracking within each invoice
 
 class InvoiceManagerCubit extends Cubit<InvoiceManagerCubitState> {
@@ -49,6 +49,8 @@ class InvoiceManagerCubit extends Cubit<InvoiceManagerCubitState> {
         discount: 0.0,
         taxes: 0.0,
         grandTotal: 0.0,
+        totalPaid: 0.0,
+        totalDue: 0.0,
         paymentType: 'cash',
         status: 'unpaid',
         notes: "",
@@ -91,6 +93,12 @@ class InvoiceManagerCubit extends Cubit<InvoiceManagerCubitState> {
     emit(InvoiceManagerLoaded(invoice: _invoice));
   }
 
+  void setTotalPaidAmount(double totalPaid) async {
+    _invoice.totalPaid = totalPaid;
+    await _updateInvoiceAmounts();
+    emit(InvoiceManagerLoaded(invoice: _invoice));
+  }
+
   void updateInvoiceAmounts() async {
     await _updateInvoiceAmounts();
     emit(InvoiceManagerLoaded(invoice: _invoice));
@@ -99,8 +107,8 @@ class InvoiceManagerCubit extends Cubit<InvoiceManagerCubitState> {
   Future<bool> _updateInvoiceAmounts() async {
     _invoice.grandTotal = _invoice.totalAmount - _invoice.discount;
 
-    _invoice.totalPaid = _invoice.payments
-        .fold(0.0, (previousValue, element) => previousValue + element.amount);
+    // _invoice.totalPaid = _invoice.payments
+    //     .fold(0.0, (previousValue, element) => previousValue + element.amount);
     _invoice.totalDue = _invoice.grandTotal - _invoice.totalPaid;
 
     if (_invoice.totalDue == 0.0)

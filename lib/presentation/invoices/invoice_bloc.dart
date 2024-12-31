@@ -20,6 +20,8 @@ class InvoiceBloc extends Cubit<Invoice> {
             discount: 0.0,
             taxes: 0.0,
             grandTotal: 0.0,
+            totalPaid: 0.0,
+            totalDue: 0.0,
             paymentType: 'cash',
             status: 'unpaid',
           ),

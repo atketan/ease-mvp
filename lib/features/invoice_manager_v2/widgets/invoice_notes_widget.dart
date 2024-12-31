@@ -24,7 +24,7 @@ class InvoiceNotesWidget extends StatelessWidget {
           // ),
           TextField(
             controller: _notesTextController,
-            maxLines: 3,
+            maxLines: 2,
             style: Theme.of(context).textTheme.labelLarge,
             decoration: InputDecoration(
               hintText: 'Enter your notes here.',

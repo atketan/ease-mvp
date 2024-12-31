@@ -1,6 +1,7 @@
 import 'package:ease/core/enums/invoice_type_enum.dart';
 import 'package:ease/core/models/invoice.dart';
 import 'package:ease/core/providers/short_uuid_generator.dart';
+// import 'package:ease/features/invoice_manager_v2/widgets/invoice_payment_widget.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -14,7 +15,6 @@ import '../widgets/entity_type_ahead_field_widget.dart';
 import '../widgets/invoice_notes_widget.dart';
 import '../widgets/invoice_order_details_widget.dart';
 import '../widgets/invoice_upload_widget.dart';
-import '../widgets/payments_manager_widget.dart';
 
 enum InvoiceFormMode {
   Add,
@@ -41,8 +41,6 @@ class InvoiceManagerV2State extends State<InvoiceManagerV2> {
   final String invoiceNumber = generateShort12CharUniqueKey().toUpperCase();
   late InvoiceType invoiceType;
   // final DateTime invoiceCreateDate = DateTime.now();
-
-  List<bool> _isOpen = [false, false, false, false, false];
 
   @override
   void initState() {
@@ -148,55 +146,9 @@ class InvoiceManagerV2State extends State<InvoiceManagerV2> {
                   ),
                   InvoiceManagerSpacer(height: 0),
                   InvoiceUploadWidget(),
-                  InvoiceManagerSpacer(height: 0),
+                  // InvoiceManagerSpacer(height: 0),
                   AllAmountsInputWidget(),
                   InvoiceManagerSpacer(height: 0),
-
-                  ExpansionPanelList(
-                    expandIconColor: Theme.of(context).primaryColorDark,
-                    materialGapSize: 2,
-                    expandedHeaderPadding: EdgeInsets.symmetric(vertical: 0),
-                    dividerColor: Theme.of(context).primaryColorLight,
-                    children: [
-                      ExpansionPanel(
-                        canTapOnHeader: true,
-                        isExpanded: _isOpen[4],
-                        headerBuilder: (context, isExpanded) {
-                          return Container(
-                            color: isExpanded
-                                ? Theme.of(context).secondaryHeaderColor
-                                : Colors.transparent,
-                            child: ListTile(
-                              leading: Icon(Icons.payment_outlined),
-                              title: Text(
-                                'PAYMENTS',
-                                style: Theme.of(context).textTheme.labelLarge,
-                              ),
-                            ),
-                          );
-                        },
-                        body: BlocBuilder<InvoiceManagerCubit,
-                            InvoiceManagerCubitState>(
-                          builder: (context, state) {
-                            if (state is InvoiceManagerLoaded) {
-                              return PaymentsManagerWidget();
-                            } else if (state is InvoiceManagerLoading) {
-                              return Center(child: CircularProgressIndicator());
-                            } else if (state is InvoiceManagerError) {
-                              return Center(
-                                  child: Text('Error: ${state.message}'));
-                            } else {
-                              return Center(child: Text('Unknown state'));
-                            }
-                          },
-                        ),
-                      ),
-                    ],
-                    expansionCallback: (panelIndex, isExpanded) => setState(() {
-                      _isOpen[panelIndex] = isExpanded;
-                    }),
-                  ),
-                  InvoiceManagerSpacer(),
                   Padding(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 16.0,
@@ -231,21 +183,6 @@ class InvoiceManagerV2State extends State<InvoiceManagerV2> {
                       ],
                     ),
                   ),
-
-                  // Payment details
-                  // BlocBuilder<InvoiceManagerCubit, InvoiceManagerCubitState>(
-                  //   builder: (context, state) {
-                  //     if (state is InvoiceManagerLoaded) {
-                  //       return PaymentDetailsWidget();
-                  //     } else if (state is InvoiceManagerLoading) {
-                  //       return Center(child: CircularProgressIndicator());
-                  //     } else if (state is InvoiceManagerError) {
-                  //       return Center(child: Text('Error: ${state.message}'));
-                  //     } else {
-                  //       return Center(child: Text('Unknown state'));
-                  //     }
-                  //   },
-                  // ),
                 ],
               ),
             ),
@@ -271,7 +208,7 @@ class InvoiceManagerV2State extends State<InvoiceManagerV2> {
                             context
                                 .read<InvoiceManagerCubit>()
                                 .invoice
-                                .grandTotal
+                                .totalDue
                                 .toString(),
                         style: Theme.of(context)
                             .textTheme

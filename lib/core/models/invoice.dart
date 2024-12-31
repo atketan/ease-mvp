@@ -17,12 +17,12 @@ class Invoice {
   double taxes;
   double grandTotal;
   String paymentType; // cash or credit
+  double totalPaid;
+  double totalDue;
   String status; // paid or unpaid
   String? notes;
   List<InvoiceItem> _items = [];
   List<Payment> _payments = [];
-  double _totalPaid = 0;
-  double _totalDue = 0;
 
   Invoice({
     this.id,
@@ -39,6 +39,8 @@ class Invoice {
     required this.taxes,
     required this.grandTotal,
     required this.paymentType,
+    required this.totalPaid,
+    required this.totalDue,
     required this.status,
     this.notes,
   }) : assert(customerId != null || vendorId != null,
@@ -54,15 +56,15 @@ class Invoice {
     _payments = payments;
   }
 
-  double get totalPaid => _totalPaid;
-  set totalPaid(double totalPaid) {
-    _totalPaid = totalPaid;
-  }
+  // double get totalPaid => _totalPaid;
+  // set totalPaid(double totalPaid) {
+  //   _totalPaid = totalPaid;
+  // }
 
-  double get totalDue => _totalDue;
-  set totalDue(double totalDue) {
-    _totalDue = totalDue;
-  }
+  // double get totalDue => _totalDue;
+  // set totalDue(double totalDue) {
+  //   _totalDue = totalDue;
+  // }
 
   factory Invoice.fromJSON(Map<String, dynamic> json) {
     return Invoice(
@@ -80,6 +82,8 @@ class Invoice {
       taxes: json['taxes'],
       grandTotal: json['grand_total'],
       paymentType: json['payment_type'],
+      totalPaid: json['total_paid'],
+      totalDue: json['total_due'],
       status: json['status'],
       notes: json['notes'],
     );
@@ -104,6 +108,8 @@ class Invoice {
       'taxes': taxes,
       'grand_total': grandTotal,
       'payment_type': paymentType,
+      'total_paid': totalPaid,
+      'total_due': totalDue,
       'status': status,
       'notes': notes,
       // 'items': _items.map((item) => item.toJSON()).toList(),
