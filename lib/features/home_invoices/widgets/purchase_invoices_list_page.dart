@@ -1,6 +1,4 @@
 import 'package:ease/core/database/customers/customers_dao.dart';
-import 'package:ease/core/database/inventory/inventory_items_dao.dart';
-import 'package:ease/core/database/invoice_items/invoice_items_dao.dart';
 import 'package:ease/core/database/invoices/invoices_dao.dart';
 import 'package:ease/core/database/payments/payments_dao.dart';
 import 'package:ease/core/database/vendors/vendors_dao.dart';
@@ -8,8 +6,8 @@ import 'package:ease/core/enums/invoice_type_enum.dart';
 import 'package:ease/core/models/invoice.dart';
 import 'package:ease/core/utils/developer_log.dart';
 import 'package:ease/features/home_invoices/widgets/custom_chip_tags_widget.dart';
-import 'package:ease/features/invoice_manager/bloc/invoice_manager_cubit.dart';
-import 'package:ease/features/invoice_manager/presentation/invoice_manager.dart';
+import 'package:ease/features/invoice_manager_v2/bloc/invoice_manager_v2_cubit.dart';
+import 'package:ease/features/invoice_manager_v2/presentation/invoice_manager_v2.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -27,9 +25,7 @@ class PurchaseInvoicesListPage extends StatefulWidget {
 
 class _PurchaseInvoicesListPageState extends State<PurchaseInvoicesListPage> {
   late InvoicesDAO _invoicesDAO;
-  late InventoryItemsDAO _inventoryItemsDAO;
   late PaymentsDAO _paymentsDAO;
-  late InvoiceItemsDAO _invoiceItemsDAO;
   late CustomersDAO _customersDAO;
   late VendorsDAO _vendorsDAO;
 
@@ -47,9 +43,7 @@ class _PurchaseInvoicesListPageState extends State<PurchaseInvoicesListPage> {
   @override
   Widget build(BuildContext context) {
     _invoicesDAO = Provider.of<InvoicesDAO>(context);
-    _inventoryItemsDAO = Provider.of<InventoryItemsDAO>(context);
     _paymentsDAO = Provider.of<PaymentsDAO>(context);
-    _invoiceItemsDAO = Provider.of<InvoiceItemsDAO>(context);
     _customersDAO = Provider.of<CustomersDAO>(context);
     _vendorsDAO = Provider.of<VendorsDAO>(context);
 
@@ -158,14 +152,12 @@ class _PurchaseInvoicesListPageState extends State<PurchaseInvoicesListPage> {
                                           create: (context) =>
                                               InvoiceManagerCubit(
                                             _invoicesDAO,
-                                            _inventoryItemsDAO,
                                             _paymentsDAO,
-                                            _invoiceItemsDAO,
                                             _customersDAO,
                                             _vendorsDAO,
                                             InvoiceType.Purchase,
                                           ),
-                                          child: InvoiceManager(
+                                          child: InvoiceManagerV2(
                                             invoiceFormMode:
                                                 InvoiceFormMode.Edit,
                                             invoice: invoice,
@@ -241,14 +233,12 @@ class _PurchaseInvoicesListPageState extends State<PurchaseInvoicesListPage> {
                                         BlocProvider(
                                       create: (context) => InvoiceManagerCubit(
                                         _invoicesDAO,
-                                        _inventoryItemsDAO,
                                         _paymentsDAO,
-                                        _invoiceItemsDAO,
                                         _customersDAO,
                                         _vendorsDAO,
                                         InvoiceType.Purchase,
                                       ),
-                                      child: InvoiceManager(
+                                      child: InvoiceManagerV2(
                                         invoiceFormMode: InvoiceFormMode.Edit,
                                         invoice: invoice,
                                       ),
