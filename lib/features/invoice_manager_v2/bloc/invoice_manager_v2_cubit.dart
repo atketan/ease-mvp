@@ -4,6 +4,7 @@ import 'package:ease/core/database/invoices/invoices_dao.dart';
 import 'package:ease/core/database/payments/payments_dao.dart';
 import 'package:ease/core/database/vendors/vendors_dao.dart';
 import 'package:ease/core/enums/invoice_type_enum.dart';
+import 'package:ease/core/enums/payment_method_enum.dart';
 import 'package:ease/core/models/customer.dart';
 import 'package:ease/core/models/invoice.dart';
 import 'package:ease/core/models/payment.dart';
@@ -99,6 +100,10 @@ class InvoiceManagerCubit extends Cubit<InvoiceManagerCubitState> {
     emit(InvoiceManagerLoaded(invoice: _invoice));
   }
 
+  void setPaymentMethod(PaymentMethod selectedPaymentMethod) {
+    _invoice.paymentType = selectedPaymentMethod.name;
+  }
+
   void updateInvoiceAmounts() async {
     await _updateInvoiceAmounts();
     emit(InvoiceManagerLoaded(invoice: _invoice));
@@ -190,6 +195,7 @@ class InvoiceManagerCubit extends Cubit<InvoiceManagerCubitState> {
 
   void setEntityName(String clientName) {
     invoice.name = clientName;
+    emit(InvoiceManagerLoaded(invoice: _invoice));
   }
 
   Future<void> _getPaymentsByInvoiceId() async {

@@ -40,7 +40,6 @@ class InvoiceManagerV2 extends StatefulWidget {
 class InvoiceManagerV2State extends State<InvoiceManagerV2> {
   final String invoiceNumber = generateShort12CharUniqueKey().toUpperCase();
   late InvoiceType invoiceType;
-  // final DateTime invoiceCreateDate = DateTime.now();
 
   @override
   void initState() {
@@ -133,12 +132,6 @@ class InvoiceManagerV2State extends State<InvoiceManagerV2> {
                           flex: 7,
                           child: EntityTypeAheadField(
                             invoiceType: invoiceType,
-                            onClientSelected: (clientName) {
-                              context
-                                  .read<InvoiceManagerCubit>()
-                                  .setEntityName(clientName);
-                              // selectedClientName = clientName;
-                            },
                           ),
                         ),
                       ],
@@ -147,7 +140,12 @@ class InvoiceManagerV2State extends State<InvoiceManagerV2> {
                   InvoiceManagerSpacer(height: 0),
                   InvoiceUploadWidget(),
                   // InvoiceManagerSpacer(height: 0),
-                  AllAmountsInputWidget(),
+                  AllAmountsInputWidget(
+                    allAmountsFormMode:
+                        widget.invoiceFormMode == InvoiceFormMode.Add
+                            ? AllAmountsFormMode.Add
+                            : AllAmountsFormMode.Edit,
+                  ),
                   InvoiceManagerSpacer(height: 0),
                   Padding(
                     padding: const EdgeInsets.symmetric(

@@ -6,7 +6,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../bloc/invoice_manager_v2_cubit.dart';
 import '../bloc/invoice_manager_v2_cubit_state.dart';
 
+enum AllAmountsFormMode {
+  Add,
+  Edit,
+}
+
 class AllAmountsInputWidget extends StatefulWidget {
+  final AllAmountsFormMode allAmountsFormMode;
+
+  const AllAmountsInputWidget({super.key, required this.allAmountsFormMode});
+
   @override
   State<StatefulWidget> createState() => AllAmountsInputWidgetState();
 }
@@ -20,6 +29,24 @@ class AllAmountsInputWidgetState extends State<AllAmountsInputWidget> {
   TextEditingController _totalPaidTextController = TextEditingController();
 
   PaymentMethod _selectedPaymentMethod = PaymentMethod.cash;
+
+  @override
+  void initState() {
+    if (widget.allAmountsFormMode == AllAmountsFormMode.Edit) {
+      _totalAmountTextController.text =
+          context.read<InvoiceManagerCubit>().invoice.totalAmount.toString();
+      _discountTextController.text =
+          context.read<InvoiceManagerCubit>().invoice.discount.toString();
+      _totalPaidTextController.text =
+          context.read<InvoiceManagerCubit>().invoice.totalPaid.toString();
+      _selectedPaymentMethod = context
+          .read<InvoiceManagerCubit>()
+          .invoice
+          .paymentType
+          .toPaymentMethod();
+    }
+    super.initState();
+  }
 
   @override
   void dispose() {
@@ -155,6 +182,8 @@ class AllAmountsInputWidgetState extends State<AllAmountsInputWidget> {
                     child: TextField(
                       controller: _totalPaidTextController,
                       style: Theme.of(context).textTheme.labelLarge,
+                      enabled:
+                          widget.allAmountsFormMode == AllAmountsFormMode.Add,
                       keyboardType:
                           TextInputType.numberWithOptions(decimal: true),
                       decoration: InputDecoration(
@@ -182,6 +211,9 @@ class AllAmountsInputWidgetState extends State<AllAmountsInputWidget> {
                       setState(() {
                         _selectedPaymentMethod =
                             selected ? method : _selectedPaymentMethod;
+                        context
+                            .read<InvoiceManagerCubit>()
+                            .setPaymentMethod(_selectedPaymentMethod);
                       });
                     },
                     // selectedColor: Colors.blue,

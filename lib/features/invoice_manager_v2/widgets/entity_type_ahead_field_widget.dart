@@ -1,4 +1,5 @@
 import 'package:ease/core/enums/invoice_type_enum.dart';
+import 'package:ease/core/utils/developer_log.dart';
 import 'package:provider/provider.dart';
 import 'package:ease/core/database/customers/customers_dao.dart';
 import 'package:ease/core/database/vendors/vendors_dao.dart';
@@ -22,11 +23,11 @@ class Entity {
 
 class EntityTypeAheadField extends StatefulWidget {
   final InvoiceType invoiceType;
-  final Function(String clientName) onClientSelected;
+  // final Function(String clientName) onClientSelected;
 
   EntityTypeAheadField({
     required this.invoiceType,
-    required this.onClientSelected,
+    // required this.onClientSelected,
   });
 
   @override
@@ -62,7 +63,7 @@ class _EntityTypeAheadFieldState extends State<EntityTypeAheadField> {
     return BlocBuilder<InvoiceManagerCubit, InvoiceManagerCubitState>(
       builder: (context, state) {
         if (state is InvoiceManagerLoaded) {
-          widget.onClientSelected(_controller.text);
+          // widget.onClientSelected(_controller.text);
           return _isEditing
               ? _buildTypeAheadField()
               : _buildSelectedEntityField();
@@ -124,7 +125,7 @@ class _EntityTypeAheadFieldState extends State<EntityTypeAheadField> {
           _controller.text = suggestion.name;
           _phoneController.text = suggestion.phone;
           _isEditing = false;
-          widget.onClientSelected(suggestion.name);
+          // widget.onClientSelected(suggestion.name);
         });
         if (suggestion.id!.isNotEmpty) {
           if (widget.invoiceType == InvoiceType.Sales) {
@@ -152,7 +153,7 @@ class _EntityTypeAheadFieldState extends State<EntityTypeAheadField> {
   }
 
   Widget _buildSelectedEntityField() {
-    widget.onClientSelected(_controller.text);
+    // widget.onClientSelected(_controller.text);
     return Row(
       children: [
         Expanded(
@@ -216,20 +217,19 @@ class _EntityTypeAheadFieldState extends State<EntityTypeAheadField> {
       if (customer != null) {
         _controller.text = customer.name;
         _phoneController.text = customer.phone ?? "";
+        _isEditing = false;
       }
     } else if (vendorId != null) {
       Vendor? vendor = await _vendorsDAO.getVendorById(vendorId);
       _controller.text = vendor!.name;
       _phoneController.text = vendor.phone ?? "";
+      _isEditing = false;
     }
 
-    setState(() {
-      (customerId == null || vendorId == null)
-          ? _isEditing = true
-          : _isEditing = false;
-      widget.onClientSelected(_controller.text);
-    });
-    // ? await context.read<InvoiceManagerCubit>().getCustomerName(null)
-    // : await context.read<InvoiceManagerCubit>().getVendorName(null);
+    debugLog(
+        'Customer ID: ${customerId}, Name: ${_controller.text}, isEditing: $_isEditing',
+        name: 'EntityTypeAheadFieldWidget');
+
+    context.read<InvoiceManagerCubit>().setEntityName(_controller.text);
   }
 }
