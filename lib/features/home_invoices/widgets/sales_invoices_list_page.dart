@@ -36,6 +36,7 @@ class _SalesInvoicesListPageState extends State<SalesInvoicesListPage> {
   void _refreshInvoices() {
     debugLog('Refresh all sales invoices called',
         name: 'SalesInvoicesListPage');
+        
     Provider.of<InvoicesProvider>(context, listen: false).subscribeToInvoices();
   }
 
@@ -164,6 +165,7 @@ class _SalesInvoicesListPageState extends State<SalesInvoicesListPage> {
                                         ),
                                       ),
                                     );
+
                                     _refreshInvoices();
                                   },
                                   backgroundColor:

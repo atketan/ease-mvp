@@ -274,7 +274,6 @@ class InvoiceManagerV2State extends State<InvoiceManagerV2> {
                                       Text('Invoice updated successfully!'),
                                 ),
                               );
-                              Navigator.pop(context);
                             },
                           );
                         } else {
@@ -289,10 +288,10 @@ class InvoiceManagerV2State extends State<InvoiceManagerV2> {
                                       Text('Invoice created successfully!'),
                                 ),
                               );
-                              Navigator.pop(context);
                             },
                           );
                         }
+                        Navigator.pop(context);
                       },
                       child: Row(
                         mainAxisSize: MainAxisSize.max,

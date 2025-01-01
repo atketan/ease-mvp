@@ -31,7 +31,7 @@ extension PaymentMethodExtension on PaymentMethod {
 
 extension StringToPaymentMethod on String {
   PaymentMethod toPaymentMethod() {
-    switch (this.toLowerCase()) {
+    switch (this) {
       case 'cash':
         return PaymentMethod.cash;
       case 'upi':
@@ -40,7 +40,7 @@ extension StringToPaymentMethod on String {
       //   return PaymentMethod.debitCard;
       // case 'credit card':
       //   return PaymentMethod.creditCard;
-      case 'net banking':
+      case 'netBanking':
         return PaymentMethod.netBanking;
       // case 'cheque':
       //   return PaymentMethod.cheque;
