@@ -133,6 +133,8 @@ class FirestoreInvoicesDAO implements InvoicesDataSource {
         .collection('enterprises')
         .doc(enterpriseId)
         .collection('invoices')
+        .where('date', isGreaterThanOrEqualTo: startDate.toIso8601String())
+        .where('date', isLessThanOrEqualTo: endDate.toIso8601String())
         .snapshots()
         .map((snapshot) {
       return snapshot.docs
@@ -141,8 +143,8 @@ class FirestoreInvoicesDAO implements InvoicesDataSource {
             invoice.invoiceId = doc.id;
             return invoice;
           })
-          .where((invoice) =>
-              invoice.date.isAfter(startDate) && invoice.date.isBefore(endDate))
+          // .where((invoice) =>
+          //     invoice.date.isAfter(startDate) && invoice.date.isBefore(endDate))
           .toList();
     });
   }
