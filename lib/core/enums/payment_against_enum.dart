@@ -1,48 +1,53 @@
-enum PaymentAgainst {
-  salesInvoice,
-  purchaseInvoice, // aka, purchase order
-  expense,
-  client,
-  vendor,
+enum PaymentType {
+  openingBalance, // added at the time of creating a new client or vendor
+  sales, // associated with sales invoice
+  purchase, // associated with purchase invoice
+  expense, // associated with expense
+  client, // amounts paid out or in to a client, unrelated to sales and can be used to manage additional client payments
+  vendor, // amounts paid out or in to a vendor, unrelated to purchase and can be used to manage additional vendor payments
   other,
 }
 
-extension PaymentAgainstExtension on PaymentAgainst {
+extension PaymentAgainstExtension on PaymentType {
   String get name {
     switch (this) {
-      case PaymentAgainst.salesInvoice:
+      case PaymentType.openingBalance:
+        return 'Opening Balance';
+      case PaymentType.sales:
         return 'Sales';
-      case PaymentAgainst.purchaseInvoice:
+      case PaymentType.purchase:
         return 'Purchase';
-      case PaymentAgainst.expense:
+      case PaymentType.expense:
         return 'Expense';
-      case PaymentAgainst.client:
+      case PaymentType.client:
         return 'Client';
-      case PaymentAgainst.vendor:
+      case PaymentType.vendor:
         return 'Vendor';
-      case PaymentAgainst.other:
+      case PaymentType.other:
         return 'Other';
     }
   }
 }
 
 extension StringPaymentAgainstExtension on String {
-  PaymentAgainst toPaymentAgainst() {
+  PaymentType toPaymentAgainst() {
     switch (this) {
+      case 'Opening Balance':
+        return PaymentType.openingBalance;
       case 'Sales':
-        return PaymentAgainst.salesInvoice;
+        return PaymentType.sales;
       case 'Purchase':
-        return PaymentAgainst.purchaseInvoice;
+        return PaymentType.purchase;
       case 'Expense':
-        return PaymentAgainst.expense;
+        return PaymentType.expense;
       case 'Client':
-        return PaymentAgainst.client;
+        return PaymentType.client;
       case 'Vendor':
-        return PaymentAgainst.vendor;
+        return PaymentType.vendor;
       case 'Other':
-        return PaymentAgainst.other;
+        return PaymentType.other;
       default:
-        return PaymentAgainst.other;
+        return PaymentType.other;
     }
   }
 }

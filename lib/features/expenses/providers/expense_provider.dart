@@ -70,7 +70,7 @@ class ExpensesProvider with ChangeNotifier {
 
       payments.forEach((payment) async {
         payment.invoiceId = expenseId;
-        payment.paymentAgainst = PaymentAgainst.expense;
+        payment.paymentAgainst = PaymentType.expense;
         await _paymentsDAO.insertPayment(payment);
       });
     } catch (e) {

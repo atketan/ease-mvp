@@ -139,8 +139,8 @@ class _AddPaymentFormState extends State<AddPaymentForm> {
                 paymentMethod: _selectedPaymentMethod,
                 transactionType: _transactionType,
                 paymentAgainst: (widget.invoiceType == InvoiceType.Sales)
-                    ? PaymentAgainst.salesInvoice
-                    : PaymentAgainst.purchaseInvoice,
+                    ? PaymentType.sales
+                    : PaymentType.purchase,
                 createdAt: DateTime.now(),
                 updatedAt: DateTime.now(),
               );

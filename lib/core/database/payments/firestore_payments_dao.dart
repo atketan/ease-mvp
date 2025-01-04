@@ -30,8 +30,8 @@ class FirestorePaymentsDAO implements PaymentsDataSource {
 
       // If the payment is associated with an invoice, store it as a subcollection under the invoice
       if (payment.invoiceId != null) {
-        if (payment.paymentAgainst == PaymentAgainst.salesInvoice ||
-            payment.paymentAgainst == PaymentAgainst.purchaseInvoice) {
+        if (payment.paymentAgainst == PaymentType.sales ||
+            payment.paymentAgainst == PaymentType.purchase) {
           final invoicePaymentsRef = _firestore
               .collection('enterprises')
               .doc(enterpriseId)
@@ -40,7 +40,7 @@ class FirestorePaymentsDAO implements PaymentsDataSource {
               .collection('payments')
               .doc(userPaymentsRef.id); // Use the same document ID
           transaction.set(invoicePaymentsRef, paymentData);
-        } else if (payment.paymentAgainst == PaymentAgainst.expense) {
+        } else if (payment.paymentAgainst == PaymentType.expense) {
           final invoicePaymentsRef = _firestore
               .collection('enterprises')
               .doc(enterpriseId)
@@ -110,8 +110,8 @@ class FirestorePaymentsDAO implements PaymentsDataSource {
 
       // If the payment is associated with an invoice, update it in the subcollection under the invoice
       if (payment.invoiceId != null) {
-        if (payment.paymentAgainst == PaymentAgainst.salesInvoice ||
-            payment.paymentAgainst == PaymentAgainst.purchaseInvoice) {
+        if (payment.paymentAgainst == PaymentType.sales ||
+            payment.paymentAgainst == PaymentType.purchase) {
           final invoicePaymentsRef = _firestore
               .collection('enterprises')
               .doc(enterpriseId)
@@ -120,7 +120,7 @@ class FirestorePaymentsDAO implements PaymentsDataSource {
               .collection('payments')
               .doc(payment.id.toString());
           transaction.update(invoicePaymentsRef, paymentData);
-        } else if (payment.paymentAgainst == PaymentAgainst.expense) {
+        } else if (payment.paymentAgainst == PaymentType.expense) {
           final invoicePaymentsRef = _firestore
               .collection('enterprises')
               .doc(enterpriseId)
@@ -156,8 +156,8 @@ class FirestorePaymentsDAO implements PaymentsDataSource {
 
       // If the payment is associated with an invoice, delete it from the subcollection under the invoice
       if (payment.invoiceId != null) {
-        if (payment.paymentAgainst == PaymentAgainst.salesInvoice ||
-            payment.paymentAgainst == PaymentAgainst.purchaseInvoice) {
+        if (payment.paymentAgainst == PaymentType.sales ||
+            payment.paymentAgainst == PaymentType.purchase) {
           final invoicePaymentsRef = _firestore
               .collection('enterprises')
               .doc(enterpriseId)
@@ -166,7 +166,7 @@ class FirestorePaymentsDAO implements PaymentsDataSource {
               .collection('payments')
               .doc(id);
           transaction.delete(invoicePaymentsRef);
-        } else if (payment.paymentAgainst == PaymentAgainst.expense) {
+        } else if (payment.paymentAgainst == PaymentType.expense) {
           final invoicePaymentsRef = _firestore
               .collection('enterprises')
               .doc(enterpriseId)

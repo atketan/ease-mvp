@@ -13,7 +13,7 @@ class Payment {
       paymentMethod; // upi, cash, debit card, credit card, net banking, cheque, other
   TransactionType transactionType; // credit, debit
   String? notes; // Nullable, for general payment description
-  PaymentAgainst paymentAgainst; // sales/purchase invoice, expense, client, vendor, other
+  PaymentType paymentAgainst; // sales/purchase invoice, expense, client, vendor, other
   DateTime? createdAt;
   DateTime? updatedAt;
 
