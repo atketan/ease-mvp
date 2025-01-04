@@ -9,6 +9,7 @@ class TimeRangeProvider with ChangeNotifier {
 
   TimeRangeProvider() {
     _currentDate = DateTime.now();
+    _setDefaultDateRange();
     _calculateDateRange();
   }
 
@@ -25,6 +26,11 @@ class TimeRangeProvider with ChangeNotifier {
   void refresh() {
     _calculateDateRange();
     notifyListeners();
+  }
+
+  void _setDefaultDateRange() {
+    _startDate = DateTime(_currentDate.year, _currentDate.month, 1);
+    _endDate = DateTime(_currentDate.year, _currentDate.month + 1, 0);
   }
 
   void _calculateDateRange() {

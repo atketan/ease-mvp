@@ -61,9 +61,6 @@ class InvoicesProvider with ChangeNotifier {
   bool get isFilterApplied => _isFilterApplied;
 
   void setDateRange(DateTime start, DateTime end) {
-    debugLog('setDateRange called with start: $start, end: $end',
-        name: 'InvoicesProvider');
-
     // Cancel existing subscription
     _invoicesSubscription?.cancel();
 
