@@ -83,8 +83,8 @@ class _EntityTypeAheadFieldState extends State<EntityTypeAheadField> {
           onTapOutside: (event) => focusNode.unfocus(),
           decoration: InputDecoration(
             labelText: widget.invoiceType == InvoiceType.Sales
-                ? 'Enter customer name or phone number'
-                : 'Enter vendor name or phone number',
+                ? 'Enter customer name' // or phone number
+                : 'Enter vendor name',  // or phone number
             labelStyle: Theme.of(context).textTheme.labelLarge,
             hintText:
                 'Start typing to search or add ${widget.invoiceType == InvoiceType.Sales ? 'Customer' : 'Vendor'}',
