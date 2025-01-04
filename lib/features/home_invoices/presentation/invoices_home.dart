@@ -10,6 +10,7 @@ import 'package:ease/features/home_invoices/widgets/sales_summary_widget.dart';
 import 'package:ease/features/manage/presentation/manage_options_bottomsheet.dart';
 import 'package:ease/widgets/time_range_provider.dart';
 import 'package:ease/widgets/time_range_selector.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
@@ -187,45 +188,82 @@ class _InvoicesHomePageState extends State<InvoicesHomePage> {
                   child: Row(
                     children: [
                       Expanded(flex: 5, child: ExpensesSummaryWidget()),
+                      SizedBox(width: 8.0),
+                      Expanded(flex: 5, child: Container()),
                     ],
                   ),
                 ),
-                Container(
-                  color: Theme.of(context).primaryColor,
-                  margin: EdgeInsets.all(0.0),
-                  child: TabBar(
-                    isScrollable: true,
-                    tabAlignment: TabAlignment.start,
-                    tabs: [
-                      Tab(text: 'Sales'),
-                      Tab(text: 'Purchases'),
-                      Tab(text: 'Expenses'),
-                      Tab(text: 'Payments'),
-                      // Tab(text: 'Reports'),
-                      // Tab(text: 'Unpaid'),
-                      // Tab(text: 'Paid'),
-                    ],
+                Card(
+                  elevation: 1.0,
+                  child: ListTile(
+                    dense: true,
+                    title: Text(
+                      'Client Ledgers',
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                    subtitle: Text(
+                      'Sales records, customer accounts, and reports',
+                      style: Theme.of(context).textTheme.labelMedium,
+                    ),
+                    trailing: Icon(Icons.arrow_forward_ios),
                   ),
                 ),
-                Expanded(
-                  child: TabBarView(
-                    children: [
-                      SalesInvoicesListPage(),
-                      PurchaseInvoicesListPage(),
-                      ExpensesListPage(
-                        timeRangeProvider: GetIt.instance<TimeRangeProvider>(),
-                      ),
-                      Container(
-                        child: Center(child: Text("Coming soon")),
-                      ),
-                      // Container(
-                      //   child: Center(child: Text("Coming soon")),
-                      // ),
-                      // UnpaidInvoicesTab(),
-                      // PaidInvoicesTab(),
-                    ],
+                SizedBox(height: 8.0),
+                Card(
+                  elevation: 1.0,
+                  child: ListTile(
+                    dense: true,
+                    title: Text(
+                      'Vendor Ledgers',
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                    subtitle: Text(
+                      'Purchase records, vendor accounts, and reports',
+                      style: Theme.of(context).textTheme.labelMedium,
+                    ),
+                    trailing: Icon(Icons.arrow_forward_ios),
                   ),
                 ),
+                SizedBox(height: 8.0),
+                if (kDebugMode)
+                  Container(
+                    color: Theme.of(context).primaryColor,
+                    margin: EdgeInsets.all(0.0),
+                    child: TabBar(
+                      isScrollable: true,
+                      tabAlignment: TabAlignment.start,
+                      tabs: [
+                        Tab(text: 'Sales'),
+                        Tab(text: 'Purchases'),
+                        Tab(text: 'Expenses'),
+                        Tab(text: 'Payments'),
+                        // Tab(text: 'Reports'),
+                        // Tab(text: 'Unpaid'),
+                        // Tab(text: 'Paid'),
+                      ],
+                    ),
+                  ),
+                if (kDebugMode)
+                  Expanded(
+                    child: TabBarView(
+                      children: [
+                        SalesInvoicesListPage(),
+                        PurchaseInvoicesListPage(),
+                        ExpensesListPage(
+                          timeRangeProvider:
+                              GetIt.instance<TimeRangeProvider>(),
+                        ),
+                        Container(
+                          child: Center(child: Text("Coming soon")),
+                        ),
+                        // Container(
+                        //   child: Center(child: Text("Coming soon")),
+                        // ),
+                        // UnpaidInvoicesTab(),
+                        // PaidInvoicesTab(),
+                      ],
+                    ),
+                  ),
               ],
             ),
           );

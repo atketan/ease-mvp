@@ -47,32 +47,32 @@ class ExpensesSummaryWidgetState extends State<ExpensesSummaryWidget> {
             "₹" + context.watch<InvoicesProvider>().totalPaidAmount.toString(),
             style: Theme.of(context).textTheme.bodyLarge,
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'To be Received',
-                style: Theme.of(context).textTheme.labelSmall,
-              ),
-              Text(
-                context.watch<InvoicesProvider>().totalPaidAmount.toString(),
-                style: Theme.of(context).textTheme.labelSmall,
-              ),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'To be Paid',
-                style: Theme.of(context).textTheme.labelSmall,
-              ),
-              Text(
-                context.watch<InvoicesProvider>().totalUnpaidAmount.toString(),
-                style: Theme.of(context).textTheme.labelSmall,
-              ),
-            ],
-          ),
+          // Row(
+          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //   children: [
+          //     Text(
+          //       'To be Received',
+          //       style: Theme.of(context).textTheme.labelSmall,
+          //     ),
+          //     Text(
+          //       context.watch<InvoicesProvider>().totalPaidAmount.toString(),
+          //       style: Theme.of(context).textTheme.labelSmall,
+          //     ),
+          //   ],
+          // ),
+          // Row(
+          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //   children: [
+          //     Text(
+          //       'To be Paid',
+          //       style: Theme.of(context).textTheme.labelSmall,
+          //     ),
+          //     Text(
+          //       context.watch<InvoicesProvider>().totalUnpaidAmount.toString(),
+          //       style: Theme.of(context).textTheme.labelSmall,
+          //     ),
+          //   ],
+          // ),
         ],
       ),
     );
