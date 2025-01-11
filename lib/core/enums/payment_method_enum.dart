@@ -9,6 +9,25 @@ enum PaymentMethod {
 }
 
 extension PaymentMethodExtension on PaymentMethod {
+  String get name {
+    switch (this) {
+      case PaymentMethod.cash:
+        return 'cash';
+      case PaymentMethod.upi:
+        return 'upi';
+      // case PaymentMethod.debitCard:
+      //   return 'Debit Card';
+      // case PaymentMethod.creditCard:
+      //   return 'Credit Card';
+      case PaymentMethod.netBanking:
+        return 'netBanking';
+      // case PaymentMethod.cheque:
+      //   return 'Cheque';
+      case PaymentMethod.other:
+        return 'other';
+    }
+  }
+
   String get displayName {
     switch (this) {
       case PaymentMethod.cash:
