@@ -1,4 +1,7 @@
 import 'package:ease/core/database/app_user_configuration/firestore_app_user_configuration_dao.dart';
+import 'package:ease/core/database/ledger/firestore_ledger_entry_dao.dart';
+import 'package:ease/core/database/ledger/ledger_entry_dao.dart';
+import 'package:ease/core/database/ledger/ledger_entry_data_source.dart';
 import 'package:ease/core/models/app_user_configuration.dart';
 import 'package:ease/core/providers/themes_provider.dart';
 import 'package:ease/core/service_locator/service_locator.dart';
@@ -156,6 +159,14 @@ class _EASEAppState extends State<EASEApp> {
               ),
               ProxyProvider<InventoryItemsDataSource, InventoryItemsDAO>(
                 update: (_, dataSource, __) => InventoryItemsDAO(dataSource),
+              ),
+              Provider<LedgerEntryDataSource>(
+                create: (_) => FirestoreLedgerEntryDAO(
+                  enterpriseId: getIt<AppUserConfiguration>().enterpriseId,
+                ),
+              ),
+              ProxyProvider<LedgerEntryDataSource, LedgerEntryDAO>(
+                update: (_, dataSource, __) => LedgerEntryDAO(dataSource),
               ),
               ChangeNotifierProvider(
                 create: (context) => ExpensesProvider(

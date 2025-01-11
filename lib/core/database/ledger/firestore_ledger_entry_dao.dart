@@ -5,18 +5,30 @@ import 'package:ease/core/models/ledger_entry.dart';
 class FirestoreLedgerEntryDAO implements LedgerEntryDataSource {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final String _collectionName = 'ledger_entries';
+  final String enterpriseId;
+
+  FirestoreLedgerEntryDAO({required this.enterpriseId});
 
   /// Create a new LedgerEntry document
   @override
   Future<void> createLedgerEntry(LedgerEntry entry) async {
-    final docRef = _firestore.collection(_collectionName).doc(entry.id);
+    final docRef = _firestore
+        .collection('enterprises')
+        .doc(enterpriseId)
+        .collection(_collectionName)
+        .doc(entry.id);
     await docRef.set(entry.toJSON());
   }
 
   /// Read a single LedgerEntry by ID
   @override
   Future<LedgerEntry?> getLedgerEntryById(String id) async {
-    final doc = await _firestore.collection(_collectionName).doc(id).get();
+    final doc = await _firestore
+        .collection('enterprises')
+        .doc(enterpriseId)
+        .collection(_collectionName)
+        .doc(id)
+        .get();
     if (doc.exists) {
       return LedgerEntry.fromJSON(doc.data()!);
     }
@@ -27,19 +39,33 @@ class FirestoreLedgerEntryDAO implements LedgerEntryDataSource {
   @override
   Future<void> updateLedgerEntry(
       String id, Map<String, dynamic> updates) async {
-    await _firestore.collection(_collectionName).doc(id).update(updates);
+    await _firestore
+        .collection('enterprises')
+        .doc(enterpriseId)
+        .collection(_collectionName)
+        .doc(id)
+        .update(updates);
   }
 
   /// Delete a LedgerEntry by ID
   @override
   Future<void> deleteLedgerEntry(String id) async {
-    await _firestore.collection(_collectionName).doc(id).delete();
+    await _firestore
+        .collection('enterprises')
+        .doc(enterpriseId)
+        .collection(_collectionName)
+        .doc(id)
+        .delete();
   }
 
   /// Get all LedgerEntries as a list
   @override
   Future<List<LedgerEntry>> getAllLedgerEntries() async {
-    final querySnapshot = await _firestore.collection(_collectionName).get();
+    final querySnapshot = await _firestore
+        .collection('enterprises')
+        .doc(enterpriseId)
+        .collection(_collectionName)
+        .get();
     return querySnapshot.docs
         .map((doc) => LedgerEntry.fromJSON(doc.data()))
         .toList();
@@ -47,7 +73,12 @@ class FirestoreLedgerEntryDAO implements LedgerEntryDataSource {
 
   @override
   Stream<List<LedgerEntry>> subscribeToLedgerEntries() {
-    return _firestore.collection(_collectionName).snapshots().map((snapshot) {
+    return _firestore
+        .collection('enterprises')
+        .doc(enterpriseId)
+        .collection(_collectionName)
+        .snapshots()
+        .map((snapshot) {
       return snapshot.docs
           .map((doc) => LedgerEntry.fromJSON(doc.data()))
           .toList();
@@ -62,7 +93,10 @@ class FirestoreLedgerEntryDAO implements LedgerEntryDataSource {
     DateTime? startDate,
     DateTime? endDate,
   }) {
-    Query query = _firestore.collection(_collectionName);
+    Query query = _firestore
+        .collection('enterprises')
+        .doc(enterpriseId)
+        .collection(_collectionName);
 
     if (type != null) {
       query = query.where('type', isEqualTo: type);
@@ -89,6 +123,8 @@ class FirestoreLedgerEntryDAO implements LedgerEntryDataSource {
   Stream<List<LedgerEntry>> getLedgerEntriesByAssociatedId(
       String associatedId) {
     return _firestore
+        .collection('enterprises')
+        .doc(enterpriseId)
         .collection(_collectionName)
         .where('associated_id', isEqualTo: associatedId)
         .orderBy('transaction_date', descending: true)
@@ -102,6 +138,8 @@ class FirestoreLedgerEntryDAO implements LedgerEntryDataSource {
   @override
   Future<Map<String, double>> getLedgerSummary(String associatedId) async {
     final querySnapshot = await _firestore
+        .collection('enterprises')
+        .doc(enterpriseId)
         .collection(_collectionName)
         .where('associated_id', isEqualTo: associatedId)
         .get();
