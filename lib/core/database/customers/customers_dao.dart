@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 import '../../models/customer.dart';
 import 'customers_data_source.dart';
 
@@ -32,5 +34,9 @@ class CustomersDAO {
 
   Future<List<Customer>> searchCustomers(String pattern) {
     return _dataSource.searchCustomers(pattern);
+  }
+
+  Stream<QuerySnapshot<Map<String, dynamic>>> getAllCustomersStream() {
+    return _dataSource.getAllCustomersStream();
   }
 }

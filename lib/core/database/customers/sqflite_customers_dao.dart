@@ -77,4 +77,10 @@ class SqfliteCustomersDAO implements CustomersDataSource {
     );
     return result.map((map) => Customer.fromJSON(map)).toList();
   }
+
+  @override
+  getAllCustomersStream() {
+    // TODO: implement getAllCustomersStream
+    throw UnimplementedError();
+  }
 }

@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 import '../../models/customer.dart';
 
 abstract class CustomersDataSource {
@@ -8,4 +10,5 @@ abstract class CustomersDataSource {
   Future<int> updateCustomer(Customer customer);
   Future<int> deleteCustomer(int id);
   Future<List<Customer>> searchCustomers(String pattern);
+  Stream<QuerySnapshot<Map<String, dynamic>>> getAllCustomersStream();
 }

@@ -104,4 +104,13 @@ class FirestoreCustomersDAO implements CustomersDataSource {
       return customer;
     }).toList();
   }
+
+  @override
+  Stream<QuerySnapshot<Map<String, dynamic>>> getAllCustomersStream() {
+    return _firestore
+        .collection('enterprises')
+        .doc(enterpriseId)
+        .collection('customers')
+        .snapshots();
+  }
 }

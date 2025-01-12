@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ease/core/database/ledger/ledger_entry_data_source.dart';
+import 'package:ease/core/enums/transaction_type_enum.dart';
 import 'package:ease/core/models/ledger_entry.dart';
 
 class FirestoreLedgerEntryDAO implements LedgerEntryDataSource {
@@ -154,20 +155,22 @@ class FirestoreLedgerEntryDAO implements LedgerEntryDataSource {
 
     double totalCredits = 0.0; // Payments received
     double totalDebits = 0.0; // Payments made or invoices issued
+    double totalBalance = 0.0;
 
     for (var doc in querySnapshot.docs) {
       final entry = LedgerEntry.fromJSON(doc.data());
-      if (entry.transactionType == 'credit') {
-        totalCredits += entry.amount;
-      } else if (entry.transactionType == 'debit') {
-        totalDebits += entry.amount;
+      if (entry.transactionType == TransactionType.credit) {
+        totalCredits += entry.grandTotal!;
+      } else if (entry.transactionType == TransactionType.debit) {
+        totalDebits += entry.grandTotal!;
       }
+      totalBalance += entry.remainingDue!;
     }
 
     return {
       'totalCredits': totalCredits,
       'totalDebits': totalDebits,
-      'balance': totalCredits - totalDebits,
+      'balance': totalBalance,
     };
   }
 }
