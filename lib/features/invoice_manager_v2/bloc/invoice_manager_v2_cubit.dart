@@ -127,24 +127,19 @@ class InvoiceManagerCubit extends Cubit<InvoiceManagerCubitState> {
   }
 
   Future<bool> _updateInvoiceAmounts() async {
-    // _invoice.grandTotal = _invoice.totalAmount - _invoice.discount;
     _ledgerEntry.grandTotal =
         _ledgerEntry.amount - (_ledgerEntry.discount ?? 0);
 
-    // _invoice.totalPaid = _invoice.payments
-    //     .fold(0.0, (previousValue, element) => previousValue + element.amount);
-    // _invoice.totalDue = _invoice.grandTotal - _invoice.totalPaid;
     _ledgerEntry.remainingDue =
         ((_ledgerEntry.grandTotal ?? 0.0) - (_ledgerEntry.initialPaid ?? 0.0));
 
-    // if (_invoice.totalDue == 0.0)
-    //   _invoice.status = 'paid';
-    // else
-    //   _invoice.status = 'unpaid';
     if (_ledgerEntry.remainingDue == 0.0)
       _ledgerEntry.status = 'paid';
-    else
+    else if (_ledgerEntry.initialPaid == 0.0 ||
+        _ledgerEntry.initialPaid == null)
       _ledgerEntry.status = 'unpaid';
+    else
+      _ledgerEntry.status = 'partially_paid';
 
     debugLog('Payment status: ${_ledgerEntry.status}',
         name: 'InvoiceManagerCubit');

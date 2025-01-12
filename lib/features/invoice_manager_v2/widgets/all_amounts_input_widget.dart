@@ -59,6 +59,10 @@ class AllAmountsInputWidgetState extends State<AllAmountsInputWidget> {
           .paymentMethod
           .toString()
           .toPaymentMethod();
+    } else {
+      context
+          .read<InvoiceManagerCubit>()
+          .setPaymentMethod(_selectedPaymentMethod);
     }
     super.initState();
   }
