@@ -46,11 +46,11 @@ class InvoicesProvider with ChangeNotifier {
   List<LedgerEntry> get allPurchaseInvoices => _allPurchaseInvoices;
 
   List<LedgerEntry> get unpaidInvoices =>
-      _allSalesInvoices.where((invoice) => invoice.status == 'unpaid').toList();
+      _allSalesInvoices.where((invoice) => invoice.status != 'paid').toList();
   List<LedgerEntry> get paidInvoices =>
       _allSalesInvoices.where((invoice) => invoice.status == 'paid').toList();
   List<LedgerEntry> get unpaidPurchases => _allPurchaseInvoices
-      .where((invoice) => invoice.status == 'unpaid')
+      .where((invoice) => invoice.status != 'paid')
       .toList();
   List<LedgerEntry> get paidPurchases => _allPurchaseInvoices
       .where((invoice) => invoice.status == 'paid')
