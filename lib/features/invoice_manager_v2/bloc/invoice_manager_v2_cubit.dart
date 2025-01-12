@@ -5,6 +5,7 @@ import 'package:ease/core/database/vendors/vendors_dao.dart';
 import 'package:ease/core/enums/ledger_enum_type.dart';
 import 'package:ease/core/enums/payment_method_enum.dart';
 import 'package:ease/core/enums/transaction_category_enum.dart';
+import 'package:ease/core/enums/transaction_type_enum.dart';
 import 'package:ease/core/models/customer.dart';
 import 'package:ease/core/models/ledger_entry.dart';
 import 'package:ease/core/models/vendor.dart';
@@ -239,6 +240,22 @@ class InvoiceManagerCubit extends Cubit<InvoiceManagerCubitState> {
         ),
       );
       setCustomerId(newId);
+
+      await _ledgerEntryDAO.createLedgerEntry(
+        LedgerEntry(
+          associatedId: newId,
+          name: name,
+          type: LedgerEntryType.openingBalance,
+          amount: openingBalance,
+          transactionType:
+              TransactionType.credit, // To be received from the customer
+          notes: "Opening balance from previous system",
+          transactionDate: DateTime.now(),
+          createdAt: DateTime.now(),
+          updatedAt: DateTime.now(),
+        ),
+      );
+
       // invoice.name = name;
       _ledgerEntry.name = name;
       phoneNumber = phone;
@@ -262,6 +279,21 @@ class InvoiceManagerCubit extends Cubit<InvoiceManagerCubitState> {
         ),
       );
       setVendorId(newId);
+
+      await _ledgerEntryDAO.createLedgerEntry(
+        LedgerEntry(
+          associatedId: newId,
+          name: name,
+          type: LedgerEntryType.openingBalance,
+          amount: openingBalance,
+          transactionType: TransactionType.debit, // To be paid to the vendor
+          notes: "Opening balance from previous system",
+          transactionDate: DateTime.now(),
+          createdAt: DateTime.now(),
+          updatedAt: DateTime.now(),
+        ),
+      );
+
       // invoice.name = name;
       _ledgerEntry.name = name;
       phoneNumber = phone;
