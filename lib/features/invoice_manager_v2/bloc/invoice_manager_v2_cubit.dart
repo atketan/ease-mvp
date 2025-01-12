@@ -58,6 +58,8 @@ class InvoiceManagerCubit extends Cubit<InvoiceManagerCubitState> {
       _ledgerEntry = LedgerEntry(
         type: LedgerEntryType.invoice,
         amount: 0.0,
+        discount: 0.0,
+        grandTotal: 0.0,
         transactionDate: DateTime.now(),
         transactionCategory: transactionCategory,
         createdAt: DateTime.now(),
@@ -133,7 +135,7 @@ class InvoiceManagerCubit extends Cubit<InvoiceManagerCubitState> {
     //     .fold(0.0, (previousValue, element) => previousValue + element.amount);
     // _invoice.totalDue = _invoice.grandTotal - _invoice.totalPaid;
     _ledgerEntry.remainingDue =
-        _ledgerEntry.grandTotal = _ledgerEntry.initialPaid;
+        ((_ledgerEntry.grandTotal ?? 0.0) - (_ledgerEntry.initialPaid ?? 0.0));
 
     // if (_invoice.totalDue == 0.0)
     //   _invoice.status = 'paid';
@@ -143,6 +145,9 @@ class InvoiceManagerCubit extends Cubit<InvoiceManagerCubitState> {
       _ledgerEntry.status = 'paid';
     else
       _ledgerEntry.status = 'unpaid';
+
+    debugLog('Payment status: ${_ledgerEntry.status}',
+        name: 'InvoiceManagerCubit');
 
     return Future.value(true);
   }
