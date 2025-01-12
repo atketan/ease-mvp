@@ -30,6 +30,7 @@ class LedgerEntry {
     this.id,
     required this.type,
     this.associatedId,
+    this.name,
     this.transactionCategory,
     required this.amount,
     this.discount,
@@ -51,6 +52,7 @@ class LedgerEntry {
       id: json['id'],
       type: json['type'].toString().toLedgerEntryType(),
       associatedId: json['associated_id'],
+      name: json['name'],
       transactionCategory:
           json['transaction_category']?.toString().toTransactionCategory(),
       amount: json['amount'],
@@ -74,6 +76,7 @@ class LedgerEntry {
       'id': id,
       'type': type.name,
       'associated_id': associatedId,
+      'name': name,
       'transaction_category': transactionCategory?.name,
       'amount': amount,
       'discount': discount,
