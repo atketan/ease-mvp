@@ -160,9 +160,9 @@ class FirestoreLedgerEntryDAO implements LedgerEntryDataSource {
     for (var doc in querySnapshot.docs) {
       final entry = LedgerEntry.fromJSON(doc.data());
       if (entry.transactionType == TransactionType.credit) {
-        totalCredits += entry.grandTotal!;
+        totalCredits += entry.initialPaid!;
       } else if (entry.transactionType == TransactionType.debit) {
-        totalDebits += entry.grandTotal!;
+        totalDebits += entry.initialPaid!;
       }
       totalBalance += entry.remainingDue!;
     }

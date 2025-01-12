@@ -111,6 +111,7 @@ class FirestoreCustomersDAO implements CustomersDataSource {
         .collection('enterprises')
         .doc(enterpriseId)
         .collection('customers')
+        .orderBy('created_at')
         .snapshots();
   }
 }
