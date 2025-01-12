@@ -177,7 +177,7 @@ class InvoiceManagerCubit extends Cubit<InvoiceManagerCubitState> {
     // debugLog("Update invoice: " + _invoice.toJSON().toString());
     // await _invoiceDAO.updateInvoice(_invoice); // Update the invoice itself
     _ledgerEntryDAO.updateLedgerEntry(
-        _ledgerEntry.id ?? "", _ledgerEntry.toJSON());
+        _ledgerEntry.docId ?? "", _ledgerEntry.toJSON());
 
     return Future.value(true);
   }
@@ -199,7 +199,7 @@ class InvoiceManagerCubit extends Cubit<InvoiceManagerCubitState> {
   String formatInvoiceDetails() {
     // Start building the formatted string
     StringBuffer buffer = StringBuffer();
-    buffer.writeln('Invoice ID: ${_ledgerEntry.id}');
+    buffer.writeln('Invoice Number: ${_ledgerEntry.invNumber}');
     buffer.writeln('Date: ${formatInvoiceDate(_ledgerEntry.transactionDate)}');
 
     buffer.writeln('-----------------------------------');

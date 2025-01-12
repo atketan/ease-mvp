@@ -4,7 +4,7 @@ import 'package:ease/core/enums/transaction_category_enum.dart';
 import 'package:ease/core/enums/transaction_type_enum.dart';
 
 class LedgerEntry {
-  String? id; // Firestore document ID
+  String? invNumber; // Firestore document ID
   LedgerEntryType type; // Enum for type ("invoice", "payment", etc.)
   String? associatedId; // Customer or vendor ID
   String? name; // Name of customer or vendor
@@ -25,9 +25,11 @@ class LedgerEntry {
   DateTime transactionDate; // Date of the transaction
   DateTime createdAt; // Auto-generated
   DateTime updatedAt; // Auto-generated
+  String?
+      docId; // Firestore doc ID for the ledger entry, should not be re-written to the database
 
   LedgerEntry({
-    this.id,
+    this.invNumber,
     required this.type,
     this.associatedId,
     this.name,
@@ -45,16 +47,17 @@ class LedgerEntry {
     required this.transactionDate,
     required this.createdAt,
     required this.updatedAt,
+    this.docId,
   });
 
   factory LedgerEntry.fromJSON(Map<String, dynamic> json) {
     return LedgerEntry(
-      id: json['id'],
+      invNumber: json['inv_number'],
       type: json['type'].toString().toLedgerEntryType(),
       associatedId: json['associated_id'],
       name: json['name'],
       transactionCategory:
-          json['transaction_category']?.toString().toTransactionCategory(),
+          json['txn_category']?.toString().toTransactionCategory(),
       amount: json['amount'],
       discount: json['discount'],
       grandTotal: json['grand_total'],
@@ -62,10 +65,10 @@ class LedgerEntry {
       remainingDue: json['remaining_due'],
       status: json['status'],
       paymentMethod: json['payment_method']?.toString().toPaymentMethod(),
-      transactionType: json['transaction_type']?.toString().toTransactionType(),
+      transactionType: json['txn_type']?.toString().toTransactionType(),
       notes: json['notes'],
       attachmentUrl: json['attachment_url'],
-      transactionDate: DateTime.parse(json['transaction_date']),
+      transactionDate: DateTime.parse(json['txn_date']),
       createdAt: DateTime.parse(json['created_at']),
       updatedAt: DateTime.parse(json['updated_at']),
     );
@@ -73,11 +76,11 @@ class LedgerEntry {
 
   Map<String, dynamic> toJSON() {
     return {
-      'id': id,
+      'inv_number': invNumber,
       'type': type.name,
       'associated_id': associatedId,
       'name': name,
-      'transaction_category': transactionCategory?.name,
+      'txn_category': transactionCategory?.name,
       'amount': amount,
       'discount': discount,
       'grand_total': grandTotal,
@@ -85,10 +88,10 @@ class LedgerEntry {
       'remaining_due': remainingDue,
       'status': status,
       'payment_method': paymentMethod?.name,
-      'transaction_type': transactionType?.name,
+      'txn_type': transactionType?.name,
       'notes': notes,
       'attachment_url': attachmentUrl,
-      'transaction_date': transactionDate.toIso8601String(),
+      'txn_date': transactionDate.toIso8601String(),
       'created_at': createdAt.toIso8601String(),
       'updated_at': updatedAt.toIso8601String(),
     };

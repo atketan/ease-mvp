@@ -87,7 +87,7 @@ class _PurchaseInvoicesPageState extends State<PurchaseInvoicesPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Slidable(
-                          key: Key(invoice.id.toString()),
+                          key: Key(invoice.docId.toString()),
                           endActionPane: ActionPane(
                             motion: ScrollMotion(),
                             children: [
@@ -160,7 +160,7 @@ class _PurchaseInvoicesPageState extends State<PurchaseInvoicesPage> {
                                   )
                               ],
                             ),
-                            subtitle: Text('#${invoice.id}'),
+                            subtitle: Text('#${invoice.invNumber}'),
                             trailing: Text(
                               '₹${invoice.grandTotal?.toStringAsFixed(2)}',
                               style: Theme.of(context)

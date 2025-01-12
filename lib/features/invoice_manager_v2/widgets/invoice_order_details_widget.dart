@@ -48,7 +48,7 @@ class InvoiceOrderDetailsWidget extends StatelessWidget {
                               (context
                                       .read<InvoiceManagerCubit>()
                                       .ledgerEntry
-                                      .id ??
+                                      .invNumber ??
                                   ''),
                           style: Theme.of(context).textTheme.titleSmall,
                         ),

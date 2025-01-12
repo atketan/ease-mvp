@@ -83,7 +83,7 @@ class _SalesInvoicesListPageState extends State<SalesInvoicesListPage> {
                         itemBuilder: (context, index) {
                           final invoice = invoices[index];
                           return Slidable(
-                            key: Key(invoice.id.toString()),
+                            key: Key(invoice.docId.toString()),
                             // startActionPane: ActionPane(
                             //   motion: ScrollMotion(),
                             //   children: [
@@ -214,7 +214,7 @@ class _SalesInvoicesListPageState extends State<SalesInvoicesListPage> {
                                     )
                                 ],
                               ),
-                              subtitle: Text('#${invoice.id}'),
+                              subtitle: Text('#${invoice.invNumber}'),
                               trailing: Text(
                                 '₹${invoice.grandTotal?.toStringAsFixed(2)}',
                                 style: Theme.of(context)

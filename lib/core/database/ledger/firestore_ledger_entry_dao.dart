@@ -12,12 +12,17 @@ class FirestoreLedgerEntryDAO implements LedgerEntryDataSource {
   /// Create a new LedgerEntry document
   @override
   Future<void> createLedgerEntry(LedgerEntry entry) async {
-    final docRef = _firestore
+    // final docRef = _firestore
+    //     .collection('enterprises')
+    //     .doc(enterpriseId)
+    //     .collection(_collectionName)
+    //     .doc(entry.id);
+    // await docRef.set(entry.toJSON());
+    await _firestore
         .collection('enterprises')
         .doc(enterpriseId)
         .collection(_collectionName)
-        .doc(entry.id);
-    await docRef.set(entry.toJSON());
+        .add(entry.toJSON());
   }
 
   /// Read a single LedgerEntry by ID
@@ -30,7 +35,7 @@ class FirestoreLedgerEntryDAO implements LedgerEntryDataSource {
         .doc(id)
         .get();
     if (doc.exists) {
-      return LedgerEntry.fromJSON(doc.data()!);
+      return LedgerEntry.fromJSON(doc.data()!..['docId'] = doc.id);
     }
     return null;
   }
@@ -66,9 +71,9 @@ class FirestoreLedgerEntryDAO implements LedgerEntryDataSource {
         .doc(enterpriseId)
         .collection(_collectionName)
         .get();
-    return querySnapshot.docs
-        .map((doc) => LedgerEntry.fromJSON(doc.data()))
-        .toList();
+    return querySnapshot.docs.map((doc) {
+      return LedgerEntry.fromJSON(doc.data()..['docId'] = doc.id);
+    }).toList();
   }
 
   @override
@@ -79,9 +84,9 @@ class FirestoreLedgerEntryDAO implements LedgerEntryDataSource {
         .collection(_collectionName)
         .snapshots()
         .map((snapshot) {
-      return snapshot.docs
-          .map((doc) => LedgerEntry.fromJSON(doc.data()))
-          .toList();
+      return snapshot.docs.map((doc) {
+        return LedgerEntry.fromJSON(doc.data()..['docId'] = doc.id);
+      }).toList();
     });
   }
 
@@ -107,15 +112,18 @@ class FirestoreLedgerEntryDAO implements LedgerEntryDataSource {
     }
 
     if (startDate != null && endDate != null) {
-      query = query.where('transaction_date',
+      query = query.where('txn_date',
           isGreaterThanOrEqualTo: startDate.toIso8601String());
-      query = query.where('transaction_date',
+      query = query.where('txn_date',
           isLessThanOrEqualTo: endDate.toIso8601String());
     }
 
-    return query.snapshots().map((snapshot) => snapshot.docs
-        .map((doc) => LedgerEntry.fromJSON(doc.data() as Map<String, dynamic>))
-        .toList());
+    return query.snapshots().map((snapshot) => snapshot.docs.map((doc) {
+          final entry =
+              LedgerEntry.fromJSON((doc.data() as Map<String, dynamic>));
+          entry.docId = doc.id;
+          return entry;
+        }).toList());
   }
 
   /// Stream LedgerEntries for a specific customer/vendor
@@ -127,11 +135,11 @@ class FirestoreLedgerEntryDAO implements LedgerEntryDataSource {
         .doc(enterpriseId)
         .collection(_collectionName)
         .where('associated_id', isEqualTo: associatedId)
-        .orderBy('transaction_date', descending: true)
+        .orderBy('txn_date', descending: true)
         .snapshots()
-        .map((snapshot) => snapshot.docs
-            .map((doc) => LedgerEntry.fromJSON(doc.data()))
-            .toList());
+        .map((snapshot) => snapshot.docs.map((doc) {
+              return LedgerEntry.fromJSON(doc.data()..['docId'] = doc.id);
+            }).toList());
   }
 
   /// Get summary for a customer/vendor ledger (balance calculation)
