@@ -1,3 +1,6 @@
+import 'package:ease/core/database/ledger/ledger_entry_dao.dart';
+import 'package:ease/core/enums/ledger_enum_type.dart';
+import 'package:ease/core/models/ledger_entry.dart';
 import 'package:provider/provider.dart';
 import 'package:ease/core/database/vendors/vendors_dao.dart';
 import 'package:ease/core/models/vendor.dart';
@@ -30,6 +33,7 @@ class _UpdateVendorsPageState extends State<UpdateVendorsPage> {
 
   late VendorsDAO _vendorsDAO;
   late Vendor? vendor;
+  late LedgerEntryDAO _ledgerEntryDAO;
 
   @override
   void initState() {
@@ -85,7 +89,22 @@ class _UpdateVendorsPageState extends State<UpdateVendorsPage> {
           updatedAt: DateTime.now(),
           openingBalance: openingBalance,
         );
-        await _vendorsDAO.insertVendor(newVendor);
+        final vendorId = await _vendorsDAO.insertVendor(newVendor);
+
+        await _ledgerEntryDAO.createLedgerEntry(
+          LedgerEntry(
+            associatedId: vendorId,
+            name: name,
+            type: LedgerEntryType.openingBalance,
+            amount: openingBalance,
+            remainingDue: openingBalance,
+            // transactionType: TransactionType.debit, // To be paid to the vendor
+            notes: "Opening balance from previous system",
+            transactionDate: DateTime.now(),
+            createdAt: DateTime.now(),
+            updatedAt: DateTime.now(),
+          ),
+        );
       } else {
         Vendor updatedVendor = Vendor(
           id: widget.vendorId,
@@ -115,6 +134,8 @@ class _UpdateVendorsPageState extends State<UpdateVendorsPage> {
   @override
   Widget build(BuildContext context) {
     _vendorsDAO = Provider.of<VendorsDAO>(context);
+    _ledgerEntryDAO = Provider.of<LedgerEntryDAO>(context);
+
     return Scaffold(
       appBar: AppBar(
         title: Text(

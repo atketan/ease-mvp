@@ -1,3 +1,7 @@
+import 'package:ease/core/database/ledger/ledger_entry_dao.dart';
+import 'package:ease/core/enums/ledger_enum_type.dart';
+// import 'package:ease/core/enums/transaction_type_enum.dart';
+import 'package:ease/core/models/ledger_entry.dart';
 import 'package:provider/provider.dart';
 import 'package:ease/core/database/customers/customers_dao.dart';
 import 'package:ease/core/models/customer.dart';
@@ -30,6 +34,7 @@ class _UpdateCustomersPageState extends State<UpdateCustomersPage> {
 
   late CustomersDAO _customersDAO;
   late Customer? customer;
+  late LedgerEntryDAO _ledgerEntryDAO;
 
   @override
   void initState() {
@@ -85,7 +90,23 @@ class _UpdateCustomersPageState extends State<UpdateCustomersPage> {
           updatedAt: DateTime.now(),
           openingBalance: openingBalance,
         );
-        await _customersDAO.insertCustomer(newCustomer);
+        final customerId = await _customersDAO.insertCustomer(newCustomer);
+
+        await _ledgerEntryDAO.createLedgerEntry(
+          LedgerEntry(
+            associatedId: customerId,
+            name: name,
+            type: LedgerEntryType.openingBalance,
+            amount: openingBalance,
+            remainingDue: openingBalance,
+            // transactionType:
+            //     TransactionType.credit, // To be received from the customer
+            notes: "Opening balance from previous system",
+            transactionDate: DateTime.now(),
+            createdAt: DateTime.now(),
+            updatedAt: DateTime.now(),
+          ),
+        );
       } else {
         Customer updatedCustomer = Customer(
           id: widget.customerId,
@@ -115,6 +136,8 @@ class _UpdateCustomersPageState extends State<UpdateCustomersPage> {
   @override
   Widget build(BuildContext context) {
     _customersDAO = Provider.of<CustomersDAO>(context);
+    _ledgerEntryDAO = Provider.of<LedgerEntryDAO>(context);
+
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.mode == CustomersFormMode.Add
