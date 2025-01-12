@@ -1,7 +1,11 @@
+import 'package:ease/core/database/ledger/ledger_entry_dao.dart';
+import 'package:ease/core/enums/ledger_enum_type.dart';
+import 'package:ease/core/enums/transaction_category_enum.dart';
+import 'package:ease/core/models/ledger_entry.dart';
 import 'package:ease/core/utils/developer_log.dart';
 import 'package:flutter/material.dart';
-import '../../../core/database/invoices/invoices_dao.dart';
-import '../../../core/models/invoice.dart';
+// import '../../../core/database/invoices/invoices_dao.dart';
+// import '../../../core/models/invoice.dart';
 import 'dart:async';
 
 class InvoicesProvider with ChangeNotifier {
@@ -11,7 +15,8 @@ class InvoicesProvider with ChangeNotifier {
   DateTime _endDate;
   StreamSubscription<dynamic>? _invoicesSubscription;
 
-  InvoicesProvider(this._invoicesDAO)
+  // InvoicesProvider(this._invoicesDAO)
+  InvoicesProvider(this._ledgerEntryDAO)
       : defaultStartDate = DateTime.now().subtract(Duration(days: 30)).copyWith(
             hour: 0, minute: 0, second: 0, millisecond: 0, microsecond: 0),
         defaultEndDate = DateTime.now().copyWith(
@@ -21,31 +26,33 @@ class InvoicesProvider with ChangeNotifier {
         _endDate = DateTime.now().copyWith(
             hour: 23, minute: 59, second: 59, millisecond: 999, microsecond: 0);
 
-  final InvoicesDAO _invoicesDAO;
+  // final InvoicesDAO _invoicesDAO;
   // final VendorsDAO _vendorsDAO = VendorsDAO();
   // final CustomersDAO _customersDAO = CustomersDAO();
   // final PaymentHistoryDAO _paymentHistoryDAO = PaymentHistoryDAO();
 
-  List<Invoice> _unpaidInvoices = [];
-  List<Invoice> _paidInvoices = [];
+  final LedgerEntryDAO _ledgerEntryDAO;
+
+  // List<LedgerEntry> _unpaidInvoices = [];
+  // List<LedgerEntry> _paidInvoices = [];
   double _totalUnpaidAmount = 0.0;
   double _totalPaidAmount = 0.0;
   double _totalSalesAmount = 0.0;
   double _totalPurchaseAmount = 0.0;
 
-  List<Invoice> _allSalesInvoices = [];
-  List<Invoice> _allPurchaseInvoices = [];
-  List<Invoice> get allSalesInvoices => _allSalesInvoices;
-  List<Invoice> get allPurchaseInvoices => _allPurchaseInvoices;
+  List<LedgerEntry> _allSalesInvoices = [];
+  List<LedgerEntry> _allPurchaseInvoices = [];
+  List<LedgerEntry> get allSalesInvoices => _allSalesInvoices;
+  List<LedgerEntry> get allPurchaseInvoices => _allPurchaseInvoices;
 
-  List<Invoice> get unpaidInvoices =>
+  List<LedgerEntry> get unpaidInvoices =>
       _allSalesInvoices.where((invoice) => invoice.status == 'unpaid').toList();
-  List<Invoice> get paidInvoices =>
+  List<LedgerEntry> get paidInvoices =>
       _allSalesInvoices.where((invoice) => invoice.status == 'paid').toList();
-  List<Invoice> get unpaidPurchases => _allPurchaseInvoices
+  List<LedgerEntry> get unpaidPurchases => _allPurchaseInvoices
       .where((invoice) => invoice.status == 'unpaid')
       .toList();
-  List<Invoice> get paidPurchases => _allPurchaseInvoices
+  List<LedgerEntry> get paidPurchases => _allPurchaseInvoices
       .where((invoice) => invoice.status == 'paid')
       .toList();
 
@@ -83,57 +90,22 @@ class InvoicesProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  // Future<void> fetchAllSalesInvoices() async {
-  //   debugLog(
-  //       'fetchAllSalesInvoices called with startDate: $_startDate, endDate: $_endDate',
-  //       name: 'InvoicesProvider');
-  //   try {
-  //     _allSalesInvoices =
-  //         await _invoicesDAO.getSalesInvoicesByDateRange(_startDate, _endDate);
-  //     debugLog('Fetched ${_allSalesInvoices.length} sales invoices',
-  //         name: 'InvoicesProvider');
-  //     _calculateTotalPaidAmount();
-  //     _calculateTotalUnpaidAmount();
-  //     notifyListeners();
-  //   } catch (e) {
-  //     debugLog('Error fetching paid invoices: $e', name: 'InvoicesProvider');
-  //     // Handle the error appropriately
-  //   }
-  // }
-
-  // Future<void> fetchUnpaidInvoices() async {
-  //   debugLog(
-  //       'fetchUnpaidInvoices called with startDate: $_startDate, endDate: $_endDate',
-  //       name: 'InvoicesProvider');
-  //   try {
-  //     _unpaidInvoices =
-  //         await _invoicesDAO.getInvoicesByDateRangeAndPaymentStatus(
-  //       _startDate,
-  //       _endDate,
-  //       'unpaid', // Assuming 'unpaid' is the status for unpaid invoices
-  //     );
-  //     debugLog('Fetched ${_unpaidInvoices.length} unpaid invoices',
-  //         name: 'InvoicesProvider');
-  //     _calculateTotalUnpaidAmount();
-  //     notifyListeners();
-  //   } catch (e) {
-  //     debugLog('Error fetching unpaid invoices: $e', name: 'InvoicesProvider');
-  //     // Handle the error appropriately
-  //   }
-  // }
-
   void subscribeToInvoices() {
-    _invoicesSubscription = _invoicesDAO
-        .subscribeToInvoices(_startDate, _endDate)
+    _invoicesSubscription = _ledgerEntryDAO
+        .getLedgerEntriesStream(startDate: _startDate, endDate: _endDate)
         .listen((invoices) {
+      debugLog(
+          'Start date: $_startDate, End date: $_endDate, Length: ${invoices.length}',
+          name: 'InvoicesProvider');
       _allSalesInvoices = invoices
           .where((invoice) =>
-              invoice.customerId != null && invoice.vendorId == null)
+              invoice.type == LedgerEntryType.invoice &&
+              invoice.transactionCategory == TransactionCategory.sales)
           .toList();
       _allPurchaseInvoices = invoices
           .where((invoice) =>
-              invoice.vendorId.toString().isNotEmpty &&
-              invoice.customerId.toString().isEmpty)
+              invoice.type == LedgerEntryType.invoice &&
+              invoice.transactionCategory == TransactionCategory.purchase)
           .toList();
 
       debugLog(
@@ -156,62 +128,15 @@ class InvoicesProvider with ChangeNotifier {
   void _calculateTotalSalesAmount() {
     _totalSalesAmount = _allSalesInvoices.fold(
       0,
-      (sum, invoice) => sum + invoice.grandTotal,
+      (sum, invoice) => sum + (invoice.grandTotal ?? 0.0),
     );
   }
 
   void _calculateTotalPurchaseAmount() {
     _totalPurchaseAmount = _allPurchaseInvoices.fold(
       0,
-      (sum, invoice) => sum + invoice.grandTotal,
+      (sum, invoice) => sum + (invoice.grandTotal ?? 0.0),
     );
-  }
-
-  void _calculateTotalUnpaidAmount() {
-    _totalUnpaidAmount = _unpaidInvoices.fold(
-      0,
-      (sum, invoice) => sum + invoice.grandTotal,
-    );
-  }
-
-  // Future<void> fetchPaidInvoices() async {
-  //   debugLog(
-  //       'fetchPaidInvoices called with startDate: $_startDate, endDate: $_endDate',
-  //       name: 'InvoicesProvider');
-  //   try {
-  //     _paidInvoices = await _invoicesDAO.getInvoicesByDateRangeAndPaymentStatus(
-  //       _startDate,
-  //       _endDate,
-  //       'paid', // Assuming 'paid' is the status for paid invoices
-  //     );
-  //     debugLog('Fetched ${_paidInvoices.length} paid invoices',
-  //         name: 'InvoicesProvider');
-  //     _calculateTotalPaidAmount();
-  //     notifyListeners();
-  //   } catch (e) {
-  //     debugLog('Error fetching paid invoices: $e', name: 'InvoicesProvider');
-  //     // Handle the error appropriately
-  //   }
-  // }
-
-  void _calculateTotalPaidAmount() {
-    _totalPaidAmount = _paidInvoices.fold(
-      0,
-      (sum, invoice) => sum + invoice.grandTotal,
-    );
-  }
-
-  Future<void> markInvoiceAsPaid(Invoice invoice) async {
-    try {
-      await _invoicesDAO.markInvoiceAsPaid(invoice.invoiceId!);
-      _unpaidInvoices.remove(invoice);
-      _calculateTotalUnpaidAmount();
-      _calculateTotalPaidAmount();
-      notifyListeners();
-    } catch (e) {
-      debugLog('Error marking invoice as paid: $e', name: 'InvoicesProvider');
-      // Handle the error appropriately
-    }
   }
 
   @override

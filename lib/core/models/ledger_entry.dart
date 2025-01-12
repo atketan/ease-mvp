@@ -7,9 +7,12 @@ class LedgerEntry {
   String? id; // Firestore document ID
   LedgerEntryType type; // Enum for type ("invoice", "payment", etc.)
   String? associatedId; // Customer or vendor ID
+  String? name; // Name of customer or vendor
   TransactionCategory?
       transactionCategory; // "sales", "purchase", "expense", or "other"
   double amount; // Total amount for the entry
+  double? discount;
+  double? grandTotal;
   double?
       initialPaid; // Amount paid at the time of invoice creation (if type = "invoice")
   double? remainingDue; // Outstanding amount (if type = "invoice")
@@ -29,6 +32,8 @@ class LedgerEntry {
     this.associatedId,
     this.transactionCategory,
     required this.amount,
+    this.discount,
+    this.grandTotal,
     this.initialPaid,
     this.remainingDue,
     this.status,
@@ -49,6 +54,8 @@ class LedgerEntry {
       transactionCategory:
           json['transaction_category']?.toString().toTransactionCategory(),
       amount: json['amount'],
+      discount: json['discount'],
+      grandTotal: json['grand_total'],
       initialPaid: json['initial_paid'],
       remainingDue: json['remaining_due'],
       status: json['status'],
@@ -69,6 +76,8 @@ class LedgerEntry {
       'associated_id': associatedId,
       'transaction_category': transactionCategory?.name,
       'amount': amount,
+      'discount': discount,
+      'grand_total': grandTotal,
       'initial_paid': initialPaid,
       'remaining_due': remainingDue,
       'status': status,

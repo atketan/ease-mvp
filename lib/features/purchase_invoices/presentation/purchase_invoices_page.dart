@@ -1,8 +1,7 @@
 import 'package:ease/core/database/customers/customers_dao.dart';
-import 'package:ease/core/database/invoices/invoices_dao.dart';
-import 'package:ease/core/database/payments/payments_dao.dart';
+import 'package:ease/core/database/ledger/ledger_entry_dao.dart';
 import 'package:ease/core/database/vendors/vendors_dao.dart';
-import 'package:ease/core/enums/invoice_type_enum.dart';
+import 'package:ease/core/enums/transaction_category_enum.dart';
 import 'package:ease/core/utils/developer_log.dart';
 import 'package:ease/features/home_invoices/data/invoices_provider.dart';
 import 'package:ease/features/home_invoices/widgets/custom_chip_tags_widget.dart';
@@ -21,7 +20,7 @@ class PurchaseInvoicesProviderWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (context) => InvoicesProvider(context.read<InvoicesDAO>()),
+      create: (context) => InvoicesProvider(context.read<LedgerEntryDAO>()),
       child: PurchaseInvoicesPage(),
     );
   }
@@ -33,10 +32,9 @@ class PurchaseInvoicesPage extends StatefulWidget {
 }
 
 class _PurchaseInvoicesPageState extends State<PurchaseInvoicesPage> {
-  late InvoicesDAO _invoicesDAO;
-  late PaymentsDAO _paymentsDAO;
   late CustomersDAO _customersDAO;
   late VendorsDAO _vendorsDAO;
+  late LedgerEntryDAO _ledgerEntryDAO;
 
   @override
   void initState() {
@@ -51,10 +49,9 @@ class _PurchaseInvoicesPageState extends State<PurchaseInvoicesPage> {
 
   @override
   Widget build(BuildContext context) {
-    _invoicesDAO = Provider.of<InvoicesDAO>(context);
-    _paymentsDAO = Provider.of<PaymentsDAO>(context);
     _customersDAO = Provider.of<CustomersDAO>(context);
     _vendorsDAO = Provider.of<VendorsDAO>(context);
+    _ledgerEntryDAO = Provider.of<LedgerEntryDAO>(context);
 
     return Consumer<InvoicesProvider>(
       builder: (context, invoicesProvider, child) {
@@ -103,15 +100,15 @@ class _PurchaseInvoicesPageState extends State<PurchaseInvoicesPage> {
                                           BlocProvider(
                                         create: (context) =>
                                             InvoiceManagerCubit(
-                                          _invoicesDAO,
-                                          _paymentsDAO,
                                           _customersDAO,
                                           _vendorsDAO,
-                                          InvoiceType.Purchase,
+                                          _ledgerEntryDAO,
+                                          TransactionCategory.purchase,
                                         ),
                                         child: InvoiceManagerV2(
                                           invoiceFormMode: InvoiceFormMode.Edit,
-                                          invoice: invoice,
+                                          // invoice: invoice,
+                                          ledgerEntry: invoice,
                                         ),
                                       ),
                                     ),
@@ -129,12 +126,14 @@ class _PurchaseInvoicesPageState extends State<PurchaseInvoicesPage> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  DateFormat('MMM').format(invoice.date),
+                                  DateFormat('MMM')
+                                      .format(invoice.transactionDate),
                                   style:
                                       Theme.of(context).textTheme.labelMedium,
                                 ),
                                 Text(
-                                  DateFormat('d').format(invoice.date),
+                                  DateFormat('d')
+                                      .format(invoice.transactionDate),
                                   style: Theme.of(context).textTheme.titleLarge,
                                 ),
                               ],
@@ -161,9 +160,9 @@ class _PurchaseInvoicesPageState extends State<PurchaseInvoicesPage> {
                                   )
                               ],
                             ),
-                            subtitle: Text('#${invoice.invoiceNumber}'),
+                            subtitle: Text('#${invoice.id}'),
                             trailing: Text(
-                              '₹${invoice.grandTotal.toStringAsFixed(2)}',
+                              '₹${invoice.grandTotal?.toStringAsFixed(2)}',
                               style: Theme.of(context)
                                   .textTheme
                                   .titleMedium!
@@ -178,15 +177,15 @@ class _PurchaseInvoicesPageState extends State<PurchaseInvoicesPage> {
                                   builder: (BuildContext context) =>
                                       BlocProvider(
                                     create: (context) => InvoiceManagerCubit(
-                                      _invoicesDAO,
-                                      _paymentsDAO,
                                       _customersDAO,
                                       _vendorsDAO,
-                                      InvoiceType.Purchase,
+                                      _ledgerEntryDAO,
+                                      TransactionCategory.purchase,
                                     ),
                                     child: InvoiceManagerV2(
                                       invoiceFormMode: InvoiceFormMode.Edit,
-                                      invoice: invoice,
+                                      // invoice: invoice,
+                                      ledgerEntry: invoice,
                                     ),
                                   ),
                                 ),

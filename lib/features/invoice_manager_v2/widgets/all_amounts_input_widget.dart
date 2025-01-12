@@ -33,16 +33,31 @@ class AllAmountsInputWidgetState extends State<AllAmountsInputWidget> {
   @override
   void initState() {
     if (widget.allAmountsFormMode == AllAmountsFormMode.Edit) {
+      // _totalAmountTextController.text =
+      //     context.read<InvoiceManagerCubit>().invoice.totalAmount.toString();
+      // _discountTextController.text =
+      //     context.read<InvoiceManagerCubit>().invoice.discount.toString();
+      // _totalPaidTextController.text =
+      //     context.read<InvoiceManagerCubit>().invoice.totalPaid.toString();
+      // _selectedPaymentMethod = context
+      //     .read<InvoiceManagerCubit>()
+      //     .invoice
+      //     .paymentType
+      //     .toPaymentMethod();
       _totalAmountTextController.text =
-          context.read<InvoiceManagerCubit>().invoice.totalAmount.toString();
+          context.read<InvoiceManagerCubit>().ledgerEntry.amount.toString();
       _discountTextController.text =
-          context.read<InvoiceManagerCubit>().invoice.discount.toString();
-      _totalPaidTextController.text =
-          context.read<InvoiceManagerCubit>().invoice.totalPaid.toString();
+          context.read<InvoiceManagerCubit>().ledgerEntry.discount.toString();
+      _totalPaidTextController.text = context
+          .read<InvoiceManagerCubit>()
+          .ledgerEntry
+          .initialPaid
+          .toString();
       _selectedPaymentMethod = context
           .read<InvoiceManagerCubit>()
-          .invoice
-          .paymentType
+          .ledgerEntry
+          .paymentMethod
+          .toString()
           .toPaymentMethod();
     }
     super.initState();
@@ -65,11 +80,14 @@ class AllAmountsInputWidgetState extends State<AllAmountsInputWidget> {
         builder: (context, state) {
           if (state is InvoiceManagerLoaded) {
             debugLog(
-                'State: $state, Invoice: ${state.invoice.toJSON().toString()}',
+                'State: $state, Invoice: ${state.ledgerEntry.toJSON().toString()}',
                 name: 'AllAmountsInputWidget');
           }
-          _grandTotalTextController.text =
-              context.read<InvoiceManagerCubit>().invoice.grandTotal.toString();
+          _grandTotalTextController.text = context
+              .read<InvoiceManagerCubit>()
+              .ledgerEntry
+              .grandTotal
+              .toString();
 
           return Column(
             mainAxisAlignment: MainAxisAlignment.start,

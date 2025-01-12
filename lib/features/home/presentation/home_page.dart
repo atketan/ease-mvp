@@ -1,8 +1,7 @@
 import 'package:ease/core/database/customers/customers_dao.dart';
-import 'package:ease/core/database/invoices/invoices_dao.dart';
-import 'package:ease/core/database/payments/payments_dao.dart';
+import 'package:ease/core/database/ledger/ledger_entry_dao.dart';
 import 'package:ease/core/database/vendors/vendors_dao.dart';
-import 'package:ease/core/enums/invoice_type_enum.dart';
+import 'package:ease/core/enums/transaction_category_enum.dart';
 import 'package:ease/core/models/app_user_configuration.dart';
 import 'package:ease/core/service_locator/service_locator.dart';
 import 'package:ease/core/utils/developer_log.dart';
@@ -32,10 +31,9 @@ class _EASEHomePageState extends State<EASEHomePage>
     with SingleTickerProviderStateMixin {
   late Animation<double> _animation;
   late AnimationController _animationController;
-  late InvoicesDAO _invoicesDAO;
-  late PaymentsDAO _paymentsDAO;
   late CustomersDAO _customersDAO;
   late VendorsDAO _vendorsDAO;
+  late LedgerEntryDAO _ledgerEntryDAO;
 
   @override
   void initState() {
@@ -115,10 +113,9 @@ class _EASEHomePageState extends State<EASEHomePage>
 
   @override
   Widget build(BuildContext context) {
-    _invoicesDAO = Provider.of<InvoicesDAO>(context);
-    _paymentsDAO = Provider.of<PaymentsDAO>(context);
     _customersDAO = Provider.of<CustomersDAO>(context);
     _vendorsDAO = Provider.of<VendorsDAO>(context);
+    _ledgerEntryDAO = Provider.of<LedgerEntryDAO>(context);
 
     return FutureBuilder<bool>(
       future: _requestPermissions(),
@@ -143,7 +140,7 @@ class _EASEHomePageState extends State<EASEHomePage>
         return MultiProvider(
           providers: [
             ChangeNotifierProvider(
-                create: (context) => InvoicesProvider(_invoicesDAO)),
+                create: (context) => InvoicesProvider(_ledgerEntryDAO)),
             // ChangeNotifierProvider(
             //     create: (context) => DashboardDataProvider()),
           ],
@@ -197,11 +194,10 @@ class _EASEHomePageState extends State<EASEHomePage>
                       MaterialPageRoute(
                         builder: (BuildContext context) => BlocProvider(
                           create: (context) => InvoiceManagerCubit(
-                            _invoicesDAO,
-                            _paymentsDAO,
                             _customersDAO,
                             _vendorsDAO,
-                            InvoiceType.Sales,
+                            _ledgerEntryDAO,
+                            TransactionCategory.sales,
                           ),
                           child: InvoiceManagerV2(
                             invoiceFormMode: InvoiceFormMode.Add,
@@ -227,11 +223,10 @@ class _EASEHomePageState extends State<EASEHomePage>
                       MaterialPageRoute(
                         builder: (BuildContext context) => BlocProvider(
                           create: (context) => InvoiceManagerCubit(
-                            _invoicesDAO,
-                            _paymentsDAO,
                             _customersDAO,
                             _vendorsDAO,
-                            InvoiceType.Purchase,
+                            _ledgerEntryDAO,
+                            TransactionCategory.purchase,
                           ),
                           child: InvoiceManagerV2(
                             invoiceFormMode: InvoiceFormMode.Add,

@@ -29,4 +29,26 @@ class LedgerEntryDAO {
   Stream<List<LedgerEntry>> subscribeToLedgerEntries() {
     return _dataSource.subscribeToLedgerEntries();
   }
+
+  Stream<List<LedgerEntry>> getLedgerEntriesStream({
+    String? type,
+    String? associatedId,
+    DateTime? startDate,
+    DateTime? endDate,
+  }) {
+    return _dataSource.getLedgerEntriesStream(
+        type: type,
+        associatedId: associatedId,
+        startDate: startDate,
+        endDate: endDate);
+  }
+
+  Stream<List<LedgerEntry>> getLedgerEntriesByAssociatedId(
+      String associatedId) {
+    return _dataSource.getLedgerEntriesByAssociatedId(associatedId);
+  }
+
+  Future<Map<String, double>> getLedgerSummary(String associatedId) {
+    return _dataSource.getLedgerSummary(associatedId);
+  }
 }

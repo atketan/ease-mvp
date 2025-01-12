@@ -1,13 +1,12 @@
 import 'package:bloc/bloc.dart';
 import 'package:ease/core/database/customers/customers_dao.dart';
-import 'package:ease/core/database/invoices/invoices_dao.dart';
-import 'package:ease/core/database/payments/payments_dao.dart';
+import 'package:ease/core/database/ledger/ledger_entry_dao.dart';
 import 'package:ease/core/database/vendors/vendors_dao.dart';
-import 'package:ease/core/enums/invoice_type_enum.dart';
+import 'package:ease/core/enums/ledger_enum_type.dart';
 import 'package:ease/core/enums/payment_method_enum.dart';
+import 'package:ease/core/enums/transaction_category_enum.dart';
 import 'package:ease/core/models/customer.dart';
-import 'package:ease/core/models/invoice.dart';
-import 'package:ease/core/models/payment.dart';
+import 'package:ease/core/models/ledger_entry.dart';
 import 'package:ease/core/models/vendor.dart';
 import 'package:ease/core/utils/date_time_utils.dart';
 import 'package:ease/core/utils/developer_log.dart';
@@ -19,148 +18,166 @@ import 'invoice_manager_v2_cubit_state.dart';
 
 class InvoiceManagerCubit extends Cubit<InvoiceManagerCubitState> {
   InvoiceManagerCubit(
-    this._invoiceDAO,
-    this._paymentsDAO,
     this._customersDAO,
     this._vendorsDAO,
-    this.invoiceType,
+    this._ledgerEntryDAO,
+    this.transactionCategory,
   ) : super(InvoiceManagerInitial());
 
-  final InvoicesDAO _invoiceDAO;
-  final PaymentsDAO _paymentsDAO;
   final CustomersDAO _customersDAO;
   final VendorsDAO _vendorsDAO;
+  final LedgerEntryDAO _ledgerEntryDAO;
 
-  late Invoice _invoice;
+  // late Invoice _invoice;
+  late LedgerEntry _ledgerEntry;
 
   late String
       phoneNumber; // Used to store the phone number of the customer/vendor temporarily for displaying in the entity typeahead field
-  final InvoiceType invoiceType;
+  final TransactionCategory transactionCategory;
 
-  void initialiseInvoiceModelInstance(Invoice? invoice, String invoiceNumber) {
-    if (invoice == null) {
-      _invoice = Invoice(
-        customerId: '',
-        name: '',
-        invoiceNumber: invoiceNumber,
-        date: DateTime.now(),
+  void initialiseInvoiceModelInstance(
+      LedgerEntry? ledgerEntry, String invoiceNumber) {
+    if (ledgerEntry == null) {
+      // _invoice = Invoice(
+      //   customerId: '',
+      //   name: '',
+      //   invoiceNumber: invoiceNumber,
+      //   date: DateTime.now(),
+      //   createdAt: DateTime.now(),
+      //   updatedAt: DateTime.now(),
+      //   totalAmount: 0.0,
+      //   discount: 0.0,
+      //   taxes: 0.0,
+      //   grandTotal: 0.0,
+      //   totalPaid: 0.0,
+      //   totalDue: 0.0,
+      //   paymentType: 'cash',
+      //   status: 'unpaid',
+      //   notes: "",
+      // );
+      _ledgerEntry = LedgerEntry(
+        type: LedgerEntryType.invoice,
+        amount: 0.0,
+        transactionDate: DateTime.now(),
+        transactionCategory: transactionCategory,
         createdAt: DateTime.now(),
         updatedAt: DateTime.now(),
-        totalAmount: 0.0,
-        discount: 0.0,
-        taxes: 0.0,
-        grandTotal: 0.0,
-        totalPaid: 0.0,
-        totalDue: 0.0,
-        paymentType: 'cash',
-        status: 'unpaid',
-        notes: "",
       );
     } else {
-      _invoice = invoice;
+      // _invoice = invoice;
+      _ledgerEntry = ledgerEntry;
     }
-    emit(InvoiceManagerLoaded(invoice: _invoice));
+    emit(InvoiceManagerLoaded(ledgerEntry: _ledgerEntry));
   }
 
   void populateInvoiceData() async {
     debugLog(
         "Populating invoice data, preset invoice data: " +
-            _invoice.toJSON().toString(),
+            _ledgerEntry.toJSON().toString(),
         name: 'InvoiceManagerCubit');
     await _getPaymentsByInvoiceId();
   }
 
-  Invoice get invoice => _invoice;
+  // Invoice get invoice => _invoice;
+  LedgerEntry get ledgerEntry => _ledgerEntry;
 
   void setCustomerId(String customerId) {
-    _invoice.customerId = customerId;
-    // emit(InvoiceManagerLoaded(invoice: _invoice));
+    // _invoice.customerId = customerId;
+    _ledgerEntry.associatedId = customerId;
+    // emit(InvoiceManagerLoaded(ledgerEntry: _ledgerEntry));
   }
 
   void setVendorId(String vendorId) {
-    _invoice.vendorId = vendorId;
-    // emit(InvoiceManagerLoaded(invoice: _invoice));
+    // _invoice.vendorId = vendorId;
+    _ledgerEntry.associatedId = vendorId;
+    // emit(InvoiceManagerLoaded(ledgerEntry: _ledgerEntry));
   }
 
   void setTotalAmount(double totalAmount) async {
-    _invoice.totalAmount = totalAmount;
+    // _invoice.totalAmount = totalAmount;
+    _ledgerEntry.amount = totalAmount;
     await _updateInvoiceAmounts();
-    emit(InvoiceManagerLoaded(invoice: _invoice));
+    emit(InvoiceManagerLoaded(ledgerEntry: _ledgerEntry));
   }
 
   void setDiscount(double discount) async {
-    _invoice.discount = discount;
+    // _invoice.discount = discount;
+    _ledgerEntry.discount = discount;
     await _updateInvoiceAmounts();
-    emit(InvoiceManagerLoaded(invoice: _invoice));
+    emit(InvoiceManagerLoaded(ledgerEntry: _ledgerEntry));
   }
 
   void setTotalPaidAmount(double totalPaid) async {
-    _invoice.totalPaid = totalPaid;
+    // _invoice.totalPaid = totalPaid;
+    _ledgerEntry.initialPaid = totalPaid;
     await _updateInvoiceAmounts();
-    emit(InvoiceManagerLoaded(invoice: _invoice));
+    emit(InvoiceManagerLoaded(ledgerEntry: _ledgerEntry));
   }
 
   void setPaymentMethod(PaymentMethod selectedPaymentMethod) {
-    _invoice.paymentType = selectedPaymentMethod.name;
+    // _invoice.paymentType = selectedPaymentMethod.name;
+    _ledgerEntry.paymentMethod = selectedPaymentMethod;
   }
 
   void updateInvoiceAmounts() async {
     await _updateInvoiceAmounts();
-    emit(InvoiceManagerLoaded(invoice: _invoice));
+    emit(InvoiceManagerLoaded(ledgerEntry: _ledgerEntry));
   }
 
   Future<bool> _updateInvoiceAmounts() async {
-    _invoice.grandTotal = _invoice.totalAmount - _invoice.discount;
+    // _invoice.grandTotal = _invoice.totalAmount - _invoice.discount;
+    _ledgerEntry.grandTotal =
+        _ledgerEntry.amount - (_ledgerEntry.discount ?? 0);
 
     // _invoice.totalPaid = _invoice.payments
     //     .fold(0.0, (previousValue, element) => previousValue + element.amount);
-    _invoice.totalDue = _invoice.grandTotal - _invoice.totalPaid;
+    // _invoice.totalDue = _invoice.grandTotal - _invoice.totalPaid;
+    _ledgerEntry.remainingDue =
+        _ledgerEntry.grandTotal = _ledgerEntry.initialPaid;
 
-    if (_invoice.totalDue == 0.0)
-      _invoice.status = 'paid';
+    // if (_invoice.totalDue == 0.0)
+    //   _invoice.status = 'paid';
+    // else
+    //   _invoice.status = 'unpaid';
+    if (_ledgerEntry.remainingDue == 0.0)
+      _ledgerEntry.status = 'paid';
     else
-      _invoice.status = 'unpaid';
+      _ledgerEntry.status = 'unpaid';
 
     return Future.value(true);
   }
 
-  void updateStatus(String paymentStatus) {
-    _invoice.status = paymentStatus;
-    emit(InvoiceManagerLoaded(invoice: _invoice));
-  }
-
-  void updatePaymentType(String paymentType) {
-    _invoice.paymentType = paymentType;
-    emit(InvoiceManagerLoaded(invoice: _invoice));
-  }
-
   Future<bool> saveInvoice() async {
-    String invoiceId = await _invoiceDAO.insertInvoice(_invoice);
+    // String invoiceId = await _invoiceDAO.insertInvoice(_invoice);
 
-    _invoice.payments.forEach((element) async {
-      element.invoiceId = invoiceId;
-      await _paymentsDAO.insertPayment(element);
-    });
+    // _invoice.payments.forEach((element) async {
+    //   element.invoiceId = invoiceId;
+    //   await _paymentsDAO.insertPayment(element);
+    // });
 
+    _ledgerEntryDAO.createLedgerEntry(_ledgerEntry);
     return Future.value(true);
   }
 
   Future<bool> updateInvoice() async {
-    _invoice.updatedAt = DateTime.now();
+    // _invoice.updatedAt = DateTime.now();
+    _ledgerEntry.updatedAt = DateTime.now();
 
-    for (var element in _invoice.payments) {
-      if (element.id != null) {
-        // Update existing payment
-        await _paymentsDAO.updatePayment(element);
-      } else {
-        // Insert new payment
-        element.invoiceId = _invoice.invoiceId; // Ensure the invoiceId is set
-        await _paymentsDAO.insertPayment(element);
-      }
-    }
+    // for (var element in _invoice.payments) {
+    //   if (element.id != null) {
+    //     // Update existing payment
+    //     await _paymentsDAO.updatePayment(element);
+    //   } else {
+    //     // Insert new payment
+    //     element.invoiceId = _invoice.invoiceId; // Ensure the invoiceId is set
+    //     await _paymentsDAO.insertPayment(element);
+    //   }
+    // }
 
-    debugLog("Update invoice: " + _invoice.toJSON().toString());
-    await _invoiceDAO.updateInvoice(_invoice); // Update the invoice itself
+    // debugLog("Update invoice: " + _invoice.toJSON().toString());
+    // await _invoiceDAO.updateInvoice(_invoice); // Update the invoice itself
+    _ledgerEntryDAO.updateLedgerEntry(
+        _ledgerEntry.id ?? "", _ledgerEntry.toJSON());
 
     return Future.value(true);
   }
@@ -169,44 +186,40 @@ class InvoiceManagerCubit extends Cubit<InvoiceManagerCubitState> {
     if (bool) {
       emit(InvoiceManagerLoading());
     } else {
-      emit(InvoiceManagerLoaded(invoice: _invoice));
+      emit(InvoiceManagerLoaded(ledgerEntry: _ledgerEntry));
     }
   }
 
   void updateInvoiceNotes(String notes) {
-    _invoice.notes = notes;
-    emit(InvoiceManagerLoaded(invoice: _invoice));
+    // _invoice.notes = notes;
+    _ledgerEntry.notes = notes;
+    emit(InvoiceManagerLoaded(ledgerEntry: _ledgerEntry));
   }
 
   String formatInvoiceDetails() {
     // Start building the formatted string
     StringBuffer buffer = StringBuffer();
-    buffer.writeln('Invoice ID: ${_invoice.id}');
-    buffer.writeln('Date: ${formatInvoiceDate(_invoice.date)}');
+    buffer.writeln('Invoice ID: ${_ledgerEntry.id}');
+    buffer.writeln('Date: ${formatInvoiceDate(_ledgerEntry.transactionDate)}');
 
     buffer.writeln('-----------------------------------');
-    buffer.writeln('Total Amount: ${_invoice.totalAmount.toStringAsFixed(2)}');
-    buffer.writeln('Discount: ${_invoice.discount.toStringAsFixed(2)}');
-    buffer
-        .writeln('Total Payable: ${(_invoice.grandTotal).toStringAsFixed(2)}');
+    buffer.writeln('Total Amount: ${_ledgerEntry.amount.toStringAsFixed(2)}');
+    buffer.writeln('Discount: ${_ledgerEntry.discount?.toStringAsFixed(2)}');
+    buffer.writeln(
+        'Total Payable: ${_ledgerEntry.grandTotal?.toStringAsFixed(2)}');
 
     return buffer.toString();
   }
 
   void setEntityName(String clientName) {
-    invoice.name = clientName;
-    emit(InvoiceManagerLoaded(invoice: _invoice));
+    // invoice.name = clientName;
+    _ledgerEntry.name = clientName;
+    emit(InvoiceManagerLoaded(ledgerEntry: _ledgerEntry));
   }
 
   Future<void> _getPaymentsByInvoiceId() async {
-    invoice.payments =
-        await _paymentsDAO.getPaymentsByInvoiceId(invoice.invoiceId ?? "");
-  }
-
-  void addPayment(Payment newPayment) {
-    invoice.payments.add(newPayment);
-    updateInvoiceAmounts();
-    // emit(InvoiceManagerLoaded(invoice: _invoice));
+    // invoice.payments =
+    //     await _paymentsDAO.getPaymentsByInvoiceId(invoice.invoiceId ?? "");
   }
 
   Future<void> insertNewCustomer(
@@ -226,7 +239,8 @@ class InvoiceManagerCubit extends Cubit<InvoiceManagerCubitState> {
         ),
       );
       setCustomerId(newId);
-      invoice.name = name;
+      // invoice.name = name;
+      _ledgerEntry.name = name;
       phoneNumber = phone;
     }
   }
@@ -248,14 +262,16 @@ class InvoiceManagerCubit extends Cubit<InvoiceManagerCubitState> {
         ),
       );
       setVendorId(newId);
-      invoice.name = name;
+      // invoice.name = name;
+      _ledgerEntry.name = name;
       phoneNumber = phone;
     }
   }
 
   void setInvoiceDate(DateTime value) {
-    _invoice.date = value;
-    emit(InvoiceManagerLoaded(invoice: _invoice));
+    // _invoice.date = value;
+    _ledgerEntry.transactionDate = value;
+    emit(InvoiceManagerLoaded(ledgerEntry: _ledgerEntry));
   }
 
   void updateInvoiceUrl(String downloadUrl) {}

@@ -1,9 +1,9 @@
 import 'package:ease/core/database/customers/customers_dao.dart';
-import 'package:ease/core/database/invoices/invoices_dao.dart';
-import 'package:ease/core/database/payments/payments_dao.dart';
+import 'package:ease/core/database/ledger/ledger_entry_dao.dart';
 import 'package:ease/core/database/vendors/vendors_dao.dart';
-import 'package:ease/core/enums/invoice_type_enum.dart';
-import 'package:ease/core/models/invoice.dart';
+import 'package:ease/core/enums/transaction_category_enum.dart';
+import 'package:ease/core/models/ledger_entry.dart';
+// import 'package:ease/core/models/invoice.dart';
 import 'package:ease/core/utils/developer_log.dart';
 import 'package:ease/features/home_invoices/widgets/custom_chip_tags_widget.dart';
 import 'package:ease/features/invoice_manager_v2/bloc/invoice_manager_v2_cubit.dart';
@@ -24,10 +24,9 @@ class PurchaseInvoicesListPage extends StatefulWidget {
 }
 
 class _PurchaseInvoicesListPageState extends State<PurchaseInvoicesListPage> {
-  late InvoicesDAO _invoicesDAO;
-  late PaymentsDAO _paymentsDAO;
   late CustomersDAO _customersDAO;
   late VendorsDAO _vendorsDAO;
+  late LedgerEntryDAO _ledgerEntryDAO;
 
   @override
   void initState() {
@@ -42,10 +41,9 @@ class _PurchaseInvoicesListPageState extends State<PurchaseInvoicesListPage> {
 
   @override
   Widget build(BuildContext context) {
-    _invoicesDAO = Provider.of<InvoicesDAO>(context);
-    _paymentsDAO = Provider.of<PaymentsDAO>(context);
     _customersDAO = Provider.of<CustomersDAO>(context);
     _vendorsDAO = Provider.of<VendorsDAO>(context);
+    _ledgerEntryDAO = Provider.of<LedgerEntryDAO>(context);
 
     return Consumer<InvoicesProvider>(
       builder: (context, invoicesProvider, child) {
@@ -151,16 +149,15 @@ class _PurchaseInvoicesListPageState extends State<PurchaseInvoicesListPage> {
                                             BlocProvider(
                                           create: (context) =>
                                               InvoiceManagerCubit(
-                                            _invoicesDAO,
-                                            _paymentsDAO,
                                             _customersDAO,
                                             _vendorsDAO,
-                                            InvoiceType.Purchase,
+                                            _ledgerEntryDAO,
+                                            TransactionCategory.purchase,
                                           ),
                                           child: InvoiceManagerV2(
                                             invoiceFormMode:
                                                 InvoiceFormMode.Edit,
-                                            invoice: invoice,
+                                            ledgerEntry: invoice,
                                           ),
                                         ),
                                       ),
@@ -181,12 +178,14 @@ class _PurchaseInvoicesListPageState extends State<PurchaseInvoicesListPage> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                    DateFormat('MMM').format(invoice.date),
+                                    DateFormat('MMM')
+                                        .format(invoice.transactionDate),
                                     style:
                                         Theme.of(context).textTheme.labelMedium,
                                   ),
                                   Text(
-                                    DateFormat('d').format(invoice.date),
+                                    DateFormat('d')
+                                        .format(invoice.transactionDate),
                                     style:
                                         Theme.of(context).textTheme.titleLarge,
                                   ),
@@ -215,9 +214,9 @@ class _PurchaseInvoicesListPageState extends State<PurchaseInvoicesListPage> {
                                     )
                                 ],
                               ),
-                              subtitle: Text('#${invoice.invoiceNumber}'),
+                              subtitle: Text('#${invoice.id}'),
                               trailing: Text(
-                                '₹${invoice.grandTotal.toStringAsFixed(2)}',
+                                '₹${invoice.grandTotal?.toStringAsFixed(2)}',
                                 style: Theme.of(context)
                                     .textTheme
                                     .titleMedium!
@@ -232,15 +231,14 @@ class _PurchaseInvoicesListPageState extends State<PurchaseInvoicesListPage> {
                                     builder: (BuildContext context) =>
                                         BlocProvider(
                                       create: (context) => InvoiceManagerCubit(
-                                        _invoicesDAO,
-                                        _paymentsDAO,
                                         _customersDAO,
                                         _vendorsDAO,
-                                        InvoiceType.Purchase,
+                                        _ledgerEntryDAO,
+                                        TransactionCategory.purchase,
                                       ),
                                       child: InvoiceManagerV2(
                                         invoiceFormMode: InvoiceFormMode.Edit,
-                                        invoice: invoice,
+                                        ledgerEntry: invoice,
                                       ),
                                     ),
                                   ),
@@ -267,10 +265,11 @@ class _PurchaseInvoicesListPageState extends State<PurchaseInvoicesListPage> {
     );
   }
 
-  Map<String, List<Invoice>> _groupInvoicesByMonth(List<Invoice> invoices) {
-    final Map<String, List<Invoice>> groupedInvoices = {};
+  Map<String, List<LedgerEntry>> _groupInvoicesByMonth(
+      List<LedgerEntry> invoices) {
+    final Map<String, List<LedgerEntry>> groupedInvoices = {};
     for (var invoice in invoices) {
-      final month = DateFormat('MMMM yyyy').format(invoice.date);
+      final month = DateFormat('MMMM yyyy').format(invoice.transactionDate);
       if (!groupedInvoices.containsKey(month)) {
         groupedInvoices[month] = [];
       }

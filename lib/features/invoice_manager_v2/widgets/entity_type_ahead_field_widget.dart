@@ -1,4 +1,4 @@
-import 'package:ease/core/enums/invoice_type_enum.dart';
+import 'package:ease/core/enums/transaction_category_enum.dart';
 import 'package:ease/core/utils/developer_log.dart';
 import 'package:provider/provider.dart';
 import 'package:ease/core/database/customers/customers_dao.dart';
@@ -22,11 +22,11 @@ class Entity {
 }
 
 class EntityTypeAheadField extends StatefulWidget {
-  final InvoiceType invoiceType;
+  final TransactionCategory transactionCategory;
   // final Function(String clientName) onClientSelected;
 
   EntityTypeAheadField({
-    required this.invoiceType,
+    required this.transactionCategory,
     // required this.onClientSelected,
   });
 
@@ -82,19 +82,19 @@ class _EntityTypeAheadFieldState extends State<EntityTypeAheadField> {
           focusNode: focusNode,
           onTapOutside: (event) => focusNode.unfocus(),
           decoration: InputDecoration(
-            labelText: widget.invoiceType == InvoiceType.Sales
+            labelText: widget.transactionCategory == TransactionCategory.sales
                 ? 'Enter customer name' // or phone number
-                : 'Enter vendor name',  // or phone number
+                : 'Enter vendor name', // or phone number
             labelStyle: Theme.of(context).textTheme.labelLarge,
             hintText:
-                'Start typing to search or add ${widget.invoiceType == InvoiceType.Sales ? 'Customer' : 'Vendor'}',
+                'Start typing to search or add ${widget.transactionCategory == TransactionCategory.sales ? 'Customer' : 'Vendor'}',
           ),
           style: Theme.of(context).textTheme.labelLarge,
         );
       },
       suggestionsCallback: (pattern) async {
         if (pattern.isEmpty) return <Entity>[];
-        if (widget.invoiceType == InvoiceType.Sales) {
+        if (widget.transactionCategory == TransactionCategory.sales) {
           final customers = await _customersDAO.searchCustomers(pattern);
           final matchedCustomers = customers
               .map((c) => Entity(id: c.id, name: c.name, phone: c.phone ?? ''))
@@ -128,13 +128,15 @@ class _EntityTypeAheadFieldState extends State<EntityTypeAheadField> {
           // widget.onClientSelected(suggestion.name);
         });
         if (suggestion.id!.isNotEmpty) {
-          if (widget.invoiceType == InvoiceType.Sales) {
+          if (widget.transactionCategory == TransactionCategory.sales) {
             context.read<InvoiceManagerCubit>().setCustomerId(suggestion.id!);
-            context.read<InvoiceManagerCubit>().invoice.name = suggestion.name;
+            context.read<InvoiceManagerCubit>().ledgerEntry.name =
+                suggestion.name;
             context.read<InvoiceManagerCubit>().phoneNumber = suggestion.phone;
           } else {
             context.read<InvoiceManagerCubit>().setVendorId(suggestion.id!);
-            context.read<InvoiceManagerCubit>().invoice.name = suggestion.name;
+            context.read<InvoiceManagerCubit>().ledgerEntry.name =
+                suggestion.name;
             context.read<InvoiceManagerCubit>().phoneNumber = suggestion.phone;
           }
           context.read<InvoiceManagerCubit>().setLoading(false);
@@ -196,21 +198,23 @@ class _EntityTypeAheadFieldState extends State<EntityTypeAheadField> {
           value: cubit,
           child: AddEntityBottomSheet(
             initialName: initialName,
-            invoiceType: widget.invoiceType,
+            transactionCategory: widget.transactionCategory,
           ),
         );
       },
     );
     setState(() {
-      _controller.text = cubit.invoice.name;
+      _controller.text = cubit.ledgerEntry.name!;
       _phoneController.text = cubit.phoneNumber;
       _isEditing = false;
     });
   }
 
   void _getEntityDetails() async {
-    String? customerId = context.read<InvoiceManagerCubit>().invoice.customerId;
-    String? vendorId = context.read<InvoiceManagerCubit>().invoice.vendorId;
+    String? customerId =
+        context.read<InvoiceManagerCubit>().ledgerEntry.associatedId;
+    String? vendorId =
+        context.read<InvoiceManagerCubit>().ledgerEntry.associatedId;
 
     if (customerId != null && customerId.isNotEmpty) {
       Customer? customer = await _customersDAO.getCustomerById(customerId);

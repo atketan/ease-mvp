@@ -1,4 +1,4 @@
-import 'package:ease/core/enums/invoice_type_enum.dart';
+import 'package:ease/core/enums/transaction_category_enum.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,11 +9,11 @@ import '../bloc/invoice_manager_v2_cubit_state.dart';
 
 class AddEntityBottomSheet extends StatefulWidget {
   final String initialName;
-  final InvoiceType invoiceType;
+  final TransactionCategory transactionCategory;
 
   AddEntityBottomSheet({
     required this.initialName,
-    required this.invoiceType,
+    required this.transactionCategory,
   });
 
   @override
@@ -133,7 +133,7 @@ class _AddEntityBottomSheetState extends State<AddEntityBottomSheet> {
       cubit.setLoading(true);
 
       try {
-        widget.invoiceType == InvoiceType.Sales
+        widget.transactionCategory == TransactionCategory.sales
             ? await cubit.insertNewCustomer(
                 name: _nameController.text,
                 phone: _mobileController.text,

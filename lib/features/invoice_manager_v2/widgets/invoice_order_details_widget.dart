@@ -45,10 +45,11 @@ class InvoiceOrderDetailsWidget extends StatelessWidget {
                         ),
                         Text(
                           "#" +
-                              context
-                                  .read<InvoiceManagerCubit>()
-                                  .invoice
-                                  .invoiceNumber,
+                              (context
+                                      .read<InvoiceManagerCubit>()
+                                      .ledgerEntry
+                                      .id ??
+                                  ''),
                           style: Theme.of(context).textTheme.titleSmall,
                         ),
                       ],
@@ -81,7 +82,10 @@ class InvoiceOrderDetailsWidget extends StatelessWidget {
                           },
                           child: Text(
                             formatInvoiceDateWithoutTime(
-                              context.read<InvoiceManagerCubit>().invoice.date,
+                              context
+                                  .read<InvoiceManagerCubit>()
+                                  .ledgerEntry
+                                  .transactionDate,
                             ),
                             style: Theme.of(context)
                                 .textTheme

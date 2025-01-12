@@ -1,5 +1,6 @@
-import 'package:ease/core/enums/invoice_type_enum.dart';
-import 'package:ease/core/models/invoice.dart';
+import 'package:ease/core/enums/transaction_category_enum.dart';
+// import 'package:ease/core/models/invoice.dart';
+import 'package:ease/core/models/ledger_entry.dart';
 import 'package:ease/core/providers/short_uuid_generator.dart';
 // import 'package:ease/features/invoice_manager_v2/widgets/invoice_payment_widget.dart';
 
@@ -23,13 +24,15 @@ enum InvoiceFormMode {
 
 class InvoiceManagerV2 extends StatefulWidget {
   final InvoiceFormMode invoiceFormMode;
-  final Invoice? invoice;
+  // final Invoice? invoice;
+  final LedgerEntry? ledgerEntry;
   InvoiceManagerV2({
     Key? key,
     required this.invoiceFormMode,
-    this.invoice,
+    // this.invoice,
+    this.ledgerEntry,
   }) : super(key: key) {
-    assert(invoiceFormMode != InvoiceFormMode.Edit || invoice != null,
+    assert(invoiceFormMode != InvoiceFormMode.Edit || ledgerEntry != null,
         'Invoice cannot be null in Edit mode');
   }
 
@@ -39,15 +42,16 @@ class InvoiceManagerV2 extends StatefulWidget {
 
 class InvoiceManagerV2State extends State<InvoiceManagerV2> {
   final String invoiceNumber = generateShort12CharUniqueKey().toUpperCase();
-  late InvoiceType invoiceType;
+  late TransactionCategory transactionCategory;
 
   @override
   void initState() {
     super.initState();
-    invoiceType = context.read<InvoiceManagerCubit>().invoiceType;
+    transactionCategory =
+        context.read<InvoiceManagerCubit>().transactionCategory;
     context
         .read<InvoiceManagerCubit>()
-        .initialiseInvoiceModelInstance(widget.invoice, invoiceNumber);
+        .initialiseInvoiceModelInstance(widget.ledgerEntry, invoiceNumber);
     if (widget.invoiceFormMode == InvoiceFormMode.Edit) {
       context.read<InvoiceManagerCubit>().populateInvoiceData();
     }
@@ -73,7 +77,7 @@ class InvoiceManagerV2State extends State<InvoiceManagerV2> {
                   .copyWith(color: Theme.of(context).colorScheme.surface),
             ),
             Text(
-              '${widget.invoiceFormMode == InvoiceFormMode.Add ? 'NEW' : 'UPDATE'} | ${invoiceType == InvoiceType.Sales ? 'SALE' : 'PURCHASE'}',
+              '${widget.invoiceFormMode == InvoiceFormMode.Add ? 'NEW' : 'UPDATE'} | ${transactionCategory == TransactionCategory.sales ? 'SALE' : 'PURCHASE'}',
               style: Theme.of(context)
                   .textTheme
                   .labelMedium!
@@ -119,7 +123,7 @@ class InvoiceManagerV2State extends State<InvoiceManagerV2> {
                             children: [
                               Icon(Icons.person_2_outlined),
                               Text(
-                                invoiceType == InvoiceType.Sales
+                                transactionCategory == TransactionCategory.sales
                                     ? 'CUSTOMER'
                                     : 'VENDOR',
                                 style: Theme.of(context).textTheme.labelLarge,
@@ -131,7 +135,7 @@ class InvoiceManagerV2State extends State<InvoiceManagerV2> {
                         Expanded(
                           flex: 7,
                           child: EntityTypeAheadField(
-                            invoiceType: invoiceType,
+                            transactionCategory: transactionCategory,
                           ),
                         ),
                       ],
@@ -173,7 +177,7 @@ class InvoiceManagerV2State extends State<InvoiceManagerV2> {
                           child: InvoiceNotesWidget(
                             initialNotes: context
                                     .read<InvoiceManagerCubit>()
-                                    .invoice
+                                    .ledgerEntry
                                     .notes ??
                                 "",
                           ),
@@ -205,8 +209,8 @@ class InvoiceManagerV2State extends State<InvoiceManagerV2> {
                         "₹" +
                             context
                                 .read<InvoiceManagerCubit>()
-                                .invoice
-                                .totalDue
+                                .ledgerEntry
+                                .remainingDue
                                 .toString(),
                         style: Theme.of(context)
                             .textTheme
