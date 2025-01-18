@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:sqflite/sqflite.dart';
 
 import '../../models/customer.dart';
@@ -79,7 +80,7 @@ class SqfliteCustomersDAO implements CustomersDataSource {
   }
 
   @override
-  getAllCustomersStream() {
+  Stream<QuerySnapshot<Map<String, dynamic>>> getAllCustomersStream() {
     // TODO: implement getAllCustomersStream
     throw UnimplementedError();
   }

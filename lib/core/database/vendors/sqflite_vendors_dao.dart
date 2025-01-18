@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:sqflite/sqflite.dart';
 import '../../models/vendor.dart';
 import '../database_helper.dart';
@@ -75,5 +76,11 @@ class SqfliteVendorsDAO implements VendorsDataSource {
       whereArgs: ['%$pattern%'],
     );
     return List.generate(maps.length, (i) => Vendor.fromJSON(maps[i]));
+  }
+
+  @override
+  Stream<QuerySnapshot<Map<String, dynamic>>> getAllVendorsStream() {
+    // TODO: implement getAllVendorsStream
+    throw UnimplementedError();
   }
 }

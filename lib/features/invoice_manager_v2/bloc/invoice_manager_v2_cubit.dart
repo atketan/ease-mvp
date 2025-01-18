@@ -5,6 +5,7 @@ import 'package:ease/core/database/vendors/vendors_dao.dart';
 import 'package:ease/core/enums/ledger_enum_type.dart';
 import 'package:ease/core/enums/payment_method_enum.dart';
 import 'package:ease/core/enums/transaction_category_enum.dart';
+import 'package:ease/core/enums/transaction_type_enum.dart';
 // import 'package:ease/core/enums/transaction_type_enum.dart';
 import 'package:ease/core/models/customer.dart';
 import 'package:ease/core/models/ledger_entry.dart';
@@ -155,6 +156,13 @@ class InvoiceManagerCubit extends Cubit<InvoiceManagerCubitState> {
     //   element.invoiceId = invoiceId;
     //   await _paymentsDAO.insertPayment(element);
     // });
+
+    if (_ledgerEntry.transactionCategory == TransactionCategory.sales) {
+      _ledgerEntry.transactionType = TransactionType.credit;
+    } else if (_ledgerEntry.transactionCategory ==
+        TransactionCategory.purchase) {
+      _ledgerEntry.transactionType = TransactionType.debit;
+    }
 
     _ledgerEntryDAO.createLedgerEntry(_ledgerEntry);
     return Future.value(true);

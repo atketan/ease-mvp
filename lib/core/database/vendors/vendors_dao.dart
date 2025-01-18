@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 import '../../models/vendor.dart';
 import 'vendors_data_source.dart';
 
@@ -32,5 +34,9 @@ class VendorsDAO {
 
   Future<List<Vendor>> searchVendors(String pattern) {
     return _dataSource.searchVendors(pattern);
+  }
+
+  Stream<QuerySnapshot<Map<String, dynamic>>> getAllVendorsStream() {
+    return _dataSource.getAllVendorsStream();
   }
 }

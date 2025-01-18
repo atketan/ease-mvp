@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 import '../../models/vendor.dart';
 
 abstract class VendorsDataSource {
@@ -8,4 +10,5 @@ abstract class VendorsDataSource {
   Future<Vendor?> getVendorByPhoneNumber(String phoneNumber);
   Future<Vendor?> getVendorById(String vendorId);
   Future<List<Vendor>> searchVendors(String pattern); // Add this line
+  Stream<QuerySnapshot<Map<String, dynamic>>> getAllVendorsStream();
 }

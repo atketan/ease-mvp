@@ -98,4 +98,14 @@ class FirestoreVendorsDAO implements VendorsDataSource {
       return vendor;
     }).toList();
   }
+
+  @override
+  Stream<QuerySnapshot<Map<String, dynamic>>> getAllVendorsStream() {
+    return _firestore
+        .collection('enterprises')
+        .doc(enterpriseId)
+        .collection('vendors')
+        .orderBy('created_at')
+        .snapshots();
+  }
 }
