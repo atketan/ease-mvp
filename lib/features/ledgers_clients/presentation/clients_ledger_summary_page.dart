@@ -133,7 +133,9 @@ class _ClientsLedgerSummaryPageState extends State<ClientsLedgerSummaryPage> {
                                       customer.name,
                                       style: Theme.of(context)
                                           .textTheme
-                                          .titleMedium,
+                                          .labelLarge
+                                          ?.copyWith(
+                                              fontWeight: FontWeight.bold),
                                     ),
                                     Text(
                                       'Phone: ${customer.phone}',
@@ -143,13 +145,33 @@ class _ClientsLedgerSummaryPageState extends State<ClientsLedgerSummaryPage> {
                                     )
                                   ],
                                 ),
-                                SizedBox(
-                                  width: 175,
-                                  child: Text(
-                                    'Total Received: ₹${balances['totalCredits']} \nBalance: ₹${balances['balance']}', // 'Total Paid: ${balances['totalDebits']}'
-                                    style:
-                                        Theme.of(context).textTheme.labelMedium,
-                                  ),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    // SizedBox(
+                                    //   width: 175,
+                                    //   child: Text(
+                                    //     'Total Received: ₹${balances['totalCredits']} \nBalance: ₹${balances['balance']}', // 'Total Paid: ${balances['totalDebits']}'
+                                    //     style: Theme.of(context)
+                                    //         .textTheme
+                                    //         .labelMedium,
+                                    //   ),
+                                    // ),
+                                    Text(
+                                      'Balance',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .labelSmall,
+                                    ),
+                                    Text(
+                                      '₹${balances['balance']}',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .labelLarge
+                                          ?.copyWith(
+                                              fontWeight: FontWeight.bold),
+                                    ),
+                                  ],
                                 )
                               ],
                             ),
