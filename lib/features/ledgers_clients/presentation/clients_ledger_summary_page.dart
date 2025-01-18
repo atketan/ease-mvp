@@ -122,18 +122,38 @@ class _ClientsLedgerSummaryPageState extends State<ClientsLedgerSummaryPage> {
                             tileColor: (balances['balance']! > 0.0)
                                 ? Colors.red[100]
                                 : Theme.of(context).listTileTheme.tileColor,
-                            title: Text(
-                              customer.name,
-                              style: Theme.of(context).textTheme.titleMedium,
+                            title: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      customer.name,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleMedium,
+                                    ),
+                                    Text(
+                                      'Phone: ${customer.phone}',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .labelSmall,
+                                    )
+                                  ],
+                                ),
+                                SizedBox(
+                                  width: 175,
+                                  child: Text(
+                                    'Total Received: ₹${balances['totalCredits']} \nBalance: ₹${balances['balance']}', // 'Total Paid: ${balances['totalDebits']}'
+                                    style:
+                                        Theme.of(context).textTheme.labelMedium,
+                                  ),
+                                )
+                              ],
                             ),
-                            subtitle: Text('Phone: ${customer.phone}'),
-                            trailing: SizedBox(
-                              width: 175,
-                              child: Text(
-                                'Total Received: ₹${balances['totalCredits']} \nBalance: ₹${balances['balance']}', // 'Total Paid: ${balances['totalDebits']}'
-                                style: Theme.of(context).textTheme.labelLarge,
-                              ),
-                            ),
+                            trailing: Icon(Icons.arrow_right_outlined),
                           );
                         },
                       ),
