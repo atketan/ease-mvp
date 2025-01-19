@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ease/core/database/vendors/vendors_dao.dart';
+import 'package:ease/core/enums/transaction_category_enum.dart';
 import 'package:ease/core/models/vendor.dart';
+import 'package:ease/features/ledger_details/presentation/ledger_details_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:ease/core/database/ledger/ledger_entry_dao.dart';
@@ -84,8 +86,8 @@ class _VendorsLedgerSummaryPageState extends State<VendorsLedgerSummaryPage> {
                   itemCount: vendors.length,
                   itemBuilder: (context, index) {
                     final vendor = vendors[index];
-                    final balancesFuture =
-                        _ledgerEntryDAO.getLedgerSummaryByAssociatedId(vendor.id!);
+                    final balancesFuture = _ledgerEntryDAO
+                        .getLedgerSummaryByAssociatedId(vendor.id!);
                     return Card(
                       elevation: 2,
                       shape: RoundedRectangleBorder(
@@ -122,6 +124,26 @@ class _VendorsLedgerSummaryPageState extends State<VendorsLedgerSummaryPage> {
                             tileColor: (balances['balance']! > 0.0)
                                 ? Colors.red[100]
                                 : Theme.of(context).listTileTheme.tileColor,
+                            onTap: () {
+                              if (vendor.id != null) {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (_) => LedgerDetailsPage(
+                                      associatedId: vendor.id!,
+                                      transactionCategory:
+                                          TransactionCategory.purchase,
+                                    ),
+                                  ),
+                                );
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text('Associate ID is missing.'),
+                                    backgroundColor: Colors.red,
+                                  ),
+                                );
+                              }
+                            },
                             title: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               crossAxisAlignment: CrossAxisAlignment.start,

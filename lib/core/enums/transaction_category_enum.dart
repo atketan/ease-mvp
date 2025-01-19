@@ -18,6 +18,19 @@ extension TransactionCategoryExtension on TransactionCategory {
         return 'other';
     }
   }
+
+  String get displayName {
+    switch (this) {
+      case TransactionCategory.sales:
+        return 'Sales';
+      case TransactionCategory.purchase:
+        return 'Purchase';
+      case TransactionCategory.expense:
+        return 'Expense';
+      case TransactionCategory.other:
+        return 'Other';
+    }
+  }
 }
 
 extension StringToTransactionCategory on String {

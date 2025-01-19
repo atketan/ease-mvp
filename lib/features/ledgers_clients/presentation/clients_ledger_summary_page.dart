@@ -1,4 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ease/core/enums/transaction_category_enum.dart';
+import 'package:ease/features/ledger_details/presentation/ledger_details_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:ease/core/models/customer.dart';
@@ -84,8 +86,8 @@ class _ClientsLedgerSummaryPageState extends State<ClientsLedgerSummaryPage> {
                   itemCount: customers.length,
                   itemBuilder: (context, index) {
                     final customer = customers[index];
-                    final balancesFuture =
-                        _ledgerEntryDAO.getLedgerSummaryByAssociatedId(customer.id!);
+                    final balancesFuture = _ledgerEntryDAO
+                        .getLedgerSummaryByAssociatedId(customer.id!);
                     return Card(
                       elevation: 2,
                       shape: RoundedRectangleBorder(
@@ -122,6 +124,26 @@ class _ClientsLedgerSummaryPageState extends State<ClientsLedgerSummaryPage> {
                             tileColor: (balances['balance']! > 0.0)
                                 ? Colors.red[100]
                                 : Theme.of(context).listTileTheme.tileColor,
+                            onTap: () {
+                              if (customer.id != null) {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (_) => LedgerDetailsPage(
+                                      associatedId: customer.id!,
+                                      transactionCategory:
+                                          TransactionCategory.sales,
+                                    ),
+                                  ),
+                                );
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text('Associate ID is missing.'),
+                                    backgroundColor: Colors.red,
+                                  ),
+                                );
+                              }
+                            },
                             title: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               crossAxisAlignment: CrossAxisAlignment.start,

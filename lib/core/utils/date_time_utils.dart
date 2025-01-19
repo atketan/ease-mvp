@@ -9,3 +9,8 @@ String formatInvoiceDateWithoutTime(DateTime invoiceDate) {
   final DateFormat formatter = DateFormat('dd MMM yyyy');
   return formatter.format(invoiceDate);
 }
+
+String formatInvoiceDateShortForm(DateTime invoiceDate){
+  final DateFormat formatter = DateFormat('dd MMM yy');
+  return formatter.format(invoiceDate);
+}
