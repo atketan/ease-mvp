@@ -85,7 +85,7 @@ class _VendorsLedgerSummaryPageState extends State<VendorsLedgerSummaryPage> {
                   itemBuilder: (context, index) {
                     final vendor = vendors[index];
                     final balancesFuture =
-                        _ledgerEntryDAO.getLedgerSummary(vendor.id!);
+                        _ledgerEntryDAO.getLedgerSummaryByAssociatedId(vendor.id!);
                     return Card(
                       elevation: 2,
                       shape: RoundedRectangleBorder(

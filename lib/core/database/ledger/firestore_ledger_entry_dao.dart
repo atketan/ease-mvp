@@ -145,7 +145,7 @@ class FirestoreLedgerEntryDAO implements LedgerEntryDataSource {
 
   /// Get summary for a customer/vendor ledger (balance calculation)
   @override
-  Future<Map<String, double>> getLedgerSummary(String associatedId) async {
+  Future<Map<String, double>> getLedgerSummaryByAssociatedId(String associatedId) async {
     final querySnapshot = await _firestore
         .collection('enterprises')
         .doc(enterpriseId)

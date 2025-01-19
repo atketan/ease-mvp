@@ -14,5 +14,5 @@ abstract class LedgerEntryDataSource {
     DateTime? endDate,
   });
   Stream<List<LedgerEntry>> getLedgerEntriesByAssociatedId(String associatedId);
-  Future<Map<String, double>> getLedgerSummary(String associatedId);
+  Future<Map<String, double>> getLedgerSummaryByAssociatedId(String associatedId);
 }

@@ -85,7 +85,7 @@ class _ClientsLedgerSummaryPageState extends State<ClientsLedgerSummaryPage> {
                   itemBuilder: (context, index) {
                     final customer = customers[index];
                     final balancesFuture =
-                        _ledgerEntryDAO.getLedgerSummary(customer.id!);
+                        _ledgerEntryDAO.getLedgerSummaryByAssociatedId(customer.id!);
                     return Card(
                       elevation: 2,
                       shape: RoundedRectangleBorder(

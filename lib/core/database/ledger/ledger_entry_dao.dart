@@ -48,7 +48,7 @@ class LedgerEntryDAO {
     return _dataSource.getLedgerEntriesByAssociatedId(associatedId);
   }
 
-  Future<Map<String, double>> getLedgerSummary(String associatedId) {
-    return _dataSource.getLedgerSummary(associatedId);
+  Future<Map<String, double>> getLedgerSummaryByAssociatedId(String associatedId) {
+    return _dataSource.getLedgerSummaryByAssociatedId(associatedId);
   }
 }
