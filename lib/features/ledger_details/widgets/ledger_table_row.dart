@@ -1,4 +1,4 @@
-import 'package:ease/core/enums/transaction_category_enum.dart';
+import 'package:ease/core/enums/ledger_enum_type.dart';
 import 'package:ease/core/utils/date_time_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:ease/core/models/ledger_entry.dart';
@@ -27,7 +27,7 @@ class LedgerTableRow extends StatelessWidget {
                   border: Border(
                       right: BorderSide(width: 1, color: Colors.grey[400]!))),
               child: Text(
-                '${formatInvoiceDateShortForm(entry.createdAt)} - ${entry.transactionCategory?.displayName}',
+                '${formatInvoiceDateShortForm(entry.createdAt)} - ${entry.type.displayName}',
                 style: Theme.of(context).textTheme.labelMedium,
                 softWrap: true,
                 overflow: TextOverflow.visible,

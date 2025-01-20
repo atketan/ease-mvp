@@ -132,6 +132,7 @@ class _VendorsLedgerSummaryPageState extends State<VendorsLedgerSummaryPage> {
                                       associatedId: vendor.id!,
                                       transactionCategory:
                                           TransactionCategory.purchase,
+                                      ledgerSummary: balances,
                                     ),
                                   ),
                                 );

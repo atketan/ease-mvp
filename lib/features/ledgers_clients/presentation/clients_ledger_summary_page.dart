@@ -132,6 +132,7 @@ class _ClientsLedgerSummaryPageState extends State<ClientsLedgerSummaryPage> {
                                       associatedId: customer.id!,
                                       transactionCategory:
                                           TransactionCategory.sales,
+                                      ledgerSummary: balances,
                                     ),
                                   ),
                                 );

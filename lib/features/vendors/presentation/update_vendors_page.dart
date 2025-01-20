@@ -1,5 +1,6 @@
 import 'package:ease/core/database/ledger/ledger_entry_dao.dart';
 import 'package:ease/core/enums/ledger_enum_type.dart';
+import 'package:ease/core/enums/transaction_category_enum.dart';
 import 'package:ease/core/models/ledger_entry.dart';
 import 'package:provider/provider.dart';
 import 'package:ease/core/database/vendors/vendors_dao.dart';
@@ -98,7 +99,11 @@ class _UpdateVendorsPageState extends State<UpdateVendorsPage> {
             type: LedgerEntryType.openingBalance,
             amount: openingBalance,
             remainingDue: openingBalance,
+            discount: 0.0,
+            grandTotal: 0.0,
+            initialPaid: 0.0,
             // transactionType: TransactionType.debit, // To be paid to the vendor
+            transactionCategory: TransactionCategory.other,
             notes: "Opening balance from previous system",
             transactionDate: DateTime.now(),
             createdAt: DateTime.now(),

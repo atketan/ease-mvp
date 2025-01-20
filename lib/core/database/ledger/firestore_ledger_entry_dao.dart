@@ -145,7 +145,8 @@ class FirestoreLedgerEntryDAO implements LedgerEntryDataSource {
 
   /// Get summary for a customer/vendor ledger (balance calculation)
   @override
-  Future<Map<String, double>> getLedgerSummaryByAssociatedId(String associatedId) async {
+  Future<Map<String, double>> getLedgerSummaryByAssociatedId(
+      String associatedId) async {
     final querySnapshot = await _firestore
         .collection('enterprises')
         .doc(enterpriseId)
@@ -156,6 +157,8 @@ class FirestoreLedgerEntryDAO implements LedgerEntryDataSource {
     double totalCredits = 0.0; // Payments received
     double totalDebits = 0.0; // Payments made or invoices issued
     double totalBalance = 0.0;
+    double totalSalesPurchase = 0.0;
+    double totalPaid = 0.0;
 
     for (var doc in querySnapshot.docs) {
       final entry = LedgerEntry.fromJSON(doc.data());
@@ -165,12 +168,16 @@ class FirestoreLedgerEntryDAO implements LedgerEntryDataSource {
         totalDebits += entry.initialPaid!;
       }
       totalBalance += entry.remainingDue!;
+      totalSalesPurchase += entry.grandTotal!;
+      totalPaid += entry.initialPaid!;
     }
 
     return {
       'totalCredits': totalCredits,
       'totalDebits': totalDebits,
       'balance': totalBalance,
+      'totalSalesPurchase': totalSalesPurchase,
+      'totalPaid': totalPaid,
     };
   }
 }

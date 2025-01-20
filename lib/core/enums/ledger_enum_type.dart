@@ -21,6 +21,21 @@ extension LedgerEntryTypeExtension on LedgerEntryType {
         return 'advance';
     }
   }
+
+  String get displayName {
+    switch (this) {
+      case LedgerEntryType.invoice:
+        return 'Invoice';
+      case LedgerEntryType.payment:
+        return 'Payment';
+      case LedgerEntryType.expense:
+        return 'Expense';
+      case LedgerEntryType.openingBalance:
+        return 'Open Bal';
+      case LedgerEntryType.advance:
+        return 'Advance';
+    }
+  }
 }
 
 extension StringToLedgerEntryType on String {

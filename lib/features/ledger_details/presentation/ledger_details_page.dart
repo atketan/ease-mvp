@@ -4,17 +4,20 @@ import 'package:ease/core/models/ledger_entry.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../widgets/ledger_table_footer.dart';
 import '../widgets/ledger_table_header.dart';
 import '../widgets/ledger_table_row.dart';
 
 class LedgerDetailsPage extends StatefulWidget {
   final String associatedId;
   final TransactionCategory transactionCategory;
+  final Map<String, dynamic> ledgerSummary;
 
   const LedgerDetailsPage({
     super.key,
     required this.associatedId,
     required this.transactionCategory,
+    required this.ledgerSummary,
   });
 
   @override
@@ -56,6 +59,10 @@ class LedgerDetailsPageState extends State<LedgerDetailsPage> {
               ...ledgerEntries
                   .map((entry) => LedgerTableRow(entry: entry))
                   .toList(),
+              Spacer(),
+              LedgerTableFooter(
+                ledgerSummary: widget.ledgerSummary,
+              ),
             ],
           );
         },
