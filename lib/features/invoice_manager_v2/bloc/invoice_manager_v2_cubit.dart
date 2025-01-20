@@ -62,6 +62,8 @@ class InvoiceManagerCubit extends Cubit<InvoiceManagerCubitState> {
         amount: 0.0,
         discount: 0.0,
         grandTotal: 0.0,
+        initialPaid: 0.0,
+        remainingDue: 0.0,
         transactionDate: DateTime.now(),
         transactionCategory: transactionCategory,
         createdAt: DateTime.now(),
