@@ -258,6 +258,9 @@ class InvoiceManagerCubit extends Cubit<InvoiceManagerCubitState> {
           type: LedgerEntryType.openingBalance,
           amount: openingBalance,
           remainingDue: openingBalance,
+          discount: 0.0,
+          grandTotal: 0.0,
+          initialPaid: 0.0,
           // transactionType:
           //     TransactionType.credit, // To be received from the customer
           notes: "Opening balance from previous system",
@@ -298,6 +301,9 @@ class InvoiceManagerCubit extends Cubit<InvoiceManagerCubitState> {
           type: LedgerEntryType.openingBalance,
           amount: openingBalance,
           remainingDue: openingBalance,
+          discount: 0.0,
+          grandTotal: 0.0,
+          initialPaid: 0.0,
           // transactionType: TransactionType.debit, // To be paid to the vendor
           notes: "Opening balance from previous system",
           transactionDate: DateTime.now(),
