@@ -266,6 +266,18 @@ class InvoiceManagerV2State extends State<InvoiceManagerV2> {
                         ),
                       ),
                       onPressed: () async {
+                        final LedgerEntry ledgerEntry = await context
+                            .read<InvoiceManagerCubit>()
+                            .ledgerEntry;
+                        if (ledgerEntry.name!.isEmpty) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text('Entity name not selected'),
+                            ),
+                          );
+                          return;
+                        }
+
                         if (widget.invoiceFormMode == InvoiceFormMode.Edit) {
                           await context
                               .read<InvoiceManagerCubit>()
@@ -274,8 +286,7 @@ class InvoiceManagerV2State extends State<InvoiceManagerV2> {
                             (value) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
-                                  content:
-                                      Text('Invoice updated successfully!'),
+                                  content: Text('Invoice updated successfully'),
                                 ),
                               );
                             },
@@ -288,8 +299,7 @@ class InvoiceManagerV2State extends State<InvoiceManagerV2> {
                             (value) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
-                                  content:
-                                      Text('Invoice created successfully!'),
+                                  content: Text('Invoice created successfully'),
                                 ),
                               );
                             },
