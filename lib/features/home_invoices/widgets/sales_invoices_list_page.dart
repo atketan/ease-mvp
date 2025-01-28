@@ -43,6 +43,7 @@ class _SalesInvoicesListPageState extends State<SalesInvoicesListPage> {
   Widget build(BuildContext context) {
     _customersDAO = Provider.of<CustomersDAO>(context);
     _vendorsDAO = Provider.of<VendorsDAO>(context);
+    _ledgerEntryDAO = Provider.of<LedgerEntryDAO>(context);
 
     return Consumer<InvoicesProvider>(
       builder: (context, invoicesProvider, child) {

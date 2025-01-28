@@ -53,12 +53,13 @@ class AllAmountsInputWidgetState extends State<AllAmountsInputWidget> {
           .ledgerEntry
           .initialPaid
           .toString();
-      _selectedPaymentMethod = context
-          .read<InvoiceManagerCubit>()
-          .ledgerEntry
-          .paymentMethod
-          .toString()
-          .toPaymentMethod();
+      debugPrint(
+          "Selected payment method: ${_selectedPaymentMethod.displayName}");
+      _selectedPaymentMethod =
+          context.read<InvoiceManagerCubit>().ledgerEntry.paymentMethod ??
+              PaymentMethod.cash;
+      // .toString()
+      // .toPaymentMethod();
     } else {
       context
           .read<InvoiceManagerCubit>()
