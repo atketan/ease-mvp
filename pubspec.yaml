@@ -54,6 +54,7 @@ dependencies:
   flutter_launcher_icons: ^0.14.2
   image_picker: ^1.1.2
   firebase_storage: ^12.3.7
+  firebase_app_check:
 
 flutter_launcher_icons:
   #  image_path: "assets/images/icon-128x128.png"

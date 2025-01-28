@@ -33,8 +33,8 @@ class InvoiceManagerCubit extends Cubit<InvoiceManagerCubitState> {
   // late Invoice _invoice;
   late LedgerEntry _ledgerEntry;
 
-  late String
-      phoneNumber; // Used to store the phone number of the customer/vendor temporarily for displaying in the entity typeahead field
+  String phoneNumber =
+      ''; // Used to store the phone number of the customer/vendor temporarily for displaying in the entity typeahead field
   final TransactionCategory transactionCategory;
 
   void initialiseInvoiceModelInstance(
@@ -237,7 +237,8 @@ class InvoiceManagerCubit extends Cubit<InvoiceManagerCubitState> {
       {String name = '',
       String phone = '',
       required double openingBalance}) async {
-    if (name.isEmpty || phone.isEmpty) {
+    if (name.isEmpty) {
+      // || phone.isEmpty - remove phone number check - allow phone number to be skipped while entity creation
       return;
     } else {
       final newId = await _customersDAO.insertCustomer(
@@ -280,8 +281,8 @@ class InvoiceManagerCubit extends Cubit<InvoiceManagerCubitState> {
       {String name = '',
       String phone = '',
       required double openingBalance}) async {
-    if (name.isEmpty || phone.isEmpty) {
-      return;
+    if (name.isEmpty) {
+      // || phone.isEmpty - remove phone number check - allow phone number to be skipped while entity creation
     } else {
       final newId = await _vendorsDAO.insertVendor(
         Vendor(

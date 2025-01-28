@@ -218,7 +218,13 @@ class InvoiceManagerV2State extends State<InvoiceManagerV2> {
                             .copyWith(fontWeight: FontWeight.bold),
                       );
                     } else if (state is InvoiceManagerLoading) {
-                      return Center(child: CircularProgressIndicator());
+                      return Center(
+                        child: SizedBox(
+                          width: 18,
+                          height: 18,
+                          child: CircularProgressIndicator(),
+                        ),
+                      );
                     } else if (state is InvoiceManagerError) {
                       return Center(child: Text('Error: ${state.message}'));
                     } else {

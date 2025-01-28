@@ -169,7 +169,7 @@ class _EntityTypeAheadFieldState extends State<EntityTypeAheadField> {
                     ),
               ),
               Text(
-                _phoneController.text,
+                (_phoneController.text.isEmpty) ? '--' : _phoneController.text,
                 style: Theme.of(context).textTheme.labelMedium,
               ),
             ],

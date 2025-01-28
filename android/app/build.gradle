@@ -75,4 +75,7 @@ flutter {
     source '../..'
 }
 
-dependencies {}
+dependencies {
+    // Add the Firebase App Check dependency
+    implementation 'com.google.firebase:firebase-appcheck-playintegrity:16.0.0'
+}
