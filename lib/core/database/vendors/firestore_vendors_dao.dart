@@ -1,4 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ease/core/utils/string_casing_extension.dart';
+
 import '../../models/vendor.dart';
 import 'vendors_data_source.dart';
 
@@ -90,8 +92,10 @@ class FirestoreVendorsDAO implements VendorsDataSource {
         .collection('enterprises')
         .doc(enterpriseId)
         .collection('vendors')
-        .where('name', isGreaterThanOrEqualTo: pattern)
+        .where('name', isGreaterThanOrEqualTo: pattern.toTitleCase)
+        .where("name", isLessThanOrEqualTo: "${pattern.toTitleCase}\uf7ff")
         .get();
+
     return snapshot.docs.map((doc) {
       final vendor = Vendor.fromJSON(doc.data());
       vendor.id = doc.id;
