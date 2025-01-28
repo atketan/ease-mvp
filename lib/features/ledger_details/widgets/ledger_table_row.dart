@@ -27,7 +27,7 @@ class LedgerTableRow extends StatelessWidget {
                   border: Border(
                       right: BorderSide(width: 1, color: Colors.grey[400]!))),
               child: Text(
-                '${formatInvoiceDateShortForm(entry.createdAt)} - ${entry.type.displayName}',
+                '${formatInvoiceDateShortForm(entry.transactionDate)} - ${entry.type.displayName}',
                 style: Theme.of(context).textTheme.labelMedium,
                 softWrap: true,
                 overflow: TextOverflow.visible,
