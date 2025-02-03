@@ -1,5 +1,4 @@
 import 'package:ease/core/enums/transaction_category_enum.dart';
-import 'package:ease/core/utils/developer_log.dart';
 import 'package:provider/provider.dart';
 import 'package:ease/core/database/customers/customers_dao.dart';
 import 'package:ease/core/database/vendors/vendors_dao.dart';
@@ -211,28 +210,31 @@ class _EntityTypeAheadFieldState extends State<EntityTypeAheadField> {
   }
 
   void _getEntityDetails() async {
-    String? customerId =
-        context.read<InvoiceManagerCubit>().ledgerEntry.associatedId;
-    String? vendorId =
-        context.read<InvoiceManagerCubit>().ledgerEntry.associatedId;
+    String? customerId;
+    String? vendorId;
 
-    if (customerId != null && customerId.isNotEmpty) {
-      Customer? customer = await _customersDAO.getCustomerById(customerId);
-      if (customer != null) {
-        _controller.text = customer.name;
-        _phoneController.text = customer.phone ?? "";
-        _isEditing = false;
+    if (context.read<InvoiceManagerCubit>().ledgerEntry.transactionType ==
+        TransactionCategory.sales) {
+      customerId = context.read<InvoiceManagerCubit>().ledgerEntry.associatedId;
+      if (customerId != null && customerId.isNotEmpty) {
+        Customer? customer = await _customersDAO.getCustomerById(customerId);
+        if (customer != null) {
+          _controller.text = customer.name;
+          _phoneController.text = customer.phone ?? "";
+          _isEditing = false;
+        }
       }
-    } else if (vendorId != null) {
-      Vendor? vendor = await _vendorsDAO.getVendorById(vendorId);
-      _controller.text = vendor!.name;
-      _phoneController.text = vendor.phone ?? "";
-      _isEditing = false;
+    } else {
+      vendorId = context.read<InvoiceManagerCubit>().ledgerEntry.associatedId;
+      if (vendorId != null && vendorId.isNotEmpty) {
+        Vendor? vendor = await _vendorsDAO.getVendorById(vendorId);
+        if (vendor != null) {
+          _controller.text = vendor.name;
+          _phoneController.text = vendor.phone ?? "";
+          _isEditing = false;
+        }
+      }
     }
-
-    debugLog(
-        'Customer ID: ${customerId}, Name: ${_controller.text}, isEditing: $_isEditing',
-        name: 'EntityTypeAheadFieldWidget');
 
     context.read<InvoiceManagerCubit>().setEntityName(_controller.text);
   }
