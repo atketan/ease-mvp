@@ -2,6 +2,7 @@ import 'package:ease/core/enums/transaction_category_enum.dart';
 // import 'package:ease/core/models/invoice.dart';
 import 'package:ease/core/models/ledger_entry.dart';
 import 'package:ease/core/providers/short_uuid_generator.dart';
+import 'package:ease/features/invoice_manager_v2/widgets/referred_by_widget.dart';
 // import 'package:ease/features/invoice_manager_v2/widgets/invoice_payment_widget.dart';
 
 import 'package:flutter/material.dart';
@@ -141,6 +142,7 @@ class InvoiceManagerV2State extends State<InvoiceManagerV2> {
                       ],
                     ),
                   ),
+                  ReferredByWidget(),
                   InvoiceManagerSpacer(height: 0),
                   InvoiceUploadWidget(),
                   // InvoiceManagerSpacer(height: 0),

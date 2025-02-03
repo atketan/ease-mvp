@@ -14,7 +14,7 @@ class ReferredByWidgetState extends State<ReferredByWidget> {
   void initState() {
     super.initState();
     _referredByController.text =
-        context.read<InvoiceManagerCubit>().ledgerEntry.referredBy.toString();
+        context.read<InvoiceManagerCubit>().ledgerEntry.referredBy ?? '';
   }
 
   @override
@@ -25,29 +25,32 @@ class ReferredByWidgetState extends State<ReferredByWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Expanded(
-          flex: 3,
-          child: Text(
-            'Reference:',
-            style: Theme.of(context).textTheme.labelLarge,
+    return Padding(
+      padding: EdgeInsets.only(left: 16.0, right: 16.0, top: 0.0, bottom: 16.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Expanded(
+            flex: 3,
+            child: Text(
+              'Reference:',
+              style: Theme.of(context).textTheme.labelLarge,
+            ),
           ),
-        ),
-        SizedBox(width: 16.0),
-        Expanded(
-          flex: 7,
-          child: TextField(
-            controller: _referredByController,
-            style: Theme.of(context).textTheme.labelLarge,
-            keyboardType: TextInputType.name,
-            onChanged: (value) {
-              context.read<InvoiceManagerCubit>().setReference(value);
-            },
+          SizedBox(width: 16.0),
+          Expanded(
+            flex: 7,
+            child: TextField(
+              controller: _referredByController,
+              style: Theme.of(context).textTheme.labelLarge,
+              keyboardType: TextInputType.name,
+              onChanged: (value) {
+                context.read<InvoiceManagerCubit>().setReference(value);
+              },
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
