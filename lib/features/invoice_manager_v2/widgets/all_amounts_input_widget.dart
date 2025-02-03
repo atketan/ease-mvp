@@ -1,5 +1,5 @@
 import 'package:ease/core/enums/payment_method_enum.dart';
-import 'package:ease/core/utils/developer_log.dart';
+// import 'package:ease/core/utils/developer_log.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -84,9 +84,9 @@ class AllAmountsInputWidgetState extends State<AllAmountsInputWidget> {
       child: BlocBuilder<InvoiceManagerCubit, InvoiceManagerCubitState>(
         builder: (context, state) {
           if (state is InvoiceManagerLoaded) {
-            debugLog(
-                'State: $state, Invoice: ${state.ledgerEntry.toJSON().toString()}',
-                name: 'AllAmountsInputWidget');
+            // debugLog(
+            //     'State: $state, Invoice: ${state.ledgerEntry.toJSON().toString()}',
+            //     name: 'AllAmountsInputWidget');
           }
           _grandTotalTextController.text = context
               .read<InvoiceManagerCubit>()

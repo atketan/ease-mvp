@@ -160,7 +160,46 @@ class _PurchaseInvoicesPageState extends State<PurchaseInvoicesPage> {
                                   )
                               ],
                             ),
-                            subtitle: Text('#${invoice.invNumber}'),
+                            subtitle: Row(
+                              children: [
+                                Text('#${invoice.invNumber}\t\t'),
+                                // SizedBox(width: 8),
+                                if (invoice.notes != null &&
+                                    invoice.notes!.isNotEmpty)
+                                  InkWell(
+                                    child: Text(
+                                      'Notes',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .labelMedium
+                                          ?.copyWith(
+                                            color: Colors.blue[800],
+                                            decoration:
+                                                TextDecoration.underline,
+                                          ),
+                                    ),
+                                    onTap: () {
+                                      showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          return AlertDialog(
+                                            title: Text('Notes'),
+                                            content: Text(invoice.notes ?? "-"),
+                                            actions: [
+                                              TextButton(
+                                                onPressed: () {
+                                                  Navigator.pop(context);
+                                                },
+                                                child: Text('Close'),
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      );
+                                    },
+                                  ),
+                              ],
+                            ),
                             trailing: Text(
                               '₹${invoice.grandTotal?.toStringAsFixed(2)}',
                               style: Theme.of(context)
