@@ -125,6 +125,10 @@ class InvoiceManagerCubit extends Cubit<InvoiceManagerCubitState> {
     _ledgerEntry.paymentMethod = selectedPaymentMethod;
   }
 
+  void setReference(String referredBy) {
+    _ledgerEntry.referredBy = referredBy;
+  }
+
   void updateInvoiceAmounts() async {
     await _updateInvoiceAmounts();
     emit(InvoiceManagerLoaded(ledgerEntry: _ledgerEntry));

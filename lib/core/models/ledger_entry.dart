@@ -25,8 +25,8 @@ class LedgerEntry {
   DateTime transactionDate; // Date of the transaction
   DateTime createdAt; // Auto-generated
   DateTime updatedAt; // Auto-generated
-  String?
-      docId; // Firestore doc ID for the ledger entry, should not be re-written to the database
+  String? docId;
+  String? referredBy; // Referred by field
 
   LedgerEntry({
     this.invNumber,
@@ -48,6 +48,7 @@ class LedgerEntry {
     required this.createdAt,
     required this.updatedAt,
     this.docId,
+    this.referredBy,
   });
 
   factory LedgerEntry.fromJSON(Map<String, dynamic> json) {
@@ -71,6 +72,7 @@ class LedgerEntry {
       transactionDate: DateTime.parse(json['txn_date']),
       createdAt: DateTime.parse(json['created_at']),
       updatedAt: DateTime.parse(json['updated_at']),
+      referredBy: json['referred_by'],
     );
   }
 
@@ -94,6 +96,7 @@ class LedgerEntry {
       'txn_date': transactionDate.toIso8601String(),
       'created_at': createdAt.toIso8601String(),
       'updated_at': updatedAt.toIso8601String(),
+      'referred_by': referredBy,
     };
   }
 }
