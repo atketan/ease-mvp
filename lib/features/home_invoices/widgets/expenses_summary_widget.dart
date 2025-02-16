@@ -46,7 +46,8 @@ class ExpensesSummaryWidgetState extends State<ExpensesSummaryWidget> {
           ),
           // SizedBox(height: 16.0),
           Text(
-            "₹" + context.watch<InvoicesProvider>().totalPaidAmount.toString(),
+            "₹" + context.watch<InvoicesProvider>().totalExpensesAmount.toString(),
+
             style: Theme.of(context).textTheme.bodyLarge,
           ),
           // Row(

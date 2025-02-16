@@ -36,7 +36,7 @@ class InvoicesProvider with ChangeNotifier {
   // List<LedgerEntry> _unpaidInvoices = [];
   // List<LedgerEntry> _paidInvoices = [];
   double _totalUnpaidAmount = 0.0;
-  double _totalPaidAmount = 0.0;
+  double _totalExpensesAmount = 0.0;
   double _totalSalesAmount = 0.0;
   double _totalPurchaseAmount = 0.0;
 
@@ -62,9 +62,9 @@ class InvoicesProvider with ChangeNotifier {
       .toList();
 
   double get totalUnpaidAmount => _totalUnpaidAmount;
-  double get totalPaidAmount => _totalPaidAmount;
   double get totalSalesAmount => _totalSalesAmount;
   double get totalPurchaseAmount => _totalPurchaseAmount;
+  double get totalExpensesAmount => _totalExpensesAmount;
 
   DateTime get startDate => _startDate;
   DateTime get endDate => _endDate;
@@ -102,7 +102,7 @@ class InvoicesProvider with ChangeNotifier {
       debugLog(
           'Start date: $_startDate, End date: $_endDate, Length: ${invoices.length}',
           name: 'InvoicesProvider');
-          
+
       _allSalesInvoices = invoices
           .where((invoice) =>
               invoice.type == LedgerEntryType.invoice &&
@@ -137,6 +137,7 @@ class InvoicesProvider with ChangeNotifier {
 
       _calculateTotalSalesAmount();
       _calculateTotalPurchaseAmount();
+      _calculateTotalExpensesAmount();
 
       notifyListeners();
     }, onError: (e) {
@@ -154,6 +155,13 @@ class InvoicesProvider with ChangeNotifier {
 
   void _calculateTotalPurchaseAmount() {
     _totalPurchaseAmount = _allPurchaseInvoices.fold(
+      0,
+      (sum, invoice) => sum + (invoice.grandTotal ?? 0.0),
+    );
+  }
+
+  void _calculateTotalExpensesAmount() {
+    _totalExpensesAmount = _allExpenseInvoices.fold(
       0,
       (sum, invoice) => sum + (invoice.grandTotal ?? 0.0),
     );

@@ -43,7 +43,7 @@ class ReceivablesSummaryWidgetState extends State<ReceivablesSummaryWidget> {
           ),
           // SizedBox(height: 16.0),
           Text(
-            "₹" + context.watch<InvoicesProvider>().totalPaidAmount.toString(),
+            "₹" + context.watch<InvoicesProvider>().totalUnpaidAmount.toString(),
             style: Theme.of(context).textTheme.bodyLarge,
           ),
           Row(
@@ -54,7 +54,7 @@ class ReceivablesSummaryWidgetState extends State<ReceivablesSummaryWidget> {
                 style: Theme.of(context).textTheme.labelSmall,
               ),
               Text(
-                context.watch<InvoicesProvider>().totalPaidAmount.toString(),
+                context.watch<InvoicesProvider>().totalUnpaidAmount.toString(),
                 style: Theme.of(context).textTheme.labelSmall,
               ),
             ],
