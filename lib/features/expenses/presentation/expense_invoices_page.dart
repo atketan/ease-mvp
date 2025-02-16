@@ -3,7 +3,7 @@ import 'package:ease/core/utils/developer_log.dart';
 import 'package:ease/features/expenses/bloc/expense_manager_cubit.dart';
 import 'package:ease/features/expenses/widgets/expense_form_v2.dart';
 import 'package:ease/features/home_invoices/data/invoices_provider.dart';
-import 'package:ease/features/home_invoices/widgets/custom_chip_tags_widget.dart';
+// import 'package:ease/features/home_invoices/widgets/custom_chip_tags_widget.dart';
 
 import 'package:ease/widgets/time_range_selector.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -141,16 +141,17 @@ class _ExpenseInvoicesPageState extends State<ExpenseInvoicesPage> {
                                 ),
                                 SizedBox(width: 8),
                                 // Add the tag for paid/unpaid status
-                                if (invoice.status == "paid")
-                                  CustomChipTagsWidget(
-                                    tagTitle: 'Paid',
-                                    tagColor: Colors.green,
-                                  )
-                                else
-                                  CustomChipTagsWidget(
-                                    tagTitle: 'Unpaid',
-                                    tagColor: Colors.red,
-                                  )
+                                // .. Commented out as expenses would always be Paid (current feature)
+                                // if (invoice.status == "paid")
+                                //   CustomChipTagsWidget(
+                                //     tagTitle: 'Paid',
+                                //     tagColor: Colors.green,
+                                //   )
+                                // else
+                                //   CustomChipTagsWidget(
+                                //     tagTitle: 'Unpaid',
+                                //     tagColor: Colors.red,
+                                //   )
                               ],
                             ),
                             subtitle: Row(
