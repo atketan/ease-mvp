@@ -3,6 +3,7 @@ import 'package:ease/core/enums/payment_against_enum.dart';
 import 'package:ease/core/enums/payment_method_enum.dart';
 import 'package:ease/core/enums/transaction_type_enum.dart';
 import 'package:ease/core/models/payment.dart';
+import 'package:ease/core/utils/developer_log.dart';
 import 'package:ease/core/utils/string_casing_extension.dart';
 import 'package:flutter/material.dart';
 
@@ -61,14 +62,16 @@ class _AddPaymentFormState extends State<AddPaymentForm> {
                   }
                   if (_transactionType == TransactionType.credit &&
                       widget.totalPaid + amount > widget.totalAmountPayable) {
-                    debugPrint(
-                        'Total Paid: ${widget.totalPaid}, Amount: $amount, totalPayable: ${widget.totalAmountPayable}');
+                    debugLog(
+                        'Total Paid: ${widget.totalPaid}, Amount: $amount, totalPayable: ${widget.totalAmountPayable}',
+                        name: 'PaymentsAddPaymentForm');
                     return 'Amount cannot exceed total payable';
                   }
                   if (_transactionType == TransactionType.debit &&
                       widget.totalAmountPayable - amount < 0.0) {
-                    debugPrint(
-                        'Total Paid: ${widget.totalPaid}, Amount: $amount, totalPayable: ${widget.totalAmountPayable}');
+                    debugLog(
+                        'Total Paid: ${widget.totalPaid}, Amount: $amount, totalPayable: ${widget.totalAmountPayable}',
+                        name: 'PaymentsAddPaymentForm');
                     return 'Amount cannot be paid from a negative balance';
                   }
                   return null;

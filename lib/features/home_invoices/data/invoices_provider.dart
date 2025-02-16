@@ -45,6 +45,11 @@ class InvoicesProvider with ChangeNotifier {
   List<LedgerEntry> get allSalesInvoices => _allSalesInvoices;
   List<LedgerEntry> get allPurchaseInvoices => _allPurchaseInvoices;
 
+  List<LedgerEntry> _allExpenseInvoices = [];
+  List<LedgerEntry> get allExpenseInvoices => _allExpenseInvoices;
+  List<LedgerEntry> _allPaymentInvoices = [];
+  List<LedgerEntry> get allPaymentInvoices => _allPaymentInvoices;
+
   List<LedgerEntry> get unpaidInvoices =>
       _allSalesInvoices.where((invoice) => invoice.status != 'paid').toList();
   List<LedgerEntry> get paidInvoices =>
@@ -97,6 +102,7 @@ class InvoicesProvider with ChangeNotifier {
       debugLog(
           'Start date: $_startDate, End date: $_endDate, Length: ${invoices.length}',
           name: 'InvoicesProvider');
+          
       _allSalesInvoices = invoices
           .where((invoice) =>
               invoice.type == LedgerEntryType.invoice &&
@@ -108,11 +114,25 @@ class InvoicesProvider with ChangeNotifier {
               invoice.transactionCategory == TransactionCategory.purchase)
           .toList();
 
+      _allExpenseInvoices = invoices
+          .where((invoice) => invoice.type == LedgerEntryType.expense)
+          .toList();
+
+      _allPaymentInvoices = invoices
+          .where((invoice) => invoice.type == LedgerEntryType.payment)
+          .toList();
+
       debugLog(
           'SubscribeToInvoices, Fetched ${_allSalesInvoices.length} sales invoices',
           name: 'InvoicesProvider');
       debugLog(
           'SubscribeToInvoices, Fetched ${_allPurchaseInvoices.length} purchase invoices',
+          name: 'InvoicesProvider');
+      debugLog(
+          'SubscribeToInvoices, Fetched ${_allExpenseInvoices.length} expense invoices',
+          name: 'InvoicesProvider');
+      debugLog(
+          'SubscribeToInvoices, Fetched ${_allPaymentInvoices.length} payment invoices',
           name: 'InvoicesProvider');
 
       _calculateTotalSalesAmount();

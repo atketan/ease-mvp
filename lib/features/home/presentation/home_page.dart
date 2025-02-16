@@ -6,7 +6,8 @@ import 'package:ease/core/models/app_user_configuration.dart';
 import 'package:ease/core/service_locator/service_locator.dart';
 import 'package:ease/core/utils/developer_log.dart';
 import 'package:ease/ease_app.dart';
-import 'package:ease/features/expenses/widgets/expense_form.dart';
+import 'package:ease/features/expenses/bloc/expense_manager_cubit.dart';
+import 'package:ease/features/expenses/widgets/expense_form_v2.dart';
 import 'package:ease/features/invoice_manager_v2/bloc/invoice_manager_v2_cubit.dart';
 import 'package:ease/features/invoice_manager_v2/presentation/invoice_manager_v2.dart';
 import 'package:flutter/material.dart';
@@ -250,7 +251,12 @@ class _EASEHomePageState extends State<EASEHomePage>
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (BuildContext context) => ExpenseForm(),
+                        builder: (BuildContext context) => BlocProvider(
+                          create: (context) => ExpenseManagerCubit(
+                            _ledgerEntryDAO,
+                          ),
+                          child: ExpenseFormV2(),
+                        ),
                       ),
                     );
                   },

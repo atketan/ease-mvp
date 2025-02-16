@@ -1,4 +1,7 @@
+import 'package:ease/features/expenses/presentation/expense_invoices_page.dart';
+// import 'package:ease/features/expenses/presentation/expenses_list_page.dart';
 import 'package:ease/features/home_invoices/data/invoices_provider.dart';
+// import 'package:ease/widgets/time_range_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -24,16 +27,15 @@ class ExpensesSummaryWidgetState extends State<ExpensesSummaryWidget> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text('Expenses',
-                  style: Theme.of(context).textTheme.titleMedium),
+              Text('Expenses', style: Theme.of(context).textTheme.titleMedium),
               IconButton(
                 onPressed: () {
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(
-                  //     builder: (context) => PaymentsProviderWidget(),
-                  //   ),
-                  // );
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ExpenseInvoicesProviderWidget(),
+                    ),
+                  );
                 },
                 icon: Icon(
                   Icons.chevron_right_outlined,

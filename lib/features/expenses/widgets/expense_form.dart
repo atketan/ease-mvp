@@ -5,6 +5,7 @@ import 'package:ease/core/models/expense.dart';
 import 'package:ease/core/models/payment.dart';
 import 'package:ease/core/providers/short_uuid_generator.dart';
 import 'package:ease/core/utils/date_time_utils.dart';
+import 'package:ease/core/utils/developer_log.dart';
 import 'package:ease/features/expense_categories/presentation/widgets/expense_category_form.dart';
 import 'package:ease/features/expense_categories/providers/expense_category_provider.dart';
 import 'package:ease/features/expenses/providers/expense_provider.dart';
@@ -171,7 +172,6 @@ class _ExpenseFormState extends State<ExpenseForm> {
                       return null;
                     },
                     onChanged: (value) {
-                      debugPrint('Amount: $value');
                       _amount = double.parse(value);
                     },
                     onSaved: (value) {
@@ -261,8 +261,10 @@ class _ExpenseFormState extends State<ExpenseForm> {
                               builder: (context, provider, child) {
                             return ElevatedButton(
                               onPressed: () {
-                                debugPrint(
-                                    'Add Payment, Expense ID: $expenseNumber, Total Paid: $totalPaid, Amount: $_amount');
+                                debugLog(
+                                  'Add Payment, Expense ID: $expenseNumber, Total Paid: $totalPaid, Amount: $_amount',
+                                  name: 'ExpenseForm',
+                                );
                                 showDialog(
                                   context: context,
                                   builder: (context) => AddPaymentForm(
