@@ -156,7 +156,8 @@ class _ExpenseInvoicesPageState extends State<ExpenseInvoicesPage> {
                             ),
                             subtitle: Row(
                               children: [
-                                Text('#${invoice.invNumber}\t\t'),
+                                // Text('#${invoice.invNumber}\t\t'),
+                                Text('${invoice.notes}\t\t'),
                                 // SizedBox(width: 8),
                                 // if (invoice.notes != null &&
                                 //     invoice.notes!.isNotEmpty)
