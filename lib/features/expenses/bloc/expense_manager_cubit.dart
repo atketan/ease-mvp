@@ -1,4 +1,6 @@
 import 'package:ease/core/database/ledger/ledger_entry_dao.dart';
+import 'package:ease/core/enums/ledger_enum_type.dart';
+import 'package:ease/core/enums/transaction_type_enum.dart';
 import 'package:ease/core/models/ledger_entry.dart';
 import 'package:ease/features/expenses/bloc/expense_cubit_manager_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,19 +21,19 @@ class ExpenseManagerCubit extends Cubit<ExpenseManagerCubitState> {
   }
 
   // Initialize a new ledger entry for expenses
-  // void initializeLedgerEntry(String invoiceNumber) {
-  //   _ledgerEntry = LedgerEntry(
-  //     type: LedgerEntryType.expense,
-  //     invNumber: invoiceNumber,
-  //     transactionDate: DateTime.now(),
-  //     createdAt: DateTime.now(),
-  //     updatedAt: DateTime.now(),
-  //     amount: 0.0,
-  //     transactionType: TransactionType.debit, // Expense is always a debit
-  //     // Add other necessary fields
-  //   );
-  //   emit(ExpenseManagerInitialized(_ledgerEntry));
-  // }
+  void initializeLedgerEntry(String invoiceNumber) {
+    _ledgerEntry = LedgerEntry(
+      type: LedgerEntryType.expense,
+      invNumber: invoiceNumber,
+      transactionDate: DateTime.now(),
+      createdAt: DateTime.now(),
+      updatedAt: DateTime.now(),
+      amount: 0.0,
+      transactionType: TransactionType.debit, // Expense is always a debit
+      // Add other necessary fields
+    );
+    emit(ExpenseManagerInitialized(_ledgerEntry));
+  }
 
   // Load an existing ledger entry
   // Future<void> loadLedgerEntry(String invoiceNumber) async {
@@ -67,5 +69,10 @@ class ExpenseManagerCubit extends Cubit<ExpenseManagerCubitState> {
     } catch (e) {
       emit(ExpenseManagerError(e.toString()));
     }
+  }
+
+  void setTransactionDate(DateTime value) {
+    _ledgerEntry.transactionDate = value;
+    emit(ExpenseManagerUpdated(_ledgerEntry));
   }
 }

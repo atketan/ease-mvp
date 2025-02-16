@@ -3,6 +3,7 @@ import 'package:ease/core/models/ledger_entry.dart';
 import 'package:ease/core/providers/short_uuid_generator.dart';
 import 'package:ease/features/expenses/bloc/expense_cubit_manager_state.dart';
 import 'package:ease/features/expenses/bloc/expense_manager_cubit.dart';
+import 'package:ease/features/expenses/widgets/expense_invoice_details_widget.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -38,6 +39,7 @@ class _ExpenseFormV2State extends State<ExpenseFormV2> {
       _expenseManagerCubit.ledgerEntry = widget.ledgerEntry!;
     } else {
       _name = '';
+      _expenseManagerCubit.initializeLedgerEntry(expenseNumber);
     }
 
     WidgetsBinding.instance.addPostFrameCallback((_) {});
@@ -103,6 +105,7 @@ class _ExpenseFormV2State extends State<ExpenseFormV2> {
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
                   children: [
+                    ExpenseInvoiceDetailsWidget(),
                     const SizedBox(height: 16),
                     TextFormField(
                       initialValue: _name,
