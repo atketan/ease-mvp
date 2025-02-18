@@ -10,6 +10,7 @@ import 'package:ease/features/expenses/bloc/expense_manager_cubit.dart';
 import 'package:ease/features/expenses/widgets/expense_form_v2.dart';
 import 'package:ease/features/invoice_manager_v2/bloc/invoice_manager_v2_cubit.dart';
 import 'package:ease/features/invoice_manager_v2/presentation/invoice_manager_v2.dart';
+import 'package:ease/features/payments/widgets/payment_category_selector_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 // import 'package:ease/features/invoice_manager/presentation/invoice_manager.dart';
@@ -261,18 +262,26 @@ class _EASEHomePageState extends State<EASEHomePage>
                     );
                   },
                 ),
-                // Bubble(
-                //   title: "Payment",
-                //   iconColor: Theme.of(context).colorScheme.primary,
-                //   bubbleColor: Theme.of(context).colorScheme.surface,
-                //   icon: Icons.home,
-                //   titleStyle: TextStyle(
-                //       fontSize: 16,
-                //       color: Theme.of(context).colorScheme.primary),
-                //   onPress: () {
-                //     _animationController.reverse();
-                //   },
-                // ),
+                Bubble(
+                  title: "Payment",
+                  iconColor: Theme.of(context).colorScheme.primary,
+                  bubbleColor: Theme.of(context).colorScheme.surface,
+                  icon: Icons.home,
+                  titleStyle: TextStyle(
+                      fontSize: 16,
+                      color: Theme.of(context).colorScheme.primary),
+                  onPress: () async {
+                    _animationController.reverse();
+                    await showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return PaymentCategorySelectorDialog();
+                      },
+                    ).then((value) {
+                      debugPrint('Value: $value');
+                    });
+                  },
+                ),
               ],
               animation: _animation,
               onPress: () => _animationController.isCompleted
