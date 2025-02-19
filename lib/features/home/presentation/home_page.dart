@@ -1,6 +1,7 @@
 import 'package:ease/core/database/customers/customers_dao.dart';
 import 'package:ease/core/database/ledger/ledger_entry_dao.dart';
 import 'package:ease/core/database/vendors/vendors_dao.dart';
+import 'package:ease/core/enums/ledger_enum_type.dart';
 import 'package:ease/core/enums/transaction_category_enum.dart';
 import 'package:ease/core/models/app_user_configuration.dart';
 import 'package:ease/core/service_locator/service_locator.dart';
@@ -10,6 +11,7 @@ import 'package:ease/features/expenses/bloc/expense_manager_cubit.dart';
 import 'package:ease/features/expenses/widgets/expense_form_v2.dart';
 import 'package:ease/features/invoice_manager_v2/bloc/invoice_manager_v2_cubit.dart';
 import 'package:ease/features/invoice_manager_v2/presentation/invoice_manager_v2.dart';
+import 'package:ease/features/payments/presentation/payments_form.dart';
 import 'package:ease/features/payments/widgets/payment_category_selector_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -199,7 +201,8 @@ class _EASEHomePageState extends State<EASEHomePage>
                             _customersDAO,
                             _vendorsDAO,
                             _ledgerEntryDAO,
-                            TransactionCategory.sales,
+                            transactionCategory: TransactionCategory.sales,
+                            ledgerEntryType: LedgerEntryType.invoice,
                           ),
                           child: InvoiceManagerV2(
                             invoiceFormMode: InvoiceFormMode.Add,
@@ -228,7 +231,8 @@ class _EASEHomePageState extends State<EASEHomePage>
                             _customersDAO,
                             _vendorsDAO,
                             _ledgerEntryDAO,
-                            TransactionCategory.purchase,
+                            transactionCategory: TransactionCategory.purchase,
+                            ledgerEntryType: LedgerEntryType.invoice,
                           ),
                           child: InvoiceManagerV2(
                             invoiceFormMode: InvoiceFormMode.Add,
@@ -278,7 +282,62 @@ class _EASEHomePageState extends State<EASEHomePage>
                         return PaymentCategorySelectorDialog();
                       },
                     ).then((value) {
-                      debugPrint('Value: $value');
+                      if (value == 0) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (BuildContext context) => BlocProvider(
+                              create: (context) => InvoiceManagerCubit(
+                                _customersDAO,
+                                _vendorsDAO,
+                                _ledgerEntryDAO,
+                                transactionCategory: TransactionCategory.sales,
+                                ledgerEntryType: LedgerEntryType.payment,
+                              ),
+                              child: PaymentsForm(
+                                paymentsFormMode: PaymentsFormMode.Add,
+                              ),
+                            ),
+                          ),
+                        );
+                      } else if (value == 1) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (BuildContext context) => BlocProvider(
+                              create: (context) => InvoiceManagerCubit(
+                                _customersDAO,
+                                _vendorsDAO,
+                                _ledgerEntryDAO,
+                                transactionCategory:
+                                    TransactionCategory.purchase,
+                                ledgerEntryType: LedgerEntryType.payment,
+                              ),
+                              child: PaymentsForm(
+                                paymentsFormMode: PaymentsFormMode.Add,
+                              ),
+                            ),
+                          ),
+                        );
+                      } else if (value == 2) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (BuildContext context) => BlocProvider(
+                              create: (context) => InvoiceManagerCubit(
+                                _customersDAO,
+                                _vendorsDAO,
+                                _ledgerEntryDAO,
+                                transactionCategory: TransactionCategory.other,
+                                ledgerEntryType: LedgerEntryType.payment,
+                              ),
+                              child: PaymentsForm(
+                                paymentsFormMode: PaymentsFormMode.Add,
+                              ),
+                            ),
+                          ),
+                        );
+                      }
                     });
                   },
                 ),

@@ -1,6 +1,7 @@
 import 'package:ease/core/database/customers/customers_dao.dart';
 import 'package:ease/core/database/ledger/ledger_entry_dao.dart';
 import 'package:ease/core/database/vendors/vendors_dao.dart';
+import 'package:ease/core/enums/ledger_enum_type.dart';
 import 'package:ease/core/enums/transaction_category_enum.dart';
 import 'package:ease/core/utils/developer_log.dart';
 import 'package:ease/features/home_invoices/data/invoices_provider.dart';
@@ -103,7 +104,10 @@ class _PurchaseInvoicesPageState extends State<PurchaseInvoicesPage> {
                                           _customersDAO,
                                           _vendorsDAO,
                                           _ledgerEntryDAO,
-                                          TransactionCategory.purchase,
+                                          transactionCategory:
+                                              TransactionCategory.purchase,
+                                          ledgerEntryType:
+                                              LedgerEntryType.invoice,
                                         ),
                                         child: InvoiceManagerV2(
                                           invoiceFormMode: InvoiceFormMode.Edit,
@@ -219,7 +223,9 @@ class _PurchaseInvoicesPageState extends State<PurchaseInvoicesPage> {
                                       _customersDAO,
                                       _vendorsDAO,
                                       _ledgerEntryDAO,
-                                      TransactionCategory.purchase,
+                                      transactionCategory:
+                                          TransactionCategory.purchase,
+                                      ledgerEntryType: LedgerEntryType.invoice,
                                     ),
                                     child: InvoiceManagerV2(
                                       invoiceFormMode: InvoiceFormMode.Edit,

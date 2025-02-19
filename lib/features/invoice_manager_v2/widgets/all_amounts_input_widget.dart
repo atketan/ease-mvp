@@ -1,3 +1,4 @@
+import 'package:ease/core/enums/ledger_enum_type.dart';
 import 'package:ease/core/enums/payment_method_enum.dart';
 // import 'package:ease/core/utils/developer_log.dart';
 import 'package:flutter/material.dart';
@@ -95,98 +96,104 @@ class AllAmountsInputWidgetState extends State<AllAmountsInputWidget> {
           return Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    flex: 3,
-                    child: Text(
-                      'Total Amount:',
-                      style: Theme.of(context).textTheme.labelLarge,
-                    ),
-                  ),
-                  SizedBox(width: 16.0),
-                  Expanded(
-                    flex: 7,
-                    child: TextField(
-                      controller: _totalAmountTextController,
-                      style: Theme.of(context).textTheme.labelLarge,
-                      keyboardType:
-                          TextInputType.numberWithOptions(decimal: true),
-                      decoration: InputDecoration(
-                        prefixText: '₹ ',
-                      ),
-                      onChanged: (value) {
-                        if (value.isEmpty) value = "0";
-                        context
-                            .read<InvoiceManagerCubit>()
-                            .setTotalAmount(double.parse(value));
-                      },
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    flex: 3,
-                    child: Text(
-                      'Discount:',
-                      style: Theme.of(context).textTheme.labelLarge,
-                    ),
-                  ),
-                  SizedBox(width: 16.0),
-                  Expanded(
-                    flex: 7,
-                    child: TextField(
-                      controller: _discountTextController,
-                      style: Theme.of(context).textTheme.labelLarge,
-                      keyboardType:
-                          TextInputType.numberWithOptions(decimal: true),
-                      decoration: InputDecoration(
-                        prefixText: '₹ ',
-                      ),
-                      onChanged: (value) {
-                        if (value.isEmpty) value = "0";
-                        context
-                            .read<InvoiceManagerCubit>()
-                            .setDiscount(double.parse(value));
-                      },
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    flex: 3,
-                    child: Text(
-                      'Grand Total:',
-                      style: Theme.of(context).textTheme.labelLarge,
-                    ),
-                  ),
-                  SizedBox(width: 16.0),
-                  Expanded(
-                    flex: 7,
-                    child: TextField(
-                      controller: _grandTotalTextController,
-                      style: Theme.of(context).textTheme.labelLarge,
-                      enabled: false,
-                      keyboardType:
-                          TextInputType.numberWithOptions(decimal: true),
-                      decoration: InputDecoration(
-                        prefixText: '₹ ',
-                        border: InputBorder.none, // Remove border
-                        filled: true,
-                        fillColor:
-                            Colors.transparent, // Remove background color
+              if (context.read<InvoiceManagerCubit>().ledgerEntryType ==
+                  LedgerEntryType.invoice)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      flex: 3,
+                      child: Text(
+                        'Total Amount:',
+                        style: Theme.of(context).textTheme.labelLarge,
                       ),
                     ),
-                  ),
-                ],
-              ),
+                    SizedBox(width: 16.0),
+                    Expanded(
+                      flex: 7,
+                      child: TextField(
+                        controller: _totalAmountTextController,
+                        style: Theme.of(context).textTheme.labelLarge,
+                        keyboardType:
+                            TextInputType.numberWithOptions(decimal: true),
+                        decoration: InputDecoration(
+                          prefixText: '₹ ',
+                        ),
+                        onChanged: (value) {
+                          if (value.isEmpty) value = "0";
+                          context
+                              .read<InvoiceManagerCubit>()
+                              .setTotalAmount(double.parse(value));
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              if (context.read<InvoiceManagerCubit>().ledgerEntryType ==
+                  LedgerEntryType.invoice)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      flex: 3,
+                      child: Text(
+                        'Discount:',
+                        style: Theme.of(context).textTheme.labelLarge,
+                      ),
+                    ),
+                    SizedBox(width: 16.0),
+                    Expanded(
+                      flex: 7,
+                      child: TextField(
+                        controller: _discountTextController,
+                        style: Theme.of(context).textTheme.labelLarge,
+                        keyboardType:
+                            TextInputType.numberWithOptions(decimal: true),
+                        decoration: InputDecoration(
+                          prefixText: '₹ ',
+                        ),
+                        onChanged: (value) {
+                          if (value.isEmpty) value = "0";
+                          context
+                              .read<InvoiceManagerCubit>()
+                              .setDiscount(double.parse(value));
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              if (context.read<InvoiceManagerCubit>().ledgerEntryType ==
+                  LedgerEntryType.invoice)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      flex: 3,
+                      child: Text(
+                        'Grand Total:',
+                        style: Theme.of(context).textTheme.labelLarge,
+                      ),
+                    ),
+                    SizedBox(width: 16.0),
+                    Expanded(
+                      flex: 7,
+                      child: TextField(
+                        controller: _grandTotalTextController,
+                        style: Theme.of(context).textTheme.labelLarge,
+                        enabled: false,
+                        keyboardType:
+                            TextInputType.numberWithOptions(decimal: true),
+                        decoration: InputDecoration(
+                          prefixText: '₹ ',
+                          border: InputBorder.none, // Remove border
+                          filled: true,
+                          fillColor:
+                              Colors.transparent, // Remove background color
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [

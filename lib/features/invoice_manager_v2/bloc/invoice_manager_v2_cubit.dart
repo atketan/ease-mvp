@@ -22,9 +22,10 @@ class InvoiceManagerCubit extends Cubit<InvoiceManagerCubitState> {
   InvoiceManagerCubit(
     this._customersDAO,
     this._vendorsDAO,
-    this._ledgerEntryDAO,
-    this.transactionCategory,
-  ) : super(InvoiceManagerInitial());
+    this._ledgerEntryDAO, {
+    required this.transactionCategory,
+    required this.ledgerEntryType,
+  }) : super(InvoiceManagerInitial());
 
   final CustomersDAO _customersDAO;
   final VendorsDAO _vendorsDAO;
@@ -35,7 +36,9 @@ class InvoiceManagerCubit extends Cubit<InvoiceManagerCubitState> {
 
   String phoneNumber =
       ''; // Used to store the phone number of the customer/vendor temporarily for displaying in the entity typeahead field
+
   final TransactionCategory transactionCategory;
+  final LedgerEntryType ledgerEntryType;
 
   void initialiseInvoiceModelInstance(
       LedgerEntry? ledgerEntry, String invoiceNumber) {
@@ -58,7 +61,7 @@ class InvoiceManagerCubit extends Cubit<InvoiceManagerCubitState> {
       //   notes: "",
       // );
       _ledgerEntry = LedgerEntry(
-        type: LedgerEntryType.invoice,
+        type: ledgerEntryType,
         amount: 0.0,
         discount: 0.0,
         grandTotal: 0.0,

@@ -42,18 +42,18 @@ class PaymentCategorySelectorDialog extends StatelessWidget {
                   },
                 ),
               ),
-              Card(
-                elevation: 2,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8.0)),
-                child: ListTile(
-                  title: Text('Other Payment'),
-                  trailing: Icon(Icons.arrow_right),
-                  onTap: () {
-                    Navigator.of(context).pop(2);
-                  },
-                ),
-              ),
+              // Card(
+              //   elevation: 2,
+              //   shape: RoundedRectangleBorder(
+              //       borderRadius: BorderRadius.circular(8.0)),
+              //   child: ListTile(
+              //     title: Text('Other Payment'),
+              //     trailing: Icon(Icons.arrow_right),
+              //     onTap: () {
+              //       Navigator.of(context).pop(2);
+              //     },
+              //   ),
+              // ),
             ],
           ),
         ),
