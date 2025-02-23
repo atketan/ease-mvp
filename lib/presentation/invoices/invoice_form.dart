@@ -58,7 +58,7 @@ class InvoiceFormBody extends StatelessWidget {
           child: Column(
             children: [
               _buildEntityField(
-                  context, isSale ? 'Customer' : 'Vendor', isSale),
+                  context, isSale ? 'Customer' : 'Supplier', isSale),
               _buildTextField(context, 'Invoice Number', (value) {
                 context.read<InvoiceBloc>().setInvoiceNumber(value);
               }),
@@ -97,7 +97,7 @@ class InvoiceFormBody extends StatelessWidget {
                 var result = await showSearch(
                   context: context,
                   delegate:
-                      EntitySearchDelegate(isSale ? 'customer' : 'vendor'),
+                      EntitySearchDelegate(isSale ? 'customer' : 'supplier'),
                 );
                 if (result != null) {
                   _controller.text = result.name;
@@ -309,7 +309,7 @@ class EntitySearchDelegate extends SearchDelegate {
               }
             },
             child: Text(
-                'Add New ${entityType == 'customer' ? 'Customer' : 'Vendor'}'),
+                'Add New ${entityType == 'customer' ? 'Customer' : 'Supplier'}'),
           ),
         ],
       ),
@@ -332,7 +332,7 @@ class _AddEntityDialogState extends State<AddEntityDialog> {
   Widget build(BuildContext context) {
     return AlertDialog(
       title: Text(
-          'Add New ${widget.entityType == 'customer' ? 'Customer' : 'Vendor'}'),
+          'Add New ${widget.entityType == 'customer' ? 'Customer' : 'Supplier'}'),
       content: TextField(
         controller: _nameController,
         decoration: InputDecoration(hintText: 'Name'),

@@ -148,7 +148,7 @@ class InvoiceManagerState extends State<InvoiceManager> {
                               title: Text(
                                 invoiceType == InvoiceType.Sales
                                     ? 'CUSTOMER'
-                                    : 'VENDOR',
+                                    : 'SUPPLIER',
                                 style: Theme.of(context).textTheme.labelLarge,
                               ),
                               trailing: BlocBuilder<InvoiceManagerCubit,

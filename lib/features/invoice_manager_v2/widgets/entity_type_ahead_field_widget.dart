@@ -86,7 +86,7 @@ class _EntityTypeAheadFieldState extends State<EntityTypeAheadField> {
                 : 'Enter vendor name', // or phone number
             labelStyle: Theme.of(context).textTheme.labelLarge,
             hintText:
-                'Start typing to search or add ${widget.transactionCategory == TransactionCategory.sales ? 'Customer' : 'Vendor'}',
+                'Start typing to search or add ${widget.transactionCategory == TransactionCategory.sales ? 'Customer' : 'Supplier'}',
           ),
           style: Theme.of(context).textTheme.labelLarge,
         );

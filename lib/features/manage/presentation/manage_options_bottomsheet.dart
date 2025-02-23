@@ -12,13 +12,13 @@ class ManageOptionsBottomsheet extends StatefulWidget {
 class ManageOptionsBottomsheetState extends State<ManageOptionsBottomsheet> {
   final List<Map<String, dynamic>> _menuItems = [
     {
-      'title': 'Clients',
+      'title': 'Customers',
       'subtitle': 'Sales',
       'icon': Icons.people,
       'page': CustomersPage(),
     },
     {
-      'title': 'Vendors',
+      'title': 'Suppliers',
       'subtitle': 'Purchases',
       'icon': Icons.store,
       'page': VendorsPage(),

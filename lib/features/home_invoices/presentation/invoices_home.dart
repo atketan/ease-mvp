@@ -207,7 +207,7 @@ class _InvoicesHomePageState extends State<InvoicesHomePage> {
                       );
                     },
                     title: Text(
-                      'Client Ledgers',
+                      'Customer Ledgers',
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
                     subtitle: Text(
@@ -230,7 +230,7 @@ class _InvoicesHomePageState extends State<InvoicesHomePage> {
                       );
                     },
                     title: Text(
-                      'Vendor Ledgers',
+                      'Supplier Ledgers',
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
                     subtitle: Text(

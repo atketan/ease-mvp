@@ -114,7 +114,7 @@ class PaymentsFormState extends State<PaymentsForm> {
                               Text(
                                 transactionCategory == TransactionCategory.sales
                                     ? 'CUSTOMER'
-                                    : 'VENDOR',
+                                    : 'SUPPLIER',
                                 style: Theme.of(context).textTheme.labelLarge,
                               ),
                             ],

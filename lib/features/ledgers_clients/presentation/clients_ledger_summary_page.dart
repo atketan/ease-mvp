@@ -42,7 +42,7 @@ class _ClientsLedgerSummaryPageState extends State<ClientsLedgerSummaryPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Clients Ledger Summary'),
+        title: Text('Customers Ledger Summary'),
       ),
       body: Column(
         children: [

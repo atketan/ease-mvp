@@ -35,7 +35,7 @@ class EntityDelegateWidgetState extends State<EntityDelegateWidget> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Text(
-          //   (widget.invoiceType == InvoiceType.Sales ? 'Customer' : 'Vendor'),
+          //   (widget.invoiceType == InvoiceType.Sales ? 'Customer' : 'Supplier'),
           //   style: Theme.of(context).textTheme.titleMedium,
           // ),
           TextField(
@@ -47,7 +47,7 @@ class EntityDelegateWidgetState extends State<EntityDelegateWidget> {
                 delegate: EntitySearchDelegate(
                     (widget.invoiceType == InvoiceType.Sales)
                         ? 'customer'
-                        : 'vendor'),
+                        : 'supplier'),
               );
               if (result != null) {
                 _entityController.text = result.name;
@@ -62,10 +62,10 @@ class EntityDelegateWidgetState extends State<EntityDelegateWidget> {
               hintText: 'Select ' +
                   (widget.invoiceType == InvoiceType.Sales
                       ? 'Customer'
-                      : 'Vendor'),
+                      : 'Supplier'),
               labelText: (widget.invoiceType == InvoiceType.Sales
                   ? 'Customer'
-                  : 'Vendor'),
+                  : 'Supplier'),
             ),
             style: Theme.of(context).textTheme.titleMedium,
           ),
@@ -167,7 +167,7 @@ class EntitySearchDelegate extends SearchDelegate {
               }
             },
             child: Text(
-                'Add New ${entityType == 'customer' ? 'Customer' : 'Vendor'}'),
+                'Add New ${entityType == 'customer' ? 'Customer' : 'Supplier'}'),
           ),
         ],
       ),

@@ -55,7 +55,7 @@ class _VendorsPageState extends State<VendorsPage> {
     _vendorsDAO = Provider.of<VendorsDAO>(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Vendors'),
+        title: Text('Suppliers'),
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 8.0),

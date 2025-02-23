@@ -126,7 +126,7 @@ class InvoiceManagerV2State extends State<InvoiceManagerV2> {
                               Text(
                                 transactionCategory == TransactionCategory.sales
                                     ? 'CUSTOMER'
-                                    : 'VENDOR',
+                                    : 'SUPPLIER',
                                 style: Theme.of(context).textTheme.labelLarge,
                               ),
                             ],

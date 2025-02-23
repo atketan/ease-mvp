@@ -23,7 +23,7 @@ class PaymentCategorySelectorDialog extends StatelessWidget {
                   borderRadius: BorderRadius.circular(8.0)
                 ),
                 child: ListTile(
-                  title: Text('Client Payment'),
+                  title: Text('Customer Payment'),
                   trailing: Icon(Icons.arrow_right),
                   onTap: () {
                     Navigator.of(context).pop(0);
@@ -35,7 +35,7 @@ class PaymentCategorySelectorDialog extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8.0)),
                 child: ListTile(
-                  title: Text('Vendor Payment'),
+                  title: Text('Supplier Payment'),
                   trailing: Icon(Icons.arrow_right),
                   onTap: () {
                     Navigator.of(context).pop(1);
