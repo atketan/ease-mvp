@@ -2,8 +2,8 @@ import 'package:ease/core/enums/transaction_category_enum.dart';
 import 'package:provider/provider.dart';
 import 'package:ease/core/database/customers/customers_dao.dart';
 import 'package:ease/core/database/vendors/vendors_dao.dart';
-import 'package:ease/core/models/customer.dart';
-import 'package:ease/core/models/vendor.dart';
+// import 'package:ease/core/models/customer.dart';
+// import 'package:ease/core/models/vendor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
@@ -210,30 +210,36 @@ class _EntityTypeAheadFieldState extends State<EntityTypeAheadField> {
   }
 
   void _getEntityDetails() async {
-    String? customerId;
-    String? vendorId;
+    // String? customerId;
+    // String? vendorId;
 
     if (context.read<InvoiceManagerCubit>().ledgerEntry.transactionType ==
         TransactionCategory.sales) {
-      customerId = context.read<InvoiceManagerCubit>().ledgerEntry.associatedId;
-      if (customerId != null && customerId.isNotEmpty) {
-        Customer? customer = await _customersDAO.getCustomerById(customerId);
-        if (customer != null) {
-          _controller.text = customer.name;
-          _phoneController.text = customer.phone ?? "";
-          _isEditing = false;
-        }
-      }
+      // customerId = context.read<InvoiceManagerCubit>().ledgerEntry.associatedId;
+      _controller.text = context.read<InvoiceManagerCubit>().ledgerEntry.name!;
+      _phoneController.text = context.read<InvoiceManagerCubit>().phoneNumber;
+      _isEditing = false;
+      // if (customerId != null && customerId.isNotEmpty) {
+      //   Customer? customer = await _customersDAO.getCustomerById(customerId);
+      //   if (customer != null) {
+      //     _controller.text = customer.name;
+      //     _phoneController.text = customer.phone ?? "";
+      //     _isEditing = false;
+      //   }
+      // }
     } else {
-      vendorId = context.read<InvoiceManagerCubit>().ledgerEntry.associatedId;
-      if (vendorId != null && vendorId.isNotEmpty) {
-        Vendor? vendor = await _vendorsDAO.getVendorById(vendorId);
-        if (vendor != null) {
-          _controller.text = vendor.name;
-          _phoneController.text = vendor.phone ?? "";
-          _isEditing = false;
-        }
-      }
+      // vendorId = context.read<InvoiceManagerCubit>().ledgerEntry.associatedId;
+      _controller.text = context.read<InvoiceManagerCubit>().ledgerEntry.name!;
+      _phoneController.text = context.read<InvoiceManagerCubit>().phoneNumber;
+      _isEditing = false;
+      // if (vendorId != null && vendorId.isNotEmpty) {
+      //   Vendor? vendor = await _vendorsDAO.getVendorById(vendorId);
+      //   if (vendor != null) {
+      //     _controller.text = vendor.name;
+      //     _phoneController.text = vendor.phone ?? "";
+      //     _isEditing = false;
+      //   }
+      // }
     }
 
     context.read<InvoiceManagerCubit>().setEntityName(_controller.text);
